@@ -25,7 +25,7 @@ public class commonDAO {
 
 				//Class.forName(DB_DRIVER);
 				context=ClientUtility.getInitialContext();
-				DataSource datasource=(DataSource)context.lookup("JDBC/sifcoDBJDBC");
+				DataSource datasource=(DataSource)context.lookup("jdbc/sifcoDBJDBC");
 				conn=datasource.getConnection();
 
 			} catch (NamingException e) {
