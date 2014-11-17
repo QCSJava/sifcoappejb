@@ -43,7 +43,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		System.out.println(hellomsg);
 		return hellomsg;
 	}
-
+//cambio
 	public ProfileOutTO GetUserProfile(ProfileInTO usrProfile) {
 		ProfileOutTO usrProfileOut = new ProfileOutTO();
 		List profileDetLst=new Vector();
