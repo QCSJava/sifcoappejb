@@ -4,6 +4,9 @@
         <dependent-module deploy-path="/" handle="module:/resource/sifcoappClient/sifcoappClient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="sifcoappObj.jar" deploy-path="/" handle="module:/resource/sifcoappObj/sifcoappObj">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/sifcoapp/build/classes"/>
         <property name="ClientProject" value="sifcoappClient"/>
         <property name="ClientJARURI" value="sifcoappClient.jar"/>

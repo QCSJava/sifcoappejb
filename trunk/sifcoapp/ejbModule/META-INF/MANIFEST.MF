@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Class-Path: sifcoappClient.jar 
- sifcoappObj.jar
- javax.batch-api.jar 
+ sifcoappObj.jarjavax.batch-api.jar 
  javax.ejb-api.jar 
  javax.el.jar 
  javax.enterprise.concurrent-api.jar 
@@ -29,5 +28,6 @@ Class-Path: sifcoappClient.jar
  javax.xml.registry-api.jar 
  javax.xml.rpc-api.jar 
  jaxb-extra-osgi.jar 
- jaxb-osgi.jar
+ jaxb-osgi.jar 
+ sifcoappObj.jar
 
