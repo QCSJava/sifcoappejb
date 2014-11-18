@@ -3,6 +3,7 @@
 	<name>sifcoapp</name>
 	<comment></comment>
 	<projects>
+		<project>sifcoappObj</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
