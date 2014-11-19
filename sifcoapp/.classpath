@@ -12,7 +12,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/glassfish4/sifcoappObj.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sifcoappObj"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
