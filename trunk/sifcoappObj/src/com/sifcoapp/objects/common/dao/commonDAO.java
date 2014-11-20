@@ -9,15 +9,15 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.security.ejb.SecurityEJBRemote;
 
 public class commonDAO {
 	private Connection conn;
-	private static final String DB_DRIVER = "org.postgresql.Driver";
-	private static final String DB_CONNECTION = "jdbc:postgresql://127.0.0.1:5432/sifcoDB";
-	private static final String DB_USER = "postgres";
-	private static final String DB_PASSWORD = "admin";
+	private static final String DB_JDBC = "jdbc/sifcoDBJDBC";
+	
 	private static Context context = null;
+	private int istransaccional;
 	public commonDAO() {
 
 		if (conn == null) {
@@ -25,8 +25,8 @@ public class commonDAO {
 
 				//Class.forName(DB_DRIVER);
 				context=ClientUtility.getInitialContext();
-				DataSource datasource=(DataSource)context.lookup("jdbc/sifcoDBJDBC");
-				conn=datasource.getConnection();
+				DataSource datasource=(DataSource)context.lookup(DB_JDBC);
+				this.conn=datasource.getConnection();
 
 			} catch (NamingException e) {
 				// TODO Auto-generated catch block
@@ -36,26 +36,16 @@ public class commonDAO {
 				e.printStackTrace();
 			}
 			
-			/*try {
-
-				this.conn = DriverManager.getConnection(
-						DB_CONNECTION, "postgres",
-						"admin");
-				
-			} catch (SQLException e) {
-
-				System.out.println("Connection Failed! Check output console");
-				e.printStackTrace();
-				return;
-
-			}*/
+			
 		}
 
 		
 	}
 	public void closeConnection(){
 		try {
-			this.conn.close();
+			if (this.getIstransaccional()==Common.C_FALSE){
+				this.conn.close();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,5 +63,11 @@ public class commonDAO {
 
 	public void setConn(Connection conn) {
 		this.conn = conn;
+	}
+	public int getIstransaccional() {
+		return istransaccional;
+	}
+	public void setIstransaccional(int istransaccional) {
+		this.istransaccional = istransaccional;
 	}
 }
