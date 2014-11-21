@@ -15,9 +15,11 @@ public class SalesEJB implements SalesEJBRemote {
         // TODO Auto-generated constructor stub
     }
 
-	public void sayHello() {
+	public String doSales() {
+		String retorno;
 		// TODO Auto-generated method stub
-		
+		retorno="Do Sales!";
+		return retorno;
 	}
 
 }
