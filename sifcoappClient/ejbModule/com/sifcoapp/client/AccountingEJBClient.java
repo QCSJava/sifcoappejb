@@ -8,6 +8,8 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.bussinessLogic.AccountingEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
+import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.security.ejb.SecurityEJBRemote;
 
 public class AccountingEJBClient implements AccountingEJBRemote {
@@ -32,6 +34,18 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		lstPeriods=bean.getAccPeriods();
 		
 		return lstPeriods;
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.sifcoapp.bussinessLogic.AccountingEJBRemote#AccAddPeriod(com.sifcoapp.objects.accounting.to.AccPeriodInTO)
+	 */
+	public AccPeriodOutTO AccAddPeriod(AccPeriodInTO parameters) {
+		// TODO Auto-generated method stub
+		AccPeriodOutTO v_salida=new AccPeriodOutTO();
+		
+		v_salida=bean.AccAddPeriod(parameters);
+		
+		return v_salida;
 	}
 
 }
