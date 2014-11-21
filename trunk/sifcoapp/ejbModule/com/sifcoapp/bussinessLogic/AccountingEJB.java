@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import javax.ejb.Stateless;
 
+import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 
 /**
@@ -55,4 +56,17 @@ public class AccountingEJB implements AccountingEJBRemote {
     	
     	return lstPeriods;
     }
+    /*
+     * (non-Javadoc)
+     * @see com.sifcoapp.bussinessLogic.AccountingEJBRemote#AccAddPeriod(com.sifcoapp.objects.accounting.to.AccPeriodInTO)
+     */
+    public AccPeriodOutTO AccAddPeriod(AccPeriodInTO parameters){
+
+        AccPeriodOutTO retorno=new AccPeriodOutTO();     
+
+        retorno.setCodResp(0);
+
+        return retorno;
+
+      }
 }
