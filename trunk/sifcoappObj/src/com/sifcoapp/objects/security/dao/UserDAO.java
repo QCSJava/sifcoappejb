@@ -28,8 +28,9 @@ public class UserDAO extends commonDAO {
 		this.setString(3, "USRPSW", parameters.getPasswordUserApp());
 		
 		this.runQuery();
+		System.out.println("return psg");
 		System.out.println(this.getInt());
-		v_return.setValidUser(this.getIntReturn());
+		v_return.setValidUser(this.getInt());
 		//return this.getIntReturn();
 		
 		return v_return;
