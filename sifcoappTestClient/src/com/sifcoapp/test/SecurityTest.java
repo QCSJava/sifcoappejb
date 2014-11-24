@@ -23,9 +23,9 @@ public class SecurityTest {
 		
 		UserAppInTO usr = new UserAppInTO();
 		UserAppOutTO usrRes = new UserAppOutTO();
-		usr.setIdUserApp("admin");
-		usr.setPasswordUserApp("adminadmin");
-		//usrRes=SecurityEJBService.UserValidate(usr);
+		usr.setIdUserApp("rutilio");
+		usr.setPasswordUserApp("rutiliopw");
+		usrRes=SecurityEJBService.UserValidate(usr);
 		
 		// TODO Auto-generated method stub
 		System.out.println("Usuario Valido");
