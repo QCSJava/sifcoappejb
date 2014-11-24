@@ -30,10 +30,10 @@ public class SecurityEJB implements SecurityEJBRemote {
     public UserAppOutTO UserValidate(UserAppInTO usr) {
 		// TODO Auto-generated method stub
 		UserAppOutTO usrValid = new UserAppOutTO();
-		if (usr.getIdUserApp().equals("admin")&&usr.getPasswordUserApp().equals("adminadmin"))
+		/*if (usr.getIdUserApp().equals("admin")&&usr.getPasswordUserApp().equals("adminadmin"))
 			usrValid.setValidUser(Common.VALID);
 		else
-			usrValid.setValidUser(Common.INVALID);
+			usrValid.setValidUser(Common.INVALID);*/
 		
 		UserDAO userdao = new UserDAO();
 		usrValid=userdao.getUserValid(usr);
