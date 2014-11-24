@@ -1,11 +1,13 @@
 package com.sifcoapp.security.ejb;
 
 import javax.ejb.Stateless;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.security.dao.UserDAO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
@@ -32,8 +34,13 @@ public class SecurityEJB implements SecurityEJBRemote {
 			usrValid.setValidUser(Common.VALID);
 		else
 			usrValid.setValidUser(Common.INVALID);
+		
+		UserDAO userdao = new UserDAO();
+		usrValid=userdao.getUserValid(usr);
+			
 		usrValid.setDesc_usr("Administrator");
 		usrValid.setId_perfil(1);
+		
 		return usrValid;
 	}
 
