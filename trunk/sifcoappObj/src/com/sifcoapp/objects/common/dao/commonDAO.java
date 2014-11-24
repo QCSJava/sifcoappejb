@@ -1,9 +1,13 @@
 package com.sifcoapp.objects.common.dao;
 
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.naming.Context;
@@ -26,27 +30,18 @@ public class commonDAO {
 	private Hashtable inParameters;
 	private Hashtable outParameters;
 	private String dbObject;
+	private int intReturn;
+	public int getIntReturn() {
+		return intReturn;
+	}
+	public void setIntReturn(int intReturn) {
+		this.intReturn = intReturn;
+	}
 	public commonDAO() {
 
-		if (conn == null) {
-			try {
-
-				//Class.forName(DB_DRIVER);
-				context=ClientUtility.getInitialContext();
-				DataSource datasource=(DataSource)context.lookup(DB_JDBC);
-				this.conn=datasource.getConnection();
-
-			} catch (NamingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-		}
-
+		this.getConnectionDB();
+		this.inParameters=new Hashtable();
+		this.outParameters=new Hashtable();
 		
 	}
 	public void closeConnection(){
@@ -71,7 +66,9 @@ public class commonDAO {
 	
 	private void insertParam(int position, String colName, Object colValue, String colType){
 					
-		this.inParameters.put(new Integer(position), (new DetailParameter(position,colName,colValue)));
+		DetailParameter detailParameter=new DetailParameter(position,colName,colValue,colType);
+		
+		this.inParameters.put(new Integer(position), detailParameter);
 		
 	}
 	
@@ -109,6 +106,78 @@ public class commonDAO {
 	
 	public void runQuery(){
 		
+		//Primero creamos el prepareStatement
+		
+		CallableStatement statementToExecute = null; 
+		
+		try {
+			statementToExecute	= this.getConn().prepareCall(this.getDbObject());
+			
+			//asignamos parametros
+			
+			Enumeration enParameters = this.inParameters.keys();
+			DetailParameter dtParameterTmp = null;
+			Integer v_position=null;
+			//Recorremos hash con parametros previamente seteados
+			while(enParameters.hasMoreElements()){
+				
+				v_position=(Integer)enParameters.nextElement();
+				
+				dtParameterTmp=(DetailParameter)this.inParameters.get(v_position);			
+				
+				System.out.println("detail: position "+v_position);
+				System.out.println("detail: getColName "+dtParameterTmp.getColName());
+				System.out.println("detail: getColValue "+dtParameterTmp.getColValue());
+				System.out.println("detail: getColType "+dtParameterTmp.getColType());
+				
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPESTRING)){
+					statementToExecute.setString(v_position.intValue(), (String)dtParameterTmp.getColValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPEINT)){
+					statementToExecute.setInt(v_position.intValue(), ((Integer)dtParameterTmp.getColValue()).intValue());
+				}
+				
+			}
+			statementToExecute.registerOutParameter(1,Types.INTEGER);
+			statementToExecute.execute();
+			//System.out.println("resultado");
+			//System.out.println(statementToExecute.getInt(1));
+			this.outParameters.put(new Integer(1), new Integer(statementToExecute.getInt(1)));
+			//Cerramos la conexion
+			statementToExecute.close();
+			this.conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+		}
+		
+		
+	}
+	
+	private void getConnectionDB(){
+		if (conn == null) {
+			try {
+
+				//Class.forName(DB_DRIVER);
+				context=ClientUtility.getInitialContext();
+				DataSource datasource=(DataSource)context.lookup(DB_JDBC);
+				this.conn=datasource.getConnection();
+
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
 	}
 	
 	public void setConn(Connection conn) {
@@ -126,4 +195,14 @@ public class commonDAO {
 	public void setDbObject(String dbObject) {
 		this.dbObject = dbObject;
 	}
+	
+	public int getInt(){
+		int returnCode = 0;
+		
+		returnCode=((Integer)this.outParameters.get(new Integer(1))).intValue();
+		
+		
+		return returnCode;
+	}
+	
 }

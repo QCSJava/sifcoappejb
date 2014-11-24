@@ -18,13 +18,14 @@ public class UserDAO extends commonDAO {
 		
 		System.out.println("Desde DAO");
 		
-		this.setDbObject("sp_valid_usr");
-		this.setString(1, "USRNAME", "ALONSO");
-		this.setString(2, "USRPSW", "ALONSOPSW");
+		this.setDbObject("{? = call sp_valid_usr(?,?)}");
+		//this.setString(1, "return");
+		this.setString(2, "USRNAME", "ALONSO");
+		this.setString(3, "USRPSW", "ALONSOPSW");
 		
 		this.runQuery();
-		
-		return 0;
+		System.out.println(this.getInt());
+		return this.getIntReturn();
 	}
 
 }
