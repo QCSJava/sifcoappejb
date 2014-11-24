@@ -4,13 +4,13 @@ public class DetailParameter {
 	private int position;
 	private String colName;
 	private Object colValue;
-	private Object colType;
+	private String colType;
 	
-	public DetailParameter(int position,String colName,Object colValue){
+	public DetailParameter(int position,String colName,Object colValue, String colType){
 		this.position=position;
 		this.colName=colName;
 		this.colValue=colValue;
-		this.colType=colType;
+		this.setColType(colType);
 	}
 	
 	public int getPosition() {
@@ -35,5 +35,13 @@ public class DetailParameter {
 
 	public void setColValue(Object colValue) {
 		this.colValue = colValue;
+	}
+
+	public String getColType() {
+		return colType;
+	}
+
+	public void setColType(String colType) {
+		this.colType = colType;
 	}
 }
