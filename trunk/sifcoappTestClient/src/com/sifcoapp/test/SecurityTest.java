@@ -34,12 +34,7 @@ public class SecurityTest {
 		ProfileInTO profileInTO=new ProfileInTO();
 		ProfileOutTO profileOutTO=new ProfileOutTO();
 		
-		UserDAO userdao = new UserDAO();
-		System.out.println("Conexion");
-		System.out.println(userdao.getConn());
-		
-		userdao.closeConnection();
-		
+				
 		profileOutTO=SecurityEJBService.GetUserProfile(profileInTO);
 		
 		System.out.println(profileOutTO.getDesc_perfil());
@@ -86,10 +81,8 @@ public class SecurityTest {
 			
 			break;
 		}
-		/*UserDAO userdao = new UserDAO();
-		System.out.println("Conexion");
-		System.out.println(userdao.getConn());
-		
-		userdao.closeConnection();*/
+		//UserDAO userdao = new UserDAO();
+		//System.out.println("Conexion");
+		//userdao.getUserValid();
 	}
 }
