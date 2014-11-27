@@ -71,6 +71,11 @@ public class SecurityEJB implements SecurityEJBRemote {
 		ProfileDetOutTO profileDetL2=new ProfileDetOutTO();
 		ProfileDetOutTO profileDetL3=new ProfileDetOutTO();
 		
+		
+		UserDAO userdao = new UserDAO();
+		usrProfileOut=userdao.getUserProfiles(usrProfile);
+		
+		
 		usrProfileOut.setDesc_perfil("Administrator");
 		usrProfileOut.setId_perfil(1);
 		
