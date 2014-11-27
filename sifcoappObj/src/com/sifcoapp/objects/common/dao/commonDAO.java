@@ -5,19 +5,24 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Vector;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import javax.sql.rowset.CachedRowSet;
 
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.DetailParameter;
 import com.sifcoapp.security.ejb.SecurityEJBRemote;
+import com.sun.rowset.CachedRowSetImpl;
 
 public class commonDAO {
 	private Connection conn;
@@ -109,7 +114,10 @@ public class commonDAO {
 		//Primero creamos el prepareStatement
 		
 		CallableStatement statementToExecute = null; 
-		
+		boolean v_haveResultsets=false;
+		ResultSet rsData = null;
+		CachedRowSet crsData = null;
+		List rsDataList=new Vector();
 		try {
 			statementToExecute	= this.getConn().prepareCall(this.getDbObject());
 			
@@ -128,7 +136,8 @@ public class commonDAO {
 				System.out.println("detail: position "+v_position);
 				System.out.println("detail: getColName "+dtParameterTmp.getColName());
 				System.out.println("detail: getColValue "+dtParameterTmp.getColValue());
-				System.out.println("detail: getColType "+dtParameterTmp.getColType());
+				System.out.println("detail: getColType " );
+				System.out.println( dtParameterTmp.getColType());
 				
 				
 				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPESTRING)){
@@ -141,10 +150,30 @@ public class commonDAO {
 				
 			}
 			statementToExecute.registerOutParameter(1,Types.INTEGER);
-			statementToExecute.execute();
+			v_haveResultsets=statementToExecute.execute();
 			//System.out.println("resultado");
 			//System.out.println(statementToExecute.getInt(1));
 			this.outParameters.put(new Integer(1), new Integer(statementToExecute.getInt(1)));
+			
+			//analizando resultsets recibidos
+			System.out.println("v_haveResultsets");
+			System.out.println(v_haveResultsets);
+			if (v_haveResultsets){
+				System.out.println("tiene resultsets");
+				rsData=statementToExecute.getResultSet();
+				if (rsData != null) {
+					rsData.clearWarnings();
+					crsData = new CachedRowSetImpl ();
+					crsData.populate (rsData);						
+					rsDataList.add (crsData);
+					//closeToDB (rsData);
+					rsData = null;
+					crsData = null;
+				}
+				
+				
+			}
+			
 			//Cerramos la conexion
 			statementToExecute.close();
 			this.conn.close();
