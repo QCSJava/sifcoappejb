@@ -35,13 +35,9 @@ public class commonDAO {
 	private Hashtable inParameters;
 	private Hashtable outParameters;
 	private String dbObject;
-	private int intReturn;
-	public int getIntReturn() {
-		return intReturn;
-	}
-	public void setIntReturn(int intReturn) {
-		this.intReturn = intReturn;
-	}
+
+	private String typeReturn;
+	
 	public commonDAO() {
 
 		this.getConnectionDB();
@@ -118,6 +114,11 @@ public class commonDAO {
 		ResultSet rsData = null;
 		CachedRowSet crsData = null;
 		List rsDataList=new Vector();
+		
+		if (this.getTypeReturn()==null){
+			this.setTypeReturn(Common.TYPERETURN_INT);
+		}
+		
 		try {
 			statementToExecute	= this.getConn().prepareCall(this.getDbObject());
 			
@@ -149,11 +150,16 @@ public class commonDAO {
 				}
 				
 			}
-			statementToExecute.registerOutParameter(1,Types.INTEGER);
+			if (this.getTypeReturn().equals(Common.TYPERETURN_INT)){
+				statementToExecute.registerOutParameter(1,Types.INTEGER);	
+			}
+			
 			v_haveResultsets=statementToExecute.execute();
 			//System.out.println("resultado");
 			//System.out.println(statementToExecute.getInt(1));
-			this.outParameters.put(new Integer(1), new Integer(statementToExecute.getInt(1)));
+			if (this.getTypeReturn().equals(Common.TYPERETURN_INT)){
+				this.outParameters.put(new Integer(1), new Integer(statementToExecute.getInt(1)));
+			}
 			
 			//analizando resultsets recibidos
 			System.out.println("v_haveResultsets");
@@ -232,6 +238,12 @@ public class commonDAO {
 		
 		
 		return returnCode;
+	}
+	public String getTypeReturn() {
+		return typeReturn;
+	}
+	public void setTypeReturn(String typeReturn) {
+		this.typeReturn = typeReturn;
 	}
 	
 }

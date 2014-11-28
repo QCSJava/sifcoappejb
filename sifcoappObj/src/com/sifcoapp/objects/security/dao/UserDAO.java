@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.commonDAO;
 import com.sifcoapp.objects.common.to.DBManager;
 import com.sifcoapp.objects.security.to.ProfileInTO;
@@ -44,15 +45,14 @@ public class UserDAO extends commonDAO {
 		ProfileOutTO v_return=new ProfileOutTO();  
 		
 		System.out.println("Desde DAO");
-		
+		this.setTypeReturn(Common.TYPERETURN_RESULTSET);
 		this.setDbObject("{call sp_get_usr_profiles(?)}");
 		//this.setString(1, "return");
-		this.setInt(1, "USRNAME","1");
-		 
-		
+		this.setInt(1, "USRNAME",new Integer(1));
+		 		
 		this.runQuery();
 		System.out.println("return psg");
-		System.out.println(this.getInt());
+		//System.out.println(this.getInt());
 		 
 		//return this.getIntReturn();
 		
