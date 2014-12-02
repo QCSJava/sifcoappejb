@@ -3,6 +3,8 @@ package com.sifcoapp.objects.security.dao;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.commonDAO;
@@ -22,7 +24,7 @@ public class UserDAO extends commonDAO {
 	public UserAppOutTO getUserValid(UserAppInTO parameters){
 		
 		UserAppOutTO v_return=new UserAppOutTO();  
-		
+		List lstResultSets=new Vector();
 		System.out.println("Desde DAO");
 		
 		this.setDbObject("{? = call sp_valid_usr(?,?)}");
@@ -30,7 +32,7 @@ public class UserDAO extends commonDAO {
 		this.setString(2, "USRNAME",parameters.getIdUserApp());
 		this.setString(3, "USRPSW", parameters.getPasswordUserApp());
 		
-		this.runQuery();
+		lstResultSets=this.runQuery();
 		System.out.println("return psg");
 		System.out.println(this.getInt());
 		v_return.setValidUser(this.getInt());
@@ -43,14 +45,14 @@ public class UserDAO extends commonDAO {
 	public ProfileOutTO getUserProfiles(ProfileInTO parameters){
 		
 		ProfileOutTO v_return=new ProfileOutTO();  
-		
+		List lstResultSets=new Vector();
 		System.out.println("Desde DAO");
 		this.setTypeReturn(Common.TYPERETURN_RESULTSET);
 		this.setDbObject("{call sp_get_usr_profiles(?)}");
 		//this.setString(1, "return");
 		this.setInt(1, "USRNAME",new Integer(1));
 		 		
-		this.runQuery();
+		lstResultSets=this.runQuery();
 		System.out.println("return psg");
 		//System.out.println(this.getInt());
 		 
