@@ -47,7 +47,7 @@ public class commonDAO {
 	}
 	public void closeConnection(){
 		try {
-			if (this.getIstransaccional()==false){
+			if (this.getIstransaccional()==false && this.conn!=null){
 				this.conn.close();
 			}
 		} catch (SQLException e) {
@@ -105,7 +105,7 @@ public class commonDAO {
 		
 	}
 	
-	public void runQuery(){
+	public List runQuery(){
 		
 		//Primero creamos el prepareStatement
 		
@@ -181,14 +181,18 @@ public class commonDAO {
 			}
 			
 			//Cerramos la conexion
-			statementToExecute.close();
-			this.conn.close();
+			if (statementToExecute!=null){
+				statementToExecute.close();
+			}
+			
+			this.closeConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			
 		}
+		return rsDataList;
 		
 		
 	}
