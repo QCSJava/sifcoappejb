@@ -24,7 +24,7 @@ import com.sifcoapp.objects.common.to.DetailParameter;
 import com.sifcoapp.security.ejb.SecurityEJBRemote;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class commonDAO {
+public class CommonDAO {
 	private Connection conn;
 	private static final String DB_JDBC = "jdbc/sifcoDBJDBC";
 	private static final String CALLABLETYPE="CALLABLE";
@@ -38,7 +38,7 @@ public class commonDAO {
 
 	private String typeReturn;
 	
-	public commonDAO() {
+	public CommonDAO() {
 
 		this.getConnectionDB();
 		this.inParameters=new Hashtable();

@@ -8,6 +8,9 @@ public class Common {
 	public static final int RESP_OK_DB=0;
 	public static final String TYPESTRING="STRING";
 	public static final String TYPEINT="INT";
+	public static final String TYPELONG="LONG";
+	public static final String TYPEFLOAT="FLOAT";
+	public static final String TYPEDOUBLE="DOUBLE";
 	public static final String TYPEBIGDECIMAL="BIGDECIMAL";
 	public static final String TYPERETURN_INT="INT";
 	public static final String TYPERETURN_RESULTSET="RESULTSET";

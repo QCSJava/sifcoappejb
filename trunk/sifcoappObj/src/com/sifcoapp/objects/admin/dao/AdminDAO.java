@@ -8,10 +8,10 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
-import com.sifcoapp.objects.common.dao.commonDAO;
+import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class AdminDAO extends commonDAO{
+public class AdminDAO extends CommonDAO{
 	public List findCatalog(String nameCatalog){
 		
 		List lstResult=new Vector();
