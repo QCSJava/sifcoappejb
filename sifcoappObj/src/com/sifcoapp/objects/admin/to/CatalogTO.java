@@ -12,6 +12,19 @@ public class CatalogTO extends CommonTO {
 	private int codeTable;
 	private String codeCatlg;
 	private String valueCatlg;
+	
+	public CatalogTO(){
+		this.setCodeCatlg(null);
+		this.setCodeTable(0);
+		this.setValueCatlg(null);
+	}
+	
+	public CatalogTO(int codeTable,String codeCatlg,String valueCatlg){
+		this.setCodeCatlg(codeCatlg);
+		this.setCodeTable(codeTable);
+		this.setValueCatlg(valueCatlg);
+		
+	}
 	public String getCodeCatlg() {
 		return codeCatlg;
 	}
