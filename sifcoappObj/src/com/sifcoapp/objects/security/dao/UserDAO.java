@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
-import com.sifcoapp.objects.common.dao.commonDAO;
+import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.DBManager;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
 
-public class UserDAO extends commonDAO {
+public class UserDAO extends CommonDAO {
 	private DBManager dbManager;
 	
 	public UserDAO(){
