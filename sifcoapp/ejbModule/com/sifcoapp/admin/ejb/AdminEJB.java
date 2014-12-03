@@ -79,9 +79,10 @@ public class AdminEJB implements AdminEJBRemote {
 
 	public List findCatalog(String nameCatalog) {
 		// TODO Auto-generated method stub
-		List catlgLst=new Vector();
+		//List catlgLst=new Vector();
+		List catlgLst=null;
 		
-		CatalogTO catl1=new CatalogTO();
+		/*CatalogTO catl1=new CatalogTO();
 		catl1.setCodeCatlg("01");
 		catl1.setValueCatlg("El Salvador");
 		catl1.setCodeTable(1);
@@ -92,11 +93,11 @@ public class AdminEJB implements AdminEJBRemote {
 		catl2.setCodeTable(1);
 		
 		catlgLst.add(catl1);
-		catlgLst.add(catl2);
+		catlgLst.add(catl2);*/
 		
 		AdminDAO adminDAO=new AdminDAO();
 		
-		adminDAO.findCatalog(nameCatalog);
+		catlgLst=adminDAO.findCatalog(nameCatalog);
 		
 		return catlgLst;
 	}
