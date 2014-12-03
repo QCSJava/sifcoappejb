@@ -94,6 +94,29 @@ public class CommonDAO {
 	public void setBigDecimal(int position, String colName, Object colValue){
 		this.insertParam(position, colName, colValue, Common.TYPEBIGDECIMAL);
 	}
+	
+	/*
+	 * 
+	 */
+	public void setLong(int position, String colName, Object colValue){
+		this.insertParam(position, colName, colValue, Common.TYPELONG);
+	}
+	/*
+	 * 
+	 * */
+	public void setFloat(int position, String colName, Object colValue){
+		this.insertParam(position, colName, colValue, Common.TYPEFLOAT);
+	}
+	/*
+	 * 
+	 * 
+	 */
+	public void setDouble(int position, String colName, Object colValue){
+		this.insertParam(position, colName, colValue, Common.TYPEDOUBLE);
+	}
+	/*
+	 * 
+	 */
 	public Connection getConn() {
 		return conn;
 	}
@@ -147,6 +170,18 @@ public class CommonDAO {
 				
 				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPEINT)){
 					statementToExecute.setInt(v_position.intValue(), ((Integer)dtParameterTmp.getColValue()).intValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPELONG)){
+					statementToExecute.setLong(v_position.intValue(), ((Long)dtParameterTmp.getColValue()).longValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPEFLOAT)){
+					statementToExecute.setFloat(v_position.intValue(), ((Float)dtParameterTmp.getColValue()).floatValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPEDOUBLE)){
+					statementToExecute.setDouble(v_position.intValue(), ((Double)dtParameterTmp.getColValue()).doubleValue());
 				}
 				
 			}
