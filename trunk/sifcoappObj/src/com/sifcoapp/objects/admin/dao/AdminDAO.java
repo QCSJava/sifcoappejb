@@ -36,16 +36,14 @@ public class AdminDAO extends CommonDAO{
 		liRowset=lstResultSet.listIterator();
 		//Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
 		while (liRowset.hasNext()) {
-			//System.out.println(iterator.next());
-			//CatalogTO catalogTO=(CatalogTO)iterator.next();
-			//System.out.println("->"+catalogTO.getValueCatlg());
+			
 			rowsetActual=(CachedRowSetImpl) liRowset.next();
 			
 			try {
 				while(rowsetActual.next()){
-					System.out.println(rowsetActual.getString(1));
+					/*System.out.println(rowsetActual.getString(1));
 					System.out.println(rowsetActual.getString(2));
-					System.out.println(rowsetActual.getString(3));
+					System.out.println(rowsetActual.getString(3));*/
 					
 					lstResult.add(new CatalogTO(rowsetActual.getInt(1),rowsetActual.getString(2),rowsetActual.getString(3)));
 				}
