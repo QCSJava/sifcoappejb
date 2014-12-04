@@ -122,12 +122,91 @@ public class CommonDAO {
 	}
 
 	/*
+	 * Ejecuta sps de insercion, update o delete
 	 * 
 	 */
-	public void runUpdate(){
+	public int runUpdate(){
 		
+		CallableStatement statementToExecute = null; 
+		int v_result=0;
+
+		if (this.getTypeReturn()==null){
+			this.setTypeReturn(Common.TYPERETURN_INT);
+		}
+		
+		try {
+			statementToExecute	= this.getConn().prepareCall(this.getDbObject());
+			
+			//asignamos parametros
+			
+			Enumeration enParameters = this.inParameters.keys();
+			DetailParameter dtParameterTmp = null;
+			Integer v_position=null;
+			//Recorremos hash con parametros previamente seteados
+			while(enParameters.hasMoreElements()){
+				
+				v_position=(Integer)enParameters.nextElement();
+				
+				dtParameterTmp=(DetailParameter)this.inParameters.get(v_position);			
+				
+				System.out.println("detail: position "+v_position);
+				System.out.println("detail: getColName "+dtParameterTmp.getColName());
+				System.out.println("detail: getColValue "+dtParameterTmp.getColValue());
+				System.out.println("detail: getColType " );
+				System.out.println( dtParameterTmp.getColType());
+				
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPESTRING)){
+					statementToExecute.setString(v_position.intValue(), (String)dtParameterTmp.getColValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPEINT)){
+					statementToExecute.setInt(v_position.intValue(), ((Integer)dtParameterTmp.getColValue()).intValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPELONG)){
+					statementToExecute.setLong(v_position.intValue(), ((Long)dtParameterTmp.getColValue()).longValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPEFLOAT)){
+					statementToExecute.setFloat(v_position.intValue(), ((Float)dtParameterTmp.getColValue()).floatValue());
+				}
+				
+				if (dtParameterTmp.getColType().equalsIgnoreCase(Common.TYPEDOUBLE)){
+					statementToExecute.setDouble(v_position.intValue(), ((Double)dtParameterTmp.getColValue()).doubleValue());
+				}
+				
+			}
+			/*if (this.getTypeReturn().equals(Common.TYPERETURN_INT)){
+				statementToExecute.registerOutParameter(1,Types.INTEGER);	
+			}*/
+			
+			v_result=statementToExecute.executeUpdate();
+			//System.out.println("resultado");
+			//System.out.println(statementToExecute.getInt(1));
+			/*if (this.getTypeReturn().equals(Common.TYPERETURN_INT)){
+				this.outParameters.put(new Integer(1), new Integer(statementToExecute.getInt(1)));
+			}*/
+			
+			
+			
+			//Cerramos la conexion
+			if (statementToExecute!=null){
+				statementToExecute.close();
+			}
+			
+			this.closeConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+		}
+		return v_result;
 	}
-	
+	/*
+	 * 
+	 */
 	public List runQuery(){
 		
 		//Primero creamos el prepareStatement
