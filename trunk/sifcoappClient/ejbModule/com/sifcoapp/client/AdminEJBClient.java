@@ -54,4 +54,6 @@ public class AdminEJBClient {
 		
 		return catlgLst;
 	}
+	
+	
 }
