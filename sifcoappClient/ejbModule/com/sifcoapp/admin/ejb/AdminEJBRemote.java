@@ -13,4 +13,5 @@ public interface AdminEJBRemote {
 	public EnterpriseTO getEnterpriseInfo();
 	public EnterpriseTO getEnterpriseInfo(int enterpriseCode);
 	public List findCatalog(String nameCatalog);
+	
 }
