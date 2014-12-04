@@ -38,8 +38,14 @@ public class AdminEJB implements AdminEJBRemote {
 	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) {
 
 		EnterpriseOutTO enterpriseOutTO = new EnterpriseOutTO();
-
-		enterpriseOutTO.setRespCode(Common.RESP_OK_DB);
+		
+		int _return=0; 
+		AdminDAO adminDAO=new AdminDAO();
+		
+		_return=adminDAO.updEnterprise(parameters);
+		
+		enterpriseOutTO.setRespCode(_return);
+		
 
 		return enterpriseOutTO;
 	}
@@ -101,5 +107,7 @@ public class AdminEJB implements AdminEJBRemote {
 		
 		return catlgLst;
 	}
+
+	
 
 }
