@@ -87,4 +87,64 @@ public class AdminDAO extends CommonDAO{
 		
 		
 	}
+	
+	/*
+	 * Obtiene la informacion de la empresa
+	 */
+	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) {
+		
+		List lstResult=new Vector();
+		List lstResultSet=null;
+		EnterpriseTO _return=new EnterpriseTO();
+		
+		System.out.println("Desde DAO");
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{? = call sp_get_enterprise_info()}");
+				 		
+		lstResultSet=this.runQuery();
+		System.out.println("return psg");
+		
+		CachedRowSetImpl	rowsetActual;
+		
+		ListIterator 		liRowset 		= null;
+		liRowset=lstResultSet.listIterator();
+		//Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+			//System.out.println(iterator.next());
+			//CatalogTO catalogTO=(CatalogTO)iterator.next();
+			//System.out.println("->"+catalogTO.getValueCatlg());
+			rowsetActual=(CachedRowSetImpl) liRowset.next();
+			
+			try {
+				while(rowsetActual.next()){
+					/*System.out.println(rowsetActual.getString(2));
+					System.out.println(rowsetActual.getString(3));
+					System.out.println("fila");*/
+					_return.setCode(rowsetActual.getInt(1));
+					_return.setCompnyName(rowsetActual.getString(2));
+					_return.setCompnyAddr(rowsetActual.getString(3));
+					_return.setCountry_catalog(rowsetActual.getString(4));
+					_return.setCrintHeadr(rowsetActual.getString(5));
+					_return.setPhone1(rowsetActual.getString(6));
+					_return.setPhone2(rowsetActual.getString(7));
+					_return.setFax(rowsetActual.getString(8));
+					_return.setE_Mail(rowsetActual.getString(9));
+					_return.setManager(rowsetActual.getString(10));
+					_return.setTaxIdNum(rowsetActual.getString(11));
+					//lstResult.add(new CatalogTO(rowsetActual.getInt(1),rowsetActual.getString(2),rowsetActual.getString(3)));
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			
+		
+		
+		}
+		
+		return _return;
+	}
+
 }

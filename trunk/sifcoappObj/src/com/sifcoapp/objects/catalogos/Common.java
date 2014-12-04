@@ -14,4 +14,5 @@ public class Common {
 	public static final String TYPEBIGDECIMAL="BIGDECIMAL";
 	public static final String TYPERETURN_INT="INT";
 	public static final String TYPERETURN_RESULTSET="RESULTSET";
+	public static final String TYPERETURN_CURSOR="CURSOR";
 }

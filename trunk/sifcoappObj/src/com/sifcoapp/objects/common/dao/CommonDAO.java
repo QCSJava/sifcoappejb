@@ -268,6 +268,11 @@ public class CommonDAO {
 				statementToExecute.registerOutParameter(1,Types.INTEGER);	
 			}
 			
+			if (this.getTypeReturn().equals(Common.TYPERETURN_CURSOR)){
+				statementToExecute.registerOutParameter(1,Types.OTHER);	
+				this.getConn().setAutoCommit(false);
+			}
+			
 			v_haveResultsets=statementToExecute.execute();
 			//System.out.println("resultado");
 			//System.out.println(statementToExecute.getInt(1));
@@ -278,9 +283,14 @@ public class CommonDAO {
 			//analizando resultsets recibidos
 			System.out.println("v_haveResultsets");
 			System.out.println(v_haveResultsets);
-			if (v_haveResultsets){
+			if (v_haveResultsets || this.getTypeReturn().equals(Common.TYPERETURN_CURSOR)){
 				System.out.println("tiene resultsets");
+				if (this.getTypeReturn().equals(Common.TYPERETURN_RESULTSET)){
 				rsData=statementToExecute.getResultSet();
+				}
+				if (this.getTypeReturn().equals(Common.TYPERETURN_CURSOR)){
+					rsData=(ResultSet)statementToExecute.getObject(1);
+				}
 				if (rsData != null) {
 					rsData.clearWarnings();
 					crsData = new CachedRowSetImpl ();
