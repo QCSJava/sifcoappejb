@@ -60,19 +60,7 @@ public class AdminEJB implements AdminEJBRemote {
 	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) {
 
 		EnterpriseTO enterpriseOutTO = null;
-/*
-		enterpriseOutTO.setCode(1);
-		enterpriseOutTO.setCompnyAddr("San Bartolo");
-		enterpriseOutTO.setCompnyName("ACOETMISAB");
-		enterpriseOutTO.setCountry_catalog("01");
-		enterpriseOutTO.setCrintHeadr("ACOETMISAB");
-		enterpriseOutTO.setE_Mail("contactenos@acoetmisab.com.sv");
-		enterpriseOutTO.setFax("2222-1111");
-		enterpriseOutTO.setManager("Pepe Perez");
-		enterpriseOutTO.setPhone1("2222-2222");
-		enterpriseOutTO.setPhone2("2222-3333");
-		enterpriseOutTO.setTaxIdNum("1234-5");
-*/
+
 		AdminDAO adminDAO=new AdminDAO();
 		
 		enterpriseOutTO=adminDAO.getEnterpriseInfo(enterpriseCode);
@@ -86,24 +74,14 @@ public class AdminEJB implements AdminEJBRemote {
 		enterpriseOutTO = this.getEnterpriseInfo(0);
 		return enterpriseOutTO;
 	}
-
+/*
+ * busca un catalogo especifico
+ * @see com.sifcoapp.admin.ejb.AdminEJBRemote#findCatalog(java.lang.String)
+ */
 	public List findCatalog(String nameCatalog) {
 		// TODO Auto-generated method stub
 		//List catlgLst=new Vector();
 		List catlgLst=null;
-		
-		/*CatalogTO catl1=new CatalogTO();
-		catl1.setCodeCatlg("01");
-		catl1.setValueCatlg("El Salvador");
-		catl1.setCodeTable(1);
-		
-		CatalogTO catl2=new CatalogTO();
-		catl2.setCodeCatlg("02");
-		catl2.setValueCatlg("Guatemala");
-		catl2.setCodeTable(1);
-		
-		catlgLst.add(catl1);
-		catlgLst.add(catl2);*/
 		
 		AdminDAO adminDAO=new AdminDAO();
 		
