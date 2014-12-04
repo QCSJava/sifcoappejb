@@ -58,7 +58,7 @@ public class AdminTest {
 		parameters.setCompnyName("ACOETMISAB");
 		parameters.setCountry_catalog("01");
 		parameters.setCrintHeadr("ACOETMISAB");
-		parameters.setE_Mail("contactenos@acoetmisab.com.sv");
+		parameters.setE_Mail("contactenos@acoetmisab.com.sv2");
 		parameters.setFax("2222-1111");
 		parameters.setManager("Pepe Perez");
 		parameters.setPhone1("2222-2222");
