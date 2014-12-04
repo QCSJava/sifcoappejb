@@ -59,8 +59,8 @@ public class AdminEJB implements AdminEJBRemote {
 	 */
 	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) {
 
-		EnterpriseTO enterpriseOutTO = new EnterpriseTO();
-
+		EnterpriseTO enterpriseOutTO = null;
+/*
 		enterpriseOutTO.setCode(1);
 		enterpriseOutTO.setCompnyAddr("San Bartolo");
 		enterpriseOutTO.setCompnyName("ACOETMISAB");
@@ -72,7 +72,11 @@ public class AdminEJB implements AdminEJBRemote {
 		enterpriseOutTO.setPhone1("2222-2222");
 		enterpriseOutTO.setPhone2("2222-3333");
 		enterpriseOutTO.setTaxIdNum("1234-5");
-
+*/
+		AdminDAO adminDAO=new AdminDAO();
+		
+		enterpriseOutTO=adminDAO.getEnterpriseInfo(enterpriseCode);
+		
 		return enterpriseOutTO;
 	}
 
