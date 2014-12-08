@@ -56,4 +56,16 @@ public class AdminEJBClient {
 	}
 	
 	
+	/**
+	 * Obtiene los registros del catalogo de tablas del sistema
+	 * @author Rutilio
+	 */
+	public List getTablesCatalog(){
+		List _return=null;
+		
+		_return=bean.getTablesCatalog();
+		
+		return _return;
+	}
+	
 }
