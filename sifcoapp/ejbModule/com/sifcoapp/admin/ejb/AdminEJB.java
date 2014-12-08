@@ -90,6 +90,18 @@ public class AdminEJB implements AdminEJBRemote {
 		return catlgLst;
 	}
 
-	
+	/**
+	 * Obtiene los registros del catalogo de tablas del sistema
+	 * @author Rutilio
+	 */
+	public List getTablesCatalog(){
+		List _return=null;
+		
+		AdminDAO adminDAO=new AdminDAO();
+		
+		_return=adminDAO.getTablesCatalog();
+		
+		return _return;
+	}
 
 }
