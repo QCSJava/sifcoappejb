@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
@@ -108,16 +109,12 @@ public class AdminDAO extends CommonDAO{
 		liRowset=lstResultSet.listIterator();
 		//Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
 		while (liRowset.hasNext()) {
-			//System.out.println(iterator.next());
-			//CatalogTO catalogTO=(CatalogTO)iterator.next();
-			//System.out.println("->"+catalogTO.getValueCatlg());
+			
 			rowsetActual=(CachedRowSetImpl) liRowset.next();
 			
 			try {
 				while(rowsetActual.next()){
-					/*System.out.println(rowsetActual.getString(2));
-					System.out.println(rowsetActual.getString(3));
-					System.out.println("fila");*/
+					
 					_return.setCode(rowsetActual.getInt(1));
 					_return.setCompnyName(rowsetActual.getString(2));
 					_return.setCompnyAddr(rowsetActual.getString(3));
@@ -129,7 +126,7 @@ public class AdminDAO extends CommonDAO{
 					_return.setE_Mail(rowsetActual.getString(9));
 					_return.setManager(rowsetActual.getString(10));
 					_return.setTaxIdNum(rowsetActual.getString(11));
-					//lstResult.add(new CatalogTO(rowsetActual.getInt(1),rowsetActual.getString(2),rowsetActual.getString(3)));
+					
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -144,5 +141,40 @@ public class AdminDAO extends CommonDAO{
 		
 		return _return;
 	}
+	/**
+	 * Obtiene los registros del catalogo de tablas del sistema
+	 * @author Rutilio
+	 */
+	public List getTablesCatalog(){
+		List _return=new Vector();
+		List lstResultSet=null;
+		TablesCatalogTO _returnTO=new TablesCatalogTO();
+		
+		System.out.println("Desde DAO");
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{? = call sp_get_tables_catalog()}");
+				 		
+		lstResultSet=this.runQuery();
+			
+		CachedRowSetImpl	rowsetActual;
+		
+		ListIterator 		liRowset 		= null;
+		liRowset=lstResultSet.listIterator();
+		//Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+			rowsetActual=(CachedRowSetImpl) liRowset.next();
+			
+			try {
+				while(rowsetActual.next()){
+					_return.add(new TablesCatalogTO(rowsetActual.getString(1),rowsetActual.getString(2),rowsetActual.getString(3)));
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		}
+		return _return;
+	}
 }
