@@ -179,23 +179,18 @@ public class AdminDAO extends CommonDAO{
 	}
 	
 	/*
-	 * Inserta nuevo registro en tabla de catalogos de sistema
+	 * Mantenimiento tabla de catalogos de sistema
 	 */
-	public int cat_tab1_catalogos_ins(CatalogTO parameters){
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action){
 		int _return;
 			
-		this.setDbObject("{call sp_upd_enterprise(?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?)}");
 		
-		/*.setString(1, "_name",parameters.getCompnyName());
-		this.setString(2, "_addr",parameters.getCompnyAddr());
-		this.setString(3, "_country",parameters.getCountry_catalog());
-		this.setString(4, "_printheadr",parameters.getCrintHeadr());
-		this.setString(5, "_phone1",parameters.getPhone1());
-		this.setString(6, "_phone2",parameters.getPhone2());
-		this.setString(7, "_fax",parameters.getFax());
-		this.setString(8, "_e_mail",parameters.getE_Mail());
-		this.setString(9, "_manager",parameters.getManager());
-		this.setString(10, "_taxidnum",parameters.getTaxIdNum());*/
+		this.setString(1, "_code",parameters.getCodeCatlg());
+		this.setString(2, "_value",parameters.getValueCatlg());
+		this.setInt(3, "_table",new Integer(parameters.getCodeTable()));
+		this.setInt(4, "_action",new Integer(action));
+		
 		_return=this.runUpdate();
 							
 		return _return;
