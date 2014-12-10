@@ -103,5 +103,17 @@ public class AdminEJB implements AdminEJBRemote {
 		
 		return _return;
 	}
+	/*
+	 * Mantenimiento de Catalogos
+	 */
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action){
+		
+		int _return;
+		
+		AdminDAO adminDAO=new AdminDAO();
+		_return=adminDAO.cat_tab1_catalogos_mtto(parameters, action);
+		
+		return _return;
+	}
 
 }
