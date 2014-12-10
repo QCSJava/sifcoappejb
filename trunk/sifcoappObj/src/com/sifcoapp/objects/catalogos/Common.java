@@ -15,4 +15,7 @@ public class Common {
 	public static final String TYPERETURN_INT="INT";
 	public static final String TYPERETURN_RESULTSET="RESULTSET";
 	public static final String TYPERETURN_CURSOR="CURSOR";
+	public static final String MTTOINSERT="INSERT";
+	public static final String MTTOUPDATE="UPDATE";
+	public static final String MTTODELETE="DELETE";
 }
