@@ -9,6 +9,7 @@ import com.sifcoapp.client.AdminEJBClient;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 
 public class AdminTest {
@@ -92,6 +93,25 @@ public class AdminTest {
 			//System.out.println(iterator.next());
 			CatalogTO catalogTO=(CatalogTO)iterator.next();
 			System.out.println("->"+catalogTO.getValueCatlg());
+		
+		}
+	}
+	/*
+	 * Obtiene el catalogo de tablas del sistema
+	 * */
+public static void getTablesCatalogTest(){
+		
+		List catlgLst=null;
+		
+		catlgLst=AdminEJBService.getTablesCatalog();
+		System.out.println("luego de servicio");
+		Iterator<TablesCatalogTO> iterator = catlgLst.iterator();
+		while (iterator.hasNext()) {
+			//System.out.println(iterator.next());
+			TablesCatalogTO _returnTO=(TablesCatalogTO)iterator.next();
+			System.out.println("Code: ->"+_returnTO.getCode());
+			System.out.println("Name: ->"+_returnTO.getName());
+			System.out.println("Description:->"+_returnTO.getDescription());
 		
 		}
 	}
