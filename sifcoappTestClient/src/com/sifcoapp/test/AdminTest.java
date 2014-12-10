@@ -10,6 +10,7 @@ import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
+import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 
 public class AdminTest {
@@ -114,6 +115,34 @@ public static void getTablesCatalogTest(){
 			System.out.println("Description:->"+_returnTO.getDescription());
 		
 		}
+	}
+
+	public static void cat_tab1_catalogos_mtto(){
+	
+		int _result;
+		CatalogTO parameters = new CatalogTO();
+				
+		parameters.setCodeTable(1);
+		parameters.setCodeCatlg("HN");
+		parameters.setValueCatlg("Honduras");
+		
+		//Agregar
+		
+		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOINSERT);
+		
+		//Actualizar
+		
+		parameters.setValueCatlg("Honduras UPD");
+		
+		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOUPDATE);
+		
+		//Borrar
+			
+		_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTODELETE);
+		
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+		
 	}
 	
 }
