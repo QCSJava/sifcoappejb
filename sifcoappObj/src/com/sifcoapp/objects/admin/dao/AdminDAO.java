@@ -177,4 +177,28 @@ public class AdminDAO extends CommonDAO{
 		}
 		return _return;
 	}
+	
+	/*
+	 * Inserta nuevo registro en tabla de catalogos de sistema
+	 */
+	public int cat_tab1_catalogos_ins(CatalogTO parameters){
+		int _return;
+			
+		this.setDbObject("{call sp_upd_enterprise(?,?,?,?,?,?,?,?,?,?)}");
+		
+		/*.setString(1, "_name",parameters.getCompnyName());
+		this.setString(2, "_addr",parameters.getCompnyAddr());
+		this.setString(3, "_country",parameters.getCountry_catalog());
+		this.setString(4, "_printheadr",parameters.getCrintHeadr());
+		this.setString(5, "_phone1",parameters.getPhone1());
+		this.setString(6, "_phone2",parameters.getPhone2());
+		this.setString(7, "_fax",parameters.getFax());
+		this.setString(8, "_e_mail",parameters.getE_Mail());
+		this.setString(9, "_manager",parameters.getManager());
+		this.setString(10, "_taxidnum",parameters.getTaxIdNum());*/
+		_return=this.runUpdate();
+							
+		return _return;
+	}
+	
 }
