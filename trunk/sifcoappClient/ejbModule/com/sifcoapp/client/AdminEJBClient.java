@@ -8,6 +8,7 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 
@@ -66,6 +67,18 @@ public class AdminEJBClient {
 		_return=bean.getTablesCatalog();
 		
 		return _return;
+	}
+	
+	/*
+	 * Mantenimiento de Catalogos
+	 */
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action){
+		int _return=0;
+		
+		_return=bean.cat_tab1_catalogos_mtto(parameters, action);
+		
+		return _return;				
+		
 	}
 	
 }
