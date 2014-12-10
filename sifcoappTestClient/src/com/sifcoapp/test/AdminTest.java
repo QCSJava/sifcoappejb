@@ -128,13 +128,13 @@ public static void getTablesCatalogTest(){
 		
 		//Agregar
 		
-		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOINSERT);
+		_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOINSERT);
 		
 		//Actualizar
 		
 		parameters.setValueCatlg("Honduras UPD");
 		
-		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOUPDATE);
+		_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOUPDATE);
 		
 		//Borrar
 			
