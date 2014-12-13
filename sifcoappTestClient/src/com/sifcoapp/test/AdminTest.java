@@ -56,7 +56,7 @@ public class AdminTest {
 		EnterpriseOutTO resp=null;
 		
 		parameters.setCode(1);
-		parameters.setCompnyAddr("San Bartolo");
+		parameters.setCompnyAddr("San Bartolo1");
 		parameters.setCompnyName("ACOETMISAB");
 		parameters.setCountry_catalog("01");
 		parameters.setCrintHeadr("ACOETMISAB");
@@ -87,13 +87,13 @@ public class AdminTest {
 		
 		List catlgLst=null;
 		
-		catlgLst=AdminEJBService.findCatalog("cg_paises");
-		System.out.println("luego de servicio");
+		catlgLst=AdminEJBService.findCatalog("Paises");
+		System.out.println("luego de servicio mod   ");
 		Iterator<CatalogTO> iterator = catlgLst.iterator();
 		while (iterator.hasNext()) {
 			//System.out.println(iterator.next());
 			CatalogTO catalogTO=(CatalogTO)iterator.next();
-			System.out.println("->"+catalogTO.getValueCatlg());
+			System.out.println("--->"+ catalogTO.getCatcode() + "-"+ catalogTO.getCatvalue());
 		
 		}
 	}
@@ -122,23 +122,23 @@ public static void getTablesCatalogTest(){
 		int _result;
 		CatalogTO parameters = new CatalogTO();
 				
-		parameters.setCodeTable(1);
-		parameters.setCodeCatlg("HN");
-		parameters.setValueCatlg("Honduras");
+		parameters.setTablecode(1);
+		parameters.setCatcode("1");
+		parameters.setCatvalue("Honduras");
 		
 		//Agregar
 		
-		_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOINSERT);
+	//	_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOINSERT);
 		
 		//Actualizar
 		
-		parameters.setValueCatlg("Honduras UPD");
+		parameters.setCatvalue("Honduras UPD");
 		
 		_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOUPDATE);
 		
 		//Borrar
 			
-		_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTODELETE);
+		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTODELETE);
 		
 		System.out.println("luego de servicio");
 		System.out.println(_result);
