@@ -32,6 +32,7 @@ public class SecurityEJBClient implements SecurityEJBRemote{
 				
 		return usrOutTO;
 		
+		
 	}
 	
 	public String SayHello(String hellomsg) {
