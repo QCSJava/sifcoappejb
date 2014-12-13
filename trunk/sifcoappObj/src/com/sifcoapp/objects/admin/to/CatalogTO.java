@@ -9,40 +9,53 @@ public class CatalogTO extends CommonTO {
 	 */
 	private static final long serialVersionUID = 3400353028558278833L;
 	
-	private int codeTable;
-	private String codeCatlg;
-	private String valueCatlg;
-	
+	private String catcode;
+	public String getCatcode() {
+		return catcode;
+	}
+
+	public void setCatcode(String catcode) {
+		this.catcode = catcode;
+	}
+
+	private int tablecode;
+	public int getTablecode() {
+		return tablecode;
+	}
+
+	public void setTablecode(int tablecode) {
+		this.tablecode = tablecode;
+	}
+
+	private String catvalue;
+	public String getCatvalue() {
+		return catvalue;
+	}
+
+	public void setCatvalue(String catvalue) {
+		this.catvalue = catvalue;
+	}
+
+	private String catstatus;
+	public String getCatstatus() {
+		return catstatus;
+	}
+
+	public void setCatstatus(String catstatus) {
+		this.catstatus = catstatus;
+	}
+
 	public CatalogTO(){
-		this.setCodeCatlg(null);
-		this.setCodeTable(0);
-		this.setValueCatlg(null);
+		this.setCatcode(null);
+		this.setTablecode(0);
+		this.setCatvalue(null);
+		this.setCatstatus(null);		
 	}
 	
-	public CatalogTO(int codeTable,String codeCatlg,String valueCatlg){
-		this.setCodeCatlg(codeCatlg);
-		this.setCodeTable(codeTable);
-		this.setValueCatlg(valueCatlg);
-		
+	public CatalogTO(String Catcode,int Tablecode,String Catvalue, String Catstatus){
+		this.setCatcode(Catcode);
+		this.setTablecode(Tablecode);
+		this.setCatvalue(Catvalue);
+		this.setCatstatus(Catstatus);
 	}
-	public String getCodeCatlg() {
-		return codeCatlg;
-	}
-	public void setCodeCatlg(String codeCatlg) {
-		this.codeCatlg = codeCatlg;
-	}
-	public String getValueCatlg() {
-		return valueCatlg;
-	}
-	public void setValueCatlg(String valueCatlg) {
-		this.valueCatlg = valueCatlg;
-	}
-	public int getCodeTable() {
-		return codeTable;
-	}
-	public void setCodeTable(int codeTable) {
-		this.codeTable = codeTable;
-	}
-
-
 }

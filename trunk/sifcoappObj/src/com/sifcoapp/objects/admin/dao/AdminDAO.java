@@ -46,7 +46,7 @@ public class AdminDAO extends CommonDAO{
 					System.out.println(rowsetActual.getString(2));
 					System.out.println(rowsetActual.getString(3));*/
 					
-					lstResult.add(new CatalogTO(rowsetActual.getInt(1),rowsetActual.getString(2),rowsetActual.getString(3)));
+					lstResult.add(new CatalogTO(rowsetActual.getString(1),rowsetActual.getInt(2),rowsetActual.getString(3),rowsetActual.getString(4)));
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -184,12 +184,13 @@ public class AdminDAO extends CommonDAO{
 	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action){
 		int _return;
 			
-		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?)}");
+		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?,?,?,?,?,?)}");
 		
-		this.setString(1, "_code",parameters.getCodeCatlg());
-		this.setString(2, "_value",parameters.getValueCatlg());
-		this.setInt(3, "_table",new Integer(parameters.getCodeTable()));
-		this.setInt(4, "_action",new Integer(action));
+		this.setString(1, "_catcode",parameters.getCatcode());
+		this.setInt(2, "_tablecode",new Integer(parameters.getTablecode()));
+		this.setString(3, "_catvalue",parameters.getCatvalue());
+		this.setString(4, "_catstatus",parameters.getCatstatus());
+		this.setInt(5, "_action",new Integer(action));
 		
 		_return=this.runUpdate();
 							
