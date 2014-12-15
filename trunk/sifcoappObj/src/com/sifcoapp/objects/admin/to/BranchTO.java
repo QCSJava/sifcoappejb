@@ -12,6 +12,22 @@ public class BranchTO extends CommonTO{
 	private String whsname;
 	private String grp_code;
 	private String locked;
+
+	public BranchTO(){
+		this.setGrp_code(grp_code);
+		this.setLocked(locked);
+		this.setWhscode(whscode);
+		this.setWhsname(whsname);
+	}
+	
+	
+	public BranchTO(String whscode, String whsname, String grp_code, String locked){
+		this.setGrp_code(grp_code);
+		this.setLocked(locked);
+		this.setWhscode(whscode);
+		this.setWhsname(whsname);
+	}
+	
 	
 	public String getWhscode() {
 		return whscode;
