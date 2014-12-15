@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
@@ -191,6 +192,52 @@ public class AdminDAO extends CommonDAO{
 		_return=this.runUpdate();
 							
 		return _return;
+	}
+	
+	/*
+	 * Guarda los cambios en los articulos
+	 */
+	public int saveArticle(ArticlesTO parameters) {
+
+		int v_resp = 0;
+
+		this.setDbObject("{call sp_upd_enterprise(?,?,?,?,?,?,?,?,?,?)}");
+
+		this.setString(1,"_itemcode", parameters.getItemCode());
+		this.setString(2,"_itemname", parameters.getItemName());
+		this.setString(3,"_itemtype", parameters.getItemType());
+		this.setInt(4,"_itmsgrpcod", new Integer(parameters.getItmsGrpCod ()));
+		this.setString(5,"_vatliable", parameters.getVatLiable());
+		this.setString(6,"_codebars", parameters.getCodeBars());
+		this.setString(7,"_prchseitem", parameters.getPrchseItem ());
+		this.setString(8,"_sellitem", parameters.getSellItem());
+		this.setString(9,"_invntitem", parameters.getInvntItem());
+		this.setString(10,"_assetitem", parameters.getAssetItem());
+		this.setString(11,"_cardcode", parameters.getCardCode());
+		this.setString(12,"_buyunitmsr", parameters.getBuyUnitMsr());
+		this.setDouble(13,"_numinbuy", parameters.getNumInBuy());
+		this.setString(14,"_salunitmsr", parameters.getSalUnitMsr());
+		this.setDouble(15,"_salpackun", parameters.getSalPackUn());
+		this.setString(16,"_suppcatnum", parameters.getSuppCatNum());
+		this.setDouble(17,"_purpackun", parameters.getSalPackUn());
+		this.setDouble(18,"_avgprice", parameters.getAvgPrice());
+		this.setDouble(19,"_onhand", parameters.getOnHand());
+		this.setString(20,"_validfor", parameters.getValidFor());
+		this.setString(21,"_validfrom", parameters.getValidFrom());
+		this.setString(22,"_validto", parameters.getValidTo());
+		this.setString(23,"_invntryuom", parameters.getInvntryUom());
+		this.setDouble(24,"_numinsale", parameters.getNumInSale());
+		this.setString(25,"_dfltwh", parameters.getDfltWH());
+		this.setString(26,"_wtliable", parameters.getWtliable());
+		this.setString(27,"_sww", parameters.getSww());
+		this.setString(28,"_validcomm", parameters.getValidComm());
+		this.setInt(29,"_usersign", parameters.getUserSign());
+		this.setInt(29, "_action", new Integer("1"));
+
+		v_resp = this.runUpdate();
+
+		return v_resp;
+
 	}
 	
 }
