@@ -18,6 +18,9 @@ public class BranchArticlesTO extends CommonTO{
 	private Double onorder;
 	private Double minstock;
 	private Double maxstock;
+	private Double minorder;
+	private String locked;
+	private boolean isasociated;
 	public BranchTO getBranch() {
 		return branch;
 	}
@@ -84,8 +87,13 @@ public class BranchArticlesTO extends CommonTO{
 	public void setLocked(String locked) {
 		this.locked = locked;
 	}
-	private Double minorder;
-	private String locked;
+	public boolean isIsasociated() {
+		return isasociated;
+	}
+	public void setIsasociated(boolean isasociated) {
+		this.isasociated = isasociated;
+	}
+	
 	
 	
 }
