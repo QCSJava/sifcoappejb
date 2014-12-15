@@ -87,7 +87,7 @@ public class AdminTest {
 		
 		List catlgLst=null;
 		
-		catlgLst=AdminEJBService.findCatalog("Paises");
+		catlgLst=AdminEJBService.findCatalog("paises");
 		System.out.println("luego de servicio mod   ");
 		Iterator<CatalogTO> iterator = catlgLst.iterator();
 		while (iterator.hasNext()) {
@@ -100,7 +100,7 @@ public class AdminTest {
 	/*
 	 * Obtiene el catalogo de tablas del sistema
 	 * */
-public static void getTablesCatalogTest(){
+	public static void getTablesCatalogTest(){
 		
 		List catlgLst=null;
 		
@@ -112,7 +112,6 @@ public static void getTablesCatalogTest(){
 			TablesCatalogTO _returnTO=(TablesCatalogTO)iterator.next();
 			System.out.println("Code: ->"+_returnTO.getCode());
 			System.out.println("Name: ->"+_returnTO.getName());
-			System.out.println("Description:->"+_returnTO.getDescription());
 		
 		}
 	}
@@ -124,11 +123,13 @@ public static void getTablesCatalogTest(){
 				
 		parameters.setTablecode(1);
 		parameters.setCatcode("1");
-		parameters.setCatvalue("Honduras");
+		parameters.setCatvalue("Panama 2");
+		parameters.setCatstatus("P");
+		parameters.setUsersign(1);
 		
 		//Agregar
 		
-	//	_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOINSERT);
+		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOINSERT);
 		
 		//Actualizar
 		
