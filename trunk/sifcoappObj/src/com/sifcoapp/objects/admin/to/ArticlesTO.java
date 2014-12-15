@@ -1,8 +1,7 @@
 package com.sifcoapp.objects.admin.to;
 
-import java.sql.Date;
-
 import com.sifcoapp.objects.common.to.CommonTO;
+import java.sql.Date;
 
 public class ArticlesTO extends CommonTO {
 
