@@ -6,12 +6,14 @@ public class TablesCatalogTO extends CommonTO {
 
 	private String name;
 	private String description;
-	private String code;
+	private int code;
+	
 	public TablesCatalogTO(){
+		this.setCode(0);
 		this.setDescription(null);
 		this.setName(null);
 	}
-	public TablesCatalogTO(String _code, String _name, String _description){
+	public TablesCatalogTO(int _code, String _name, String _description){
 		this.setDescription(_description);
 		this.setName(_name);
 		this.setCode(_code);
@@ -30,10 +32,10 @@ public class TablesCatalogTO extends CommonTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
-	public void setCode(String code) {
+	public void setCode(int code) {
 		this.code = code;
 	}
 	

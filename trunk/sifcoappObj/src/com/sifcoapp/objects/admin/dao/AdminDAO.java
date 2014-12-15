@@ -14,6 +14,7 @@ import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class AdminDAO extends CommonDAO{
+	
 	/*
 	 * Retorna un catalogo specifico de la base de datos
 	 */
@@ -46,7 +47,7 @@ public class AdminDAO extends CommonDAO{
 					System.out.println(rowsetActual.getString(2));
 					System.out.println(rowsetActual.getString(3));*/
 					
-					lstResult.add(new CatalogTO(rowsetActual.getString(1),rowsetActual.getInt(2),rowsetActual.getString(3),rowsetActual.getString(4)));
+					lstResult.add(new CatalogTO(rowsetActual.getString(1),rowsetActual.getInt(2),rowsetActual.getString(3),rowsetActual.getString(4),rowsetActual.getInt(5)));
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -63,7 +64,6 @@ public class AdminDAO extends CommonDAO{
 	/*
 	 * Actualiza los datos de la empresa
 	 */
-	
 	public int updEnterprise(EnterpriseTO parameters){
 		
 		int v_resp=0;
@@ -125,26 +125,22 @@ public class AdminDAO extends CommonDAO{
 					_return.setFax(rowsetActual.getString(8));
 					_return.setE_Mail(rowsetActual.getString(9));
 					_return.setManager(rowsetActual.getString(10));
-					_return.setTaxIdNum(rowsetActual.getString(11));
-					
+					_return.setTaxIdNum(rowsetActual.getString(11));					
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-		
-			
-		
-		
+			}				
 		}
 		
 		return _return;
 	}
-	/**
+	
+	/*
 	 * Obtiene los registros del catalogo de tablas del sistema
 	 * @author Rutilio
-	 */
+	 */	
 	public List getTablesCatalog(){
 		List _return=new Vector();
 		List lstResultSet=null;
@@ -166,14 +162,13 @@ public class AdminDAO extends CommonDAO{
 			
 			try {
 				while(rowsetActual.next()){
-					_return.add(new TablesCatalogTO(rowsetActual.getString(1),rowsetActual.getString(2),rowsetActual.getString(3)));
+					_return.add(new TablesCatalogTO(rowsetActual.getInt(1),rowsetActual.getString(2),rowsetActual.getString(3)));
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 		return _return;
 	}
@@ -184,13 +179,14 @@ public class AdminDAO extends CommonDAO{
 	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action){
 		int _return;
 			
-		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?,?,?)}");
 		
 		this.setString(1, "_catcode",parameters.getCatcode());
 		this.setInt(2, "_tablecode",new Integer(parameters.getTablecode()));
 		this.setString(3, "_catvalue",parameters.getCatvalue());
 		this.setString(4, "_catstatus",parameters.getCatstatus());
-		this.setInt(5, "_action",new Integer(action));
+		this.setInt(5, "_usersign",new Integer(parameters.getUsersign()));
+		this.setInt(6, "_action",new Integer(action));
 		
 		_return=this.runUpdate();
 							

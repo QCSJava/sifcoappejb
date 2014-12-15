@@ -45,17 +45,29 @@ public class CatalogTO extends CommonTO {
 		this.catstatus = catstatus;
 	}
 
+	private int usersign;
+	
+	public int getUsersign() {
+		return usersign;
+	}
+
+	public void setUsersign(int usersign) {
+		this.usersign = usersign;
+	}
+
 	public CatalogTO(){
 		this.setCatcode(null);
 		this.setTablecode(0);
 		this.setCatvalue(null);
-		this.setCatstatus(null);		
+		this.setCatstatus(null);
+		this.setUsersign(0);
 	}
 	
-	public CatalogTO(String Catcode,int Tablecode,String Catvalue, String Catstatus){
+	public CatalogTO(String Catcode,int Tablecode,String Catvalue, String Catstatus,int Usersign){
 		this.setCatcode(Catcode);
 		this.setTablecode(Tablecode);
 		this.setCatvalue(Catvalue);
 		this.setCatstatus(Catstatus);
+		this.setUsersign(Usersign);
 	}
 }
