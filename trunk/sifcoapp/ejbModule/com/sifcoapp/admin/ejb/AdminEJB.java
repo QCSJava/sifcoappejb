@@ -74,10 +74,11 @@ public class AdminEJB implements AdminEJBRemote {
 		enterpriseOutTO = this.getEnterpriseInfo(0);
 		return enterpriseOutTO;
 	}
-/*
- * busca un catalogo especifico
- * @see com.sifcoapp.admin.ejb.AdminEJBRemote#findCatalog(java.lang.String)
- */
+	
+	/*
+ 	 * busca un catalogo especifico
+	 * @see com.sifcoapp.admin.ejb.AdminEJBRemote#findCatalog(java.lang.String)
+	 */
 	public List findCatalog(String nameCatalog) {
 		// TODO Auto-generated method stub
 		//List catlgLst=new Vector();
@@ -90,7 +91,7 @@ public class AdminEJB implements AdminEJBRemote {
 		return catlgLst;
 	}
 
-	/**
+	/*
 	 * Obtiene los registros del catalogo de tablas del sistema
 	 * @author Rutilio
 	 */
@@ -103,6 +104,7 @@ public class AdminEJB implements AdminEJBRemote {
 		
 		return _return;
 	}
+	
 	/*
 	 * Mantenimiento de Catalogos
 	 */
