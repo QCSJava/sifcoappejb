@@ -2,7 +2,7 @@ package com.sifcoapp.objects.admin.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
-public class BranchArticles extends CommonTO{
+public class BranchArticlesTO extends CommonTO{
 
 	/**
 	 * 
