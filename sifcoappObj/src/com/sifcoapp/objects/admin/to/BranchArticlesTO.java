@@ -21,6 +21,36 @@ public class BranchArticlesTO extends CommonTO{
 	private Double minorder;
 	private String locked;
 	private boolean isasociated;
+	
+	public BranchArticlesTO(){
+		this.setBranch(branch);
+		this.setItemcode(itemcode);
+		this.setWhscode(whscode);
+		this.setOnhand(onhand);
+		this.setOnhand1(onhand1);
+		this.setIscommited(iscommited);
+		this.setOnorder(onorder);
+		this.setMinorder(minorder);
+		this.setMaxstock(maxstock);
+		this.setMinstock(minstock);
+		this.setLocked(locked);		
+		this.setIsasociated(isasociated);	
+	}
+	public BranchArticlesTO(BranchTO branch, String itemcode, String whscode, Double onhand, Double onhand1, Double iscommited, Double onorder, Double minstock, Double maxstock, String locked, boolean isasociated){	
+		this.setBranch(branch);
+		this.setItemcode(itemcode);
+		this.setWhscode(whscode);
+		this.setOnhand(onhand);
+		this.setOnhand1(onhand1);
+		this.setIscommited(iscommited);
+		this.setOnorder(onorder);
+		this.setMinorder(minorder);
+		this.setMaxstock(maxstock);
+		this.setMinstock(minstock);
+		this.setLocked(locked);		
+		this.setIsasociated(isasociated);		
+	}
+	
 	public BranchTO getBranch() {
 		return branch;
 	}
