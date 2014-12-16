@@ -6,6 +6,7 @@ import java.util.Vector;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -117,5 +118,17 @@ public class AdminEJB implements AdminEJBRemote {
 		
 		return _return;
 	}
-
+	
+	/*
+	 * Mantenimiento de Articulos
+	 */
+	public int SaveArticles(ArticlesTO parameters, int action){
+		
+		int _return;
+		
+		AdminDAO adminDAO=new AdminDAO();
+		_return=adminDAO.saveArticle(parameters, action);
+		
+		return _return;
+	}
 }
