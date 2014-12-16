@@ -11,6 +11,7 @@ public class Common {
 	public static final String TYPELONG="LONG";
 	public static final String TYPEFLOAT="FLOAT";
 	public static final String TYPEDOUBLE="DOUBLE";
+	public static final String TYPEDATE="DATE";
 	public static final String TYPEBIGDECIMAL="BIGDECIMAL";
 	public static final String TYPERETURN_INT="INT";
 	public static final String TYPERETURN_RESULTSET="RESULTSET";

@@ -197,11 +197,11 @@ public class AdminDAO extends CommonDAO{
 	/*
 	 * Guarda los cambios en los articulos
 	 */
-	public int saveArticle(ArticlesTO parameters) {
+	public int saveArticle(ArticlesTO parameters, int action) {
 
 		int v_resp = 0;
-
-		this.setDbObject("{call sp_upd_enterprise(?,?,?,?,?,?,?,?,?,?)}");
+//      this.setDbObject("{call sp_cat_articles_mtto_5(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_cat_articles_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 
 		this.setString(1,"_itemcode", parameters.getItemCode());
 		this.setString(2,"_itemname", parameters.getItemName());
@@ -223,8 +223,8 @@ public class AdminDAO extends CommonDAO{
 		this.setDouble(18,"_avgprice", parameters.getAvgPrice());
 		this.setDouble(19,"_onhand", parameters.getOnHand());
 		this.setString(20,"_validfor", parameters.getValidFor());
-		this.setString(21,"_validfrom", parameters.getValidFrom());
-		this.setString(22,"_validto", parameters.getValidTo());
+		this.setDate(21,"_validfrom", parameters.getValidFrom());
+		this.setDate(22,"_validto", parameters.getValidTo());
 		this.setString(23,"_invntryuom", parameters.getInvntryUom());
 		this.setDouble(24,"_numinsale", parameters.getNumInSale());
 		this.setString(25,"_dfltwh", parameters.getDfltWH());
@@ -232,12 +232,10 @@ public class AdminDAO extends CommonDAO{
 		this.setString(27,"_sww", parameters.getSww());
 		this.setString(28,"_validcomm", parameters.getValidComm());
 		this.setInt(29,"_usersign", parameters.getUserSign());
-		this.setInt(29, "_action", new Integer("1"));
+		this.setInt(30, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
 
 		return v_resp;
-
-	}
-	
+	}	
 }
