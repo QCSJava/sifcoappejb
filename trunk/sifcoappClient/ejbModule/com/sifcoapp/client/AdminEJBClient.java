@@ -8,77 +8,89 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
-
 
 public class AdminEJBClient {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AdminEJB!com.sifcoapp.admin.ejb.AdminEJBRemote";
 	private static AdminEJBRemote bean;
 	private static Context context = null;
-	public AdminEJBClient(){
-		       
-        //2. Lookup and cast
+
+	public AdminEJBClient() {
+
+		// 2. Lookup and cast
 		try {
 			context = ClientUtility.getInitialContext();
-			bean = (AdminEJBRemote)context.lookup(LOOKUP_STRING);
+			bean = (AdminEJBRemote) context.lookup(LOOKUP_STRING);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters){
-		
-		EnterpriseOutTO enterpriseOutTO=null;
-		
-		enterpriseOutTO=bean.saveEnterprise(parameters);
-				
+
+	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) {
+
+		EnterpriseOutTO enterpriseOutTO = null;
+
+		enterpriseOutTO = bean.saveEnterprise(parameters);
+
 		return enterpriseOutTO;
 	}
-	public EnterpriseTO getEnterpriseInfo(){
-		
+
+	public EnterpriseTO getEnterpriseInfo() {
+
 		EnterpriseTO enterpriseTO;
-		
-		enterpriseTO=bean.getEnterpriseInfo();
-		
+
+		enterpriseTO = bean.getEnterpriseInfo();
+
 		return enterpriseTO;
-		
-		
+
 	}
-	
+
 	public List findCatalog(String nameCatalog) {
-		List catlgLst=null;
-		
-		catlgLst=bean.findCatalog(nameCatalog);
-		
+		List catlgLst = null;
+
+		catlgLst = bean.findCatalog(nameCatalog);
+
 		return catlgLst;
 	}
-	
-	
+
 	/**
 	 * Obtiene los registros del catalogo de tablas del sistema
+	 * 
 	 * @author Rutilio
 	 */
-	public List getTablesCatalog(){
-		List _return=null;
-		
-		_return=bean.getTablesCatalog();
-		
+	public List getTablesCatalog() {
+		List _return = null;
+
+		_return = bean.getTablesCatalog();
+
 		return _return;
 	}
-	
+
 	/*
 	 * Mantenimiento de Catalogos
 	 */
-	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action){
-		int _return=0;
-		
-		_return=bean.cat_tab1_catalogos_mtto(parameters, action);
-		
-		return _return;				
-		
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) {
+		int _return = 0;
+
+		_return = bean.cat_tab1_catalogos_mtto(parameters, action);
+
+		return _return;
+
 	}
-	
+
+	/*
+	 * Mantenimiento de Articulos
+	 */
+	public int SaveArticles(ArticlesTO parameters, int action) {
+		int _return = 0;
+
+		_return = bean.SaveArticles(parameters, action);
+
+		return _return;
+
+	}
 }
