@@ -6,12 +6,14 @@ import java.util.List;
 
 import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.client.AdminEJBClient;
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
+import java.sql.Date;
 
 public class AdminTest {
 	private static AdminEJBClient AdminEJBService;
@@ -133,9 +135,48 @@ public class AdminTest {
 		
 		//Actualizar
 		
-		parameters.setCatvalue("Honduras UPD");
+		parameters.setCatvalue("Honduras UPD -1");
 		
 		_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOUPDATE);
+		
+		//Borrar
+			
+		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTODELETE);
+		
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+		
+	}
+	
+	public static void articles_mtto(){
+		
+		int _result;
+		ArticlesTO parameters = new ArticlesTO();
+				
+		parameters.setItemCode("Prueba6");
+		parameters.setItemName("Nombre Prueba 6");
+		parameters.setUserSign(2);
+		parameters.setItemType("S");
+		parameters.setNumInBuy(54.2);
+		parameters.setNumInSale(12.23);
+		parameters.setOnHand(2.5);
+		parameters.setPurPackUn(21.2);
+		parameters.setSalPackUn(12.2);
+		parameters.setAvgPrice(4.0);
+		//parameters.setValidFrom((Date)"23/23/23" );
+
+		
+		
+		
+		//Agregar
+		
+		_result=AdminEJBService.SaveArticles(parameters, Common.MTTOINSERT);
+		
+		//Actualizar
+		
+		//parameters.setItemName("Honduras UPD");
+		
+		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTOUPDATE);
 		
 		//Borrar
 			
