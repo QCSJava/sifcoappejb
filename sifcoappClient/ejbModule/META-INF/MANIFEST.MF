@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: sifcoappObj.jar 
- appserv-rt.jar 
- javaee.jar 
- jndi-properties.jar 
- gf-client.jar
-
