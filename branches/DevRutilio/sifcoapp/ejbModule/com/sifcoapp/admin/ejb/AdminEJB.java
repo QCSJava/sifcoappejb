@@ -132,8 +132,4 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public List getTablesCatalogDetail(String nameTable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
