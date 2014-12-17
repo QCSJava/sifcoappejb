@@ -13,6 +13,8 @@ import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
+import com.sifcoapp.objects.utilities.PasswordService;
+
 import java.sql.Date;
 
 public class AdminTest {
@@ -187,4 +189,14 @@ public class AdminTest {
 		
 	}
 	
+	public static void testEncrypt(){
+		try {
+			System.out.println(PasswordService.getInstance().encrypt("admin123"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }
+
