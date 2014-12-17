@@ -20,7 +20,7 @@ public interface AdminEJBRemote {
 	public List findCatalog(String nameCatalog);
 
 	public List getTablesCatalog();
-
+	
 	/*
 	 * Mantenimiento de Catalogos
 	 */
