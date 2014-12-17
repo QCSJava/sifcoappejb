@@ -95,8 +95,7 @@ public class AdminTest {
 		while (iterator.hasNext()) {
 			//System.out.println(iterator.next());
 			CatalogTO catalogTO=(CatalogTO)iterator.next();
-			System.out.println("--->"+ catalogTO.getCatcode() + "-"+ catalogTO.getCatvalue());
-		
+			System.out.println("--->"+ catalogTO.getCatcode() + "-"+ catalogTO.getCatvalue()+ "-"+ catalogTO.getCatvalue2());				
 		}
 	}
 	/*
@@ -126,6 +125,7 @@ public class AdminTest {
 		parameters.setTablecode(1);
 		parameters.setCatcode("1");
 		parameters.setCatvalue("Panama 2");
+		parameters.setCatvalue3("Panama 2");
 		parameters.setCatstatus("P");
 		parameters.setUsersign(1);
 		
