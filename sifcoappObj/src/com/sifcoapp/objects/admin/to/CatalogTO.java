@@ -8,8 +8,15 @@ public class CatalogTO extends CommonTO {
 	 * 
 	 */
 	private static final long serialVersionUID = 3400353028558278833L;
-	
+
 	private String catcode;
+	private int tablecode;
+	private String catvalue;
+	private String catvalue2;
+	private String catvalue3;
+	private String catstatus;
+	private int usersign;
+
 	public String getCatcode() {
 		return catcode;
 	}
@@ -18,7 +25,6 @@ public class CatalogTO extends CommonTO {
 		this.catcode = catcode;
 	}
 
-	private int tablecode;
 	public int getTablecode() {
 		return tablecode;
 	}
@@ -27,7 +33,6 @@ public class CatalogTO extends CommonTO {
 		this.tablecode = tablecode;
 	}
 
-	private String catvalue;
 	public String getCatvalue() {
 		return catvalue;
 	}
@@ -36,7 +41,22 @@ public class CatalogTO extends CommonTO {
 		this.catvalue = catvalue;
 	}
 
-	private String catstatus;
+	public String getCatvalue2() {
+		return catvalue2;
+	}
+
+	public void setCatvalue2(String catvalue2) {
+		this.catvalue2 = catvalue2;
+	}
+
+	public String getCatvalue3() {
+		return catvalue3;
+	}
+
+	public void setCatvalue3(String catvalue3) {
+		this.catvalue3 = catvalue3;
+	}
+
 	public String getCatstatus() {
 		return catstatus;
 	}
@@ -45,8 +65,6 @@ public class CatalogTO extends CommonTO {
 		this.catstatus = catstatus;
 	}
 
-	private int usersign;
-	
 	public int getUsersign() {
 		return usersign;
 	}
@@ -55,19 +73,30 @@ public class CatalogTO extends CommonTO {
 		this.usersign = usersign;
 	}
 
-	public CatalogTO(){
-		this.setCatcode(null);
-		this.setTablecode(0);
-		this.setCatvalue(null);
-		this.setCatstatus(null);
-		this.setUsersign(0);
+	public CatalogTO(String catcode, int tablecode, String catvalue, String catvalue2,
+			String catvalue3, String catstatus,  int usersign) {
+		super();
+		this.catcode = catcode;
+		this.tablecode = tablecode;
+		this.catvalue = catvalue;
+		this.catvalue2 = catvalue2;
+		this.catvalue3 = catvalue3;
+		this.catstatus = catstatus;
+		this.usersign = usersign;
 	}
-	
-	public CatalogTO(String Catcode,int Tablecode,String Catvalue, String Catstatus,int Usersign){
-		this.setCatcode(Catcode);
-		this.setTablecode(Tablecode);
-		this.setCatvalue(Catvalue);
-		this.setCatstatus(Catstatus);
-		this.setUsersign(Usersign);
+
+	public CatalogTO() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
+
+	/*
+	 * public CatalogTO() { this.setCatcode(null); this.setTablecode(0);
+	 * this.setCatvalue(null); this.setCatstatus(null); this.setUsersign(0); }
+	 * 
+	 * public CatalogTO(String Catcode, int Tablecode, String Catvalue, String
+	 * Catstatus, int Usersign) { this.setCatcode(Catcode);
+	 * this.setTablecode(Tablecode); this.setCatvalue(Catvalue);
+	 * this.setCatstatus(Catstatus); this.setUsersign(Usersign); }
+	 */
 }
