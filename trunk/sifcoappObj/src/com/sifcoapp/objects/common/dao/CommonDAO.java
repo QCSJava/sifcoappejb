@@ -208,6 +208,7 @@ public class CommonDAO {
 							((Date) dtParameterTmp.getColValue()));
 				}
 			}
+
 			/*
 			 * if (this.getTypeReturn().equals(Common.TYPERETURN_INT)){
 			 * statementToExecute.registerOutParameter(1,Types.INTEGER); }
@@ -312,7 +313,7 @@ public class CommonDAO {
 							((Double) dtParameterTmp.getColValue())
 									.doubleValue());
 				}
-				
+
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPEDATE)) {
 					statementToExecute.setDate(v_position.intValue(),

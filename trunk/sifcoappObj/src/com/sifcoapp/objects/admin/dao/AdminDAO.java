@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 import com.sifcoapp.objects.admin.to.ArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
@@ -199,7 +200,7 @@ public class AdminDAO extends CommonDAO{
 	/*
 	 * Guarda los cambios en los articulos
 	 */
-	public int saveArticle(ArticlesTO parameters, int action) {
+	public int cat_articles_mtto(ArticlesTO parameters, int action) {
 
 		int v_resp = 0;
 //      this.setDbObject("{call sp_cat_articles_mtto_5(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
@@ -235,6 +236,31 @@ public class AdminDAO extends CommonDAO{
 		this.setString(28,"_validcomm", parameters.getValidComm());
 		this.setInt(29,"_usersign", parameters.getUserSign());
 		this.setInt(30, "_action", new Integer(action));
+
+		v_resp = this.runUpdate();
+
+		return v_resp;
+	}	
+	
+	/*
+	 * Guarda los cambios en los articulos
+	 */
+	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action) {
+
+		int v_resp = 0;
+//      this.setDbObject("{call sp_cat_brancharticles_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_cat_brancharticles_mtto(?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setString(1,"_itemcode", parameters.getItemcode());
+		this.setString(2,"_whscode", parameters.getWhscode());
+		this.setDouble(3,"_onhand", parameters.getOnhand());
+		this.setDouble(4,"_onhand1",parameters.getOnhand1());
+		this.setDouble(5,"_iscommited", parameters.getIscommited());
+		this.setDouble(6,"_onorder", parameters.getOnorder());
+		this.setDouble(7,"_minstock", parameters.getMinstock());
+		this.setDouble(8,"_maxstock", parameters.getMaxstock());	
+		this.setDouble(9,"_minorder", parameters.getMinorder());		
+		this.setString(10,"_locked", parameters.getLocked());
+		this.setInt(11, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
 
