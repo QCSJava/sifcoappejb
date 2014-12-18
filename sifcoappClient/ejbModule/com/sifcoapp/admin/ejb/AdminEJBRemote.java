@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.sifcoapp.objects.admin.to.ArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -26,5 +27,7 @@ public interface AdminEJBRemote {
 	 */
 	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action);
 
-	public int SaveArticles(ArticlesTO parameters, int action);
+	public int cat_articles_mtto(ArticlesTO parameters, int action);
+	
+	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action);
 }

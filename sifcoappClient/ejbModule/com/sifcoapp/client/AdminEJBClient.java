@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -85,10 +86,22 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public int SaveArticles(ArticlesTO parameters, int action) {
+	public int cat_articles_mtto(ArticlesTO parameters, int action) {
 		int _return = 0;
 
-		_return = bean.SaveArticles(parameters, action);
+		_return = bean.cat_articles_mtto(parameters, action);
+
+		return _return;
+
+	}
+
+	/*
+	 * Mantenimiento de Articulos
+	 */
+	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action) {
+		int _return = 0;
+
+		_return = bean.cat_brancharticles_mtto(parameters, action);
 
 		return _return;
 
