@@ -8,6 +8,8 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -105,5 +107,17 @@ public class AdminEJBClient {
 
 		return _return;
 
+	}
+
+	/*
+	 * Mantenimiento de periodos contables
+	 */
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action){
+
+		int _return = 0;
+
+		_return = bean.cat_accPeriod_mtto(parameters, usersign, action);
+
+		return _return;
 	}
 }

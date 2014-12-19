@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -30,4 +31,7 @@ public interface AdminEJBRemote {
 	public int cat_articles_mtto(ArticlesTO parameters, int action);
 	
 	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action);
+	
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action);
+	
 }
