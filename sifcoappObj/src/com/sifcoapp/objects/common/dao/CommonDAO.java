@@ -2,8 +2,7 @@ package com.sifcoapp.objects.common.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -20,9 +19,7 @@ import javax.sql.rowset.CachedRowSet;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.DetailParameter;
-import com.sifcoapp.security.ejb.SecurityEJBRemote;
 import com.sun.rowset.CachedRowSetImpl;
-import java.sql.Date;
 
 public class CommonDAO {
 	private Connection conn;
@@ -317,7 +314,7 @@ public class CommonDAO {
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPEDATE)) {
 					statementToExecute.setDate(v_position.intValue(),
-							((Date) dtParameterTmp.getColValue()));
+							(Date)dtParameterTmp.getColValue());
 				}
 
 			}
@@ -435,5 +432,5 @@ public class CommonDAO {
 	public void setTypeReturn(String typeReturn) {
 		this.typeReturn = typeReturn;
 	}
-
+	
 }
