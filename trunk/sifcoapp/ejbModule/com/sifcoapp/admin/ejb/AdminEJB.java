@@ -1,11 +1,14 @@
 package com.sifcoapp.admin.ejb;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -136,9 +139,11 @@ public class AdminEJB implements AdminEJBRemote {
 			}
 			if (action == Common.MTTOUPDATE) {
 				if (branch.isIsasociated()) {
-					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTOINSERT);
+					adminDAO1
+							.cat_brancharticles_mtto(branch, Common.MTTOINSERT);
 				} else {
-					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTODELETE);
+					adminDAO1
+							.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 				}
 			}
 			if (action == Common.MTTODELETE) {
@@ -162,6 +167,37 @@ public class AdminEJB implements AdminEJBRemote {
 		AdminDAO adminDAO = new AdminDAO();
 		_return = adminDAO.cat_brancharticles_mtto(parameters, action);
 
+		return _return;
+	}
+
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action) {
+
+		int _return = 0;
+
+		// Dividir el año en 12 periodos y crear objeto
+
+		/*
+		 * Agregar validadiones - Se haran desde la base - Que no este creado el
+		 * año - Que el año sea mayor al actual
+		 */
+		for (int i = 1; i <= 12; i++) {
+
+			AccPeriodTO periodo = new AccPeriodTO();
+			periodo.setAcccode(Integer.toString(i));
+			periodo.setAccname(Integer.toString(parameters)	+ String.format("%02d", i));			
+			periodo.setF_duedate(Common.getPrimerDiaDelMes(parameters, i));
+			periodo.setF_refdate(Common.getPrimerDiaDelMes(parameters, i));
+			periodo.setF_taxdate(Common.getPrimerDiaDelMes(parameters, i));
+			periodo.setPeriodstat(1);
+			periodo.setT_duedate(Common.getUltimoDiaDelMes(parameters, i));
+			periodo.setT_refdate(Common.getUltimoDiaDelMes(parameters, i));
+			periodo.setT_taxdate(Common.getUltimoDiaDelMes(parameters, i));
+			periodo.setUsersign(usersign);
+
+			AdminDAO adminDAO = new AdminDAO();
+			_return = adminDAO.cat_accPeriod_mtto(periodo, action);
+
+		}
 		return _return;
 	}
 }
