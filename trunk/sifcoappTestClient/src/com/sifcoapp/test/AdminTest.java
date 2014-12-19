@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.client.AdminEJBClient;
+import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -172,7 +173,7 @@ public class AdminTest {
 		parameters.setPurPackUn(21.2);
 		parameters.setSalPackUn(12.2);
 		parameters.setAvgPrice(4.0);
-		
+
 		BranchArticlesTO branch[] = new BranchArticlesTO[1];
 		branch[0] = new BranchArticlesTO();
 		branch[0].setIsasociated(true);
@@ -187,16 +188,15 @@ public class AdminTest {
 		branch[0].setOnhand1(10.2);
 		branch[0].setOnorder(2.5);
 		branch[0].setMinorder(20.2);
-		
+
 		parameters.setBranchArticles(branch);
-		
-		
+
 		// parameters.setValidFrom((Date)"23/23/23" );
 
 		// Agregar
 
-		 _result=AdminEJBService.cat_articles_mtto(parameters,
-		 Common.MTTOINSERT);
+		_result = AdminEJBService.cat_articles_mtto(parameters,
+				Common.MTTOINSERT);
 
 		// Actualizar
 
@@ -207,7 +207,8 @@ public class AdminTest {
 
 		// Borrar
 
-		//_result = AdminEJBService.cat_articles_mtto(parameters, Common.MTTODELETE);
+		// _result = AdminEJBService.cat_articles_mtto(parameters,
+		// Common.MTTODELETE);
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
@@ -238,14 +239,35 @@ public class AdminTest {
 
 		// Actualizar
 
-		// parameters.setItemName("Honduras UPD");
+		// _result=AdminEJBService.cat_brancharticles_mtto(parameters, Common.MTTOUPDATE);
 
-		// _result=AdminEJBService.cat_brancharticles_mtto(parameters,
+		// Borrar
+
+		// _result=AdminEJBService.cat_brancharticles_mtto(parameters, Common.MTTODELETE);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
+	}
+
+	public static void accPeridod_mtto() {
+
+		int _result;
+		int parameters = 2015;		
+		int usersing = 1;
+
+		// Agregar
+
+		_result = AdminEJBService.cat_accPeriod_mtto(parameters,usersing,Common.MTTOINSERT);
+
+		// Actualizar
+
+		// _result=AdminEJBService.cat_accPeriod_mtto(parameters,
 		// Common.MTTOUPDATE);
 
 		// Borrar
 
-		// _result=AdminEJBService.cat_brancharticles_mtto(parameters,
+		// _result=AdminEJBService.cat_accPeriod_mtto(parameters,
 		// Common.MTTODELETE);
 
 		System.out.println("luego de servicio");
@@ -253,4 +275,5 @@ public class AdminTest {
 
 	}
 
+	
 }
