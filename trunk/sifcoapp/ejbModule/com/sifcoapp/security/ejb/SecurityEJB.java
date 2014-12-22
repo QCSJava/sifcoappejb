@@ -94,7 +94,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		
 				
 		profileDetL11.setDesc_perfil_det("Detalles de sociedad");
-		profileDetL11.setUrl_perfil_det("#");
+		profileDetL11.setUrl_perfil_det("/faces/detalle_sociedad.xhtml");
 		profileDetL11.setId_perfil_det(4);
 		profileDetL11.setParent_id(3);
 				
@@ -135,7 +135,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		
 		
 		profileDetL12.setDesc_perfil_det("Periodos Contables");
-		profileDetL12.setUrl_perfil_det("#");
+		profileDetL12.setUrl_perfil_det("/faces/periodos.xhtml");
 		profileDetL12.setId_perfil_det(4);
 		profileDetL12.setParent_id(1);
 		
