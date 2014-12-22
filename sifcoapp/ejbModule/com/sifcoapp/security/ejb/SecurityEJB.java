@@ -44,6 +44,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		return usrValid;
 	}
 
+    
     public String SayHello(String hellomsg) {
 		// TODO Auto-generated method stub
 		hellomsg=hellomsg+"EJB";

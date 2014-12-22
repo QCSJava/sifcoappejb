@@ -1,6 +1,7 @@
 package com.sifcoapp.admin.ejb;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
@@ -198,6 +199,17 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.cat_accPeriod_mtto(periodo, action);
 
 		}
+		return _return;
+	}
+
+	
+	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname) {
+		
+		ArrayList<ArticlesTO> _return;
+		
+		AdminDAO adminDAO = new AdminDAO();
+		_return = adminDAO.getArticles(itemcode, itemname);
+		
 		return _return;
 	}
 }
