@@ -12,6 +12,7 @@ import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
+import com.sifcoapp.objects.utilities.PasswordService;
 
 public class SecurityTest {
 	private static SecurityEJBClient SecurityEJBService=null;
@@ -23,8 +24,16 @@ public class SecurityTest {
 		
 		UserAppInTO usr = new UserAppInTO();
 		UserAppOutTO usrRes = new UserAppOutTO();
-		usr.setIdUserApp("pepe");
-		usr.setPasswordUserApp("pepepw");
+		usr.setIdUserApp("admin");
+		//usr.setPasswordUserApp("+GW1NiOxIf007lQmx5Llwzr4wic=");
+		
+		try {
+			System.out.println("encrytp " + PasswordService.getInstance().encrypt("admin123"));
+			usr.setPasswordUserApp(PasswordService.getInstance().encrypt("admin123"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		usrRes=SecurityEJBService.UserValidate(usr);
 		
 		// TODO Auto-generated method stub
@@ -65,7 +74,6 @@ public class SecurityTest {
 									while (iterator2.hasNext()) {
 										ProfileDetOutTO profileDetOutTO4=(ProfileDetOutTO)iterator2.next();
 										System.out.println("--->"+profileDetOutTO4.getDesc_perfil_det());
-										System.out.println("--->url: "+profileDetOutTO4.getUrl_perfil_det());
 									}	
 								}catch(Exception ex){
 									
