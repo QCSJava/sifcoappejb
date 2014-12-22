@@ -1,6 +1,7 @@
 package com.sifcoapp.test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -215,6 +216,21 @@ public class AdminTest {
 
 	}
 
+	public static void getArticles() {
+		ArrayList<ArticlesTO> resp = null;
+
+		String name = null;
+		String code = "1";
+
+		resp = AdminEJBService.getArticles(code, name);
+
+		for (ArticlesTO articulo : resp) {
+
+			System.out.println(articulo.getItemCode() + " - "
+					+ articulo.getItemName());
+		}
+	}
+
 	public static void bracharticles_mtto() {
 
 		int _result;
@@ -239,11 +255,13 @@ public class AdminTest {
 
 		// Actualizar
 
-		// _result=AdminEJBService.cat_brancharticles_mtto(parameters, Common.MTTOUPDATE);
+		// _result=AdminEJBService.cat_brancharticles_mtto(parameters,
+		// Common.MTTOUPDATE);
 
 		// Borrar
 
-		// _result=AdminEJBService.cat_brancharticles_mtto(parameters, Common.MTTODELETE);
+		// _result=AdminEJBService.cat_brancharticles_mtto(parameters,
+		// Common.MTTODELETE);
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
@@ -253,12 +271,13 @@ public class AdminTest {
 	public static void accPeridod_mtto() {
 
 		int _result;
-		int parameters = 2015;		
+		int parameters = 2015;
 		int usersing = 1;
 
 		// Agregar
 
-		_result = AdminEJBService.cat_accPeriod_mtto(parameters,usersing,Common.MTTOINSERT);
+		_result = AdminEJBService.cat_accPeriod_mtto(parameters, usersing,
+				Common.MTTOINSERT);
 
 		// Actualizar
 
@@ -275,5 +294,4 @@ public class AdminTest {
 
 	}
 
-	
 }
