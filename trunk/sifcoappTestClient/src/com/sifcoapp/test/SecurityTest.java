@@ -65,6 +65,7 @@ public class SecurityTest {
 									while (iterator2.hasNext()) {
 										ProfileDetOutTO profileDetOutTO4=(ProfileDetOutTO)iterator2.next();
 										System.out.println("--->"+profileDetOutTO4.getDesc_perfil_det());
+										System.out.println("--->url: "+profileDetOutTO4.getUrl_perfil_det());
 									}	
 								}catch(Exception ex){
 									
