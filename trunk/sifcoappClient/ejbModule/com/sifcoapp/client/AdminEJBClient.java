@@ -1,5 +1,6 @@
 package com.sifcoapp.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -107,6 +108,14 @@ public class AdminEJBClient {
 
 		return _return;
 
+	}
+	
+	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname ) {
+		ArrayList<ArticlesTO> _return;
+
+		_return = bean.getArticles(itemcode, itemname);
+
+		return _return;
 	}
 
 	/*

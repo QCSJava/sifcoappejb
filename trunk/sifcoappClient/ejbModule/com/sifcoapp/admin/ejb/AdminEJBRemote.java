@@ -1,5 +1,6 @@
 package com.sifcoapp.admin.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -33,5 +34,7 @@ public interface AdminEJBRemote {
 	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action);
 	
 	public int cat_accPeriod_mtto(int parameters, int usersign, int action);
+	
+	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname );
 	
 }
