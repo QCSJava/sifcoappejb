@@ -1,6 +1,7 @@
 package com.sifcoapp.objects.admin.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -226,23 +227,23 @@ public class AdminDAO extends CommonDAO {
 		this.setString(10, "_assetitem", parameters.getAssetItem());
 		this.setString(11, "_cardcode", parameters.getCardCode());
 		this.setString(12, "_buyunitmsr", parameters.getBuyUnitMsr());
-		this.setDouble(13, "_numinbuy", parameters.getNumInBuy());
+		this.setDouble(13, "_numinbuy", new Double(parameters.getNumInBuy()));
 		this.setString(14, "_salunitmsr", parameters.getSalUnitMsr());
-		this.setDouble(15, "_salpackun", parameters.getSalPackUn());
+		this.setDouble(15, "_salpackun", new Double(parameters.getSalPackUn()));
 		this.setString(16, "_suppcatnum", parameters.getSuppCatNum());
-		this.setDouble(17, "_purpackun", parameters.getSalPackUn());
-		this.setDouble(18, "_avgprice", parameters.getAvgPrice());
-		this.setDouble(19, "_onhand", parameters.getOnHand());
+		this.setDouble(17, "_purpackun",new Double(parameters.getSalPackUn()));
+		this.setDouble(18, "_avgprice", new Double(parameters.getAvgPrice()));
+		this.setDouble(19, "_onhand", new Double(parameters.getOnHand()));
 		this.setString(20, "_validfor", parameters.getValidFor());
 		this.setDate(21, "_validfrom", parameters.getValidFrom());
 		this.setDate(22, "_validto", parameters.getValidTo());
 		this.setString(23, "_invntryuom", parameters.getInvntryUom());
-		this.setDouble(24, "_numinsale", parameters.getNumInSale());
+		this.setDouble(24, "_numinsale", new Double(parameters.getNumInSale()));
 		this.setString(25, "_dfltwh", parameters.getDfltWH());
 		this.setString(26, "_wtliable", parameters.getWtliable());
 		this.setString(27, "_sww", parameters.getSww());
 		this.setString(28, "_validcomm", parameters.getValidComm());
-		this.setInt(29, "_usersign", parameters.getUserSign());
+		this.setInt(29, "_usersign",  new Integer(parameters.getUserSign()));
 		this.setInt(30, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
@@ -250,6 +251,72 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
+	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname ) {
+
+		List lstResultSet = null;
+		ArrayList<ArticlesTO> _return = new ArrayList<ArticlesTO>();
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+     // this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_articles(?,?)}");
+		this.setString(1, "_itemcode",itemcode);
+		this.setString(2, "_itemname", itemname);
+		
+		lstResultSet = this.runQuery();
+		
+		CachedRowSetImpl rowsetActual;
+		
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();		
+			try {
+				while (rowsetActual.next()) {
+					ArticlesTO article =  new ArticlesTO();
+					article.setItemCode(rowsetActual.getString(1));
+					article.setItemName(rowsetActual.getString(2));
+					article.setItemType(rowsetActual.getString(3));
+					article.setItmsGrpCod(rowsetActual.getInt(4));
+					article.setVatLiable(rowsetActual.getString(5));
+					article.setCodeBars(rowsetActual.getString(6));
+					article.setPrchseItem(rowsetActual.getString(7));
+					article.setSellItem(rowsetActual.getString(8));
+					article.setInvntItem(rowsetActual.getString(9));
+					article.setAssetItem(rowsetActual.getString(10));
+					article.setCardCode(rowsetActual.getString(11));
+					article.setBuyUnitMsr(rowsetActual.getString(12));
+					article.setNumInBuy(rowsetActual.getDouble(13));
+					article.setSalUnitMsr(rowsetActual.getString(14));
+					article.setSalPackUn(rowsetActual.getDouble(15));
+					article.setSuppCatNum(rowsetActual.getString(16));
+					article.setPurPackUn(rowsetActual.getDouble(17));
+					article.setAvgPrice(rowsetActual.getDouble(18));
+					article.setOnHand(rowsetActual.getDouble(19));
+					article.setValidFor(rowsetActual.getString(20));
+					article.setValidFrom(rowsetActual.getDate(21));
+					article.setValidTo(rowsetActual.getDate(22));
+					article.setInvntryUom(rowsetActual.getString(23));
+					article.setNumInSale(rowsetActual.getDouble(24));
+					article.setDfltWH(rowsetActual.getString(25));
+					article.setWtliable(rowsetActual.getString(26));
+					article.setSww(rowsetActual.getString(27));
+					article.setValidComm(rowsetActual.getString(28));
+					article.setUserSign(rowsetActual.getInt(29));		
+					
+					_return.add(article);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+	
 	/*
 	 * Guarda los cambios en los articulos
 	 */
