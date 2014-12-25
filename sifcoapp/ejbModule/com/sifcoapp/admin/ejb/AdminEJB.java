@@ -3,13 +3,14 @@ package com.sifcoapp.admin.ejb;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.Stateless;
 
+import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
-import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -132,7 +133,11 @@ public class AdminEJB implements AdminEJBRemote {
 
 		int _return;
 
-		for (BranchArticlesTO branch : parameters.getBranchArticles()) {
+		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
+				.iterator();
+
+		while (iterator.hasNext()) {
+			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
 			// Para articulos nuevos
 			AdminDAO adminDAO1 = new AdminDAO();
 			if (action == Common.MTTOINSERT && branch.isIsasociated()) {
@@ -171,44 +176,28 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public int cat_accPeriod_mtto(int parameters, int usersign, int action) {
+	public List getArticles(String itemcode, String itemname) {
 
-		int _return = 0;
+		List _return;
 
-		// Dividir el año en 12 periodos y crear objeto
+		AdminDAO adminDAO = new AdminDAO();
+		_return = adminDAO.getArticles(itemcode, itemname);
 
-		/*
-		 * Agregar validadiones - Se haran desde la base - Que no este creado el
-		 * año - Que el año sea mayor al actual
-		 */
-		for (int i = 1; i <= 12; i++) {
-
-			AccPeriodTO periodo = new AccPeriodTO();
-			periodo.setAcccode(Integer.toString(i));
-			periodo.setAccname(Integer.toString(parameters)	+ String.format("%02d", i));			
-			periodo.setF_duedate(Common.getPrimerDiaDelMes(parameters, i));
-			periodo.setF_refdate(Common.getPrimerDiaDelMes(parameters, i));
-			periodo.setF_taxdate(Common.getPrimerDiaDelMes(parameters, i));
-			periodo.setPeriodstat(1);
-			periodo.setT_duedate(Common.getUltimoDiaDelMes(parameters, i));
-			periodo.setT_refdate(Common.getUltimoDiaDelMes(parameters, i));
-			periodo.setT_taxdate(Common.getUltimoDiaDelMes(parameters, i));
-			periodo.setUsersign(usersign);
-
-			AdminDAO adminDAO = new AdminDAO();
-			_return = adminDAO.cat_accPeriod_mtto(periodo, action);
-
-		}
 		return _return;
 	}
 
-	
-	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname) {
-		
-		ArrayList<ArticlesTO> _return;
+	public ArticlesTO getArticlesByKey(String itemcode) {
+		ArticlesTO _return;
 		
 		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.getArticles(itemcode, itemname);
+		
+		//para el manejo de transacciones
+		adminDAO.setIstransaccional(true);
+		_return = adminDAO.getArticlesByKey(itemcode);
+
+		//adminDAO.forceCommit();
+		adminDAO.forceCloseConnection();
+		
 		
 		return _return;
 	}
