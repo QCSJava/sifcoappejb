@@ -5,8 +5,12 @@ import java.util.Vector;
 
 import javax.ejb.Stateless;
 
+import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
+import com.sifcoapp.objects.accounting.to.AccPeriodTO;
+import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.catalogos.Common;
 
 /**
  * Session Bean implementation class AccountingEJB
@@ -14,59 +18,57 @@ import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 @Stateless
 public class AccountingEJB implements AccountingEJBRemote {
 
-    /**
-     * Default constructor. 
-     */
-    public AccountingEJB() {
-        // TODO Auto-generated constructor stub
-    }
-    public List getAccPeriods(){
-    	List lstPeriods=new Vector();
-    	
-    	AccPeriodOutTO accPeriodOutTO = new AccPeriodOutTO();
-    	AccPeriodOutTO accPeriodOutTO1 = new AccPeriodOutTO();
-    	
-    	accPeriodOutTO.setCantidadPeriodo("cant1");
-    	accPeriodOutTO.setCodigoPeriodo("CodigoPeriodo1");
-    	accPeriodOutTO.setCodResp(1);
-    	accPeriodOutTO.setEjercicio("Ejercicio1");
-    	accPeriodOutTO.setFechaConta("20/11/2014");
-    	accPeriodOutTO.setFechaDocumento("20/11/2014");
-    	accPeriodOutTO.setFechaVencimiento("20/11/2014");
-    	accPeriodOutTO.setIndicadorPeriodo("indicadorPeriodo1");
-    	accPeriodOutTO.setInicioEjercicio("inicioEjercicio");
-    	accPeriodOutTO.setNombrePeriodo("nombrePeriodo");
-    	accPeriodOutTO.setStatusPeriodo("statusPeriodo");
-    	accPeriodOutTO.setSubPeriodo("subPeriodo");
-    	lstPeriods.add(accPeriodOutTO);
-    	
-    	accPeriodOutTO1.setCantidadPeriodo("cant1");
-    	accPeriodOutTO1.setCodigoPeriodo("CodigoPeriodo1");
-    	accPeriodOutTO1.setCodResp(1);
-    	accPeriodOutTO1.setEjercicio("Ejercicio1");
-    	accPeriodOutTO1.setFechaConta("20/11/2014");
-    	accPeriodOutTO1.setFechaDocumento("20/11/2014");
-    	accPeriodOutTO1.setFechaVencimiento("20/11/2014");
-    	accPeriodOutTO1.setIndicadorPeriodo("indicadorPeriodo1");
-    	accPeriodOutTO1.setInicioEjercicio("inicioEjercicio");
-    	accPeriodOutTO1.setNombrePeriodo("nombrePeriodo");
-    	accPeriodOutTO1.setStatusPeriodo("statusPeriodo");
-    	accPeriodOutTO1.setSubPeriodo("subPeriodo");
-    	lstPeriods.add(accPeriodOutTO1);
-    	
-    	return lstPeriods;
-    }
-    /*
-     * (non-Javadoc)
-     * @see com.sifcoapp.bussinessLogic.AccountingEJBRemote#AccAddPeriod(com.sifcoapp.objects.accounting.to.AccPeriodInTO)
-     */
-    public AccPeriodOutTO AccAddPeriod(AccPeriodInTO parameters){
+	/**
+	 * Default constructor.
+	 */
+	public AccountingEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
-        AccPeriodOutTO retorno=new AccPeriodOutTO();     
+	public List getAccPeriods() {
+		List _return = new Vector();
+		AccountingDAO DAO = new AccountingDAO();
+		_return = DAO.getAccPeriods();
 
-        retorno.setCodResp(0);
+		return _return;
 
-        return retorno;
+	}
 
-      }
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action) {
+
+		int _return = 0;
+
+		// Dividir el año en 12 periodos y crear objeto
+
+		/*
+		 * Agregar validadiones - Se haran desde la base - Que no este creado el
+		 * año - Que el año sea mayor al actual
+		 */
+		AccountingDAO DAO = new AccountingDAO();
+		//para el manejo de transacciones
+		DAO.setIstransaccional(true);
+		
+		for (int i = 1; i <= 12; i++) {
+
+			AccPeriodTO periodo = new AccPeriodTO();
+			periodo.setAcccode(Integer.toString(i));
+			periodo.setAccname(Integer.toString(parameters)
+					+ String.format("%02d", i));
+			periodo.setF_duedate(Common.getPrimerDiaDelMes(parameters, i));
+			periodo.setF_refdate(Common.getPrimerDiaDelMes(parameters, i));
+			periodo.setF_taxdate(Common.getPrimerDiaDelMes(parameters, i));
+			periodo.setPeriodstat(1);
+			periodo.setT_duedate(Common.getUltimoDiaDelMes(parameters, i));
+			periodo.setT_refdate(Common.getUltimoDiaDelMes(parameters, i));
+			periodo.setT_taxdate(Common.getUltimoDiaDelMes(parameters, i));
+			periodo.setUsersign(usersign);
+			_return = DAO.cat_accPeriod_mtto(periodo, action);
+		}
+		
+		DAO.forceCommit();
+		DAO.forceCloseConnection();
+		
+		return _return;
+	}
+
 }

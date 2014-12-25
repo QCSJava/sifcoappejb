@@ -131,20 +131,22 @@ public class SecurityEJB implements SecurityEJBRemote {
 		profileDet1Lst.add(profileDetL1);
 		profileDet.setNodeDetail(profileDet1Lst);
 		
+		profileDetL12.setDesc_perfil_det("Maestro Articulos");
+		profileDetL12.setUrl_perfil_det("/faces/view/mtto/ArticleInventoryMaster.xhtml");
+		profileDetL12.setId_perfil_det(4);
+		profileDetL12.setParent_id(2);
+		
 		profileDetLst.add(profileDet);
 		profileDetLst.add(profileDet1);
 		
 		
-		profileDetL12.setDesc_perfil_det("Periodos Contables");
-		profileDetL12.setUrl_perfil_det("/faces/periodos.xhtml");
-		profileDetL12.setId_perfil_det(4);
-		profileDetL12.setParent_id(1);
+		
 		
 				
-		profileDetL13.setDesc_perfil_det("Autorizaciones Generales");
+		/*profileDetL13.setDesc_perfil_det("Autorizaciones Generales");
 		profileDetL13.setUrl_perfil_det("#");
 		profileDetL13.setId_perfil_det(6);
-		profileDetL13.setParent_id(1);
+		profileDetL13.setParent_id(1);*/
 
 		
 		usrProfileOut.setProfile_det(profileDetLst);
