@@ -16,36 +16,38 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AccountingEJB!com.sifcoapp.bussinessLogic.AccountingEJBRemote";
 	private static AccountingEJBRemote bean;
 	private static Context context = null;
-	public AccountingEJBClient(){
-	       
-        //2. Lookup and cast
+
+	public AccountingEJBClient() {
+
+		// 2. Lookup and cast
 		try {
 			context = ClientUtility.getInitialContext();
-			bean = (AccountingEJBRemote)context.lookup(LOOKUP_STRING);
+			bean = (AccountingEJBRemote) context.lookup(LOOKUP_STRING);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	public List getAccPeriods() {
 		// TODO Auto-generated method stub
-		List lstPeriods=new Vector();
-		
-		lstPeriods=bean.getAccPeriods();
-		
+		List lstPeriods = new Vector();
+
+		lstPeriods = bean.getAccPeriods();
+
 		return lstPeriods;
 	}
+
 	/*
-	 * (non-Javadoc)
-	 * @see com.sifcoapp.bussinessLogic.AccountingEJBRemote#AccAddPeriod(com.sifcoapp.objects.accounting.to.AccPeriodInTO)
+	 * Mantenimiento de periodos contables
 	 */
-	public AccPeriodOutTO AccAddPeriod(AccPeriodInTO parameters) {
-		// TODO Auto-generated method stub
-		AccPeriodOutTO v_salida=new AccPeriodOutTO();
-		
-		v_salida=bean.AccAddPeriod(parameters);
-		
-		return v_salida;
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action) {
+
+		int _return = 0;
+
+		_return = bean.cat_accPeriod_mtto(parameters, usersign, action);
+
+		return _return;
 	}
 
 }

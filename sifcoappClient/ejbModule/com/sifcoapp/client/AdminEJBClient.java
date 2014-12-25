@@ -9,8 +9,8 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
-import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -110,23 +110,20 @@ public class AdminEJBClient {
 
 	}
 	
-	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname ) {
-		ArrayList<ArticlesTO> _return;
+	public List getArticles(String itemcode, String itemname ) {
+		List _return;
 
 		_return = bean.getArticles(itemcode, itemname);
 
 		return _return;
 	}
+	
+	public ArticlesTO getArticlesByKey(String itemcode) {
+		ArticlesTO _return;
 
-	/*
-	 * Mantenimiento de periodos contables
-	 */
-	public int cat_accPeriod_mtto(int parameters, int usersign, int action){
-
-		int _return = 0;
-
-		_return = bean.cat_accPeriod_mtto(parameters, usersign, action);
+		_return = bean.getArticlesByKey(itemcode);
 
 		return _return;
 	}
+	
 }
