@@ -4,10 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.client.AdminEJBClient;
-import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -98,6 +98,7 @@ public class AdminTest {
 
 		catlgLst = AdminEJBService.findCatalog("paises");
 		System.out.println("luego de servicio mod   ");
+
 		Iterator<CatalogTO> iterator = catlgLst.iterator();
 		while (iterator.hasNext()) {
 			// System.out.println(iterator.next());
@@ -164,7 +165,7 @@ public class AdminTest {
 
 		int _result;
 		ArticlesTO parameters = new ArticlesTO();
-		parameters.setItemCode("art-001");
+		parameters.setItemCode("art-002");
 		parameters.setItemName("Nombre Prueba 7");
 		parameters.setUserSign(2);
 		parameters.setItemType("S");
@@ -175,20 +176,22 @@ public class AdminTest {
 		parameters.setSalPackUn(12.2);
 		parameters.setAvgPrice(4.0);
 
-		BranchArticlesTO branch[] = new BranchArticlesTO[1];
-		branch[0] = new BranchArticlesTO();
-		branch[0].setIsasociated(true);
-		branch[0].setIscommited(100.2);
-		branch[0].setItemcode("art-001");
-		branch[0].setLocked("Y");
-		branch[0].setWhscode("suc-001");
-		branch[0].setMinstock(1.0);
-		branch[0].setMaxstock(10.2);
-		branch[0].setMinstock(1.2);
-		branch[0].setOnhand(10.2);
-		branch[0].setOnhand1(10.2);
-		branch[0].setOnorder(2.5);
-		branch[0].setMinorder(20.2);
+		List branch = new Vector();
+
+		BranchArticlesTO branch1 = new BranchArticlesTO();
+		branch1.setIsasociated(true);
+		branch1.setIscommited(100.2);
+		branch1.setItemcode("art-002");
+		branch1.setLocked("Y");
+		branch1.setWhscode("suc-001");
+		branch1.setMinstock(1.0);
+		branch1.setMaxstock(10.2);
+		branch1.setMinstock(1.2);
+		branch1.setOnhand(10.2);
+		branch1.setOnhand1(10.2);
+		branch1.setOnorder(2.5);
+		branch1.setMinorder(20.2);
+		branch.add(branch1);
 
 		parameters.setBranchArticles(branch);
 
@@ -217,18 +220,38 @@ public class AdminTest {
 	}
 
 	public static void getArticles() {
-		ArrayList<ArticlesTO> resp = null;
+		List resp = null;
 
 		String name = null;
-		String code = "1";
+		String code = "art-001";
 
 		resp = AdminEJBService.getArticles(code, name);
 
-		for (ArticlesTO articulo : resp) {
-
-			System.out.println(articulo.getItemCode() + " - "
-					+ articulo.getItemName());
+		Iterator<ArticlesTO> iterator = resp.iterator();
+		while (iterator.hasNext()) {
+			ArticlesTO article = (ArticlesTO) iterator.next();
+			System.out.println(article.getItemCode() + " - "
+					+ article.getItemName());
 		}
+	}
+
+	public static void getArticlesByKey() {
+		ArticlesTO article = null;
+
+		String code = "art-001";
+
+		article = AdminEJBService.getArticlesByKey(code);
+
+		System.out.println(article.getItemCode() + " - "
+				+ article.getItemName());
+		System.out.println("Almacenes asociados");
+		
+		Iterator<BranchArticlesTO> iterator = article.getBranchArticles().iterator();
+		while (iterator.hasNext()) {
+			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
+			System.out.println(branch.isIsasociated() + " - " + branch.getWhscode() + " - "
+					+ branch.getWhsname());
+		}	
 	}
 
 	public static void bracharticles_mtto() {
@@ -268,30 +291,6 @@ public class AdminTest {
 
 	}
 
-	public static void accPeridod_mtto() {
-
-		int _result;
-		int parameters = 2015;
-		int usersing = 1;
-
-		// Agregar
-
-		_result = AdminEJBService.cat_accPeriod_mtto(parameters, usersing,
-				Common.MTTOINSERT);
-
-		// Actualizar
-
-		// _result=AdminEJBService.cat_accPeriod_mtto(parameters,
-		// Common.MTTOUPDATE);
-
-		// Borrar
-
-		// _result=AdminEJBService.cat_accPeriod_mtto(parameters,
-		// Common.MTTODELETE);
-
-		System.out.println("luego de servicio");
-		System.out.println(_result);
-
-	}
+	
 
 }
