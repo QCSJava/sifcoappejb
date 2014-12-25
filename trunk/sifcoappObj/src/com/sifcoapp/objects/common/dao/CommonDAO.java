@@ -54,6 +54,41 @@ public class CommonDAO {
 		}
 	}
 
+	public void forceCloseConnection() {
+		try {
+			if (this.conn != null) {
+				this.conn.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void rollBackConnection() {
+		try {
+			if (this.conn != null) {
+				this.conn.rollback();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Forza el commit para operaciones transaccionales
+	 */
+	public void forceCommit() {
+		try {
+			if (this.conn != null) {
+				this.conn.commit();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	/*
 	 * 
 	 */
@@ -142,7 +177,8 @@ public class CommonDAO {
 
 		try {
 			statementToExecute = this.getConn().prepareCall(this.getDbObject());
-
+			this.getConn().setAutoCommit(!this.istransaccional);
+			// this.getConn().commit(); afuera en dao
 			// asignamos parametros
 
 			Enumeration enParameters = this.inParameters.keys();
@@ -220,12 +256,13 @@ public class CommonDAO {
 			 * Integer(statementToExecute.getInt(1))); }
 			 */
 
-			// Cerramos la conexion
+			// Cerramos el Statement
 			if (statementToExecute != null) {
 				statementToExecute.close();
 			}
-
+			// Cerramos la conexión
 			this.closeConnection();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -314,7 +351,7 @@ public class CommonDAO {
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPEDATE)) {
 					statementToExecute.setDate(v_position.intValue(),
-							(Date)dtParameterTmp.getColValue());
+							(Date) dtParameterTmp.getColValue());
 				}
 
 			}
@@ -432,5 +469,5 @@ public class CommonDAO {
 	public void setTypeReturn(String typeReturn) {
 		this.typeReturn = typeReturn;
 	}
-	
+
 }

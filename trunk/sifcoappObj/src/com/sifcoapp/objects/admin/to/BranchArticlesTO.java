@@ -12,6 +12,7 @@ public class BranchArticlesTO extends CommonTO{
 	private BranchTO branch;
 	private String itemcode;
 	private String whscode;
+	private String whsname;	
 	private Double onhand;
 	private Double onhand1;
 	private Double iscommited;
@@ -24,6 +25,7 @@ public class BranchArticlesTO extends CommonTO{
 	
 	public BranchArticlesTO(){
 		this.setBranch(branch);
+		this.setWhsname(whsname);
 		this.setItemcode(itemcode);
 		this.setWhscode(whscode);
 		this.setOnhand(onhand);
@@ -36,10 +38,11 @@ public class BranchArticlesTO extends CommonTO{
 		this.setLocked(locked);		
 		this.setIsasociated(isasociated);	
 	}
-	public BranchArticlesTO(BranchTO branch, String itemcode, String whscode, Double onhand, Double onhand1, Double iscommited, Double onorder, Double minstock, Double maxstock, String locked, boolean isasociated){	
+	public BranchArticlesTO(BranchTO branch, String itemcode, String whscode,  String whsname, Double onhand, Double onhand1, Double iscommited, Double onorder, Double minstock, Double maxstock, String locked, boolean isasociated){	
 		this.setBranch(branch);
 		this.setItemcode(itemcode);
 		this.setWhscode(whscode);
+		this.setWhsname(whsname);
 		this.setOnhand(onhand);
 		this.setOnhand1(onhand1);
 		this.setIscommited(iscommited);
@@ -68,6 +71,12 @@ public class BranchArticlesTO extends CommonTO{
 	}
 	public void setWhscode(String whscode) {
 		this.whscode = whscode;
+	}
+	public String getWhsname() {
+		return whsname;
+	}
+	public void setWhsname(String whsname) {
+		this.whsname = whsname;
 	}
 	public Double getOnhand() {
 		return onhand;
@@ -117,7 +126,7 @@ public class BranchArticlesTO extends CommonTO{
 	public void setLocked(String locked) {
 		this.locked = locked;
 	}
-	public boolean isIsasociated() {
+	public boolean isIsasociated() {		
 		return isasociated;
 	}
 	public void setIsasociated(boolean isasociated) {

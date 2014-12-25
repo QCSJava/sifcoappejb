@@ -1,4 +1,4 @@
-package com.sifcoapp.objects.admin.to;
+package com.sifcoapp.objects.accounting.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 

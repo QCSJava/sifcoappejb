@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import com.sifcoapp.objects.admin.to.AccPeriodTO;
+import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -231,7 +231,7 @@ public class AdminDAO extends CommonDAO {
 		this.setString(14, "_salunitmsr", parameters.getSalUnitMsr());
 		this.setDouble(15, "_salpackun", new Double(parameters.getSalPackUn()));
 		this.setString(16, "_suppcatnum", parameters.getSuppCatNum());
-		this.setDouble(17, "_purpackun",new Double(parameters.getSalPackUn()));
+		this.setDouble(17, "_purpackun", new Double(parameters.getSalPackUn()));
 		this.setDouble(18, "_avgprice", new Double(parameters.getAvgPrice()));
 		this.setDouble(19, "_onhand", new Double(parameters.getOnHand()));
 		this.setString(20, "_validfor", parameters.getValidFor());
@@ -243,7 +243,7 @@ public class AdminDAO extends CommonDAO {
 		this.setString(26, "_wtliable", parameters.getWtliable());
 		this.setString(27, "_sww", parameters.getSww());
 		this.setString(28, "_validcomm", parameters.getValidComm());
-		this.setInt(29, "_usersign",  new Integer(parameters.getUserSign()));
+		this.setInt(29, "_usersign", new Integer(parameters.getUserSign()));
 		this.setInt(30, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
@@ -251,31 +251,30 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname ) {
-
+	public List getArticles(String itemcode, String itemname) {
+		List _return = new Vector();
 		List lstResultSet = null;
-		ArrayList<ArticlesTO> _return = new ArrayList<ArticlesTO>();
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-     // this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_articles(?,?)}");
-		this.setString(1, "_itemcode",itemcode);
+		this.setString(1, "_itemcode", itemcode);
 		this.setString(2, "_itemname", itemname);
-		
+
 		lstResultSet = this.runQuery();
-		
+
 		CachedRowSetImpl rowsetActual;
-		
+
 		System.out.println("return psg");
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		
+
 		while (liRowset.hasNext()) {
-			rowsetActual = (CachedRowSetImpl) liRowset.next();		
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					ArticlesTO article =  new ArticlesTO();
+					ArticlesTO article = new ArticlesTO();
 					article.setItemCode(rowsetActual.getString(1));
 					article.setItemName(rowsetActual.getString(2));
 					article.setItemType(rowsetActual.getString(3));
@@ -304,8 +303,8 @@ public class AdminDAO extends CommonDAO {
 					article.setWtliable(rowsetActual.getString(26));
 					article.setSww(rowsetActual.getString(27));
 					article.setValidComm(rowsetActual.getString(28));
-					article.setUserSign(rowsetActual.getInt(29));		
-					
+					article.setUserSign(rowsetActual.getInt(29));
+
 					_return.add(article);
 				}
 				rowsetActual.close();
@@ -316,7 +315,121 @@ public class AdminDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
+
+	public ArticlesTO getArticlesByKey(String itemcode) {
+		ArticlesTO _return = new ArticlesTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_articles_by_key(?)}");
+		this.setString(1, "_itemcode", itemcode);
+		
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ArticlesTO article = new ArticlesTO();
+					article.setItemCode(rowsetActual.getString(1));
+					article.setItemName(rowsetActual.getString(2));
+					article.setItemType(rowsetActual.getString(3));
+					article.setItmsGrpCod(rowsetActual.getInt(4));
+					article.setVatLiable(rowsetActual.getString(5));
+					article.setCodeBars(rowsetActual.getString(6));
+					article.setPrchseItem(rowsetActual.getString(7));
+					article.setSellItem(rowsetActual.getString(8));
+					article.setInvntItem(rowsetActual.getString(9));
+					article.setAssetItem(rowsetActual.getString(10));
+					article.setCardCode(rowsetActual.getString(11));
+					article.setBuyUnitMsr(rowsetActual.getString(12));
+					article.setNumInBuy(rowsetActual.getDouble(13));
+					article.setSalUnitMsr(rowsetActual.getString(14));
+					article.setSalPackUn(rowsetActual.getDouble(15));
+					article.setSuppCatNum(rowsetActual.getString(16));
+					article.setPurPackUn(rowsetActual.getDouble(17));
+					article.setAvgPrice(rowsetActual.getDouble(18));
+					article.setOnHand(rowsetActual.getDouble(19));
+					article.setValidFor(rowsetActual.getString(20));
+					article.setValidFrom(rowsetActual.getDate(21));
+					article.setValidTo(rowsetActual.getDate(22));
+					article.setInvntryUom(rowsetActual.getString(23));
+					article.setNumInSale(rowsetActual.getDouble(24));
+					article.setDfltWH(rowsetActual.getString(25));
+					article.setWtliable(rowsetActual.getString(26));
+					article.setSww(rowsetActual.getString(27));
+					article.setValidComm(rowsetActual.getString(28));
+					article.setUserSign(rowsetActual.getInt(29));
+					article.setBranchArticles(getBranchArticles(rowsetActual.getString(1)));
+					_return = article;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	public List getBranchArticles(String itemcode) {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+	 // this.setDbObject("{call sp_get_branch_articles_by_key(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_branch_articles_by_key(?)}");
+		this.setString(1, "_itemcode", itemcode);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					BranchArticlesTO brachArticle = new BranchArticlesTO();
+					brachArticle.setItemcode(rowsetActual.getString(1));
+					brachArticle.setWhscode(rowsetActual.getString(2));
+					brachArticle.setOnhand(rowsetActual.getDouble(3));
+					brachArticle.setOnhand1(rowsetActual.getDouble(4));
+					brachArticle.setIscommited(rowsetActual.getDouble(5));
+					brachArticle.setOnorder(rowsetActual.getDouble(6));
+					brachArticle.setMinstock(rowsetActual.getDouble(7));
+					brachArticle.setMaxstock(rowsetActual.getDouble(8));
+					brachArticle.setMinorder(rowsetActual.getDouble(9));
+					brachArticle.setLocked(rowsetActual.getString(10));
+					brachArticle.setWhsname(rowsetActual.getString(11));
+					brachArticle.setIsasociated(false);
+					if (rowsetActual.getString(1) != null) {
+						brachArticle.setIsasociated(true);
+					};
+						
+					_return.add(brachArticle);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
 	/*
 	 * Guarda los cambios en los articulos
 	 */
@@ -342,29 +455,5 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	/*
-	 * Mantenimiento de periodos contables
-	 */
-	public int cat_accPeriod_mtto(AccPeriodTO parameters, int action) {
-
-		int v_resp = 0;
-	 // this.setDbObject("{call sp_cat_acc_period_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_cat_acc_period_mtto(?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setString(1, "_acccode", parameters.getAcccode());
-		this.setString(2, "_accname", parameters.getAccname());
-		this.setDate(3, "_f_refdate", parameters.getF_refdate());
-		this.setDate(4, "_t_refdate", parameters.getT_refdate());
-		this.setDate(5, "_f_duedate", parameters.getF_duedate());
-		this.setDate(6, "_t_duedate", parameters.getT_duedate());
-		this.setDate(7, "_f_taxdate", parameters.getF_taxdate());
-		this.setDate(8, "_t_taxdate", parameters.getT_taxdate());
-		this.setInt(9, "_periodstat", new Integer(parameters.getPeriodstat()));
-		this.setInt(10, "_usersign", new Integer(parameters.getUsersign()));
-		this.setInt(11, "_action", new Integer(action));
-
-		v_resp = this.runUpdate();
-
-		return v_resp;
-	}
-
+	
 }

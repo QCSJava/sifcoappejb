@@ -1,7 +1,9 @@
 package com.sifcoapp.objects.admin.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
+
 import java.sql.Date;
+import java.util.List;
 
 public class ArticlesTO extends CommonTO {
 
@@ -39,7 +41,7 @@ public class ArticlesTO extends CommonTO {
 	private String sww;
 	private String validComm;
 	private int userSign;
-	private BranchArticlesTO[] branchArticles;
+	private List branchArticles;
 
 	public ArticlesTO(String itemCode, String itemName, String itemType,
 			int itmsGrpCod, String vatLiable, String codeBars,
@@ -50,8 +52,7 @@ public class ArticlesTO extends CommonTO {
 			double onHand, String validFor, Date validFrom, Date validTo,
 			String invntryUom, double numInSale, String dfltWH,
 			String wtliable, String sww, String validComm, int userSign,
-			BranchArticlesTO[] branchArticles) {
-		super();
+			List branchArticles) {
 		this.itemCode = itemCode;
 		this.itemName = itemName;
 		this.itemType = itemType;
@@ -321,11 +322,11 @@ public class ArticlesTO extends CommonTO {
 		this.userSign = userSign;
 	}
 
-	public BranchArticlesTO[] getBranchArticles() {
+	public List getBranchArticles() {
 		return branchArticles;
 	}
 
-	public void setBranchArticles(BranchArticlesTO[] branchArticles) {
-		this.branchArticles = branchArticles;
+	public void setBranchArticles(List list) {
+		this.branchArticles = list;
 	}
 }
