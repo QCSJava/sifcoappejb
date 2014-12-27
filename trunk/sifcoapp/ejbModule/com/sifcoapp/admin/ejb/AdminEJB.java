@@ -13,6 +13,7 @@ import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -166,15 +167,17 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de alamacenes de Articulos
 	 */
-	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action) {
-
-		int _return;
-
-		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.cat_brancharticles_mtto(parameters, action);
-
-		return _return;
-	}
+	/*
+	 * public int cat_brancharticles_mtto(BranchArticlesTO parameters, int
+	 * action) {
+	 * 
+	 * int _return;
+	 * 
+	 * AdminDAO adminDAO = new AdminDAO(); _return =
+	 * adminDAO.cat_brancharticles_mtto(parameters, action);
+	 * 
+	 * return _return; }
+	 */
 
 	public List getArticles(String itemcode, String itemname) {
 
@@ -188,17 +191,50 @@ public class AdminEJB implements AdminEJBRemote {
 
 	public ArticlesTO getArticlesByKey(String itemcode) {
 		ArticlesTO _return;
-		
+
 		AdminDAO adminDAO = new AdminDAO();
-		
-		//para el manejo de transacciones
+
+		// para el manejo de transacciones
 		adminDAO.setIstransaccional(true);
 		_return = adminDAO.getArticlesByKey(itemcode);
 
-		//adminDAO.forceCommit();
+		// adminDAO.forceCommit();
 		adminDAO.forceCloseConnection();
-		
-		
+
+		return _return;
+	}
+
+	/*
+	 * Mantenimiento de almacenes
+	 */
+	public int cat_branch_mtto(BranchTO parameters, int action) {
+		// TODO Auto-generated method stub
+		int _return;
+
+		AdminDAO adminDAO = new AdminDAO();
+		_return = adminDAO.cat_branch_mtto(parameters, action);
+
+		return _return;
+	}
+
+	public List getBranch(String whscode, String whsname) {
+		// TODO Auto-generated method stub
+
+		List _return;
+
+		AdminDAO adminDAO = new AdminDAO();
+		_return = adminDAO.getBranch(whscode, whsname);
+
+		return _return;
+	}
+
+	public BranchTO getBranchByKey(String whscode) {
+		// TODO Auto-generated method stub
+		BranchTO _return;
+
+		AdminDAO adminDAO = new AdminDAO();
+		_return = adminDAO.getBranchByKey(whscode);
+
 		return _return;
 	}
 }
