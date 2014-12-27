@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -31,10 +32,14 @@ public interface AdminEJBRemote {
 
 	public int cat_articles_mtto(ArticlesTO parameters, int action);
 	
-	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action);
+	public int cat_branch_mtto(BranchTO parameters, int action);
 	
 	public List getArticles(String itemcode, String itemname );
 	
 	public ArticlesTO getArticlesByKey(String itemcode);
+	
+	public List getBranch(String whscode, String whsname);
+	
+	public BranchTO getBranchByKey(String whscode);
 	
 }

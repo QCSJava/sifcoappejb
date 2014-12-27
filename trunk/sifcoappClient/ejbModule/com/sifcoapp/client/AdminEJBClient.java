@@ -13,6 +13,7 @@ import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -99,12 +100,12 @@ public class AdminEJBClient {
 	}
 
 	/*
-	 * Mantenimiento de Articulos
+	 * Mantenimiento de almacenes
 	 */
-	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action) {
+	public int cat_branch_mtto(BranchTO parameters, int action) {
 		int _return = 0;
 
-		_return = bean.cat_brancharticles_mtto(parameters, action);
+		_return = bean.cat_branch_mtto(parameters, action);
 
 		return _return;
 
@@ -122,6 +123,22 @@ public class AdminEJBClient {
 		ArticlesTO _return;
 
 		_return = bean.getArticlesByKey(itemcode);
+
+		return _return;
+	}
+	
+	public List getBranch(String whscode, String whsname ) {
+		List _return;
+
+		_return = bean.getBranch(whscode, whsname);
+
+		return _return;
+	}
+	
+	public BranchTO getBranchByKey(String whscode) {
+		BranchTO _return;
+
+		_return = bean.getBranchByKey(whscode);
 
 		return _return;
 	}
