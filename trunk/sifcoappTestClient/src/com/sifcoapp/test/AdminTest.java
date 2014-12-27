@@ -10,6 +10,7 @@ import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.client.AdminEJBClient;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -165,7 +166,7 @@ public class AdminTest {
 
 		int _result;
 		ArticlesTO parameters = new ArticlesTO();
-		parameters.setItemCode("art-002");
+		parameters.setItemCode("art-005");
 		parameters.setItemName("Nombre Prueba 7");
 		parameters.setUserSign(2);
 		parameters.setItemType("S");
@@ -181,7 +182,7 @@ public class AdminTest {
 		BranchArticlesTO branch1 = new BranchArticlesTO();
 		branch1.setIsasociated(true);
 		branch1.setIscommited(100.2);
-		branch1.setItemcode("art-002");
+		branch1.setItemcode("art-005");
 		branch1.setLocked("Y");
 		branch1.setWhscode("suc-001");
 		branch1.setMinstock(1.0);
@@ -245,16 +246,17 @@ public class AdminTest {
 		System.out.println(article.getItemCode() + " - "
 				+ article.getItemName());
 		System.out.println("Almacenes asociados");
-		
-		Iterator<BranchArticlesTO> iterator = article.getBranchArticles().iterator();
+
+		Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
+				.iterator();
 		while (iterator.hasNext()) {
 			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
-			System.out.println(branch.isIsasociated() + " - " + branch.getWhscode() + " - "
-					+ branch.getWhsname());
-		}	
+			System.out.println(branch.isIsasociated() + " - "
+					+ branch.getWhscode() + " - " + branch.getWhsname());
+		}
 	}
 
-	public static void bracharticles_mtto() {
+	/*public static void bracharticles_mtto() {
 
 		int _result;
 		BranchArticlesTO parameters = new BranchArticlesTO();
@@ -289,8 +291,60 @@ public class AdminTest {
 		System.out.println("luego de servicio");
 		System.out.println(_result);
 
+	}*/
+	
+	public static void brach_mtto() {
+
+		int _result;
+		BranchTO parameters = new BranchTO();
+		parameters.setWhscode("SUC-002");
+		parameters.setWhsname("Sucursal de pruebas");
+		parameters.setGrp_code("54");
+		parameters.setLocked(false);
+		parameters.setStreet("Calle");
+		parameters.setCity("San Salvador");
+		parameters.setCountry("ES");
+		parameters.setLocation("M");
+		parameters.setUsetax("N");
+		parameters.setBalinvntac("1111111");		
+		parameters.setUsersign(1);
+
+
+		// Agregar
+
+		/*_result = AdminEJBService.cat_branch_mtto(parameters,
+				Common.MTTOINSERT);*/
+
+		// Actualizar
+
+		 _result=AdminEJBService.cat_branch_mtto(parameters,
+		 Common.MTTOUPDATE);
+
+		// Borrar
+
+		// _result=AdminEJBService.cat_branch_mtto(parameters,
+		// Common.MTTODELETE);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
 	}
 
-	
+	public static void getBranch() {
+		List resp = null;
+
+		String name = null;
+		String code = null;
+
+		resp = AdminEJBService.getBranch(code, name);
+
+		Iterator<BranchTO> iterator = resp.iterator();
+		while (iterator.hasNext()) {
+			BranchTO branch = (BranchTO) iterator.next();
+			System.out.println(branch.getWhscode() + " - "
+					+ branch.getWhsname());
+		}
+	}
+
 
 }
