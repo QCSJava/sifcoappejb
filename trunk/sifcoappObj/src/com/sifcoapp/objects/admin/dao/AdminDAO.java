@@ -10,6 +10,7 @@ import java.util.Vector;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
@@ -324,7 +325,7 @@ public class AdminDAO extends CommonDAO {
 		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_articles_by_key(?)}");
 		this.setString(1, "_itemcode", itemcode);
-		
+
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
@@ -368,7 +369,8 @@ public class AdminDAO extends CommonDAO {
 					article.setSww(rowsetActual.getString(27));
 					article.setValidComm(rowsetActual.getString(28));
 					article.setUserSign(rowsetActual.getInt(29));
-					article.setBranchArticles(getBranchArticles(rowsetActual.getString(1)));
+					article.setBranchArticles(getBranchArticles(rowsetActual
+							.getString(1)));
 					_return = article;
 				}
 				rowsetActual.close();
@@ -385,7 +387,7 @@ public class AdminDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-	 // this.setDbObject("{call sp_get_branch_articles_by_key(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		// this.setDbObject("{call sp_get_branch_articles_by_key(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_branch_articles_by_key(?)}");
 		this.setString(1, "_itemcode", itemcode);
 
@@ -417,8 +419,9 @@ public class AdminDAO extends CommonDAO {
 					brachArticle.setIsasociated(false);
 					if (rowsetActual.getString(1) != null) {
 						brachArticle.setIsasociated(true);
-					};
-						
+					}
+					;
+
 					_return.add(brachArticle);
 				}
 				rowsetActual.close();
@@ -455,5 +458,242 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	
+	/*
+	 * Guarda los cambios en los articulos
+	 */
+	public int cat_branch_mtto(BranchTO parameters, int action) {
+
+		int v_resp = 0;
+		// thsetDbObject("{call sp_cat_branch_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
+		this.setDbObject("{call sp_cat_branch_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setString(1, "_whscode", parameters.getWhscode());
+		this.setString(2, "_whsname", parameters.getWhsname());
+		this.setString(3, "_grp_code", parameters.getGrp_code());
+		this.setBool(4, "_locked", parameters.isLocked());
+		this.setString(5, "_street", parameters.getStreet());
+		this.setString(6, "_city", parameters.getCity());
+		this.setString(7, "_country", parameters.getCountry());
+		this.setString(8, "_location", parameters.getLocation());
+		this.setString(9, "_usetax", parameters.getUsetax());
+		this.setString(10, "_balinvntac", parameters.getBalinvntac());
+		this.setString(11, "_salecostac", parameters.getSalecostac());
+		this.setString(12, "_transferac", parameters.getTransferac());
+		this.setString(13, "_revenuesac", parameters.getRevenuesac());
+		this.setString(14, "_varianceac", parameters.getVarianceac());
+		this.setString(15, "_decreasac", parameters.getDecreasac());
+		this.setString(16, "_increasac", parameters.getIncreasac());
+		this.setString(17, "_returnac", parameters.getReturnac());
+		this.setString(18, "_expensesac", parameters.getExpensesac());
+		this.setString(19, "_frrevenuac", parameters.getFrrevenuac());
+		this.setString(20, "_frexpensac", parameters.getFrexpensac());
+		this.setString(21, "_pricedifac", parameters.getPricedifac());
+		this.setString(22, "_exchangeac", parameters.getExchangeac());
+		this.setString(23, "_balanceacc", parameters.getBalanceacc());
+		this.setString(24, "_purchaseac", parameters.getPurchaseac());
+		this.setString(25, "_pareturnac", parameters.getPareturnac());
+		this.setString(26, "_purchofsac", parameters.getPurchofsac());
+		this.setString(27, "_shpdgdsact", parameters.getShpdgdsact());
+		this.setString(28, "_vatrevact", parameters.getVatrevact());
+		this.setString(29, "_decresglac", parameters.getDecresglac());
+		this.setString(30, "_incresglac", parameters.getIncresglac());
+		this.setString(31, "_stokrvlact", parameters.getStokrvlact());
+		this.setString(32, "_stkoffsact", parameters.getStkoffsact());
+		this.setString(33, "_wipacct", parameters.getWipacct());
+		this.setString(34, "_wipvaracct", parameters.getWipvaracct());
+		this.setString(35, "_costrvlact", parameters.getCostrvlact());
+		this.setString(36, "_cstoffsact", parameters.getCstoffsact());
+		this.setString(37, "_expclract", parameters.getExpclract());
+		this.setString(38, "_expofstact", parameters.getExpofstact());
+		this.setString(39, "_arcmact", parameters.getArcmact());
+		this.setString(40, "_arcmfrnact", parameters.getArcmfrnact());
+		this.setString(41, "_arcmexpact", parameters.getArcmexpact());
+		this.setString(42, "_apcmact", parameters.getApcmact());
+		this.setString(43, "_apcmfrnact", parameters.getApcmfrnact());
+		this.setString(44, "_revretact", parameters.getRevretact());
+		this.setString(45, "_negstckact", parameters.getNegstckact());
+		this.setString(46, "_stkintnact", parameters.getStkintnact());
+		this.setString(47, "_purbalact", parameters.getPurbalact());
+		this.setString(48, "_whicenact", parameters.getWhicenact());
+		this.setString(49, "_whocenact", parameters.getWhocenact());
+		this.setString(50, "_excisable", parameters.getExcisable());
+		this.setInt(51, "_usersign", parameters.getUsersign());
+		this.setInt(52, "_action", new Integer(action));
+
+		v_resp = this.runUpdate();
+
+		return v_resp;
+	}
+
+	public List getBranch(String whscode, String whsname) {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// this.setDbOct("{call sp_get_branch(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_branch(?,?)}");
+		this.setString(1, "_whscode", whscode);
+		this.setString(2, "_whsname", whsname);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					BranchTO branch = new BranchTO();
+					branch.setWhscode(rowsetActual.getString(1));
+					branch.setWhsname(rowsetActual.getString(2));
+					branch.setGrp_code(rowsetActual.getString(3));
+					branch.setLocked(rowsetActual.getBoolean(4));
+					branch.setStreet(rowsetActual.getString(5));
+					branch.setCity(rowsetActual.getString(6));
+					branch.setCountry(rowsetActual.getString(7));
+					branch.setLocation(rowsetActual.getString(8));
+					branch.setUsetax(rowsetActual.getString(9));
+					branch.setBalinvntac(rowsetActual.getString(10));
+					branch.setSalecostac(rowsetActual.getString(11));
+					branch.setTransferac(rowsetActual.getString(12));
+					branch.setRevenuesac(rowsetActual.getString(13));
+					branch.setVarianceac(rowsetActual.getString(14));
+					branch.setDecreasac(rowsetActual.getString(15));
+					branch.setIncreasac(rowsetActual.getString(16));
+					branch.setReturnac(rowsetActual.getString(17));
+					branch.setExpensesac(rowsetActual.getString(18));
+					branch.setFrrevenuac(rowsetActual.getString(19));
+					branch.setFrexpensac(rowsetActual.getString(20));
+					branch.setPricedifac(rowsetActual.getString(21));
+					branch.setExchangeac(rowsetActual.getString(22));
+					branch.setBalanceacc(rowsetActual.getString(23));
+					branch.setPurchaseac(rowsetActual.getString(24));
+					branch.setPareturnac(rowsetActual.getString(25));
+					branch.setPurchofsac(rowsetActual.getString(26));
+					branch.setShpdgdsact(rowsetActual.getString(27));
+					branch.setVatrevact(rowsetActual.getString(28));
+					branch.setDecresglac(rowsetActual.getString(29));
+					branch.setIncresglac(rowsetActual.getString(30));
+					branch.setStokrvlact(rowsetActual.getString(31));
+					branch.setStkoffsact(rowsetActual.getString(32));
+					branch.setWipacct(rowsetActual.getString(33));
+					branch.setWipvaracct(rowsetActual.getString(34));
+					branch.setCostrvlact(rowsetActual.getString(35));
+					branch.setCstoffsact(rowsetActual.getString(36));
+					branch.setExpclract(rowsetActual.getString(37));
+					branch.setExpofstact(rowsetActual.getString(38));
+					branch.setArcmact(rowsetActual.getString(39));
+					branch.setArcmfrnact(rowsetActual.getString(40));
+					branch.setArcmexpact(rowsetActual.getString(41));
+					branch.setApcmact(rowsetActual.getString(42));
+					branch.setApcmfrnact(rowsetActual.getString(43));
+					branch.setRevretact(rowsetActual.getString(44));
+					branch.setNegstckact(rowsetActual.getString(45));
+					branch.setStkintnact(rowsetActual.getString(46));
+					branch.setPurbalact(rowsetActual.getString(47));
+					branch.setWhicenact(rowsetActual.getString(48));
+					branch.setWhocenact(rowsetActual.getString(49));
+					branch.setExcisable(rowsetActual.getString(50));
+					branch.setUsersign(rowsetActual.getInt(51));
+					_return.add(branch);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	public BranchTO getBranchByKey(String whscode) {
+		BranchTO _return = new BranchTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// th
+		// etDbObject("{call sp_get_branch_by_key(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_branch_by_key(?)}");
+		this.setString(1, "_whscode", whscode);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					BranchTO branch = new BranchTO();
+					branch.setWhscode(rowsetActual.getString(1));
+					branch.setWhsname(rowsetActual.getString(2));
+					branch.setGrp_code(rowsetActual.getString(3));
+					branch.setLocked(rowsetActual.getBoolean(4));
+					branch.setStreet(rowsetActual.getString(5));
+					branch.setCity(rowsetActual.getString(6));
+					branch.setCountry(rowsetActual.getString(7));
+					branch.setLocation(rowsetActual.getString(8));
+					branch.setUsetax(rowsetActual.getString(9));
+					branch.setBalinvntac(rowsetActual.getString(10));
+					branch.setSalecostac(rowsetActual.getString(11));
+					branch.setTransferac(rowsetActual.getString(12));
+					branch.setRevenuesac(rowsetActual.getString(13));
+					branch.setVarianceac(rowsetActual.getString(14));
+					branch.setDecreasac(rowsetActual.getString(15));
+					branch.setIncreasac(rowsetActual.getString(16));
+					branch.setReturnac(rowsetActual.getString(17));
+					branch.setExpensesac(rowsetActual.getString(18));
+					branch.setFrrevenuac(rowsetActual.getString(19));
+					branch.setFrexpensac(rowsetActual.getString(20));
+					branch.setPricedifac(rowsetActual.getString(21));
+					branch.setExchangeac(rowsetActual.getString(22));
+					branch.setBalanceacc(rowsetActual.getString(23));
+					branch.setPurchaseac(rowsetActual.getString(24));
+					branch.setPareturnac(rowsetActual.getString(25));
+					branch.setPurchofsac(rowsetActual.getString(26));
+					branch.setShpdgdsact(rowsetActual.getString(27));
+					branch.setVatrevact(rowsetActual.getString(28));
+					branch.setDecresglac(rowsetActual.getString(29));
+					branch.setIncresglac(rowsetActual.getString(30));
+					branch.setStokrvlact(rowsetActual.getString(31));
+					branch.setStkoffsact(rowsetActual.getString(32));
+					branch.setWipacct(rowsetActual.getString(33));
+					branch.setWipvaracct(rowsetActual.getString(34));
+					branch.setCostrvlact(rowsetActual.getString(35));
+					branch.setCstoffsact(rowsetActual.getString(36));
+					branch.setExpclract(rowsetActual.getString(37));
+					branch.setExpofstact(rowsetActual.getString(38));
+					branch.setArcmact(rowsetActual.getString(39));
+					branch.setArcmfrnact(rowsetActual.getString(40));
+					branch.setArcmexpact(rowsetActual.getString(41));
+					branch.setApcmact(rowsetActual.getString(42));
+					branch.setApcmfrnact(rowsetActual.getString(43));
+					branch.setRevretact(rowsetActual.getString(44));
+					branch.setNegstckact(rowsetActual.getString(45));
+					branch.setStkintnact(rowsetActual.getString(46));
+					branch.setPurbalact(rowsetActual.getString(47));
+					branch.setWhicenact(rowsetActual.getString(48));
+					branch.setWhocenact(rowsetActual.getString(49));
+					branch.setExcisable(rowsetActual.getString(50));
+					branch.setUsersign(rowsetActual.getInt(51));
+					_return = branch;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
 }
