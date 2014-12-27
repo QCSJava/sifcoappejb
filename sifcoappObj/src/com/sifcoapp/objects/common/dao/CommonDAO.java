@@ -75,6 +75,7 @@ public class CommonDAO {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Forza el commit para operaciones transaccionales
 	 */
@@ -156,6 +157,10 @@ public class CommonDAO {
 		this.insertParam(position, colName, colValue, Common.TYPEDATE);
 	}
 
+	public void setBool(int position, String colName, Object colValue) {
+		this.insertParam(position, colName, colValue, Common.TYPEBOOL);
+	}
+
 	/*
 	 * 
 	 */
@@ -177,7 +182,10 @@ public class CommonDAO {
 
 		try {
 			statementToExecute = this.getConn().prepareCall(this.getDbObject());
-			this.getConn().setAutoCommit(!this.istransaccional);
+			// this.getConn().setAutoCommit(!this.istransaccional);
+			if (this.istransaccional) {
+				this.getConn().setAutoCommit(false);
+			}
 			// this.getConn().commit(); afuera en dao
 			// asignamos parametros
 
@@ -240,6 +248,12 @@ public class CommonDAO {
 					statementToExecute.setDate(v_position.intValue(),
 							((Date) dtParameterTmp.getColValue()));
 				}
+
+				if (dtParameterTmp.getColType().equalsIgnoreCase(
+						Common.TYPEBOOL)) {
+					statementToExecute.setBoolean(v_position.intValue(),
+							(Boolean) (dtParameterTmp.getColValue()));
+				}
 			}
 
 			/*
@@ -262,7 +276,7 @@ public class CommonDAO {
 			}
 			// Cerramos la conexión
 			this.closeConnection();
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
