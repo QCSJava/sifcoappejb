@@ -1,5 +1,7 @@
 package com.sifcoapp.client;
 
+import java.util.List;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -7,6 +9,7 @@ import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
+import com.sifcoapp.objects.security.to.UserTO;
 import com.sifcoapp.security.ejb.*;
 import com.sifcoapp.clientutility.ClientUtility;
 
@@ -81,6 +84,24 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 		profileOutTO = bean.GetUserProfile(usrProfile);
 
 		return profileOutTO;
+	}
+
+	public int cat_users_mtto(UserTO parameters, int action) {
+		// TODO Auto-generated method stub
+		int _return = 0;
+
+		_return = bean.cat_users_mtto(parameters, action);
+
+		return _return;
+	}
+
+	public List getUser() {
+		// TODO Auto-generated method stub
+		List _return = null;
+
+		_return = bean.getUser();
+
+		return _return;
 	}
 
 }
