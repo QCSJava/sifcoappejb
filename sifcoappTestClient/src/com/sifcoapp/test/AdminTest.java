@@ -172,7 +172,7 @@ public class AdminTest {
 		
 		//Agregar
 		
-		_result=AdminEJBService.SaveArticles(parameters, Common.MTTOINSERT);
+		//_result=AdminEJBService.SaveArticles(parameters, Common.MTTOINSERT);
 		
 		//Actualizar
 		
@@ -185,7 +185,7 @@ public class AdminTest {
 		//_result=AdminEJBService.cat_tab1_catalogos_mtto(parameters, Common.MTTODELETE);
 		
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		//System.out.println(_result);
 		
 	}
 	
