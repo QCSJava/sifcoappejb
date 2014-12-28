@@ -8,9 +8,7 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.bussinessLogic.AccountingEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
-import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
-import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
-import com.sifcoapp.security.ejb.SecurityEJBRemote;
+import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 
 public class AccountingEJBClient implements AccountingEJBRemote {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AccountingEJB!com.sifcoapp.bussinessLogic.AccountingEJBRemote";
@@ -48,6 +46,24 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		_return = bean.cat_accPeriod_mtto(parameters, usersign, action);
 
 		return _return;
+	}
+
+	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) {
+		// TODO Auto-generated method stub
+		int _return = 0;
+
+		_return = bean.cat_accAssignment_mtto(parameters, action);
+
+		return _return;
+	}
+
+	public AccassignmentTO getAccAssignment() {
+		// TODO Auto-generated method stub
+		AccassignmentTO acc = new AccassignmentTO();
+
+		acc = bean.getAccAssignment();
+
+		return acc;
 	}
 
 }
