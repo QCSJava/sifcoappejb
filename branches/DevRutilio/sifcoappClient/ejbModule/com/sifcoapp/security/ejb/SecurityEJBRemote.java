@@ -10,6 +10,6 @@ import com.sifcoapp.objects.security.to.UserAppOutTO;
 public interface SecurityEJBRemote {
 	public UserAppOutTO UserValidate(UserAppInTO usr);
 	public String SayHello(String hellomsg);
-	public ProfileOutTO GetUserProfile(ProfileInTO usrProfile);
+	public ProfileOutTO GetUserProfile(UserAppInTO usr);
 
 }
