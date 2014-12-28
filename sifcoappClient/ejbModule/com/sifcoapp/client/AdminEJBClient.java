@@ -1,5 +1,6 @@
 package com.sifcoapp.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -8,7 +9,10 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -85,12 +89,44 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public int SaveArticles(ArticlesTO parameters, int action) {
+	public int cat_articles_mtto(ArticlesTO parameters, int action) {
 		int _return = 0;
 
-		_return = bean.SaveArticles(parameters, action);
+		_return = bean.cat_articles_mtto(parameters, action);
 
 		return _return;
 
+	}
+
+	/*
+	 * Mantenimiento de Articulos
+	 */
+	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action) {
+		int _return = 0;
+
+		_return = bean.cat_brancharticles_mtto(parameters, action);
+
+		return _return;
+
+	}
+	
+	public ArrayList<ArticlesTO> getArticles(String itemcode, String itemname ) {
+		ArrayList<ArticlesTO> _return;
+
+		_return = bean.getArticles(itemcode, itemname);
+
+		return _return;
+	}
+
+	/*
+	 * Mantenimiento de periodos contables
+	 */
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action){
+
+		int _return = 0;
+
+		_return = bean.cat_accPeriod_mtto(parameters, usersign, action);
+
+		return _return;
 	}
 }
