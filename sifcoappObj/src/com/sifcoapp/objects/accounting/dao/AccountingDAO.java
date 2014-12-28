@@ -1,11 +1,13 @@
 package com.sifcoapp.objects.accounting.dao;
 
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
+import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
@@ -41,7 +43,7 @@ public class AccountingDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{? = call sp_get_acc_period()}");		
+		this.setDbObject("{? = call sp_get_acc_period()}");
 
 		lstResultSet = this.runQuery();
 
@@ -67,8 +69,267 @@ public class AccountingDAO extends CommonDAO {
 					period.setF_taxdate(rowsetActual.getDate(8));
 					period.setT_taxdate(rowsetActual.getDate(9));
 					period.setPeriodstat(rowsetActual.getInt(10));
-					period.setUsersign(rowsetActual.getInt(11));			
+					period.setUsersign(rowsetActual.getInt(11));
 					_return.add(period);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) {
+
+		int v_resp = 0;	
+		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
+
+		Object[] param = { parameters.getAbsentry(), parameters.getPeriodcat(),
+				parameters.getFinancyear(), parameters.getYear(),
+				parameters.getPeriodname(), parameters.getSubtype(),
+				parameters.getPeriodnum(), parameters.getF_refdate(),
+				parameters.getT_refdate(), parameters.getF_duedate(),
+				parameters.getT_duedate(), parameters.getF_taxdate(),
+				parameters.getT_taxdate(), parameters.getLinkact_1(),
+				parameters.getLinkact_2(), parameters.getLinkact_3(),
+				parameters.getLinkact_4(), parameters.getLinkact_5(),
+				parameters.getLinkact_6(), parameters.getLinkact_8(),
+				parameters.getLinkact_9(), parameters.getLinkact_10(),
+				parameters.getLinkact_11(), parameters.getLinkact_12(),
+				parameters.getLinkact_13(), parameters.getLinkact_14(),
+				parameters.getLinkact_15(), parameters.getLinkact_16(),
+				parameters.getLinkact_17(), parameters.getLinkact_18(),
+				parameters.getDfltincom(), parameters.getExmptincom(),
+				parameters.getDfltexpn(), parameters.getForgnincm(),
+				parameters.getEcincome(), parameters.getForgnexpn(),
+				parameters.getDfltratedi(), parameters.getDecresglac(),
+				parameters.getLinkact_27(), parameters.getDftstockob(),
+				parameters.getLinkact_19(), parameters.getLinkact_20(),
+				parameters.getLinkact_21(), parameters.getLinkact_22(),
+				parameters.getLinkact_23(), parameters.getLinkact_24(),
+				parameters.getLinkact_25(), parameters.getLinkact_26(),
+				parameters.getIncresglac(), parameters.getRturnngact(),
+				parameters.getCogm_act(), parameters.getAloccstact(),
+				parameters.getVariancact(), parameters.getPricdifact(),
+				parameters.getCdownpymnt(), parameters.getVdownpymnt(),
+				parameters.getCboercvble(), parameters.getCboeonclct(),
+				parameters.getCboepresnt(), parameters.getCboediscnt(),
+				parameters.getCunpaidboe(), parameters.getVboepayble(),
+				parameters.getVasstboepy(), parameters.getCopendebts(),
+				parameters.getVopendebts(), parameters.getPurchseact(),
+				parameters.getPareturnac(), parameters.getPaoffsetac(),
+				parameters.getLinkact_28(), parameters.getExdiffact(),
+				parameters.getBalanceact(), parameters.getBnkchgact(),
+				parameters.getLinkact_29(), parameters.getLinkact_30(),
+				parameters.getIncmacct(), parameters.getExpnacct(),
+				parameters.getVatrevact(), parameters.getExpclract(),
+				parameters.getExpofstact(), parameters.getCostrevact(),
+				parameters.getRepomoact(), parameters.getWipvaracct(),
+				parameters.getSalevatoff(), parameters.getPurcvatoff(),
+				parameters.getDpmsalact(), parameters.getDpmpuract(),
+				parameters.getExpvaract(), parameters.getCostoffact(),
+				parameters.getEcexepnses(), parameters.getStockact(),
+				parameters.getDflinprcss(), parameters.getDfltincstm(),
+				parameters.getDfltprofit(), parameters.getDfltloss(),
+				parameters.getVassets(), parameters.getStockrvact(),
+				parameters.getStkrvofact(), parameters.getWipacct(),
+				parameters.getDfltcard(), parameters.getShpdgdsact(),
+				parameters.getGlrvoffact(), parameters.getOverpayap(),
+				parameters.getUndrpayap(), parameters.getOverpayar(),
+				parameters.getUndrpayar(), parameters.getArcmact(),
+				parameters.getArcmexpact(), parameters.getArcmfrnact(),
+				parameters.getArcmeuact(), parameters.getApcmact(),
+				parameters.getApcmfrnact(), parameters.getApcmeuact(),
+				parameters.getNegstckact(), parameters.getStkintnact(),
+				parameters.getGlgainxdif(), parameters.getGllossxdif(),
+				parameters.getAmountdiff(), parameters.getSlfinvincm(),
+				parameters.getSlfinvexpn(), parameters.getOnholdact(),
+				parameters.getPlaact(), parameters.getIcclract(),
+				parameters.getOcclract(), parameters.getPurbalact(),
+				parameters.getWhicenact(), parameters.getWhocenact(),
+				parameters.getSaldpmint(), parameters.getPurdpmint(),
+				parameters.getExrateondt(), parameters.getEurecvact(),
+				parameters.getEupayact(), parameters.getWipoffset(),
+				parameters.getStockoffst(), parameters.getDunintrst(),
+				parameters.getDunfee(), parameters.getTdsinterst(),
+				parameters.getTdscharges(), parameters.getUsersign() };
+
+		Array aArray = null;
+		try {
+			aArray = conn.createArrayOf("varchar", param);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		this.setArrayString(1, "_param", aArray);
+		this.setInt(2, "_action", new Integer(action));		
+
+		v_resp = this.runUpdate();
+
+		return v_resp;
+	}
+
+	public AccassignmentTO getAccAssignment() {
+		AccassignmentTO _return = new AccassignmentTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{? = call sp_get_acc_assignment()}");
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					_return.setAbsentry(rowsetActual.getInt(1));
+					_return.setPeriodcat(rowsetActual.getString(2));
+					_return.setFinancyear(rowsetActual.getDate(3));
+					_return.setYear(rowsetActual.getInt(4));
+					_return.setPeriodname(rowsetActual.getString(5));
+					_return.setSubtype(rowsetActual.getString(6));
+					_return.setPeriodnum(rowsetActual.getInt(7));
+					_return.setF_refdate(rowsetActual.getDate(8));
+					_return.setT_refdate(rowsetActual.getDate(9));
+					_return.setF_duedate(rowsetActual.getDate(10));
+					_return.setT_duedate(rowsetActual.getDate(11));
+					_return.setF_taxdate(rowsetActual.getDate(12));
+					_return.setT_taxdate(rowsetActual.getDate(13));
+					_return.setLinkact_1(rowsetActual.getString(14));
+					_return.setLinkact_2(rowsetActual.getString(15));
+					_return.setLinkact_3(rowsetActual.getString(16));
+					_return.setLinkact_4(rowsetActual.getString(17));
+					_return.setLinkact_5(rowsetActual.getString(18));
+					_return.setLinkact_6(rowsetActual.getString(19));
+					_return.setLinkact_8(rowsetActual.getString(20));
+					_return.setLinkact_9(rowsetActual.getString(21));
+					_return.setLinkact_10(rowsetActual.getString(22));
+					_return.setLinkact_11(rowsetActual.getString(23));
+					_return.setLinkact_12(rowsetActual.getString(24));
+					_return.setLinkact_13(rowsetActual.getString(25));
+					_return.setLinkact_14(rowsetActual.getString(26));
+					_return.setLinkact_15(rowsetActual.getString(27));
+					_return.setLinkact_16(rowsetActual.getString(28));
+					_return.setLinkact_17(rowsetActual.getString(29));
+					_return.setLinkact_18(rowsetActual.getString(30));
+					_return.setDfltincom(rowsetActual.getString(31));
+					_return.setExmptincom(rowsetActual.getString(32));
+					_return.setDfltexpn(rowsetActual.getString(33));
+					_return.setForgnincm(rowsetActual.getString(34));
+					_return.setEcincome(rowsetActual.getString(35));
+					_return.setForgnexpn(rowsetActual.getString(36));
+					_return.setDfltratedi(rowsetActual.getString(37));
+					_return.setDecresglac(rowsetActual.getString(38));
+					_return.setLinkact_27(rowsetActual.getString(39));
+					_return.setDftstockob(rowsetActual.getString(40));
+					_return.setLinkact_19(rowsetActual.getString(41));
+					_return.setLinkact_20(rowsetActual.getString(42));
+					_return.setLinkact_21(rowsetActual.getString(43));
+					_return.setLinkact_22(rowsetActual.getString(44));
+					_return.setLinkact_23(rowsetActual.getString(45));
+					_return.setLinkact_24(rowsetActual.getString(46));
+					_return.setLinkact_25(rowsetActual.getString(47));
+					_return.setLinkact_26(rowsetActual.getString(48));
+					_return.setIncresglac(rowsetActual.getString(49));
+					_return.setRturnngact(rowsetActual.getString(50));
+					_return.setCogm_act(rowsetActual.getString(51));
+					_return.setAloccstact(rowsetActual.getString(52));
+					_return.setVariancact(rowsetActual.getString(53));
+					_return.setPricdifact(rowsetActual.getString(54));
+					_return.setCdownpymnt(rowsetActual.getString(55));
+					_return.setVdownpymnt(rowsetActual.getString(56));
+					_return.setCboercvble(rowsetActual.getString(57));
+					_return.setCboeonclct(rowsetActual.getString(58));
+					_return.setCboepresnt(rowsetActual.getString(59));
+					_return.setCboediscnt(rowsetActual.getString(60));
+					_return.setCunpaidboe(rowsetActual.getString(61));
+					_return.setVboepayble(rowsetActual.getString(62));
+					_return.setVasstboepy(rowsetActual.getString(63));
+					_return.setCopendebts(rowsetActual.getString(64));
+					_return.setVopendebts(rowsetActual.getString(65));
+					_return.setPurchseact(rowsetActual.getString(66));
+					_return.setPareturnac(rowsetActual.getString(67));
+					_return.setPaoffsetac(rowsetActual.getString(68));
+					_return.setLinkact_28(rowsetActual.getString(69));
+					_return.setExdiffact(rowsetActual.getString(70));
+					_return.setBalanceact(rowsetActual.getString(71));
+					_return.setBnkchgact(rowsetActual.getString(72));
+					_return.setLinkact_29(rowsetActual.getString(73));
+					_return.setLinkact_30(rowsetActual.getString(74));
+					_return.setIncmacct(rowsetActual.getString(75));
+					_return.setExpnacct(rowsetActual.getString(76));
+					_return.setVatrevact(rowsetActual.getString(77));
+					_return.setExpclract(rowsetActual.getString(78));
+					_return.setExpofstact(rowsetActual.getString(79));
+					_return.setCostrevact(rowsetActual.getString(80));
+					_return.setRepomoact(rowsetActual.getString(81));
+					_return.setWipvaracct(rowsetActual.getString(82));
+					_return.setSalevatoff(rowsetActual.getString(83));
+					_return.setPurcvatoff(rowsetActual.getString(84));
+					_return.setDpmsalact(rowsetActual.getString(85));
+					_return.setDpmpuract(rowsetActual.getString(86));
+					_return.setExpvaract(rowsetActual.getString(87));
+					_return.setCostoffact(rowsetActual.getString(88));
+					_return.setEcexepnses(rowsetActual.getString(89));
+					_return.setStockact(rowsetActual.getString(90));
+					_return.setDflinprcss(rowsetActual.getString(91));
+					_return.setDfltincstm(rowsetActual.getString(92));
+					_return.setDfltprofit(rowsetActual.getString(93));
+					_return.setDfltloss(rowsetActual.getString(94));
+					_return.setVassets(rowsetActual.getString(95));
+					_return.setStockrvact(rowsetActual.getString(96));
+					_return.setStkrvofact(rowsetActual.getString(97));
+					_return.setWipacct(rowsetActual.getString(98));
+					_return.setDfltcard(rowsetActual.getString(99));
+					_return.setShpdgdsact(rowsetActual.getString(100));
+					_return.setGlrvoffact(rowsetActual.getString(101));
+					_return.setOverpayap(rowsetActual.getString(102));
+					_return.setUndrpayap(rowsetActual.getString(103));
+					_return.setOverpayar(rowsetActual.getString(104));
+					_return.setUndrpayar(rowsetActual.getString(105));
+					_return.setArcmact(rowsetActual.getString(106));
+					_return.setArcmexpact(rowsetActual.getString(107));
+					_return.setArcmfrnact(rowsetActual.getString(108));
+					_return.setArcmeuact(rowsetActual.getString(109));
+					_return.setApcmact(rowsetActual.getString(110));
+					_return.setApcmfrnact(rowsetActual.getString(111));
+					_return.setApcmeuact(rowsetActual.getString(112));
+					_return.setNegstckact(rowsetActual.getString(113));
+					_return.setStkintnact(rowsetActual.getString(114));
+					_return.setGlgainxdif(rowsetActual.getString(115));
+					_return.setGllossxdif(rowsetActual.getString(116));
+					_return.setAmountdiff(rowsetActual.getString(117));
+					_return.setSlfinvincm(rowsetActual.getString(118));
+					_return.setSlfinvexpn(rowsetActual.getString(119));
+					_return.setOnholdact(rowsetActual.getString(120));
+					_return.setPlaact(rowsetActual.getString(121));
+					_return.setIcclract(rowsetActual.getString(122));
+					_return.setOcclract(rowsetActual.getString(123));
+					_return.setPurbalact(rowsetActual.getString(124));
+					_return.setWhicenact(rowsetActual.getString(125));
+					_return.setWhocenact(rowsetActual.getString(126));
+					_return.setSaldpmint(rowsetActual.getString(127));
+					_return.setPurdpmint(rowsetActual.getString(128));
+					_return.setExrateondt(rowsetActual.getString(129));
+					_return.setEurecvact(rowsetActual.getString(130));
+					_return.setEupayact(rowsetActual.getString(131));
+					_return.setWipoffset(rowsetActual.getString(132));
+					_return.setStockoffst(rowsetActual.getString(133));
+					_return.setDunintrst(rowsetActual.getString(134));
+					_return.setDunfee(rowsetActual.getString(135));
+					_return.setTdsinterst(rowsetActual.getString(136));
+					_return.setTdscharges(rowsetActual.getString(137));
+					_return.setUsersign(rowsetActual.getInt(138));
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
