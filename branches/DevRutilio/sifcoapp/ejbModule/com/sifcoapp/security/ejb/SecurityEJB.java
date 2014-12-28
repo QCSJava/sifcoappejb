@@ -3,6 +3,7 @@ package com.sifcoapp.security.ejb;
 import javax.ejb.Stateless;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
@@ -30,20 +31,34 @@ public class SecurityEJB implements SecurityEJBRemote {
     public UserAppOutTO UserValidate(UserAppInTO usr) {
 		// TODO Auto-generated method stub
 		UserAppOutTO usrValid = new UserAppOutTO();
-		/*if (usr.getIdUserApp().equals("admin")&&usr.getPasswordUserApp().equals("adminadmin"))
-			usrValid.setValidUser(Common.VALID);
-		else
-			usrValid.setValidUser(Common.INVALID);*/
-		
+		ProfileOutTO usrprofile=null;		
 		UserDAO userdao = new UserDAO();
+		userdao.setIstransaccional(true);
 		usrValid=userdao.getUserValid(usr);
-			
-		usrValid.setDesc_usr("Administrator");
-		usrValid.setId_perfil(1);
+		
+		if (usrValid.getValidUser()==0){
+			//usuario Valido
+			System.out.println("validate " + usr.getIdUserApp());
+            userdao.initCommon();	
+			usrprofile=userdao.getUsrProfileHeader(usr.getIdUserApp());
+			usrValid.setUsrprofile(usrprofile);
+		}
+		//ToDo: forceconn
+		if (userdao.getConn()!=null){
+			try {
+				userdao.getConn().close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//usrValid.setDesc_usr("Administrator");
+		//usrValid.setId_perfil(1);
 		
 		return usrValid;
 	}
 
+    
     public String SayHello(String hellomsg) {
 		// TODO Auto-generated method stub
 		hellomsg=hellomsg+"EJB";
@@ -51,7 +66,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		return hellomsg;
 	}
 //cambio
-	public ProfileOutTO GetUserProfile(ProfileInTO usrProfile) {
+	public ProfileOutTO GetUserProfile(UserAppInTO usr) {
 		ProfileOutTO usrProfileOut = new ProfileOutTO();
 		List profileDetLst=new Vector();
 		List profileDet1Lst=new Vector();
@@ -67,14 +82,21 @@ public class SecurityEJB implements SecurityEJBRemote {
 		ProfileDetOutTO profileDetL12=new ProfileDetOutTO();
 		ProfileDetOutTO profileDetL13=new ProfileDetOutTO();
 		ProfileDetOutTO profileDetL131=new ProfileDetOutTO();
-	
+
+		ProfileDetOutTO profileDet1L1=new ProfileDetOutTO();
+		
 		ProfileDetOutTO profileDetL2=new ProfileDetOutTO();
 		ProfileDetOutTO profileDetL3=new ProfileDetOutTO();
 		
-		
+		//usrProfile.setId_perfil(1);
+	/*	
 		UserDAO userdao = new UserDAO();
-		usrProfileOut=userdao.getUserProfiles(usrProfile);
+		userdao.setIstransaccional(true);
+		usrProfileOut=userdao.getUsrProfileHeader(usrProfile.getId_perfil());
+		usrProfileOut.setProfile_det(userdao.getUserProfiles(usrProfile).getProfile_det());
+		System.out.println(usrProfileOut.getDesc_perfil());		*/
 		
+		/*
 		
 		usrProfileOut.setDesc_perfil("Administrator");
 		usrProfileOut.setId_perfil(1);
@@ -84,8 +106,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		profileDet.setUrl_perfil_det("#");
 		profileDet.setId_perfil_det(1);
 		profileDet.setParent_id(0);
-		
-		
+				
 		
 		profileDetL1.setDesc_perfil_det("Inicializacion");
 		profileDetL1.setUrl_perfil_det("#");
@@ -94,7 +115,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		
 				
 		profileDetL11.setDesc_perfil_det("Detalles de sociedad");
-		profileDetL11.setUrl_perfil_det("#");
+		profileDetL11.setUrl_perfil_det("/faces/detalle_sociedad.xhtml");
 		profileDetL11.setId_perfil_det(4);
 		profileDetL11.setParent_id(3);
 				
@@ -118,6 +139,11 @@ public class SecurityEJB implements SecurityEJBRemote {
 		profileDetL131.setUrl_perfil_det("#");
 		profileDetL131.setId_perfil_det(7);
 		profileDetL131.setParent_id(6);
+			
+		profileDetL1.setNodeDetail(profileDet11Lst);
+		
+		profileDet1Lst.add(profileDetL1);
+		profileDet.setNodeDetail(profileDet1Lst);
 		
 		
 		profileDet1.setDesc_perfil_det("Inventarios");
@@ -125,17 +151,23 @@ public class SecurityEJB implements SecurityEJBRemote {
 		profileDet1.setId_perfil_det(2);
 		profileDet1.setParent_id(0);
 		
-		profileDetL1.setNodeDetail(profileDet11Lst);
 		
-		profileDet1Lst.add(profileDetL1);
-		profileDet.setNodeDetail(profileDet1Lst);
+		profileDet1L1.setDesc_perfil_det("Maestro Productos");
+		profileDet1L1.setUrl_perfil_det("/faces/view/mtto/ArticleInventoryMaster.xhtml");
+		profileDet1L1.setId_perfil_det(20);
+		profileDet1L1.setParent_id(2);
+				
+		
+		profileDet2Lst.add(profileDet1L1);
+		
+		profileDet1.setNodeDetail(profileDet2Lst);
 		
 		profileDetLst.add(profileDet);
 		profileDetLst.add(profileDet1);
 		
 		
 		profileDetL12.setDesc_perfil_det("Periodos Contables");
-		profileDetL12.setUrl_perfil_det("#");
+		profileDetL12.setUrl_perfil_det("/faces/periodos.xhtml");
 		profileDetL12.setId_perfil_det(4);
 		profileDetL12.setParent_id(1);
 		
@@ -145,8 +177,18 @@ public class SecurityEJB implements SecurityEJBRemote {
 		profileDetL13.setId_perfil_det(6);
 		profileDetL13.setParent_id(1);
 
-		
+		profileDet1.setNodeDetail(profileDet2Lst);
 		usrProfileOut.setProfile_det(profileDetLst);
+		
+		*/
+		
+
+		
+		UserDAO usrDAO =  new UserDAO();  		
+		usrDAO.setIstransaccional(true);
+		
+		usrProfileOut=usrDAO.getUsrProfileHeader(usr.getIdUserApp());
+		usrProfileOut.setProfile_det(usrDAO.getUsrProfileDetail(usrProfileOut.getId_perfil()));
 		
 		// TODO Auto-generated method stub
 		
