@@ -6,9 +6,9 @@ public class UserAppOutTO implements java.io.Serializable{
 	 */
 	private static final long serialVersionUID = 7499103127629005767L;
 	private int validUser;
-	private String desc_usr;
-	private int id_perfil;
-
+	private String desc_usr;	
+	private ProfileOutTO usrprofile;
+	
 	public int getValidUser() {
 		return validUser;
 	}
@@ -25,11 +25,12 @@ public class UserAppOutTO implements java.io.Serializable{
 		return desc_usr;
 	}
 
-	public void setId_perfil(int id_perfil) {
-		this.id_perfil = id_perfil;
+	public ProfileOutTO getUsrprofile() {
+		return usrprofile;
 	}
 
-	public int getId_perfil() {
-		return id_perfil;
+	public void setUsrprofile(ProfileOutTO usrprofile) {
+		this.usrprofile = usrprofile;
 	}
+
 }
