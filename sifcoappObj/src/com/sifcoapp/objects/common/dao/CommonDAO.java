@@ -2,8 +2,7 @@ package com.sifcoapp.objects.common.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -20,9 +19,7 @@ import javax.sql.rowset.CachedRowSet;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.DetailParameter;
-import com.sifcoapp.security.ejb.SecurityEJBRemote;
 import com.sun.rowset.CachedRowSetImpl;
-import java.sql.Date;
 
 public class CommonDAO {
 	private Connection conn;
@@ -40,9 +37,7 @@ public class CommonDAO {
 
 	public CommonDAO() {
 
-		this.getConnectionDB();
-		this.inParameters = new Hashtable();
-		this.outParameters = new Hashtable();
+		this.initCommon();
 
 	}
 
@@ -208,6 +203,7 @@ public class CommonDAO {
 							((Date) dtParameterTmp.getColValue()));
 				}
 			}
+
 			/*
 			 * if (this.getTypeReturn().equals(Common.TYPERETURN_INT)){
 			 * statementToExecute.registerOutParameter(1,Types.INTEGER); }
@@ -312,11 +308,11 @@ public class CommonDAO {
 							((Double) dtParameterTmp.getColValue())
 									.doubleValue());
 				}
-				
+
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPEDATE)) {
 					statementToExecute.setDate(v_position.intValue(),
-							((Date) dtParameterTmp.getColValue()));
+							(Date)dtParameterTmp.getColValue());
 				}
 
 			}
@@ -325,11 +321,15 @@ public class CommonDAO {
 			}
 
 			if (this.getTypeReturn().equals(Common.TYPERETURN_CURSOR)) {
+				//statementToExecute.setNull(2, Types.REF);
+				//statementToExecute.setNull(3, Types.REF);
 				statementToExecute.registerOutParameter(1, Types.OTHER);
+				//statementToExecute.registerOutParameter(3, Types.OTHER);
 				this.getConn().setAutoCommit(false);
 			}
 
-			v_haveResultsets = statementToExecute.execute();
+			//v_haveResultsets = statementToExecute.execute();
+			statementToExecute.execute();
 			// System.out.println("resultado");
 			// System.out.println(statementToExecute.getInt(1));
 			if (this.getTypeReturn().equals(Common.TYPERETURN_INT)) {
@@ -345,11 +345,68 @@ public class CommonDAO {
 				System.out.println("tiene resultsets");
 				if (this.getTypeReturn().equals(Common.TYPERETURN_RESULTSET)) {
 					rsData = statementToExecute.getResultSet();
+					if (rsData != null) {
+						rsData.clearWarnings();
+						crsData = new CachedRowSetImpl();
+						crsData.populate(rsData);
+						rsDataList.add(crsData);
+						// closeToDB (rsData);
+						rsData = null;
+						crsData = null;
+					}
 				}
+				
 				if (this.getTypeReturn().equals(Common.TYPERETURN_CURSOR)) {
+					int _idx=1;
+									
 					rsData = (ResultSet) statementToExecute.getObject(1);
+				
+					if (rsData != null) {
+						rsData.clearWarnings();
+						crsData = new CachedRowSetImpl();
+						crsData.populate(rsData);
+						rsDataList.add(crsData);
+						// closeToDB (rsData);
+						rsData = null;
+						crsData = null;
+					}
+					
+					rsData = (ResultSet) statementToExecute.getObject(2);
+					
+					if (rsData != null) {						
+						rsData.clearWarnings();
+						crsData = new CachedRowSetImpl();
+						crsData.populate(rsData);
+						rsDataList.add(crsData);
+						// closeToDB (rsData);
+						rsData = null;
+						crsData = null;
+					}else{
+						System.out.println("Resultset nulo en 2");
+					}
+					
+					/*System.out.println("+resultsets");
+					System.out.println(statementToExecute.getMoreResults());
+					
+					while (statementToExecute.getMoreResults()){
+						System.out.println("+resultsets");
+						rsData = (ResultSet) statementToExecute.getObject(_idx);
+						if (rsData != null) {
+							rsData.clearWarnings();
+							crsData = new CachedRowSetImpl();
+							crsData.populate(rsData);
+							rsDataList.add(crsData);
+							// closeToDB (rsData);
+							rsData = null;
+							crsData = null;
+						}
+						_idx++;
+						System.out.println("_idx");
+						System.out.println(_idx);
+					}*/
+					
 				}
-				if (rsData != null) {
+				/*if (rsData != null) {
 					rsData.clearWarnings();
 					crsData = new CachedRowSetImpl();
 					crsData.populate(rsData);
@@ -357,7 +414,7 @@ public class CommonDAO {
 					// closeToDB (rsData);
 					rsData = null;
 					crsData = null;
-				}
+				}*/
 
 			}
 
@@ -434,5 +491,13 @@ public class CommonDAO {
 	public void setTypeReturn(String typeReturn) {
 		this.typeReturn = typeReturn;
 	}
+	
+	public void initCommon(){
 
+		this.getConnectionDB();
+		this.inParameters = new Hashtable();
+		this.outParameters = new Hashtable();
+		
+	}
+	
 }
