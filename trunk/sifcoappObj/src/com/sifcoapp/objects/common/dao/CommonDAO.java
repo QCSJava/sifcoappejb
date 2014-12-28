@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.common.dao;
 
+import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,7 +23,7 @@ import com.sifcoapp.objects.common.to.DetailParameter;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class CommonDAO {
-	private Connection conn;
+	public Connection conn;
 	private static final String DB_JDBC = "jdbc/sifcoDBJDBC";
 	private static final String CALLABLETYPE = "CALLABLE";
 	private static final String PREPAREDTYPE = "PREPARED";
@@ -120,6 +121,13 @@ public class CommonDAO {
 	/*
 	 * 
 	 */
+	public void setArrayString(int position, String colName, Object colValue) {
+		this.insertParam(position, colName, colValue, Common.TYPESARRAYTRING);
+	}
+
+	/*
+	 * 
+	 */
 	public void setInt(int position, String colName, Object colValue) {
 		this.insertParam(position, colName, colValue, Common.TYPEINT);
 	}
@@ -212,6 +220,12 @@ public class CommonDAO {
 						Common.TYPESTRING)) {
 					statementToExecute.setString(v_position.intValue(),
 							(String) dtParameterTmp.getColValue());
+				}
+
+				if (dtParameterTmp.getColType().equalsIgnoreCase(
+						Common.TYPESARRAYTRING)) {
+					statementToExecute.setArray(v_position.intValue(),
+							(Array) dtParameterTmp.getColValue());
 				}
 
 				if (dtParameterTmp.getColType()
