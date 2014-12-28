@@ -9,6 +9,7 @@ import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
+import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.catalogos.Common;
 
@@ -71,4 +72,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) {
+		int _return;
+
+		AccountingDAO DAO = new AccountingDAO();
+		_return = DAO.cat_accAssignment_mtto(parameters, action);
+		return _return;
+	}
+
+	public AccassignmentTO getAccAssignment() {
+		AccassignmentTO _return;
+
+		AccountingDAO DAO = new AccountingDAO();
+		_return = DAO.getAccAssignment();
+		return _return;
+	}
 }
