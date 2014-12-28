@@ -10,12 +10,15 @@ import com.sifcoapp.client.SecurityEJBClient;
 import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
+import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
+import com.sifcoapp.objects.security.to.UserTO;
+import com.sifcoapp.objects.utilities.PasswordService;
 
 public class AccountingTest {
 	private static AccountingEJBClient AccountingEJBService = null;
@@ -67,7 +70,7 @@ public class AccountingTest {
 		while (iterator.hasNext()) {
 			AccPeriodTO periodo = (AccPeriodTO) iterator.next();
 			System.out.println(periodo.getAcccode() + " - "
-					+ periodo.getAccname()+ " - "
+					+ periodo.getAccname() + " - "
 					+ periodo.getF_duedate().toString());
 		}
 	}
@@ -96,5 +99,60 @@ public class AccountingTest {
 		System.out.println("luego de servicio");
 		System.out.println(_result);
 
+	}
+
+	public static void accAssignmetn_mtto() throws Exception {
+
+		int _result;
+		AccassignmentTO parameters = new AccassignmentTO();
+
+		// parameters.setUsersign();
+		parameters.setLinkact_1("101010");
+		parameters.setLinkact_2("111111");
+		parameters.setLinkact_3("1212121");
+		parameters.setLinkact_4("131313");
+		parameters.setLinkact_5("141414");
+		parameters.setLinkact_6("141414");
+		parameters.setLinkact_10("jc");
+		parameters.setLinkact_11("jc");
+
+		// Agregar
+
+		// _result = AccountingEJBService.cat_accAssignment_mtto(parameters,
+		// Common.MTTOINSERT);
+
+		// Actualizar
+
+		parameters.setUsersign(1);
+		_result = AccountingEJBService.cat_accAssignment_mtto(parameters,
+				Common.MTTOUPDATE);
+
+		// Borrar
+		/*
+		 * parameters.setUsersign(13);
+		 * _result=SecurityEJBService.cat_users_mtto(parameters,
+		 * Common.MTTODELETE);
+		 */
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
+	}
+
+	public static void getAccAssignment() {
+		AccassignmentTO acc = null;
+
+		acc = AccountingEJBService.getAccAssignment();
+
+		System.out.println(acc.getLinkact_1());
+		System.out.println(acc.getLinkact_2());
+		System.out.println(acc.getLinkact_3());
+		System.out.println(acc.getLinkact_4());
+		System.out.println(acc.getLinkact_5());
+		System.out.println(acc.getLinkact_6());
+		System.out.println(acc.getLinkact_8());
+		System.out.println(acc.getLinkact_9());
+		System.out.println(acc.getLinkact_10());
+		System.out.println(acc.getLinkact_11());
 	}
 }
