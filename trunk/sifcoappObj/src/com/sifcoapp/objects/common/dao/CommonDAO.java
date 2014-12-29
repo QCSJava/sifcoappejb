@@ -38,9 +38,7 @@ public class CommonDAO {
 
 	public CommonDAO() {
 
-		this.getConnectionDB();
-		this.inParameters = new Hashtable();
-		this.outParameters = new Hashtable();
+		this.initCommon();
 
 	}
 
@@ -497,5 +495,11 @@ public class CommonDAO {
 	public void setTypeReturn(String typeReturn) {
 		this.typeReturn = typeReturn;
 	}
+	public void initCommon(){
 
+		this.getConnectionDB();
+		this.inParameters = new Hashtable();
+		this.outParameters = new Hashtable();
+		
+	}
 }
