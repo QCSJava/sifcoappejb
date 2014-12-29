@@ -77,11 +77,11 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 	 * com.sifcoapp.security.ejb.SecurityEJBRemote#GetUserProfile(com.sifcoapp
 	 * .objects.security.to.ProfileInTO)
 	 */
-	public ProfileOutTO GetUserProfile(ProfileInTO usrProfile) {
+	public ProfileOutTO GetUserProfile(UserAppInTO usr) {
 		// TODO Auto-generated method stub
 		ProfileOutTO profileOutTO = new ProfileOutTO();
 
-		profileOutTO = bean.GetUserProfile(usrProfile);
+		profileOutTO = bean.GetUserProfile(usr);
 
 		return profileOutTO;
 	}
