@@ -13,7 +13,7 @@ import com.sifcoapp.objects.security.to.UserTO;
 public interface SecurityEJBRemote {
 	public UserAppOutTO UserValidate(UserAppInTO usr);
 	public String SayHello(String hellomsg);
-	public ProfileOutTO GetUserProfile(ProfileInTO usrProfile);
+	public ProfileOutTO GetUserProfile(UserAppInTO usr);
 	public int cat_users_mtto(UserTO parameters, int action);
 	public List getUser();
 }
