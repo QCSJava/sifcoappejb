@@ -73,13 +73,6 @@ public class SecurityTest {
 
 
 
-
-
-
-
-
-
-
 		usrRes=SecurityEJBService.UserValidate(usr);
 		
 
