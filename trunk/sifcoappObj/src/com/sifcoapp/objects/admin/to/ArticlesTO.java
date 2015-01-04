@@ -15,7 +15,7 @@ public class ArticlesTO extends CommonTO {
 	private String itemCode;
 	private String itemName;
 	private String itemType;
-	private int itmsGrpCod;
+	private String itmsGrpCod;
 	private String vatLiable;
 	private String codeBars;
 	private String prchseItem;
@@ -44,7 +44,7 @@ public class ArticlesTO extends CommonTO {
 	private List branchArticles;
 
 	public ArticlesTO(String itemCode, String itemName, String itemType,
-			int itmsGrpCod, String vatLiable, String codeBars,
+			String itmsGrpCod, String vatLiable, String codeBars,
 			String prchseItem, String sellItem, String invntItem,
 			String assetItem, String cardCode, String buyUnitMsr,
 			double numInBuy, String salUnitMsr, double salPackUn,
@@ -114,11 +114,11 @@ public class ArticlesTO extends CommonTO {
 		this.itemType = itemType;
 	}
 
-	public int getItmsGrpCod() {
+	public String getItmsGrpCod() {
 		return itmsGrpCod;
 	}
 
-	public void setItmsGrpCod(int itmsGrpCod) {
+	public void setItmsGrpCod(String itmsGrpCod) {
 		this.itmsGrpCod = itmsGrpCod;
 	}
 
