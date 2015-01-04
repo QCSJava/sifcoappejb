@@ -279,7 +279,7 @@ public class AdminDAO extends CommonDAO {
 					article.setItemCode(rowsetActual.getString(1));
 					article.setItemName(rowsetActual.getString(2));
 					article.setItemType(rowsetActual.getString(3));
-					article.setItmsGrpCod(rowsetActual.getInt(4));
+					article.setItmsGrpCod(rowsetActual.getString(4));
 					article.setVatLiable(rowsetActual.getString(5));
 					article.setCodeBars(rowsetActual.getString(6));
 					article.setPrchseItem(rowsetActual.getString(7));
@@ -343,7 +343,7 @@ public class AdminDAO extends CommonDAO {
 					article.setItemCode(rowsetActual.getString(1));
 					article.setItemName(rowsetActual.getString(2));
 					article.setItemType(rowsetActual.getString(3));
-					article.setItmsGrpCod(rowsetActual.getInt(4));
+					article.setItmsGrpCod(rowsetActual.getString(4));
 					article.setVatLiable(rowsetActual.getString(5));
 					article.setCodeBars(rowsetActual.getString(6));
 					article.setPrchseItem(rowsetActual.getString(7));
