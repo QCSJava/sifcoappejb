@@ -10,6 +10,7 @@ import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.catalogos.Common;
 
@@ -32,7 +33,30 @@ public class AccountingEJB implements AccountingEJBRemote {
 		_return = DAO.getAccPeriods();
 
 		return _return;
+	}
+	
+	public List getAccount(int type) {
+		List _return = new Vector();
+		/*AccountingDAO DAO = new AccountingDAO();
+		_return = DAO.getAccount(type);*/
+		
+		AccountTO account = new AccountTO();
+		
+		account.setAcctcode("101010");
+		account.setAcctname("Cuenta de activos");
+		_return.add(account);
+		
+		AccountTO account1 = new AccountTO();
+		account1.setAcctcode("101011");
+		account1.setAcctname("Cuenta de pasivos");
+		_return.add(account1);
+		
+		AccountTO account2 = new AccountTO();
+		account2.setAcctcode("101011");
+		account2.setAcctname("Cuenta de Otras");
+		_return.add(account2);
 
+		return _return;
 	}
 
 	public int cat_accPeriod_mtto(int parameters, int usersign, int action) {
