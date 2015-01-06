@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
@@ -38,6 +39,60 @@ public class AccountingDAO extends CommonDAO {
 		return v_resp;
 	}
 
+	public List getAccount(int type) {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{? = call sp_get_account(?)}");
+		this.setInt(1, "_type", type);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					AccountTO account = new AccountTO();
+					account.setAcctcode(rowsetActual.getString(1));
+					account.setAcctname(rowsetActual.getString(2));
+					account.setCurrtotal(rowsetActual.getDouble(3));
+					account.setEndtotal(rowsetActual.getDouble(4));
+					account.setFinanse(rowsetActual.getString(5));
+					account.setBudget(rowsetActual.getString(6));
+					account.setPostable(rowsetActual.getString(7));
+					account.setLevels(rowsetActual.getInt(8));
+					account.setGrpline(rowsetActual.getInt(9));
+					account.setFathernum(rowsetActual.getString(10));
+					account.setGroupmask(rowsetActual.getInt(11));
+					account.setIntrmatch(rowsetActual.getInt(12));
+					account.setActtype(rowsetActual.getString(13));
+					account.setProtected1(rowsetActual.getString(14));
+					account.setCreatedate(rowsetActual.getDate(15));
+					account.setUpdatedate(rowsetActual.getDate(16));
+					account.setUsersign(rowsetActual.getInt(17));
+					account.setObjtype(rowsetActual.getString(18));
+					account.setValidfor(rowsetActual.getString(19));
+					account.setFormatcode(rowsetActual.getString(20));
+
+					_return.add(account);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+	
 	public List getAccPeriods() {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -83,7 +138,7 @@ public class AccountingDAO extends CommonDAO {
 
 	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) {
 
-		int v_resp = 0;	
+		int v_resp = 0;
 		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
 
 		Object[] param = { parameters.getAbsentry(), parameters.getPeriodcat(),
@@ -154,7 +209,9 @@ public class AccountingDAO extends CommonDAO {
 				parameters.getEupayact(), parameters.getWipoffset(),
 				parameters.getStockoffst(), parameters.getDunintrst(),
 				parameters.getDunfee(), parameters.getTdsinterst(),
-				parameters.getTdscharges(), parameters.getUsersign() };
+				parameters.getTdscharges(), parameters.getUsersign(),
+				parameters.getPdfltwt(), parameters.getSdfltwt(),
+				parameters.isShandlewt(), parameters.isPhandlewt() };
 
 		Array aArray = null;
 		try {
@@ -165,7 +222,7 @@ public class AccountingDAO extends CommonDAO {
 		}
 
 		this.setArrayString(1, "_param", aArray);
-		this.setInt(2, "_action", new Integer(action));		
+		this.setInt(2, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
 
@@ -330,6 +387,11 @@ public class AccountingDAO extends CommonDAO {
 					_return.setTdsinterst(rowsetActual.getString(136));
 					_return.setTdscharges(rowsetActual.getString(137));
 					_return.setUsersign(rowsetActual.getInt(138));
+					
+					_return.setShandlewt(rowsetActual.getBoolean(139));
+					_return.setPhandlewt(rowsetActual.getBoolean(140));
+					_return.setSdfltwt(rowsetActual.getString(141));
+					_return.setPdfltwt(rowsetActual.getString(142));
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {

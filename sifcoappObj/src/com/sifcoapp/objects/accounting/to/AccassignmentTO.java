@@ -147,6 +147,10 @@ public class AccassignmentTO extends CommonTO {
 	private String dunfee;
 	private String tdsinterst;
 	private String tdscharges;
+	private String sdfltwt;// Tabla de empresa
+	private String pdfltwt;// Tabla de empresa
+	private boolean shandlewt;// Tabla de empresa
+	private boolean phandlewt; // Tabla de empresa
 	private int usersign;
 
 	public int getAbsentry() {
@@ -1245,6 +1249,38 @@ public class AccassignmentTO extends CommonTO {
 		this.tdscharges = tdscharges;
 	}
 
+	public String getSdfltwt() {
+		return sdfltwt;
+	}
+
+	public void setSdfltwt(String sdfltwt) {
+		this.sdfltwt = sdfltwt;
+	}
+
+	public String getPdfltwt() {
+		return pdfltwt;
+	}
+
+	public void setPdfltwt(String pdfltwt) {
+		this.pdfltwt = pdfltwt;
+	}
+
+	public boolean isShandlewt() {
+		return shandlewt;
+	}
+
+	public void setShandlewt(boolean shandlewt) {
+		this.shandlewt = shandlewt;
+	}
+
+	public boolean isPhandlewt() {
+		return phandlewt;
+	}
+
+	public void setPhandlewt(boolean phandlewt) {
+		this.phandlewt = phandlewt;
+	}
+
 	public int getUsersign() {
 		return usersign;
 	}
@@ -1302,7 +1338,8 @@ public class AccassignmentTO extends CommonTO {
 			String purdpmint, String exrateondt, String eurecvact,
 			String eupayact, String wipoffset, String stockoffst,
 			String dunintrst, String dunfee, String tdsinterst,
-			String tdscharges, int usersign) {
+			String tdscharges, String sdfltwt, String pdfltwt,
+			boolean shandlewt, boolean phandlewt, int usersign) {
 		super();
 		this.absentry = absentry;
 		this.periodcat = periodcat;
@@ -1441,6 +1478,10 @@ public class AccassignmentTO extends CommonTO {
 		this.dunfee = dunfee;
 		this.tdsinterst = tdsinterst;
 		this.tdscharges = tdscharges;
+		this.sdfltwt = sdfltwt;
+		this.pdfltwt = pdfltwt;
+		this.shandlewt = shandlewt;
+		this.phandlewt = phandlewt;
 		this.usersign = usersign;
 	}
 
