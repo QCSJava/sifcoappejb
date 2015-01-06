@@ -11,6 +11,7 @@ import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.security.to.ProfileInTO;
@@ -75,6 +76,19 @@ public class AccountingTest {
 		}
 	}
 
+	public static void getAccount() {
+
+		List lstPeriods = new Vector();
+
+		lstPeriods = AccountingEJBService.getAccount(1);
+
+		Iterator<AccountTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			AccountTO acc = (AccountTO) iterator.next();
+			System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
+		}
+	}
+
 	public static void accPeridod_mtto() {
 
 		int _result;
@@ -115,6 +129,10 @@ public class AccountingTest {
 		parameters.setLinkact_6("141414");
 		parameters.setLinkact_10("jc");
 		parameters.setLinkact_11("jc");
+		parameters.setSdfltwt("Sdfltwt");
+		parameters.setPdfltwt("Pdfltwt");
+		parameters.setShandlewt(true);
+		parameters.setPhandlewt(true);
 
 		// Agregar
 
@@ -154,5 +172,9 @@ public class AccountingTest {
 		System.out.println(acc.getLinkact_9());
 		System.out.println(acc.getLinkact_10());
 		System.out.println(acc.getLinkact_11());
+		System.out.println(acc.isPhandlewt());
+		System.out.println(acc.isShandlewt());
+		System.out.println(acc.getSdfltwt());
+		System.out.println(acc.getPdfltwt());
 	}
 }
