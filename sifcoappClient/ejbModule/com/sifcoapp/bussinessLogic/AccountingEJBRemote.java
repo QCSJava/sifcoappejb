@@ -18,5 +18,7 @@ public interface AccountingEJBRemote {
 	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action);
 	
 	public AccassignmentTO getAccAssignment();
+	
+	public List getAccount(int type);
 
 }
