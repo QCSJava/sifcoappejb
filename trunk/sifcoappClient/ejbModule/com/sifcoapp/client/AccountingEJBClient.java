@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import com.sifcoapp.bussinessLogic.AccountingEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
+import com.sifcoapp.objects.accounting.to.AccountTO;
 
 public class AccountingEJBClient implements AccountingEJBRemote {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AccountingEJB!com.sifcoapp.bussinessLogic.AccountingEJBRemote";
@@ -62,6 +63,15 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		AccassignmentTO acc = new AccassignmentTO();
 
 		acc = bean.getAccAssignment();
+
+		return acc;
+	}
+
+	public List getAccount(int type) {
+		// TODO Auto-generated method stub
+		List acc = new Vector();
+
+		acc = bean.getAccount(type);
 
 		return acc;
 	}
