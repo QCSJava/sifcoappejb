@@ -44,7 +44,7 @@ public class AccountingDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{? = call sp_get_account(?)}");
+		this.setDbObject("{call sp_get_account(?)}");
 		this.setInt(1, "_type", type);
 
 		lstResultSet = this.runQuery();
