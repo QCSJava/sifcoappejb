@@ -37,10 +37,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 	
 	public List getAccount(int type) {
 		List _return = new Vector();
-		/*AccountingDAO DAO = new AccountingDAO();
-		_return = DAO.getAccount(type);*/
+		AccountingDAO DAO = new AccountingDAO();
+		_return = DAO.getAccount(type);
 		
-		AccountTO account = new AccountTO();
+		/*AccountTO account = new AccountTO();
 		
 		account.setAcctcode("101010");
 		account.setAcctname("Cuenta de activos");
@@ -54,7 +54,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		AccountTO account2 = new AccountTO();
 		account2.setAcctcode("101011");
 		account2.setAcctname("Cuenta de Otras");
-		_return.add(account2);
+		_return.add(account2);*/
 
 		return _return;
 	}
