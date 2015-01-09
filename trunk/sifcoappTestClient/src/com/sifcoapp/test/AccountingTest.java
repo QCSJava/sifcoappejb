@@ -80,7 +80,7 @@ public class AccountingTest {
 
 		List lstPeriods = new Vector();
 
-		lstPeriods = AccountingEJBService.getAccount(1);
+		lstPeriods = AccountingEJBService.getAccount(2);
 
 		Iterator<AccountTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
