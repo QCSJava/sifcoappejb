@@ -1,37 +1,26 @@
-package prueba.to;
-
+package com.sifcoapp.objects.inventary.to;
+import com.sifcoapp.objects.common.to.*; 
 import java.sql.Date;
+public class GoodsissuesTO extends CommonTO{
 
-import com.sifcoapp.objects.common.to.CommonTO;
-
-public class Goodsreceipt_TO extends CommonTO{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	 private int docentry; 
-	 private int docnum; 
-	 private String canceled; 
-	 private String docstatus; 
-	 private String objtype; 
-	 private Date docdate; 
-	 private Date docduedate; 
-	 private Double doctotal; 
-     private String comments; 
-	 private String ref2; 
-	 private int series; 
-	 private String whscode; 
-	 private String idmovement; 
-	 private int itmsgrpcod; 
-	 private Date createddatel; 
-	 private String modifiedbyl;
-	 private String createdbyl; 
-	 private Date modifieddatel;
-	 
-	 
-	public int getDocentry() {
+		private int docentry; 
+		  private int docnum; 
+		  private String canceled; 
+		  private String docstatus; 
+		  private String objtype; 
+		  private Date docdate; 
+		  private Date docduedate;
+		  private Double doctotal; 
+		  private String comments;
+		  private String ref2; 
+		  private int series; 
+		  private String whscode;
+		  private int itmsgrpcod;
+		  private Date createddatel;
+		  private String modifiedbyl; 
+		  private String createdbyl; 
+		  private Date modifieddatel;
+	  public int getDocentry() {
 		return docentry;
 	}
 	public void setDocentry(int docentry) {
@@ -103,12 +92,6 @@ public class Goodsreceipt_TO extends CommonTO{
 	public void setWhscode(String whscode) {
 		this.whscode = whscode;
 	}
-	public String getIdmovement() {
-		return idmovement;
-	}
-	public void setIdmovement(String idmovement) {
-		this.idmovement = idmovement;
-	}
 	public int getItmsgrpcod() {
 		return itmsgrpcod;
 	}
@@ -139,8 +122,32 @@ public class Goodsreceipt_TO extends CommonTO{
 	public void setModifieddatel(Date modifieddatel) {
 		this.modifieddatel = modifieddatel;
 	}
-	 
-	 
+	public GoodsissuesTO() {
+		super();
+	}   
+	public GoodsissuesTO(int docentry, int docnum, String canceled,
+			String docstatus, String objtype, Date docdate, Date docduedate,
+			Double doctotal, String comments, String ref2, int series,
+			String whscode, int itmsgrpcod, Date createddatel,
+			String modifiedbyl, String createdbyl, Date modifieddatel) {
+		super();
+		this.docentry = docentry;
+		this.docnum = docnum;
+		this.canceled = canceled;
+		this.docstatus = docstatus;
+		this.objtype = objtype;
+		this.docdate = docdate;
+		this.docduedate = docduedate;
+		this.doctotal = doctotal;
+		this.comments = comments;
+		this.ref2 = ref2;
+		this.series = series;
+		this.whscode = whscode;
+		this.itmsgrpcod = itmsgrpcod;
+		this.createddatel = createddatel;
+		this.modifiedbyl = modifiedbyl;
+		this.createdbyl = createdbyl;
+		this.modifieddatel = modifieddatel;
+	}
 	
-
 }

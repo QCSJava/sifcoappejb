@@ -1,8 +1,9 @@
-package prueba.dao;
+package com.sifcoapp.objects.inventary.dao;
 
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
+import com.sifcoapp.objects.inventary.to.GoodsreceiptTO;
 import com.sun.rowset.CachedRowSetImpl;
 
 import java.sql.Date;
@@ -13,10 +14,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import prueba.to.Goodsreceipt_TO;
 
-
-public class Goodsreceipt_DAO extends CommonDAO{
+public class GoodsreceiptDAO extends CommonDAO{
 	
 	public List getListGoodsreceipt(int docnum, Date docdate, int series){
 		List _return = new Vector();
@@ -41,7 +40,7 @@ public class Goodsreceipt_DAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					Goodsreceipt_TO article = new Goodsreceipt_TO();
+					GoodsreceiptTO article = new GoodsreceiptTO();
 					article.setDocentry(rowsetActual.getInt(1));
 					article.setDocnum(rowsetActual.getInt(2));
 					article.setCanceled(rowsetActual.getString(3));
