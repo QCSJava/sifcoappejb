@@ -1,9 +1,9 @@
-package com.sifcoapp.objects.catalogo.to;
+package com.sifcoapp.objects.catalog.to;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 import java.sql.Date;
 import java.util.List;
-public class businesspartnerTO extends CommonTO {
+public class BusinesspartnerTO extends CommonTO {
 
 	/**
 	 * 
@@ -122,7 +122,7 @@ public class businesspartnerTO extends CommonTO {
 	public void setVatgroup(String vatgroup) {
 		this.vatgroup = vatgroup;
 	}
-	public businesspartnerTO(String cardcode, String cardname, int groupcode,
+	public BusinesspartnerTO(String cardcode, String cardname, int groupcode,
 			String addid, String notes, String address, String cardtype,
 			String phone1, String phone2, String cellular, String email,
 			String validfor, Date validfrom, Date validto, String nit,
@@ -145,7 +145,7 @@ public class businesspartnerTO extends CommonTO {
 		this.nit = nit;
 		this.vatgroup = vatgroup;
 	}
-	public businesspartnerTO() {
+	public BusinesspartnerTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
