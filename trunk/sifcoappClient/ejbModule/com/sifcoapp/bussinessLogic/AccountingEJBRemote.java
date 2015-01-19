@@ -7,6 +7,7 @@ import javax.ejb.Remote;
 import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
+import com.sifcoapp.objects.catalogo.to.businesspartnerTO;
 
 @Remote
 public interface AccountingEJBRemote {
@@ -20,5 +21,6 @@ public interface AccountingEJBRemote {
 	public AccassignmentTO getAccAssignment();
 	
 	public List getAccount(int type);
-
+	
+	
 }

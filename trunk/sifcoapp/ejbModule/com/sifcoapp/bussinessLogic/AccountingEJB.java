@@ -12,6 +12,7 @@ import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.catalogo.to.businesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 
 /**
@@ -111,4 +112,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 		_return = DAO.getAccAssignment();
 		return _return;
 	}
+
+	
 }

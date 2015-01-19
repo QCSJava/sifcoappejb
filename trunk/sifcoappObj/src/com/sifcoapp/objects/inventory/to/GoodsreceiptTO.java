@@ -1,4 +1,4 @@
-package com.sifcoapp.objects.inventary.to;
+package com.sifcoapp.objects.inventory.to;
 
 import java.sql.Date;
 
