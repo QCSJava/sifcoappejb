@@ -5,13 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.sifcoapp.client.AdminEJBClient;
-import com.sifcoapp.client.HelloWorldClient;
 import com.sifcoapp.client.SecurityEJBClient;
-import com.sifcoapp.objects.admin.to.ArticlesTO;
-import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
-import com.sifcoapp.objects.security.dao.UserDAO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
