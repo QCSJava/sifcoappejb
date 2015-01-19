@@ -1,9 +1,9 @@
-package com.sifcoapp.objects.inventary.dao;
+package com.sifcoapp.objects.inventory.dao;
 
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.inventary.to.GoodsreceiptTO;
+import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sun.rowset.CachedRowSetImpl;
 
 import java.sql.Date;

@@ -1,8 +1,12 @@
-package com.sifcoapp.objects.inventary.to;
+package com.sifcoapp.objects.inventory.to;
 import com.sifcoapp.objects.common.to.*; 
-import java.sql.Date;
+import java.util.Date;
 public class GoodsissuesTO extends CommonTO{
 
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7806684365762245908L;
 		private int docentry; 
 		  private int docnum; 
 		  private String canceled; 

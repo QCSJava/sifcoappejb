@@ -1,8 +1,9 @@
-package com.sifcoapp.objects.inventary.dao;
-import com.sifcoapp.objects.inventary.to.*;
+package com.sifcoapp.objects.inventory.dao;
+import com.sifcoapp.objects.inventory.to.*;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -12,22 +13,25 @@ import java.util.Vector;
 public class GoodsissuesDAO extends CommonDAO{
 	
 	//Retorna de goodsisuues registros por filtro
-	public List getGoodsissues(Integer docnum, Date docdate,Integer series) {
+	public List getGoodsissues(GoodsissuesInTO param) {
 		List _return = new Vector();
 		List lstResultSet = null;
-
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_goodsissues(?,?,?)}");
-		this.setString(1, "_docnum", docnum);
-		this.setString(2, "_docdate", docdate);
-		this.setString(2, "_series", series);
-
+		
+		if (param.getDocdate().getDay()!=0){
+			this.setDate(2, "_docdate", param.getDocdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(param.getDocdate().getTime());
+			this.setDate(2, "_docdate", fecha);
+		}
+		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
+		
+		this.setInt(3, "_series", new Integer(param.getSeries()));
 		lstResultSet = this.runQuery();
-
 		CachedRowSetImpl rowsetActual;
-
 		System.out.println("return psg");
-
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -64,4 +68,10 @@ public class GoodsissuesDAO extends CommonDAO{
 		return _return;
 	}
 
+	public boolean inv_goodsissues_mtto(GoodsissuesTO parameters,int accion){
+		int v_resp = 0;
+		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
+		return false;
+		
+	}
 }
