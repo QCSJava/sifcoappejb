@@ -41,7 +41,7 @@ public class BusinesspartnerDAO extends CommonDAO{
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_cat_businesspartner(?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_businesspartner(?,?,?,?,?)}");
 		this.setString(1, "_cardcode", parameters.getCardcode());
 		this.setString(2, "_cardname", parameters.getCardname());
 		this.setInt(3, "_groupcode",new Integer(parameters.getGroupcode()));
