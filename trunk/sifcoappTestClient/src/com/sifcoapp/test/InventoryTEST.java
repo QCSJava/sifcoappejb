@@ -56,7 +56,7 @@ public class InventoryTEST {
 		GoodsissuesInTO nuevo = new GoodsissuesInTO();
 		nuevo.setDocnum(12);
 		Date fecha= new Date();
-		nuevo.setDocdate(fecha);
+		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		lstPeriods = Inventory.getGoodsissues(nuevo);
 		Iterator<GoodsissuesTO> iterator = lstPeriods.iterator();

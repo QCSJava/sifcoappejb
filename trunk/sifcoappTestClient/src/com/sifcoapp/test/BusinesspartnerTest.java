@@ -55,8 +55,8 @@ public class BusinesspartnerTest {
 
 		List lstPeriods = new Vector();
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
-		nuevo.setCardcode("T");
-		nuevo.setCardname("P");
+		nuevo.setCardcode("R");
+		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
 		lstPeriods = catalogo.get_businesspartner(nuevo);
 		Iterator<BusinesspartnerTO> iterator = lstPeriods.iterator();
