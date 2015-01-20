@@ -12,11 +12,11 @@ import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 
 public class BusinesspartnerTest {
 	
-	private static CatalogEJBClient catalogo;
+	private static CatalogEJBClient catalog;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		if (catalogo == null)
-			catalogo = new CatalogEJBClient();
+		if (catalog == null)
+			catalog = new CatalogEJBClient();
 
 		String v_method = args[0];
 
@@ -55,10 +55,10 @@ public class BusinesspartnerTest {
 
 		List lstPeriods = new Vector();
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
-		nuevo.setCardcode("R");
+		nuevo.setCardcode("T");
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
-		lstPeriods = catalogo.get_businesspartner(nuevo);
+		lstPeriods = catalog.get_businesspartnerBykey(nuevo);
 		Iterator<BusinesspartnerTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			BusinesspartnerTO periodo = (BusinesspartnerTO) iterator.next();
