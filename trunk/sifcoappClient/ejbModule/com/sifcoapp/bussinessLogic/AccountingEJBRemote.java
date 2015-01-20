@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
-import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
-import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 
 @Remote
 public interface AccountingEJBRemote {

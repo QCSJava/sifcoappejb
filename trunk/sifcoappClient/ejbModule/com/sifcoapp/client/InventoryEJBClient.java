@@ -1,4 +1,5 @@
 package com.sifcoapp.client;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Vector;
@@ -12,6 +13,7 @@ import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 
 public class InventoryEJBClient implements InventoryEJBRemote{
+	
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/InventoryEJB!com.sifcoapp.bussinessLogic.InventoryEJBRemote";
 	private static InventoryEJBRemote bean;
 	private static Context context = null;

@@ -8,16 +8,17 @@ import javax.naming.Context;
 
 import javax.naming.NamingException;
 
-import com.sifcoapp.catalogo.ejb.CatalogEJBRemote;
+import com.sifcoapp.bussinessLogic.CatalogEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 
 public class CatalogEJBClient implements CatalogEJBRemote {
 
-	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/CatalogEJB!com.sifcoapp.catalog.ejb.CatalogEJBRemote";
+	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/CatalogEJB!com.sifcoapp.bussinessLogic.CatalogEJBRemote";
 	private static CatalogEJBRemote bean;
 	private static Context context = null;
+	
 	public CatalogEJBClient() {
 
 		// 2. Lookup and cast
@@ -49,5 +50,4 @@ public class CatalogEJBClient implements CatalogEJBRemote {
 		return lstPeriods;
 	}
 	
-
 }
