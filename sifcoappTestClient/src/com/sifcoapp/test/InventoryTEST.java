@@ -10,6 +10,8 @@ import java.util.Vector;
 import com.sifcoapp.client.InventoryEJBClient;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
+import com.sifcoapp.objects.inventory.to.GoodsreceiptInTO;
+import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 public class InventoryTEST {
 	
 	private static InventoryEJBClient Inventory;
@@ -54,7 +56,7 @@ public class InventoryTEST {
 
 		List lstPeriods = new Vector();
 		GoodsissuesInTO nuevo = new GoodsissuesInTO();
-		nuevo.setDocnum(12);
+		nuevo.setDocnum(21);
 		Date fecha= new Date();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
@@ -62,6 +64,22 @@ public class InventoryTEST {
 		Iterator<GoodsissuesTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			GoodsissuesTO periodo = (GoodsissuesTO) iterator.next();
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+		}
+	}
+	public static void getGoodreceipt() {
+
+		List lstPeriods = new Vector();
+		GoodsreceiptInTO nuevo = new GoodsreceiptInTO();
+		nuevo.setDocnum(25);
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		lstPeriods = Inventory.getGoodsreceipt(nuevo);
+		Iterator<GoodsreceiptTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			GoodsreceiptTO periodo = (GoodsreceiptTO) iterator.next();
 			System.out.println(periodo.getDocnum()+ " - "
 					+ periodo.getSeries() + " - "
 					+ periodo.getDocentry());

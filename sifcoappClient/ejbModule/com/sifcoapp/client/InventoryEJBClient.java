@@ -1,6 +1,5 @@
 package com.sifcoapp.client;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -11,6 +10,8 @@ import com.sifcoapp.bussinessLogic.InventoryEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
+import com.sifcoapp.objects.inventory.to.GoodsreceiptInTO;
+import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 
 public class InventoryEJBClient implements InventoryEJBRemote{
 	
@@ -29,9 +30,13 @@ public class InventoryEJBClient implements InventoryEJBRemote{
 			e.printStackTrace();
 		}
 	}
-	public List getListGoodsreceipt(int docnum, Date docdate, int series) {
+	public List getGoodsreceipt(GoodsreceiptInTO param) {
 		// TODO Auto-generated method stub
-		return null;
+		List lstPeriods = new Vector();
+
+		lstPeriods = bean.getGoodsreceipt(param);
+
+		return lstPeriods;
 	}
 
 	public List getGoodsissues(GoodsissuesInTO param) {
@@ -45,6 +50,10 @@ public class InventoryEJBClient implements InventoryEJBRemote{
 	public boolean inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public int Goodsreceipt_mtto(GoodsreceiptTO param) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	
