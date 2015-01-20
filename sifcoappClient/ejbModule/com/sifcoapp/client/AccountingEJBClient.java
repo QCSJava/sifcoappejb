@@ -12,6 +12,7 @@ import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 
 public class AccountingEJBClient implements AccountingEJBRemote {
+	
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AccountingEJB!com.sifcoapp.bussinessLogic.AccountingEJBRemote";
 	private static AccountingEJBRemote bean;
 	private static Context context = null;
