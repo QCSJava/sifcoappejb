@@ -10,6 +10,7 @@ import com.sifcoapp.objects.inventory.dao.GoodsIssuesDAO;
 import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
 import com.sifcoapp.objects.inventory.dao.GoodsreceiptDAO;
 import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
@@ -54,7 +55,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	}
 
-	public int inv_goodsReceiptDetail_mtto(GoodsIssuesDetailTO parameters,
+	public int inv_goodsReceiptDetail_mtto(GoodsReceiptDetailTO parameters,
 			int accion) {
 		// TODO Auto-generated method stub
 		int _return = 0;
