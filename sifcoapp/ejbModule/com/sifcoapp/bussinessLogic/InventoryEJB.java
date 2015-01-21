@@ -1,10 +1,14 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.Stateless;
 
+import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
 import com.sifcoapp.objects.inventory.dao.GoodsIssuesDAO;
 import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
@@ -38,11 +42,24 @@ public class InventoryEJB implements InventoryEJBRemote {
 	 * return _return; }
 	 */
 
-	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) {
+	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int action) {
 		// TODO Auto-generated method stub
 		int _return = 0;
+		Iterator<GoodsIssuesDetailTO> iterator = parameters.getGoodIssuesDetail().iterator();
+		while (iterator.hasNext()) {
+			GoodsIssuesDetailTO branch = (GoodsIssuesDetailTO) iterator.next();
+			// Para articulos nuevos
+			GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
+			if (action == Common.MTTOINSERT) {
+				goodDAO1.inv_goodsIssuesDetail_mtto(branch,Common.MTTOINSERT);
+			}
+			if (action == Common.MTTODELETE) {
+				goodDAO1.inv_goodsIssuesDetail_mtto(branch,Common.MTTODELETE);
+			}
+		}
+		
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
-		_return = DAO.inv_goodsissues_mtto(parameters, accion);
+		_return = DAO.inv_goodsissues_mtto(parameters, action);
 
 		return _return;
 		
@@ -113,6 +130,11 @@ public class InventoryEJB implements InventoryEJBRemote {
 		_return = DAO.getGoodsreceipt(param);
 
 		return _return;
+	}
+
+	public List getGoodsissuesByKey(int docentry) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
