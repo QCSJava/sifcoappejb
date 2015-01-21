@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.InventoryEJBClient;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 public class InventoryTEST {
 	
@@ -72,7 +72,7 @@ public class InventoryTEST {
 	public static void getGoodreceipt() {
 
 		List lstPeriods = new Vector();
-		GoodsreceiptInTO nuevo = new GoodsreceiptInTO();
+		GoodsReceiptInTO nuevo = new GoodsReceiptInTO();
 		nuevo.setDocnum(25);
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);

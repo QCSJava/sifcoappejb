@@ -17,7 +17,6 @@ public class BusinesspartnerTest {
 		// TODO Auto-generated method stub
 		if (catalog == null)
 			catalog = new CatalogEJBClient();
-
 		String v_method = args[0];
 
 		/*
@@ -55,7 +54,7 @@ public class BusinesspartnerTest {
 
 		List lstPeriods = new Vector();
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
-		nuevo.setCardcode("T");
+		//nuevo.setCardcode("T");
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
 		lstPeriods = catalog.get_businesspartnerBykey(nuevo);

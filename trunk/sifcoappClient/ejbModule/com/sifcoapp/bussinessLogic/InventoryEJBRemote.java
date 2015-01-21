@@ -1,22 +1,34 @@
 package com.sifcoapp.bussinessLogic;
+
 import java.util.List;
 
+import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 
 import javax.ejb.Remote;
 
 @Remote
 public interface InventoryEJBRemote {
-	
-	public List getGoodsreceipt(GoodsreceiptInTO param);
-	
+
+	public boolean inv_goodsissues_mtto(GoodsissuesTO parameters, int accion);
+
+	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,
+			int accion);
+
+	public int inv_goodsReceiptDetail_mtto(GoodsIssuesDetailTO parameters,
+			int accion);
+
 	public int Goodsreceipt_mtto(GoodsreceiptTO param);
-	
+
 	public List getGoodsissues(GoodsissuesInTO param);
-	
-	public boolean inv_goodsissues_mtto(GoodsissuesTO parameters,int accion);
-	
+
+	public List getGoodsIssuesDetail(int docentry);
+
+	public List getGoodsReceiptDetail(int docentry);
+
+	public List getGoodsreceipt(GoodsReceiptInTO param);
+
 }
