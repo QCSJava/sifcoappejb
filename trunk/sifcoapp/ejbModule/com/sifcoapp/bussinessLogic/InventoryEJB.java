@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
 import com.sifcoapp.objects.inventory.dao.GoodsIssuesDAO;
 import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
-import com.sifcoapp.objects.inventory.dao.GoodsreceiptDAO;
+import com.sifcoapp.objects.inventory.dao.GoodsReceiptDAO;
 import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
@@ -66,9 +66,13 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	}
 
-	public int Goodsreceipt_mtto(GoodsreceiptTO param) {
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) {
 		// TODO Auto-generated method stub
-		return 0;
+		int _return;
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		_return = DAO.inv_GoodsReceipt_mtto(parameters, accion);
+
+		return _return;
 	}
 
 	public List getGoodsissues(GoodsissuesInTO param) {
@@ -101,7 +105,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 	public List getGoodsreceipt(GoodsReceiptInTO param) {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
-		GoodsreceiptDAO DAO = new GoodsreceiptDAO();
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		_return = DAO.getGoodsreceipt(param);
 
 		return _return;
