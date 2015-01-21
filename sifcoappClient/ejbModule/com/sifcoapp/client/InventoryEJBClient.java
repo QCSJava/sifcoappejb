@@ -60,9 +60,13 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstVector;
 	}
 
-	public int Goodsreceipt_mtto(GoodsreceiptTO param) {
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion) {
 		// TODO Auto-generated method stub
-		return 0;
+		int _return;
+
+		_return = bean.inv_GoodsReceipt_mtto(param, accion);
+
+		return _return;
 	}
 
 	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,

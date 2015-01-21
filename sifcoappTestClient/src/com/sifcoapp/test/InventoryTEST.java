@@ -1,12 +1,10 @@
 package com.sifcoapp.test;
 import java.lang.reflect.InvocationTargetException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
 import com.sifcoapp.client.InventoryEJBClient;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
@@ -90,6 +88,22 @@ public class InventoryTEST {
 					+ periodo.getDocentry());
 		}
 	}
+
+	
+	public static void GoodReceipt_mtto() {
+
+		int _result;
+		GoodsreceiptTO parameters = new GoodsreceiptTO();
+		parameters.setDocnum(26);
+		parameters.setUsersign(1);
+		parameters.setDoctotal(111.2);
+		_result = Inventory.inv_GoodsReceipt_mtto(parameters, 1);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
+	}
+
 	
 	public static void getGoodreceiptDetail() {
 
@@ -161,4 +175,5 @@ public class InventoryTEST {
 		System.out.println(resp);
 
 	}
+
 }

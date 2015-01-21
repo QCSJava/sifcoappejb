@@ -14,7 +14,7 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 
-public class GoodsreceiptDAO extends CommonDAO{
+public class GoodsReceiptDAO extends CommonDAO{
 	
 	public List getGoodsreceipt(GoodsReceiptInTO param){
 		List _return = new Vector();
@@ -80,32 +80,30 @@ public class GoodsreceiptDAO extends CommonDAO{
 		return _return;
 	}
 	
-	public int Goodsreceipt_mtto(GoodsreceiptTO parameters, int action) {
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) {
 
-		int v_resp = 0;
-		// this.setDbObject("{call sp_cat_acc_period_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_inv_gre0_goodsreceipt_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setInt(1,"_docentry", parameters.getDocentry());
-		this.setInt(2,"_docnum", parameters.getDocnum());
+		int v_resp = 6;
+		// this.seObject("{call sp_inv_gre0_goodsreceipt_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_inv_gre0_goodsreceipt_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setInt(1,"_docentry", new Integer(parameters.getDocentry()));
+		this.setInt(2,"_docnum", new Integer(parameters.getDocnum()));
 		this.setString(3,"_doctype", parameters.getDoctype());
 		this.setString(4,"_canceled", parameters.getCanceled());
 		this.setString(5,"_docstatus", parameters.getDocstatus());
 		this.setString(6,"_objtype", parameters.getObjtype());
 		this.setDate(7,"_docdate", parameters.getDocdate());
 		this.setDate(8,"_docduedate", parameters.getDocduedate());
-		this.setDouble(9,"_doctotal", parameters.getDoctotal());
+		this.setDouble(9,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(10,"_ref1", parameters.getRef1());
 		this.setString(11,"_comments", parameters.getComments());
 		this.setString(12,"_jrnlmemo", parameters.getJrnlmemo());
-		this.setInt(13,"_transid", parameters.getTransid());
-		this.setInt(14,"_series", parameters.getSeries());
+		this.setInt(13,"_transid", new Integer(parameters.getTransid()));
+		this.setInt(14,"_series", new Integer(parameters.getSeries()));
 		this.setString(15,"_towhscode", parameters.getTowhscode());
 		this.setString(16,"_fromwhscode", parameters.getFromwhscode());
 		this.setString(17,"_confirmed", parameters.getConfirmed());
-		this.setInt(18,"_usersign", parameters.getUsersign());
-		this.setDate(19,"_createdate", parameters.getCreatedate());
-		this.setInt(20,"_createtime", parameters.getCreatetime());
-		this.setInt(21, "_action", new Integer(action));
+		this.setInt(18,"_usersign", new Integer(parameters.getUsersign()));
+		this.setInt(19, "_action", new Integer(accion));
 
 		v_resp = this.runUpdate();
 
