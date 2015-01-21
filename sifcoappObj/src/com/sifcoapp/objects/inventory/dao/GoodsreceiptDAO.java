@@ -23,13 +23,14 @@ public class GoodsreceiptDAO extends CommonDAO{
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_goodsreceipt(?,?,?)}");
 		
-		if (param.getDocdate().getDay()==0){
+		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
 		}else
 		{
 			java.sql.Date fecha= new java.sql.Date(param.getDocdate().getTime());
 			this.setDate(2, "_docdate", fecha);
 		}
+		
 		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
 		
 		this.setInt(3, "_series", new Integer(param.getSeries()));

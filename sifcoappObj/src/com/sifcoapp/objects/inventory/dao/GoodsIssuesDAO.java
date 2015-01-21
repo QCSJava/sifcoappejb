@@ -19,7 +19,7 @@ public class GoodsIssuesDAO extends CommonDAO{
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_goodsissues(?,?,?)}");
 		
-		if (param.getDocdate().getDay()==0){
+		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
 		}else
 		{
@@ -29,6 +29,7 @@ public class GoodsIssuesDAO extends CommonDAO{
 		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
 		
 		this.setInt(3, "_series", new Integer(param.getSeries()));
+		
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
