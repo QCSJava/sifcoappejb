@@ -76,10 +76,10 @@ public class GoodsissuesDetailDAO extends CommonDAO{
 		this.setString(7,"_linestatus,", parameters.getLinestatus());
 		this.setString(8,"_itemcode,", parameters.getItemcode());
 		this.setString(9,"_dscription,", parameters.getDscription());
-		this.setDouble(10,"_quantity,", parameters.getQuantity());
-		this.setDouble(11,"_openqty,", parameters.getOpenqty());
-		this.setDouble(12,"_price,", parameters.getPrice());
-		this.setDouble(13,"_linetotal,", parameters.getLinetotal());
+		this.setDouble(10,"_quantity,", new Double(parameters.getQuantity()));
+		this.setDouble(11,"_openqty,", new Double(parameters.getOpenqty()));
+		this.setDouble(12,"_price,", new Double(parameters.getPrice()));
+		this.setDouble(13,"_linetotal,", new Double(parameters.getLinetotal()));
 		this.setString(14,"_whscode,", parameters.getWhscode());
 		this.setString(15,"_acctcode,", parameters.getAcctcode());
 		this.setString(16,"_usebaseun,", parameters.getUsebaseun());
