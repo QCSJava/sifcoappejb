@@ -175,5 +175,21 @@ public class InventoryTEST {
 		System.out.println(resp);
 
 	}
+	
+	public static void GoodsIssues_mtto() {
+
+		int _result;
+		GoodsissuesTO parameters = new GoodsissuesTO();
+		parameters.setDocnum(485);
+		parameters.setUsersign(1);
+		parameters.setDoctotal(15.5);
+		parameters.setDocentry(2);
+		_result = Inventory.inv_goodsissues_mtto(parameters,2);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
+	}
+
 
 }
