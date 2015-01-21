@@ -105,4 +105,11 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstVector;
 	}
 
+	public List getGoodsissuesByKey(int docentry) {
+		// TODO Auto-generated method stub
+		List lstPeriods = new Vector();
+		lstPeriods = bean.getGoodsissuesByKey(docentry);
+		return lstPeriods;
+	}
+
 }

@@ -23,6 +23,7 @@ public interface InventoryEJBRemote {
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO param,int accion);
 
 	public List getGoodsissues(GoodsissuesInTO param);
+	public List getGoodsissuesByKey(int docentry);
 
 	public List getGoodsIssuesDetail(int docentry);
 

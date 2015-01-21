@@ -134,8 +134,7 @@ public class AdminEJB implements AdminEJBRemote {
 
 		int _return;
 
-		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
-				.iterator();
+		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
 
 		while (iterator.hasNext()) {
 			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
