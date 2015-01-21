@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import com.sifcoapp.bussinessLogic.InventoryEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
@@ -74,7 +75,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public int inv_goodsReceiptDetail_mtto(GoodsIssuesDetailTO parameters,
+	public int inv_goodsReceiptDetail_mtto(GoodsReceiptDetailTO parameters,
 			int accion) {
 		// TODO Auto-generated method stub
 		int _return = 0;
