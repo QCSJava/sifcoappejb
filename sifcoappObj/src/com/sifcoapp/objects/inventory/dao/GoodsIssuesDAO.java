@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
-public class GoodsissuesDAO extends CommonDAO{
+public class GoodsIssuesDAO extends CommonDAO{
 	
 	//Retorna de goodsisuues registros por filtro
 	public List getGoodsissues(GoodsissuesInTO param) {

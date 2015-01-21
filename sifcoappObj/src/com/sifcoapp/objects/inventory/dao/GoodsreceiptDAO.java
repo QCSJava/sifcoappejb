@@ -4,7 +4,7 @@ package com.sifcoapp.objects.inventory.dao;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptInTO;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -16,7 +16,7 @@ import java.util.Vector;
 
 public class GoodsreceiptDAO extends CommonDAO{
 	
-	public List getGoodsreceipt(GoodsreceiptInTO param){
+	public List getGoodsreceipt(GoodsReceiptInTO param){
 		List _return = new Vector();
 		List lstResultSet = null;
 		

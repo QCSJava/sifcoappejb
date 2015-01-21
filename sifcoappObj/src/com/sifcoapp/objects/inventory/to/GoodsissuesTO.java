@@ -1,10 +1,13 @@
 package com.sifcoapp.objects.inventory.to;
-import com.sifcoapp.objects.common.to.*; 
+
+import com.sifcoapp.objects.common.to.*;
 
 import java.util.Date;
-public class GoodsissuesTO extends CommonTO{
+import java.util.List;
 
-		/**
+public class GoodsissuesTO extends CommonTO {
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7806684365762245908L;
@@ -28,7 +31,8 @@ public class GoodsissuesTO extends CommonTO{
 	private int usersign;
 	private Date createdate;
 	private int createtime;
-	
+	private List GoodIssuesDetail;
+
 	public GoodsissuesTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -223,5 +227,12 @@ public class GoodsissuesTO extends CommonTO{
 		this.createtime = createtime;
 	}
 
-	
+	public List getGoodIssuesDetail() {
+		return GoodIssuesDetail;
+	}
+
+	public void setGoodIssuesDetail(List goodIssuesDetail) {
+		GoodIssuesDetail = goodIssuesDetail;
+	}
+
 }
