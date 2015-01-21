@@ -38,10 +38,14 @@ public class InventoryEJB implements InventoryEJBRemote {
 	 * return _return; }
 	 */
 
-	public boolean inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) {
+	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) {
 		// TODO Auto-generated method stub
+		int _return = 0;
+		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
+		_return = DAO.inv_goodsissues_mtto(parameters, accion);
 
-		return true;
+		return _return;
+		
 	}
 
 	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,

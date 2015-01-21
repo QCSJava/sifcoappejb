@@ -71,11 +71,33 @@ public class GoodsIssuesDAO extends CommonDAO{
 		}
 		return _return;
 	}
-
-	public boolean inv_goodsissues_mtto(GoodsissuesTO parameters,int accion){
+//mantenimiento de la tabla goodsissues
+	public int inv_goodsissues_mtto(GoodsissuesTO parameters,int accion){
 		int v_resp = 0;
-		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
-		return false;
+		this.setDbObject("{call sp_inv_gis0_goodsissues_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setInt(1,"_docentry", new Integer(parameters.getDocentry()));
+		this.setInt(2,"_docnum", new Integer(parameters.getDocnum()));
+		this.setString(3,"_doctype", parameters.getDoctype());
+		this.setString(4,"_canceled", parameters.getCanceled());
+		this.setString(5,"_docstatus", parameters.getDocstatus());
+		this.setString(6,"_objtype", parameters.getObjtype());
+		this.setDate(7,"_docdate", parameters.getDocdate());
+		this.setDate(8,"_docduedate", parameters.getDocduedate());
+		this.setDouble(9,"_doctotal", new Double(parameters.getDoctotal()));
+		this.setString(10,"_ref1", parameters.getRef1());
+		this.setString(11,"_comments", parameters.getComments());
+		this.setString(12,"_jrnlmemo", parameters.getJrnlmemo());
+		this.setInt(13,"_transid", new Integer(parameters.getTransid()));
+		this.setInt(14,"_series", new Integer(parameters.getSeries()));
+		this.setString(15,"_towhscode", parameters.getTowhscode());
+		this.setString(16,"_fromwhscode", parameters.getFromwhscode());
+		this.setString(17,"_confirmed", parameters.getConfirmed());
+		this.setInt(18,"_usersign", new Integer(parameters.getUsersign()));
+		this.setInt(19, "_action", new Integer(accion));
+
+		v_resp = this.runUpdate();
+
+		return v_resp;
 		
 	}
 }

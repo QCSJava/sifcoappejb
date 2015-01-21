@@ -51,12 +51,10 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstPeriods;
 	}
 
-	public boolean inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) {
+	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) {
 		// TODO Auto-generated method stub
-		boolean lstVector = true;
-
+		int lstVector;
 		lstVector = bean.inv_goodsissues_mtto(parameters, accion);
-
 		return lstVector;
 	}
 
