@@ -133,8 +133,8 @@ public class GoodsReceiptDAO extends CommonDAO{
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) {
 
 		List v_resp;
-		// this.seObject("{call sp_inv_gre0_goodsreceipt_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_inv_gre0_goodsreceipt_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		// this.seObject("{call sp_inv_gre0_goodsreceipt_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{? = call sp_inv_gre0_goodsreceipt_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setInt(2,"_docentry", new Integer(parameters.getDocentry()));
 		this.setInt(3,"_docnum", new Integer(parameters.getDocnum()));
 		this.setString(4,"_doctype", parameters.getDoctype());

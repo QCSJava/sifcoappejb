@@ -156,7 +156,7 @@ public class InventoryTEST {
 
 	}
 	
-	public static void GoodReceiptDetail_mtto() {
+	public static void GoodReceipt_mtto_condetalle() {
 		int _result;
 		GoodsReceiptDetailTO document = new GoodsReceiptDetailTO();
 
