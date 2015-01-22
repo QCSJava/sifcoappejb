@@ -44,22 +44,23 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int action) {
 		// TODO Auto-generated method stub
-		int _return = 0;
-		Iterator<GoodsIssuesDetailTO> iterator = parameters.getGoodIssuesDetail().iterator();
-		while (iterator.hasNext()) {
-			GoodsIssuesDetailTO branch = (GoodsIssuesDetailTO) iterator.next();
-			// Para articulos nuevos
-			GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
-			if (action == Common.MTTOINSERT) {
-				goodDAO1.inv_goodsIssuesDetail_mtto(branch,Common.MTTOINSERT);
-			}
-			if (action == Common.MTTODELETE) {
-				goodDAO1.inv_goodsIssuesDetail_mtto(branch,Common.MTTODELETE);
-			}
-		}
-		
+		int _return = 5;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		_return = DAO.inv_goodsissues_mtto(parameters, action);
+		
+		Iterator<GoodsIssuesDetailTO> iterator = parameters.getGoodIssuesDetail().iterator();
+		while (iterator.hasNext()) {
+			GoodsIssuesDetailTO articleDetalle = (GoodsIssuesDetailTO) iterator.next();
+			// Para articulos nuevos
+			GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
+			articleDetalle.setDocentry(_return);
+			if (action == Common.MTTOINSERT) {
+				goodDAO1.inv_goodsIssuesDetail_mtto(articleDetalle,Common.MTTOINSERT);
+			}
+			if (action == Common.MTTODELETE) {
+				goodDAO1.inv_goodsIssuesDetail_mtto(articleDetalle,Common.MTTODELETE);
+			}
+		}
 
 		return _return;
 		
@@ -87,11 +88,23 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	}
 
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) {
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action) {
 		// TODO Auto-generated method stub
 		int _return;
+		Iterator<GoodsReceiptDetailTO> iterator = parameters.getGoodReceiptDetail().iterator();
+		while (iterator.hasNext()) {
+			GoodsReceiptDetailTO branch = (GoodsReceiptDetailTO) iterator.next();
+			// Para articulos nuevos
+			GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO();
+			if (action == Common.MTTOINSERT) {
+				goodDAO1.inv_goodReceiptDetail_mtto(branch,Common.MTTOINSERT);
+			}
+			if (action == Common.MTTODELETE) {
+				goodDAO1.inv_goodReceiptDetail_mtto(branch,Common.MTTODELETE);
+			}
+		}
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
-		_return = DAO.inv_GoodsReceipt_mtto(parameters, accion);
+		_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
 
 		return _return;
 	}
@@ -132,9 +145,19 @@ public class InventoryEJB implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public List getGoodsissuesByKey(int docentry) {
+	public GoodsissuesTO getGoodsissuesByKey(int docentry) {
 		// TODO Auto-generated method stub
-		return null;
+		GoodsissuesTO _return;
+		GoodsIssuesDAO GoodDAO=new GoodsIssuesDAO();
+		_return=GoodDAO.getGoodsissuesByKey(docentry);
+		return _return;
+	}
+	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) {
+		// TODO Auto-generated method stub
+		GoodsreceiptTO _return;
+		GoodsReceiptDAO GoodDAO=new GoodsReceiptDAO();
+		_return=GoodDAO.getGoodsReceiptByKey(docentry);
+		return _return;
 	}
 
 }

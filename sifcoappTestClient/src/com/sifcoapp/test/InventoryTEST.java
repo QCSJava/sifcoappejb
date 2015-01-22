@@ -180,16 +180,83 @@ public class InventoryTEST {
 
 		int _result;
 		GoodsissuesTO parameters = new GoodsissuesTO();
+	
+		List prueba = new Vector();
+		GoodsIssuesDetailTO document = new GoodsIssuesDetailTO();
+		GoodsIssuesDetailTO document1 = new GoodsIssuesDetailTO();
+		
+		document.setDocentry(1);
+		document.setLinenum(1);
+		document.setItemcode("ART-001");
+		document.setDscription("Articulo de prueba");
+		document.setQuantity(10.25);
+		document.setOpenqty(10.25);
+		document.setPrice(11.25);
+		document.setLinetotal(100.00);
+		prueba.add(document);
+		document1.setDocentry(1);
+		document1.setLinenum(2);
+		document1.setItemcode("ART-001");
+		document1.setDscription("Articulo de prueba");
+		document1.setQuantity(10.25);
+		document1.setOpenqty(10.25);
+		document1.setPrice(11.25);
+		document1.setLinetotal(100.00);
+		prueba.add(document1);
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
+		parameters.setDocentry(26);
 		parameters.setDoctotal(15.5);
-		parameters.setDocentry(2);
-		_result = Inventory.inv_goodsissues_mtto(parameters,2);
+		parameters.setGoodIssuesDetail(prueba);
+		_result = Inventory.inv_goodsissues_mtto(parameters,1);
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
 
 	}
+	public static void getGoodreceiptbykey() {
 
+		GoodsreceiptTO periodo = new GoodsreceiptTO();
+		List lstPeriods = new Vector();
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		periodo = Inventory.getGoodsReceiptByKey(2);
+		
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+			
+			lstPeriods = periodo.getGoodReceiptDetail();
+			Iterator<GoodsReceiptDetailTO> iterator = lstPeriods.iterator();
+			while (iterator.hasNext()) {
+				GoodsReceiptDetailTO periodo2 = (GoodsReceiptDetailTO) iterator.next();
+				System.out.println(periodo2.getItemcode() + " - "
+						+ periodo2.getDscription() + " - "
+						+ periodo2.getAcctcode());
+			}	
+	}
+	public static void getGoodsissuesbykey() {
+
+		GoodsissuesTO periodo = new GoodsissuesTO();
+		List lstPeriods = new Vector();
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		periodo = Inventory.getGoodsissuesByKey(1);
+		
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+			
+			lstPeriods = periodo.getGoodIssuesDetail();
+			Iterator<GoodsIssuesDetailTO> iterator = lstPeriods.iterator();
+			while (iterator.hasNext()) {
+				GoodsIssuesDetailTO periodo2 = (GoodsIssuesDetailTO) iterator.next();
+				System.out.println(periodo2.getItemcode() + " - "
+						+ periodo2.getDscription() + " - "
+						+ periodo2.getAcctcode());
+			}	
+	}
 
 }
+
+
