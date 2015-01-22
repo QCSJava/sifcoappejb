@@ -1,6 +1,7 @@
 package com.sifcoapp.objects.inventory.to;
 
 import java.sql.Date;
+import java.util.List;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
@@ -31,17 +32,19 @@ public class GoodsreceiptTO extends CommonTO{
 	private int usersign;
 	private Date createdate;
 	private int createtime;
+	private List GoodReceiptDetail;
 	
 	public GoodsreceiptTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public GoodsreceiptTO(int docentry, int docnum, String doctype,
 			String canceled, String docstatus, String objtype, Date docdate,
 			Date docduedate, Double doctotal, String ref1, String comments,
 			String jrnlmemo, int transid, int series, String towhscode,
 			String fromwhscode, String confirmed, int usersign,
-			Date createdate, int createtime) {
+			Date createdate, int createtime, List goodReceiptDetail) {
 		super();
 		this.docentry = docentry;
 		this.docnum = docnum;
@@ -63,7 +66,9 @@ public class GoodsreceiptTO extends CommonTO{
 		this.usersign = usersign;
 		this.createdate = createdate;
 		this.createtime = createtime;
+		GoodReceiptDetail = goodReceiptDetail;
 	}
+
 	public int getDocentry() {
 		return docentry;
 	}
@@ -183,6 +188,14 @@ public class GoodsreceiptTO extends CommonTO{
 	}
 	public void setCreatetime(int createtime) {
 		this.createtime = createtime;
+	}
+
+	public List getGoodReceiptDetail() {
+		return GoodReceiptDetail;
+	}
+
+	public void setGoodReceiptDetail(List goodReceiptDetail) {
+		GoodReceiptDetail = goodReceiptDetail;
 	}
 
 }

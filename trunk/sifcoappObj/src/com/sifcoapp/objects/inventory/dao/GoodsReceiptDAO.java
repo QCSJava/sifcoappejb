@@ -5,6 +5,7 @@ import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
+import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -70,6 +71,55 @@ public class GoodsReceiptDAO extends CommonDAO{
 					docu.setCreatedate(rowsetActual.getDate(19));
 					docu.setCreatetime(rowsetActual.getInt(20));
 					_return.add(docu);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+	//Retorna elemento goodsreceipt con detalle por clave
+	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) {
+		GoodsreceiptTO _return = new GoodsreceiptTO();
+		List lstResultSet = null;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_goodsReceipt_by_key(?)}");
+		this.setInt(1, "_docentry", new Integer(docentry));
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		System.out.println("return psg");
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		GoodReceiptDetailDAO Detail = new GoodReceiptDetailDAO();
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					GoodsreceiptTO documento = new GoodsreceiptTO();
+					documento.setDocentry(rowsetActual.getInt(1));
+					documento.setDocnum(rowsetActual.getInt(2));
+					documento.setDoctype(rowsetActual.getString(3));
+					documento.setCanceled(rowsetActual.getString(4));
+					documento.setDocstatus(rowsetActual.getString(5));
+					documento.setObjtype(rowsetActual.getString(6));
+					documento.setDocdate(rowsetActual.getDate(7));
+					documento.setDocduedate(rowsetActual.getDate(8));
+					documento.setDoctotal(rowsetActual.getDouble(9));
+					documento.setRef1(rowsetActual.getString(10));
+					documento.setComments(rowsetActual.getString(11));
+					documento.setJrnlmemo(rowsetActual.getString(12));
+					documento.setTransid(rowsetActual.getInt(13));
+					documento.setSeries(rowsetActual.getInt(14));
+					documento.setTowhscode(rowsetActual.getString(15));
+					documento.setFromwhscode(rowsetActual.getString(16));
+					documento.setConfirmed(rowsetActual.getString(17));
+					documento.setUsersign(rowsetActual.getInt(18));
+					documento.setCreatedate(rowsetActual.getDate(19));
+					documento.setCreatetime(rowsetActual.getInt(20));
+					documento.setGoodReceiptDetail(Detail.getGoodReceiptDetail(rowsetActual.getInt(1)));
+					_return=documento;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {

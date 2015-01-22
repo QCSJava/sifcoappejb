@@ -17,7 +17,7 @@ public class GoodReceiptDetailDAO extends CommonDAO{
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_goodsissuesdetail(?)}");		
+		this.setDbObject("{call sp_get_goodsreceiptdetail(?)}");		
 		this.setInt(1, "_docentry", new Integer(docentry));		
 		
 		lstResultSet = this.runQuery();
@@ -30,7 +30,7 @@ public class GoodReceiptDetailDAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					GoodsIssuesDetailTO document = new GoodsIssuesDetailTO();
+					GoodsReceiptDetailTO document = new GoodsReceiptDetailTO();
 					document.setDocentry(rowsetActual.getInt(1));
 					document.setLinenum(rowsetActual.getInt(2));
 					document.setTargettype(rowsetActual.getInt(3));

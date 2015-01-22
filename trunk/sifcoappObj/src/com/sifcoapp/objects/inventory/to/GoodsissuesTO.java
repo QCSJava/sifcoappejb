@@ -38,12 +38,14 @@ public class GoodsissuesTO extends CommonTO {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 	public GoodsissuesTO(int docentry, int docnum, String doctype,
 			String canceled, String docstatus, String objtype, Date docdate,
 			Date docduedate, Double doctotal, String ref1, String comments,
 			String jrnlmemo, int transid, int series, String towhscode,
 			String fromwhscode, String confirmed, int usersign,
-			Date createdate, int createtime) {
+			Date createdate, int createtime, List goodIssuesDetail) {
 		super();
 		this.docentry = docentry;
 		this.docnum = docnum;
@@ -65,7 +67,10 @@ public class GoodsissuesTO extends CommonTO {
 		this.usersign = usersign;
 		this.createdate = createdate;
 		this.createtime = createtime;
+		GoodIssuesDetail = goodIssuesDetail;
 	}
+
+
 
 	public int getDocentry() {
 		return docentry;
