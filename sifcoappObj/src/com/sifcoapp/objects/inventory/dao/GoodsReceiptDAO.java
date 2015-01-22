@@ -132,32 +132,32 @@ public class GoodsReceiptDAO extends CommonDAO{
 	
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) {
 
-		int v_resp = 6;
+		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsreceipt_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_inv_gre0_goodsreceipt_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setInt(1,"_docentry", new Integer(parameters.getDocentry()));
-		this.setInt(2,"_docnum", new Integer(parameters.getDocnum()));
-		this.setString(3,"_doctype", parameters.getDoctype());
-		this.setString(4,"_canceled", parameters.getCanceled());
-		this.setString(5,"_docstatus", parameters.getDocstatus());
-		this.setString(6,"_objtype", parameters.getObjtype());
-		this.setDate(7,"_docdate", parameters.getDocdate());
-		this.setDate(8,"_docduedate", parameters.getDocduedate());
-		this.setDouble(9,"_doctotal", new Double(parameters.getDoctotal()));
-		this.setString(10,"_ref1", parameters.getRef1());
-		this.setString(11,"_comments", parameters.getComments());
-		this.setString(12,"_jrnlmemo", parameters.getJrnlmemo());
-		this.setInt(13,"_transid", new Integer(parameters.getTransid()));
-		this.setInt(14,"_series", new Integer(parameters.getSeries()));
-		this.setString(15,"_towhscode", parameters.getTowhscode());
-		this.setString(16,"_fromwhscode", parameters.getFromwhscode());
-		this.setString(17,"_confirmed", parameters.getConfirmed());
-		this.setInt(18,"_usersign", new Integer(parameters.getUsersign()));
-		this.setInt(19, "_action", new Integer(accion));
+		this.setInt(2,"_docentry", new Integer(parameters.getDocentry()));
+		this.setInt(3,"_docnum", new Integer(parameters.getDocnum()));
+		this.setString(4,"_doctype", parameters.getDoctype());
+		this.setString(5,"_canceled", parameters.getCanceled());
+		this.setString(6,"_docstatus", parameters.getDocstatus());
+		this.setString(7,"_objtype", parameters.getObjtype());
+		this.setDate(8,"_docdate", parameters.getDocdate());
+		this.setDate(9,"_docduedate", parameters.getDocduedate());
+		this.setDouble(10,"_doctotal", new Double(parameters.getDoctotal()));
+		this.setString(11,"_ref1", parameters.getRef1());
+		this.setString(12,"_comments", parameters.getComments());
+		this.setString(13,"_jrnlmemo", parameters.getJrnlmemo());
+		this.setInt(14,"_transid", new Integer(parameters.getTransid()));
+		this.setInt(15,"_series", new Integer(parameters.getSeries()));
+		this.setString(16,"_towhscode", parameters.getTowhscode());
+		this.setString(17,"_fromwhscode", parameters.getFromwhscode());
+		this.setString(18,"_confirmed", parameters.getConfirmed());
+		this.setInt(19,"_usersign", new Integer(parameters.getUsersign()));
+		this.setInt(20, "_action", new Integer(accion));
 
-		v_resp = this.runUpdate();
+		v_resp = this.runQuery();
 
-		return v_resp;
+		return this.getInt();
 	}
 
 }

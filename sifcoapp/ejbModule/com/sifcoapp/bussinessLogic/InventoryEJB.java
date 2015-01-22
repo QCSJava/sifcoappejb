@@ -91,20 +91,22 @@ public class InventoryEJB implements InventoryEJBRemote {
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action) {
 		// TODO Auto-generated method stub
 		int _return;
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
+		
 		Iterator<GoodsReceiptDetailTO> iterator = parameters.getGoodReceiptDetail().iterator();
 		while (iterator.hasNext()) {
-			GoodsReceiptDetailTO branch = (GoodsReceiptDetailTO) iterator.next();
+			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator.next();
 			// Para articulos nuevos
 			GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO();
 			if (action == Common.MTTOINSERT) {
-				goodDAO1.inv_goodReceiptDetail_mtto(branch,Common.MTTOINSERT);
+				goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,Common.MTTOINSERT);
 			}
 			if (action == Common.MTTODELETE) {
-				goodDAO1.inv_goodReceiptDetail_mtto(branch,Common.MTTODELETE);
+				goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,Common.MTTODELETE);
 			}
 		}
-		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
-		_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
+		
 
 		return _return;
 	}
