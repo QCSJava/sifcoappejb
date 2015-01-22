@@ -147,7 +147,7 @@ public class GoodsIssuesDAO extends CommonDAO{
 		this.setInt(19,"_usersign", new Integer(parameters.getUsersign()));
 		this.setInt(20, "_action", new Integer(accion));
 		v_resp = this.runQuery();
-		System.out.println(this.getInt());
+		//System.out.println(this.getInt());
 		
 		return this.getInt();
 		
