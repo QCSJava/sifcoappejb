@@ -93,6 +93,62 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 	
+	//######### RETORNA REGISTRO DE ACCOUNT POR FILTROS  ############################
+	public List getAccountByFilter(String acctcode,String acctname) {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_acc0_account(?,?,?)}");
+		this.setString(1, "_acctcode", acctcode);
+		this.setString(2, "_acctname", acctname);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					AccountTO account = new AccountTO();
+					account.setAcctcode(rowsetActual.getString(1));
+					account.setAcctname(rowsetActual.getString(2));
+					account.setCurrtotal(rowsetActual.getDouble(3));
+					account.setEndtotal(rowsetActual.getDouble(4));
+					account.setFinanse(rowsetActual.getString(5));
+					account.setBudget(rowsetActual.getString(6));
+					account.setPostable(rowsetActual.getString(7));
+					account.setLevels(rowsetActual.getInt(8));
+					account.setGrpline(rowsetActual.getInt(9));
+					account.setFathernum(rowsetActual.getString(10));
+					account.setGroupmask(rowsetActual.getInt(11));
+					account.setIntrmatch(rowsetActual.getInt(12));
+					account.setActtype(rowsetActual.getString(13));
+					account.setProtected1(rowsetActual.getString(14));
+					account.setCreatedate(rowsetActual.getDate(15));
+					account.setUpdatedate(rowsetActual.getDate(16));
+					account.setUsersign(rowsetActual.getInt(17));
+					account.setObjtype(rowsetActual.getString(18));
+					account.setValidfor(rowsetActual.getString(19));
+					account.setFormatcode(rowsetActual.getString(20));
+
+					_return.add(account);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+	
 	public List getAccPeriods() {
 		List _return = new Vector();
 		List lstResultSet = null;
