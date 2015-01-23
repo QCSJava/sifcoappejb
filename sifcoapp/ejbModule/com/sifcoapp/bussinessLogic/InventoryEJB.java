@@ -5,20 +5,9 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.Stateless;
-
-import com.sifcoapp.objects.admin.dao.AdminDAO;
-import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
-import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
-import com.sifcoapp.objects.inventory.dao.GoodsIssuesDAO;
-import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
-import com.sifcoapp.objects.inventory.dao.GoodsReceiptDAO;
-import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
+import com.sifcoapp.objects.inventory.dao.*;
+import com.sifcoapp.objects.inventory.to.*;
 
 /**
  * Session Bean implementation class InventoryEJB
@@ -159,6 +148,62 @@ public class InventoryEJB implements InventoryEJBRemote {
 		GoodsreceiptTO _return;
 		GoodsReceiptDAO GoodDAO=new GoodsReceiptDAO();
 		_return=GoodDAO.getGoodsReceiptByKey(docentry);
+		return _return;
+	}
+
+	
+	public List getTransfers(TransfersInTO param) {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		TransfersDAO DAO = new TransfersDAO();
+		_return = DAO.getTransfers(param);
+
+		return _return;
+	}
+
+	public TransfersTO getTransfersByKey(int docentry) {
+		// TODO Auto-generated method stub
+		TransfersTO _return;
+		TransfersDAO TraDAO= new TransfersDAO();
+		_return=TraDAO.getTransfersByKey(docentry);
+		return _return;
+	}
+
+	public int inv_transfers_mtto(TransfersTO parameters, int action) {
+		// TODO Auto-generated method stub
+		int _return;
+		TransfersDAO Trans= new TransfersDAO();
+		_return= Trans.inv_transfers_mtto(parameters, action);
+		Iterator<TransfersDetailTO> iterator= parameters.getTransfersDetail().iterator();
+		
+		while(iterator.hasNext()){
+			TransfersDetailTO articleDetalle = (TransfersDetailTO) iterator.next();
+			// Para articulos nuevos
+			TransfersDetailDAO TransDAO = new TransfersDetailDAO();
+			articleDetalle.setDocentry(_return);
+			if (action == Common.MTTOINSERT) {
+				TransDAO.inv_transfersDetail_mtto(articleDetalle,Common.MTTOINSERT);
+			}
+			if (action == Common.MTTODELETE) {
+				TransDAO.inv_transfersDetail_mtto(articleDetalle,Common.MTTODELETE);
+			}
+		}
+		return _return;
+	}
+
+	public List getTransfersDetail(int docentry) {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		TransfersDetailDAO DAO = new TransfersDetailDAO();
+		_return=DAO.getTransfersDetail(docentry);
+		return _return;
+	}
+
+	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action) {
+		// TODO Auto-generated method stub
+		int _return;
+		TransfersDetailDAO Trans= new TransfersDetailDAO();
+		_return= Trans.inv_transfersDetail_mtto(parameters, action);
 		return _return;
 	}
 

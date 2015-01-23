@@ -8,12 +8,7 @@ import java.util.Vector;
 import com.sifcoapp.client.InventoryEJBClient;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
-import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
+import com.sifcoapp.objects.inventory.to.*;
 public class InventoryTEST {
 	
 	private static InventoryEJBClient Inventory;
@@ -274,6 +269,87 @@ public class InventoryTEST {
 						+ periodo2.getDscription() + " - "
 						+ periodo2.getAcctcode());
 			}	
+	}
+	
+	//###########################pruebas de tablas transfers y trasnfersdetail###################################################
+	
+	public static void transfers_mtto() {
+
+		int _result;
+		TransfersTO parameters = new TransfersTO();
+	
+		List prueba = new Vector();
+		TransfersDetailTO document = new TransfersDetailTO();
+		TransfersDetailTO document1 = new TransfersDetailTO();
+		
+		//document.setDocentry(1);
+		document.setLinenum(1);
+		document.setItemcode("ART-001");
+		document.setDscription("Articulo de prueba");
+		document.setQuantity(10.25);
+		document.setOpenqty(10.25);
+		document.setPrice(11.25);
+		document.setLinetotal(100.00);
+		prueba.add(document);
+		//document1.setDocentry(1);
+		document1.setLinenum(2);
+		document1.setItemcode("ART-001");
+		document1.setDscription("Articulo de prueba");
+		document1.setQuantity(10.25);
+		document1.setOpenqty(10.25);
+		document1.setPrice(11.25);
+		document1.setLinetotal(100.00);
+		prueba.add(document1);
+		parameters.setDocnum(485);
+		//parameters.setUsersign(1);
+		parameters.setDocentry(26);
+		parameters.setDoctotal(15.5);
+		parameters.setTransfersDetail(prueba);
+		_result = Inventory.inv_transfers_mtto(parameters,1);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
+	}
+	
+	
+	public static void getTransfers_by_key() {
+
+
+		List lstPeriods = new Vector();
+		TransfersTO nuevo = new TransfersTO();
+	
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		nuevo = Inventory.getTransfersByKey(1);
+		//TransfersTO periodo = (TransfersTO) lstPeriods.get(0);
+		System.out.println(nuevo.getDocnum()+ " - "
+				+ nuevo.getSeries() + " - "
+				+ nuevo.getDocentry()+"-");
+		/*
+		while (iterator.hasNext()) {
+			TransfersTO periodo = (TransfersTO) iterator.next();
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+		}*/
+	}
+	public static void getTransfer() {
+
+		List lstPeriods = new Vector();
+		TransfersInTO nuevo = new TransfersInTO();
+		nuevo.setDocnum(12);
+		//Date fecha= new Date();
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		lstPeriods = Inventory.getTransfers(nuevo);
+		Iterator<TransfersTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			TransfersTO periodo = (TransfersTO) iterator.next();
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+		}
 	}
 
 }
