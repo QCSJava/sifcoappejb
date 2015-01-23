@@ -43,9 +43,9 @@ public class CatalogEJBClient implements CatalogEJBRemote {
 		lstPeriods = bean.get_businesspartner(parameters);
 		return lstPeriods;
 	}
-	public List get_businesspartnerBykey(BusinesspartnerInTO parameters) {
+	public BusinesspartnerTO get_businesspartnerBykey(String parameters) {
 		// TODO Auto-generated method stub
-		List lstPeriods = new Vector();
+		BusinesspartnerTO lstPeriods = new BusinesspartnerTO();
 		lstPeriods = bean.get_businesspartnerBykey(parameters);
 		return lstPeriods;
 	}

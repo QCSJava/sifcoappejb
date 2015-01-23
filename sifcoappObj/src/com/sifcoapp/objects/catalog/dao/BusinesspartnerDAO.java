@@ -88,12 +88,12 @@ public class BusinesspartnerDAO extends CommonDAO{
 	}
 	
 	//RETORNA DE LA TABLA BUSINEESPARTNER UN REGISTRO POR CLAVE
-	public List get_businesspartnerByKey(BusinesspartnerInTO parameters){
-		List _return = new Vector();
+	public BusinesspartnerTO get_businesspartnerByKey(String parameters){
+		BusinesspartnerTO _return = new BusinesspartnerTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_businesspartner_by_key(?)}");
-		this.setString(1, "_cardcode", parameters.getCardcode());
+		this.setString(1, "_cardcode", parameters);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
@@ -121,8 +121,7 @@ public class BusinesspartnerDAO extends CommonDAO{
 					account.setValidto(rowsetActual.getDate(14));
 					account.setNit(rowsetActual.getString(15));
 					account.setVatgroup(rowsetActual.getString(16));
-
-					_return.add(account);
+					_return=account;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {

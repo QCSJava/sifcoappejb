@@ -14,6 +14,6 @@ public interface CatalogEJBRemote {
 
 	public List get_businesspartner(BusinesspartnerInTO parameters);
 
-	public List get_businesspartnerBykey(BusinesspartnerInTO parameters);
+	public BusinesspartnerTO get_businesspartnerBykey(String parameters);
 
 }
