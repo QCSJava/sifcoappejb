@@ -12,7 +12,7 @@ import java.util.Vector;
 
 public class TransfersDetailDAO extends CommonDAO{
 	
-	//Retorna de transfersDetail
+	//RETORNA DE LA TABLA TRANSFERSDETAIL (SE USA JUNTOS A EL GET DE LA TABLA PADRE: TRANSFERS) RETORNA TODAS SUS HIJAS
 	public List getTransfersDetail(int docentry) {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -61,10 +61,11 @@ public class TransfersDetailDAO extends CommonDAO{
 		return _return;
 	}
 
+	//########################CRUD DE LA TABLA TRANSFERSDETAILS (SE USA JUNTO CON EL CRUD DE LA TABLA PADRE: TRANSFERS) GUARDA TODOS LOS DETALLES DE SU PADRE
 	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action){
-		
+
 		int v_resp = 0;
-		
+
 		// s.setDbObject("{call sp_gis1_goodsissuedetail_mttodddd(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_inv_tra1_transfersdetails_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setInt(1,"_docentry,", new Integer(parameters.getDocentry()));
@@ -91,6 +92,6 @@ public class TransfersDetailDAO extends CommonDAO{
 		v_resp = this.runUpdate();
 
 		return v_resp;
-		
+
 	}
 }
