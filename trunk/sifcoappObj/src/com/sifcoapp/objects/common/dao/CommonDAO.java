@@ -52,7 +52,6 @@ public class CommonDAO {
 			e.printStackTrace();
 		}
 	}
-
 	public void forceCloseConnection() {
 		try {
 			if (this.conn != null) {
@@ -63,7 +62,7 @@ public class CommonDAO {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void rollBackConnection() {
 		try {
 			if (this.conn != null) {

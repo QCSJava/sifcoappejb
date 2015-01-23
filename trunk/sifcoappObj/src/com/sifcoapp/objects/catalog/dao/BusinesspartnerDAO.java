@@ -12,10 +12,11 @@ import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sun.rowset.CachedRowSetImpl;
 public class BusinesspartnerDAO extends CommonDAO{
 	
-	//insertar un nuevo socio en businesspartner  accion 1=insertar, accion 2= update accion 3= eliminar
+	//##################################  CRUD DE TABLA BUSINESSPARTNER ####################################
 	public int inv_cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters, int action) {
 		int v_resp = 0;
-		this.setDbObject("{call sp_cat_bpa0_businesspartner_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		// s.setDbObject("{call sp_gis1_goodsissuedetail_mtto   (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_cat_bpa0_businesspartner_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setString(1,"_cardcode", parameters.getCardcode());
 		this.setString(2,"_cardname", parameters.getCardname());
 		this.setInt(3,"_groupcode",new Integer (parameters.getGroupcode()));
@@ -36,7 +37,7 @@ public class BusinesspartnerDAO extends CommonDAO{
 		v_resp = this.runUpdate();
 		return v_resp;
 	}
-//encuentra en catalogo los socios por filtros
+//RETORNA DE REGISTROS DE LA TABLA BUSINESSPARTNER POR FILTRO (5 FILTROS)
 	public List get_businesspartner(BusinesspartnerInTO parameters){
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -86,7 +87,7 @@ public class BusinesspartnerDAO extends CommonDAO{
 		return _return;
 	}
 	
-	//encuentra en catalogo socios por clave
+	//RETORNA DE LA TABLA BUSINEESPARTNER UN REGISTRO POR CLAVE
 	public List get_businesspartnerByKey(BusinesspartnerInTO parameters){
 		List _return = new Vector();
 		List lstResultSet = null;

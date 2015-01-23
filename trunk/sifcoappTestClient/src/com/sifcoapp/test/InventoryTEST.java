@@ -66,6 +66,8 @@ public class InventoryTEST {
 					+ periodo.getDocentry());
 		}
 	}
+	
+	//#########################PRUEBAS DE TABLAS GOODSISSUES AND 
 	public static void getGoodreceipt() {
 
 		List lstPeriods = new Vector();

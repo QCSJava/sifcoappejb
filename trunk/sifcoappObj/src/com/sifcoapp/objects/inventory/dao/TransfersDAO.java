@@ -10,7 +10,7 @@ import java.util.Vector;
 
 public class TransfersDAO extends CommonDAO{
 	
-	//Retorna de transfers registros por filtro
+	//RETORNA REGISTROS DE LA TABLA TRANSFERS POR TRES TIPOS DE FILTO: DOCDATE, DOCNUM Y SERIES
 	public List getTransfers(TransfersInTO param) {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -70,7 +70,7 @@ public class TransfersDAO extends CommonDAO{
 		return _return;
 	}
 	
-	//busca elemento en tabla transfers por clave
+	//RETORNA UN REGISTRO DE LA TABLA TRANSFERS CON SUS HIJAS DE LA TABLA TRANSFERSDETAIL
 	public TransfersTO getTransfersByKey(int docentry) {
 		TransfersTO _return = new TransfersTO();
 		List lstResultSet = null;
@@ -119,7 +119,7 @@ public class TransfersDAO extends CommonDAO{
 		}
 		return _return;
 	}
-//mantenimiento de la tabla goodsissues
+//#############################CRUD DE LA TABLA TRANSFERS###############################
 	public int inv_transfers_mtto(TransfersTO parameters,int accion){
 		List v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissues_mtto  (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");

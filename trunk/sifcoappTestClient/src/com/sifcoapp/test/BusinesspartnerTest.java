@@ -54,7 +54,7 @@ public class BusinesspartnerTest {
 
 		List lstPeriods = new Vector();
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
-		//nuevo.setCardcode("T");
+		nuevo.setCardcode("T");
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
 		lstPeriods = catalog.get_businesspartnerBykey(nuevo);
@@ -65,6 +65,19 @@ public class BusinesspartnerTest {
 					+ periodo.getNit() + " - "
 					+ periodo.getAddid());
 		}
+	}
+	
+	public static void businesspartner_mtto(){
+		int resp;
+		BusinesspartnerTO bus= new BusinesspartnerTO();
+		bus.setCardcode("prueba3");
+		bus.setCardname("testeo");
+		bus.setGroupcode(26);
+		
+		resp= catalog.cat_bpa_businesspartner_mtto(bus,3);
+		System.out.println(resp);
+		
+		
 	}
 
 }
