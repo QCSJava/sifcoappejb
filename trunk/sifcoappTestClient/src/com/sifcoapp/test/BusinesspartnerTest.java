@@ -49,16 +49,28 @@ public class BusinesspartnerTest {
 		}
 	}
 	
+	//################################ PRUEBAS DE TABLA BUSINESSPARTNER########################################
 	
+	//##### PARA PROBAR LA BUSQUEDA POR KEY Y POR FILTRO########### (CAMBIAR EL METODO)#####
 	public static void getBuss() {
 
-		List lstPeriods = new Vector();
+		BusinesspartnerTO lstPeriods= new BusinesspartnerTO();
+		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
+	 List lstPeriods3 = new Vector();
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
-		nuevo.setCardcode("T");
+		nuevo.setCardname("PRUEBA");
+		
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
+		/*
+		String nuevo="T";
 		lstPeriods = catalog.get_businesspartnerBykey(nuevo);
-		Iterator<BusinesspartnerTO> iterator = lstPeriods.iterator();
+		System.out.println(lstPeriods.getGroupcode()+ " - "
+				+ lstPeriods.getNit() + " - "
+				+ lstPeriods.getAddid());
+		/**/
+		lstPeriods3 = catalog.get_businesspartner(nuevo);
+		Iterator<BusinesspartnerTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
 			BusinesspartnerTO periodo = (BusinesspartnerTO) iterator.next();
 			System.out.println(periodo.getGroupcode()+ " - "

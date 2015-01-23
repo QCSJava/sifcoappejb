@@ -34,9 +34,9 @@ public class CatalogEJB implements CatalogEJBRemote {
 		return _return;
 	}
 
-	public List get_businesspartnerBykey(BusinesspartnerInTO parameters) {
+	public BusinesspartnerTO get_businesspartnerBykey(String parameters) {
 		// TODO Auto-generated method stub
-		List _return = new Vector();
+		BusinesspartnerTO _return = new BusinesspartnerTO();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
 		_return = DAO.get_businesspartnerByKey(parameters);
 
