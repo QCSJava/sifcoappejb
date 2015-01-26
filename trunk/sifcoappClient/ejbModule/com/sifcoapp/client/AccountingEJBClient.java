@@ -77,4 +77,25 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		return acc;
 	}
 
+	public List getAccountByFilter(String acctcode, String acctname) {
+		// TODO Auto-generated method stub
+		List account = new Vector();
+		account = bean.getAccountByFilter(acctcode, acctname);
+		return account;
+	}
+
+	public AccountTO getAccountByKey(String acctcode) {
+		// TODO Auto-generated method stub
+		AccountTO _return= new AccountTO();
+		_return= bean.getAccountByKey(acctcode);
+		return _return;
+	}
+
+	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) {
+		// TODO Auto-generated method stub
+		int _return=0;
+		_return= bean.cat_acc0_ACCOUNT_mtto(parameters, action);
+		return _return;
+	}
+
 }

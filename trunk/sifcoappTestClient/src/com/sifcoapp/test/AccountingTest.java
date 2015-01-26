@@ -177,4 +177,46 @@ public class AccountingTest {
 		System.out.println(acc.getSdfltwt());
 		System.out.println(acc.getPdfltwt());
 	}
+
+
+//################## PRUEBAS DE TABLA ACCOUNT  ############################
+public static void getAccountByFilter() {
+
+	List lstPeriods = new Vector();
+
+	lstPeriods = AccountingEJBService.getAccountByFilter(null,"de");
+
+	Iterator<AccountTO> iterator = lstPeriods.iterator();
+	while (iterator.hasNext()) {
+		System.out.println("entrooo");
+		AccountTO acc = (AccountTO) iterator.next();
+		System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
+	}
+}
+
+public static void getAccountByKey() {
+
+	AccountTO acc = new AccountTO();
+
+	acc = AccountingEJBService.getAccountByKey("101010");
+	
+		System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
+	
+}
+
+public static void cat_Acc0_account_mtto() {
+	int _return=8;
+	AccountTO acc = new AccountTO();
+	acc.setAcctcode("101013");
+	acc.setAcctname("Pasivos Corrientes");
+	acc.setCurrtotal(42.5);
+	acc.setEndtotal(56.2);
+
+	_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 3);
+	
+		System.out.println(_return);
+	
+}
+
+
 }
