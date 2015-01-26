@@ -132,7 +132,7 @@ public class UserDAO extends CommonDAO {
 		return _return;
 	}
 	
-public ProfileOutTO getUsrProfileHeader(String _nickname){
+	public ProfileOutTO getUsrProfileHeader(String _nickname){
 		ProfileOutTO _return = null;
 
 		List lstResultSet = null;
@@ -167,29 +167,10 @@ public ProfileOutTO getUsrProfileHeader(String _nickname){
 				e.printStackTrace();
 			}
 		}
-		
-		
 		return _return;
 		
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	/*
 	 * Obtiene todas las opciones permitidas  para el perfil de usuario
 	 * 
@@ -204,18 +185,12 @@ public ProfileOutTO getUsrProfileHeader(String _nickname){
 		System.out.println("Desde DAO");
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_usr_profile(?)}");
-		this.setInt(1, "_profilecode", _profileCode);
-		
-		
-
-
+		this.setInt(1, "_profilecode", _profileCode);	
 
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
 		ArrayList arr;
-
-
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -224,50 +199,20 @@ public ProfileOutTO getUsrProfileHeader(String _nickname){
 		 //Iterator<CachedRowSetImpl> iterator = lstResultSet.iterator();
 
 		while (liRowset.hasNext()) {
-			
-			//if (liRowset.nextIndex()==1){
-			System.out.println("liRowset.nextIndex()");
-			System.out.println(liRowset.nextIndex());
+
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
-			
-			/*System.out.println("tamanyo");
-		    System.out.println(lstResultSet.size());
-			rowsetActual = (CachedRowSetImpl) lstResultSet.get(1);
-*/
+
 			try {
 				while (rowsetActual.next()) {
-					/*_return.add(new TablesCatalogTO(rowsetActual.getInt(1),
-							rowsetActual.getString(2), rowsetActual
-									.getString(3)));*/
-				/*	System.out.println("profilecode");
 
-					System.out.println(rowsetActual.getInt(1));
-					System.out.println("profiledetcode");
-					System.out.println(rowsetActual.getInt(2));
-					System.out.println("profiledetparent");
-					System.out.println(rowsetActual.getInt(3));
-					System.out.println("profiledetdesc");
-					System.out.println(rowsetActual.getString(4));
-					System.out.println("profiledeturl");
-					System.out.println(rowsetActual.getString(5));
-					System.out.println("profiledeticon");
-					System.out.println(rowsetActual.getString(6));
-					System.out.println("profilename");
-					System.out.println(rowsetActual.getString(7));*/
-					
 					ProfileDetOutTO profileDet=new ProfileDetOutTO();
 					profileDet.setId_perfil_det(rowsetActual.getInt(2));
 					profileDet.setDesc_perfil_det(rowsetActual.getString(4));
-
 					profileDet.setParent_id(rowsetActual.getInt(3));
-					profileDet.setUrl_perfil_det(rowsetActual.getString(5));
-										
-					_values.put(profileDet.getId_perfil_det(), profileDet);
-					
-			
+					profileDet.setUrl_perfil_det(rowsetActual.getString(5));										
+					_values.put(profileDet.getId_perfil_det(), profileDet);						
 				}
-				
-				
+								
 				Enumeration enParameters = _values.keys();
 				ProfileDetOutTO profileDetTmp = null;
 				Integer _position = null;
@@ -282,46 +227,15 @@ public ProfileOutTO getUsrProfileHeader(String _nickname){
 															
 					
 					if (profileDetTmp.getParent_id()==0){
-						
-						System.out.println("Id_perfil_det: " + profileDetTmp.getId_perfil_det());
-						System.out.println("Desc_perfil_det: " + profileDetTmp.getDesc_perfil_det());
-						System.out.println("Parent_id(): " + profileDetTmp.getParent_id());
-											
-						this.filterParent(profileDetTmp, _values, profileDetTmp.getId_perfil_det());
-						
-						_return.add(profileDetTmp);
-					
+						this.filterParent(profileDetTmp, _values, profileDetTmp.getId_perfil_det());						
+						_return.add(profileDetTmp);					
 					}
-					
-					
-				}
-				
-				//partimos de los nodos sin hijos
-				
-				
-				
-				
-				/*
-				TreeMap tm=(TreeMap) rowsetActual.toCollection();
-				//arr=(ArrayList) rowsetActual.toCollection();
-				arr=new ArrayList();
-				int count = arr.size();
-				System.out.println("Count: " + count);
-
-				// Loop through elements.
-				for (int i = 0; i < arr.size(); i++) {
-				    Object value = (Object)arr.get(i);
-				    System.out.println("Element: " + value.toString());
-				}*/
-				
-				
+				}					
 				rowsetActual.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
-			//}
+			}			
 		}
 		return _return;
 	}
@@ -343,28 +257,12 @@ public ProfileOutTO getUsrProfileHeader(String _nickname){
 			
 			profileDetTmp = (ProfileDetOutTO) _allvalues
 					.get(_position);
-							
-					
-			//
 			
-			if (profileDetTmp.getParent_id()==parentFilter){	
-				
-				System.out.println("Id_perfil_det: " + profileDetTmp.getId_perfil_det());
-				System.out.println("Desc_perfil_det: " + profileDetTmp.getDesc_perfil_det());
-				System.out.println("Parent_id(): " + profileDetTmp.getParent_id());
-				
-				this.filterParent(profileDetTmp, _allvalues, profileDetTmp.getId_perfil_det());
-				
+			if (profileDetTmp.getParent_id()==parentFilter){					
+				this.filterParent(profileDetTmp, _allvalues, profileDetTmp.getId_perfil_det());				
 				lstDetProfile.add(profileDetTmp);	
-				
-				
-				
-			}
-			
-		}
-		
+			}			
+		}		
 		parent.setNodeDetail(lstDetProfile);
-		
-		
 	}
 }
