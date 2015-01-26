@@ -72,14 +72,40 @@ public class InventoryTEST {
 
 		List lstPeriods = new Vector();
 		GoodsReceiptInTO nuevo = new GoodsReceiptInTO();
-		nuevo.setDocnum(25);
-		Date fecha= new Date();
+		nuevo.setDocnum(0);
+		nuevo.setComments("N");
+		nuevo.setFromwhscode("R");
+		nuevo.setTowhscode("i");
+		//nuevo.setRef1("E");
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		lstPeriods = Inventory.getGoodsreceipt(nuevo);
 		Iterator<GoodsreceiptTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			GoodsreceiptTO periodo = (GoodsreceiptTO) iterator.next();
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+		}
+	}
+	public static void getGoodsissues() {
+
+		List lstPeriods = new Vector();
+		GoodsissuesInTO nuevo = new GoodsissuesInTO();
+		nuevo.setDocnum(0);
+		nuevo.setComments("ERt");
+		nuevo.setRef1("s");
+		nuevo.setFromwhscode("o");
+		nuevo.setTowhscode("sd");
+		//nuevo.setFromwhscode("R");
+		//nuevo.setTowhscode("E");
+		//nuevo.setRef1("E");
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		lstPeriods = Inventory.getGoodsissues(nuevo);
+		Iterator<GoodsissuesTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			GoodsissuesTO periodo = (GoodsissuesTO) iterator.next();
 			System.out.println(periodo.getDocnum()+ " - "
 					+ periodo.getSeries() + " - "
 					+ periodo.getDocentry());
