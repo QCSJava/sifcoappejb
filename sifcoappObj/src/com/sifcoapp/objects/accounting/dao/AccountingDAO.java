@@ -99,14 +99,11 @@ public class AccountingDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_acc0_account(?,?,?)}");
+		this.setDbObject("{call sp_get_acc0_account(?,?)}");
 		this.setString(1, "_acctcode", acctcode);
 		this.setString(2, "_acctname", acctname);
-
 		lstResultSet = this.runQuery();
-
 		CachedRowSetImpl rowsetActual;
-
 		System.out.println("return psg");
 
 		ListIterator liRowset = null;
@@ -149,6 +146,91 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 	
+	//######### RETORNA REGISTRO DE ACCOUNT POR CLAVE  ############################
+		public AccountTO getAccountByKey(String acctcode) {
+			AccountTO _return = new AccountTO();
+			List lstResultSet = null;
+
+			this.setTypeReturn(Common.TYPERETURN_CURSOR);
+			this.setDbObject("{call sp_get_acc0_account_by_key(?)}");
+			this.setString(1, "_acctcode", acctcode);
+
+			lstResultSet = this.runQuery();
+
+			CachedRowSetImpl rowsetActual;
+
+			System.out.println("return psg");
+
+			ListIterator liRowset = null;
+			liRowset = lstResultSet.listIterator();
+
+			while (liRowset.hasNext()) {
+				rowsetActual = (CachedRowSetImpl) liRowset.next();
+				try {
+					while (rowsetActual.next()) {
+						AccountTO account = new AccountTO();
+						account.setAcctcode(rowsetActual.getString(1));
+						account.setAcctname(rowsetActual.getString(2));
+						account.setCurrtotal(rowsetActual.getDouble(3));
+						account.setEndtotal(rowsetActual.getDouble(4));
+						account.setFinanse(rowsetActual.getString(5));
+						account.setBudget(rowsetActual.getString(6));
+						account.setPostable(rowsetActual.getString(7));
+						account.setLevels(rowsetActual.getInt(8));
+						account.setGrpline(rowsetActual.getInt(9));
+						account.setFathernum(rowsetActual.getString(10));
+						account.setGroupmask(rowsetActual.getInt(11));
+						account.setIntrmatch(rowsetActual.getInt(12));
+						account.setActtype(rowsetActual.getString(13));
+						account.setProtected1(rowsetActual.getString(14));
+						account.setCreatedate(rowsetActual.getDate(15));
+						account.setUpdatedate(rowsetActual.getDate(16));
+						account.setUsersign(rowsetActual.getInt(17));
+						account.setObjtype(rowsetActual.getString(18));
+						account.setValidfor(rowsetActual.getString(19));
+						account.setFormatcode(rowsetActual.getString(20));
+						_return=account;
+					}
+					rowsetActual.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return _return;
+		}
+	
+	//#####################  MANTEMINIENTO DE LA TABLA ACCOUNT ############################
+		public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) {
+
+			int v_resp = 0;
+			// this.setDbObject("{call sp_cat_acc_period(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+			this.setDbObject("{call sp_acc0_account_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+			this.setString(1,"_acctcode", parameters.getAcctcode());
+			this.setString(2,"_acctname", parameters.getAcctname());
+			this.setDouble(3,"_currtotal", new Double(parameters.getCurrtotal()));
+			this.setDouble(4,"_endtotal", new Double(parameters.getEndtotal()));
+			this.setString(5,"_finanse", parameters.getFinanse());
+			this.setString(6,"_budget", parameters.getBudget());
+			this.setString(7,"_postable", parameters.getPostable());
+			this.setInt(8,"_levels", new Integer(parameters.getLevels()));
+			this.setInt(9,"_grpline", new Integer(parameters.getGrpline()));
+			this.setString(10,"_fathernum", parameters.getFathernum());
+			this.setInt(11,"_groupmask", new Integer(parameters.getGroupmask()));
+			this.setInt(12,"_intrmatch", new Integer(parameters.getIntrmatch()));
+			this.setString(13,"_acttype", parameters.getActtype());
+			this.setString(14,"_protected", parameters.getProtected1());
+			this.setInt(15,"_usersign", new Integer(parameters.getUsersign()));
+			this.setString(16,"_objtype", parameters.getObjtype());
+			this.setString(17,"_validfor", parameters.getValidfor());
+			this.setString(18,"_formatcode", parameters.getFormatcode());
+			this.setInt(19, "_action", new Integer(action));
+
+			v_resp = this.runUpdate();
+
+			return v_resp;
+		}
+		
 	public List getAccPeriods() {
 		List _return = new Vector();
 		List lstResultSet = null;

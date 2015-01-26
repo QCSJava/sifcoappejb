@@ -113,5 +113,29 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public List getAccountByFilter(String acctcode, String acctname) {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		AccountingDAO DAO = new AccountingDAO();
+		_return= DAO.getAccountByFilter(acctcode, acctname);
+		return _return;
+	}
+
+	public AccountTO getAccountByKey(String acctcode) {
+		// TODO Auto-generated method stub
+		AccountTO acc= new AccountTO();
+		AccountingDAO DAO= new AccountingDAO();
+		acc = DAO.getAccountByKey(acctcode);
+		return acc;
+	}
+
+	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) {
+		// TODO Auto-generated method stub
+		int _return=0;
+		AccountingDAO DAO= new AccountingDAO();
+		_return= DAO.cat_acc0_ACCOUNT_mtto(parameters, action);
+		return _return;
+	}
+
 	
 }

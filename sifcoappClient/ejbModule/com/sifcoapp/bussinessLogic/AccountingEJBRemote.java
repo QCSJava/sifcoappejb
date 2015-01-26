@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
+import com.sifcoapp.objects.accounting.to.AccountTO;
 
 @Remote
 public interface AccountingEJBRemote {
@@ -19,5 +20,10 @@ public interface AccountingEJBRemote {
 	
 	public List getAccount(int type);
 	
+	public List getAccountByFilter(String acctcode,String acctname);
+	
+	public AccountTO getAccountByKey(String acctcode);
+	
+	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action);
 	
 }
