@@ -4,7 +4,6 @@ import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
