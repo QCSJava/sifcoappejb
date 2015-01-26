@@ -20,6 +20,14 @@ public class TransfersInTO extends CommonTO{
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public TransfersInTO(int docnum, Date docdate, int series) {
+		super();
+		this.docnum = docnum;
+		this.docdate = docdate;
+		this.series = series;
+	}
+
 	public int getDocnum() {
 		return docnum;
 	}
