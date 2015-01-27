@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import com.sifcoapp.client.InventoryEJBClient;
-import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
-import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.inventory.to.*;
 public class InventoryTEST {
 	
@@ -193,23 +191,25 @@ public class InventoryTEST {
 		document.setItemcode("ART-001");
 		document.setDscription("Articulo de prueba");
 		document.setQuantity(10.25);
-		//document.setOpenqty(10.25);
+		document.setOpenqty(1.56);
 		document.setPrice(11.25);
-		//document.setLinetotal(100.00);
+		document.setLinetotal(5.6);
 		prueba.add(document);
 		//document1.setDocentry(1);
 		document1.setLinenum(6);
 		document1.setItemcode("ART-001");
 		document1.setDscription("Articulo de prueba");
 		document1.setQuantity(10.25);
-		//document1.setOpenqty(10.25);
+		document1.setOpenqty(15.56);
 		document1.setPrice(11.25);
-		//document1.setLinetotal(100.00);
+		document1.setLinetotal(5.6);
 		prueba.add(document1);
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
 		//parameters.setDocentry(26);
-		//parameters.setDoctotal(15.5);
+		parameters.setDoctotal(3.6);
+		Date fecha= new Date();
+		parameters.setDocdate(fecha);
 		parameters.setGoodReceiptDetail(prueba);
 		_result = Inventory.inv_GoodsReceipt_mtto(parameters,1);
 

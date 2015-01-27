@@ -130,14 +130,26 @@ public class GoodsIssuesDAO extends CommonDAO{
 		List v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissues_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_inv_gis0_goodsissues_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		if (parameters.getDocdate() == null){
+			this.setDate(8,"_docdate", parameters.getDocdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getDocdate().getTime());
+			this.setDate(8,"_docdate", fecha);
+		}
+		if (parameters.getDocduedate() == null){
+			this.setDate(9,"_docduedate", parameters.getDocduedate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getDocduedate().getTime());
+			this.setDate(9,"_docduedate", fecha);
+		}
 		this.setInt(2,"_docentry", new Integer(parameters.getDocentry()));
 		this.setInt(3,"_docnum", new Integer(parameters.getDocnum()));
 		this.setString(4,"_doctype", parameters.getDoctype());
 		this.setString(5,"_canceled", parameters.getCanceled());
 		this.setString(6,"_docstatus", parameters.getDocstatus());
 		this.setString(7,"_objtype", parameters.getObjtype());
-		this.setDate(8,"_docdate", parameters.getDocdate());
-		this.setDate(9,"_docduedate", parameters.getDocduedate());
 		this.setDouble(10,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(11,"_ref1", parameters.getRef1());
 		this.setString(12,"_comments", parameters.getComments());
