@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.Stateless;
+
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.inventory.dao.*;
 import com.sifcoapp.objects.inventory.to.*;
@@ -34,7 +35,16 @@ public class InventoryEJB implements InventoryEJBRemote {
 	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int action) {
 		// TODO Auto-generated method stub
 		int _return = 5;
+		Double total=0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
+		@SuppressWarnings("unchecked")
+		Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail().iterator();
+		while (iterator2.hasNext()) {
+			GoodsIssuesDetailTO articleDetalle = (GoodsIssuesDetailTO) iterator2.next();
+			articleDetalle.setLinetotal(articleDetalle.getQuantity()*articleDetalle.getPrice());
+			total=total+articleDetalle.getLinetotal();
+		}
+		parameters.setDoctotal(total);
 		_return = DAO.inv_goodsissues_mtto(parameters, action);
 		
 		Iterator<GoodsIssuesDetailTO> iterator = parameters.getGoodIssuesDetail().iterator();
@@ -81,6 +91,15 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// TODO Auto-generated method stub
 		int _return;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		Double total=0.0;
+		@SuppressWarnings("unchecked")
+		Iterator<GoodsReceiptDetailTO> iterator2 = parameters.getGoodReceiptDetail().iterator();
+		while (iterator2.hasNext()) {
+			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2.next();
+			articleDetalle.setLinetotal(articleDetalle.getQuantity()*articleDetalle.getPrice());
+			total=total+articleDetalle.getLinetotal();
+		}
+		parameters.setDoctotal(total);
 		_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
 		
 		Iterator<GoodsReceiptDetailTO> iterator = parameters.getGoodReceiptDetail().iterator();
