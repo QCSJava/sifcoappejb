@@ -42,6 +42,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		while (iterator2.hasNext()) {
 			GoodsIssuesDetailTO articleDetalle = (GoodsIssuesDetailTO) iterator2.next();
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()*articleDetalle.getPrice());
+			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total=total+articleDetalle.getLinetotal();
 		}
 		parameters.setDoctotal(total);
@@ -97,6 +98,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		while (iterator2.hasNext()) {
 			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2.next();
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()*articleDetalle.getPrice());
+			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total=total+articleDetalle.getLinetotal();
 		}
 		parameters.setDoctotal(total);
@@ -107,6 +109,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator.next();
 			// Para articulos nuevos
 			GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO();
+			detalleReceipt.setDocentry(_return);
 			if (action == Common.MTTOINSERT) {
 				goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,Common.MTTOINSERT);
 			}

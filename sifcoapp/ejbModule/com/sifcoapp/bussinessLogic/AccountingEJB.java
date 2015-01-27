@@ -137,5 +137,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public List getTreeAccount() {
+		// TODO Auto-generated method stub
+		List _return= new Vector();
+		AccountingDAO DAO= new AccountingDAO();
+		_return=DAO.getTreeAccount();
+		return _return;
+	}
+
 	
 }

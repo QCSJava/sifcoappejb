@@ -188,27 +188,27 @@ public class InventoryTEST {
 		List prueba = new Vector();
 		GoodsReceiptDetailTO document1 = new GoodsReceiptDetailTO();
 		
-		document.setDocentry(1);
-		document.setLinenum(1);
+		//document.setDocentry(1);
+		document.setLinenum(5);
 		document.setItemcode("ART-001");
 		document.setDscription("Articulo de prueba");
 		document.setQuantity(10.25);
-		document.setOpenqty(10.25);
+		//document.setOpenqty(10.25);
 		document.setPrice(11.25);
-		document.setLinetotal(100.00);
+		//document.setLinetotal(100.00);
 		prueba.add(document);
-		document1.setDocentry(1);
-		document1.setLinenum(2);
+		//document1.setDocentry(1);
+		document1.setLinenum(6);
 		document1.setItemcode("ART-001");
 		document1.setDscription("Articulo de prueba");
 		document1.setQuantity(10.25);
-		document1.setOpenqty(10.25);
+		//document1.setOpenqty(10.25);
 		document1.setPrice(11.25);
-		document1.setLinetotal(100.00);
+		//document1.setLinetotal(100.00);
 		prueba.add(document1);
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
-		parameters.setDocentry(26);
+		//parameters.setDocentry(26);
 		//parameters.setDoctotal(15.5);
 		parameters.setGoodReceiptDetail(prueba);
 		_result = Inventory.inv_GoodsReceipt_mtto(parameters,1);
@@ -227,7 +227,7 @@ public class InventoryTEST {
 		GoodsIssuesDetailTO document = new GoodsIssuesDetailTO();
 		GoodsIssuesDetailTO document1 = new GoodsIssuesDetailTO();
 		
-		document.setDocentry(1);
+		//document.setDocentry(1);
 		document.setLinenum(1);
 		document.setItemcode("ART-001");
 		document.setDscription("Articulo de prueba");

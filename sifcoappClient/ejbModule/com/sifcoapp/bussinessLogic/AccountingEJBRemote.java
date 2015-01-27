@@ -26,4 +26,6 @@ public interface AccountingEJBRemote {
 	
 	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action);
 	
+	public List getTreeAccount();
+	
 }
