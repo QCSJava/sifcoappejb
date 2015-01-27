@@ -85,7 +85,19 @@ public class AccountingTest {
 		Iterator<AccountTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			AccountTO acc = (AccountTO) iterator.next();
-			System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
+			System.out.println(acc.getAcctcode() + " - " + acc.getCurrtotal());
+		}
+	}
+	public static void getAccountree() {
+
+		List lstPeriods = new Vector();
+
+		lstPeriods = AccountingEJBService.getTreeAccount();
+
+		Iterator<AccountTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			AccountTO acc = (AccountTO) iterator.next();
+			System.out.println(acc.getAcctcode() + " - " + acc.getCurrtotal());
 		}
 	}
 

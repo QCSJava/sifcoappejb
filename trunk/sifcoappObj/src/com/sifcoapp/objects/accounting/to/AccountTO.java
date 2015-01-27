@@ -3,6 +3,7 @@ package com.sifcoapp.objects.accounting.to;
 import java.sql.Date;
 
 import com.sifcoapp.objects.common.to.CommonTO;
+import java.util.List;
 
 public class AccountTO extends CommonTO {
 
@@ -31,6 +32,37 @@ public class AccountTO extends CommonTO {
 	private String objtype;
 	private String validfor;
 	private String formatcode;
+	private List nodeDetail;
+
+	public AccountTO(String acctcode, String acctname, Double currtotal,
+			Double endtotal, String finanse, String budget, String postable,
+			int levels, int grpline, String fathernum, int groupmask,
+			int intrmatch, String acttype, String protected1, Date createdate,
+			Date updatedate, int usersign, String objtype, String validfor,
+			String formatcode, List nodedetail) {
+		super();
+		this.acctcode = acctcode;
+		this.acctname = acctname;
+		this.currtotal = currtotal;
+		this.endtotal = endtotal;
+		this.finanse = finanse;
+		this.budget = budget;
+		this.postable = postable;
+		this.levels = levels;
+		this.grpline = grpline;
+		this.fathernum = fathernum;
+		this.groupmask = groupmask;
+		this.intrmatch = intrmatch;
+		this.acttype = acttype;
+		this.protected1 = protected1;
+		this.createdate = createdate;
+		this.updatedate = updatedate;
+		this.usersign = usersign;
+		this.objtype = objtype;
+		this.validfor = validfor;
+		this.formatcode = formatcode;
+		this.nodeDetail = nodedetail;
+	}
 
 	public String getAcctcode() {
 		return acctcode;
@@ -197,33 +229,14 @@ public class AccountTO extends CommonTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AccountTO(String acctcode, String acctname, Double currtotal,
-			Double endtotal, String finanse, String budget, String postable,
-			int levels, int grpline, String fathernum, int groupmask,
-			int intrmatch, String acttype, String protected1, Date createdate,
-			Date updatedate, int usersign, String objtype, String validfor,
-			String formatcode) {
-		super();
-		this.acctcode = acctcode;
-		this.acctname = acctname;
-		this.currtotal = currtotal;
-		this.endtotal = endtotal;
-		this.finanse = finanse;
-		this.budget = budget;
-		this.postable = postable;
-		this.levels = levels;
-		this.grpline = grpline;
-		this.fathernum = fathernum;
-		this.groupmask = groupmask;
-		this.intrmatch = intrmatch;
-		this.acttype = acttype;
-		this.protected1 = protected1;
-		this.createdate = createdate;
-		this.updatedate = updatedate;
-		this.usersign = usersign;
-		this.objtype = objtype;
-		this.validfor = validfor;
-		this.formatcode = formatcode;
+	public List getNodedetail() {
+		return nodeDetail;
 	}
+
+	public void setNodedetail(List nodedetail) {
+		this.nodeDetail = nodedetail;
+	}
+
+	
 
 }

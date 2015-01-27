@@ -98,4 +98,11 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public List getTreeAccount() {
+		// TODO Auto-generated method stub
+		List account= new Vector();
+		account= bean.getTreeAccount();
+		return account;
+	}
+
 }
