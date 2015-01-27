@@ -1,14 +1,12 @@
 package com.sifcoapp.objects.inventory.dao;
 
 
-import com.sifcoapp.objects.accounting.to.AccPeriodTO;
+
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sun.rowset.CachedRowSetImpl;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -138,14 +136,26 @@ public class GoodsReceiptDAO extends CommonDAO{
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsreceipt_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_inv_gre0_goodsreceipt_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		if (parameters.getDocdate() == null){
+			this.setDate(8,"_docdate", parameters.getDocdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getDocdate().getTime());
+			this.setDate(8,"_docdate", fecha);
+		}
+		if (parameters.getDocduedate() == null){
+			this.setDate(9,"_docduedate", parameters.getDocduedate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getDocduedate().getTime());
+			this.setDate(9,"_docduedate", fecha);
+		}
 		this.setInt(2,"_docentry", new Integer(parameters.getDocentry()));
 		this.setInt(3,"_docnum", new Integer(parameters.getDocnum()));
 		this.setString(4,"_doctype", parameters.getDoctype());
 		this.setString(5,"_canceled", parameters.getCanceled());
 		this.setString(6,"_docstatus", parameters.getDocstatus());
-		this.setString(7,"_objtype", parameters.getObjtype());
-		this.setDate(8,"_docdate", parameters.getDocdate());
-		this.setDate(9,"_docduedate", parameters.getDocduedate());
+		this.setString(7,"_objtype", parameters.getObjtype());		
 		this.setDouble(10,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(11,"_ref1", parameters.getRef1());
 		this.setString(12,"_comments", parameters.getComments());
