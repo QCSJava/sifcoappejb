@@ -209,7 +209,7 @@ public class InventoryTEST {
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
 		parameters.setDocentry(26);
-		parameters.setDoctotal(15.5);
+		//parameters.setDoctotal(15.5);
 		parameters.setGoodReceiptDetail(prueba);
 		_result = Inventory.inv_GoodsReceipt_mtto(parameters,1);
 
@@ -248,7 +248,7 @@ public class InventoryTEST {
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
 		parameters.setDocentry(26);
-		parameters.setDoctotal(15.5);
+		//parameters.setDoctotal(15.5);
 		parameters.setGoodIssuesDetail(prueba);
 		_result = Inventory.inv_goodsissues_mtto(parameters,1);
 
