@@ -3,6 +3,7 @@ package com.sifcoapp.bussinessLogic;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
@@ -28,18 +29,28 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List getAccPeriods() {
+	public List getAccPeriods() throws EJBException {
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
-		_return = DAO.getAccPeriods();
+		try {
+			_return = DAO.getAccPeriods();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 	
-	public List getAccount(int type) {
+	public List getAccount(int type) throws EJBException {
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
-		_return = DAO.getAccount(type);
+		try {
+			_return = DAO.getAccount(type);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		/*AccountTO account = new AccountTO();
 		
@@ -60,7 +71,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public int cat_accPeriod_mtto(int parameters, int usersign, int action) {
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action) throws EJBException {
 
 		int _return = 0;
 
@@ -88,7 +99,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 			periodo.setT_refdate(Common.getUltimoDiaDelMes(parameters, i));
 			periodo.setT_taxdate(Common.getUltimoDiaDelMes(parameters, i));
 			periodo.setUsersign(usersign);
-			_return = DAO.cat_accPeriod_mtto(periodo, action);
+			try {
+				_return = DAO.cat_accPeriod_mtto(periodo, action);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		DAO.forceCommit();
@@ -97,53 +113,82 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) {
-		int _return;
+	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)throws EJBException {
+		int _return = 0;
 
 		AccountingDAO DAO = new AccountingDAO();
-		_return = DAO.cat_accAssignment_mtto(parameters, action);
+		try {
+			_return = DAO.cat_accAssignment_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public AccassignmentTO getAccAssignment() {
-		AccassignmentTO _return;
+	public AccassignmentTO getAccAssignment() throws EJBException {
+		AccassignmentTO _return = null;
 
 		AccountingDAO DAO = new AccountingDAO();
-		_return = DAO.getAccAssignment();
+		try {
+			_return = DAO.getAccAssignment();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public List getAccountByFilter(String acctcode, String acctname) {
+	public List getAccountByFilter(String acctcode, String acctname) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
-		_return= DAO.getAccountByFilter(acctcode, acctname);
+		try {
+			_return= DAO.getAccountByFilter(acctcode, acctname);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public AccountTO getAccountByKey(String acctcode) {
+	public AccountTO getAccountByKey(String acctcode)throws EJBException {
 		// TODO Auto-generated method stub
 		AccountTO acc= new AccountTO();
 		AccountingDAO DAO= new AccountingDAO();
-		acc = DAO.getAccountByKey(acctcode);
+		try {
+			acc = DAO.getAccountByKey(acctcode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return acc;
 	}
 
-	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) {
+	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) throws EJBException {
 		// TODO Auto-generated method stub
 		int _return=0;
 		AccountingDAO DAO= new AccountingDAO();
-		_return= DAO.cat_acc0_ACCOUNT_mtto(parameters, action);
+		try {
+			_return= DAO.cat_acc0_ACCOUNT_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public List getTreeAccount() {
+	public List getTreeAccount() throws EJBException {
 		// TODO Auto-generated method stub
 		List _return= new Vector();
 		AccountingDAO DAO= new AccountingDAO();
-		_return=DAO.getTreeAccount();
+		try {
+			_return=DAO.getTreeAccount();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
-
 	
 }

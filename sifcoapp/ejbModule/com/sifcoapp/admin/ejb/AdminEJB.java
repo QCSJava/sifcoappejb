@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
@@ -43,14 +44,20 @@ public class AdminEJB implements AdminEJBRemote {
 	 * com.sifcoapp.admin.ejb.AdminEJBRemote#saveEnterprise(com.sifcoapp.objects
 	 * .admin.to.EnterpriseTO)
 	 */
-	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) {
+	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) throws EJBException {
 
 		EnterpriseOutTO enterpriseOutTO = new EnterpriseOutTO();
 
 		int _return = 0;
 		AdminDAO adminDAO = new AdminDAO();
 
-		_return = adminDAO.updEnterprise(parameters);
+		try {
+			_return = adminDAO.updEnterprise(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			throw (EJBException) new EJBException(e);
+		}
 
 		enterpriseOutTO.setRespCode(_return);
 
@@ -70,7 +77,12 @@ public class AdminEJB implements AdminEJBRemote {
 
 		AdminDAO adminDAO = new AdminDAO();
 
-		enterpriseOutTO = adminDAO.getEnterpriseInfo(enterpriseCode);
+		try {
+			enterpriseOutTO = adminDAO.getEnterpriseInfo(enterpriseCode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return enterpriseOutTO;
 	}
@@ -94,7 +106,12 @@ public class AdminEJB implements AdminEJBRemote {
 
 		AdminDAO adminDAO = new AdminDAO();
 
-		catlgLst = adminDAO.findCatalog(nameCatalog);
+		try {
+			catlgLst = adminDAO.findCatalog(nameCatalog);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return catlgLst;
 	}
@@ -109,7 +126,12 @@ public class AdminEJB implements AdminEJBRemote {
 
 		AdminDAO adminDAO = new AdminDAO();
 
-		_return = adminDAO.getTablesCatalog();
+		try {
+			_return = adminDAO.getTablesCatalog();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
@@ -119,10 +141,15 @@ public class AdminEJB implements AdminEJBRemote {
 	 */
 	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) {
 
-		int _return;
+		int _return=0;
 
 		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.cat_tab1_catalogos_mtto(parameters, action);
+		try {
+			_return = adminDAO.cat_tab1_catalogos_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
@@ -132,16 +159,18 @@ public class AdminEJB implements AdminEJBRemote {
 	 */
 	public int cat_articles_mtto(ArticlesTO parameters, int action) {
 
-		int _return;
+		int _return = 0;
 
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
-
+		try {
 		while (iterator.hasNext()) {
 			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
 			// Para articulos nuevos
 			AdminDAO adminDAO1 = new AdminDAO();
 			if (action == Common.MTTOINSERT && branch.isIsasociated()) {
-				adminDAO1.cat_brancharticles_mtto(branch, action);
+
+					adminDAO1.cat_brancharticles_mtto(branch, action);
+				
 			}
 			if (action == Common.MTTOUPDATE) {
 				if (branch.isIsasociated()) {
@@ -159,7 +188,10 @@ public class AdminEJB implements AdminEJBRemote {
 
 		AdminDAO adminDAO = new AdminDAO();
 		_return = adminDAO.cat_articles_mtto(parameters, action);
-
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
@@ -180,22 +212,32 @@ public class AdminEJB implements AdminEJBRemote {
 
 	public List getArticles(String itemcode, String itemname) {
 
-		List _return;
+		List _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.getArticles(itemcode, itemname);
+		try {
+			_return = adminDAO.getArticles(itemcode, itemname);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 
 	public ArticlesTO getArticlesByKey(String itemcode) {
-		ArticlesTO _return;
+		ArticlesTO _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
 
 		// para el manejo de transacciones
 		adminDAO.setIstransaccional(true);
-		_return = adminDAO.getArticlesByKey(itemcode);
+		try {
+			_return = adminDAO.getArticlesByKey(itemcode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// adminDAO.forceCommit();
 		adminDAO.forceCloseConnection();
@@ -208,10 +250,15 @@ public class AdminEJB implements AdminEJBRemote {
 	 */
 	public int cat_branch_mtto(BranchTO parameters, int action) {
 		// TODO Auto-generated method stub
-		int _return;
+		int _return = 0;
 
 		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.cat_branch_mtto(parameters, action);
+		try {
+			_return = adminDAO.cat_branch_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
@@ -219,20 +266,30 @@ public class AdminEJB implements AdminEJBRemote {
 	public List getBranch(String whscode, String whsname) {
 		// TODO Auto-generated method stub
 
-		List _return;
+		List _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.getBranch(whscode, whsname);
+		try {
+			_return = adminDAO.getBranch(whscode, whsname);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 
 	public BranchTO getBranchByKey(String whscode) {
 		// TODO Auto-generated method stub
-		BranchTO _return;
+		BranchTO _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.getBranchByKey(whscode);
+		try {
+			_return = adminDAO.getBranchByKey(whscode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}

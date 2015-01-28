@@ -19,9 +19,14 @@ public class CatalogEJB implements CatalogEJBRemote {
 	public int cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
 			int accion) {
 		// TODO Auto-generated method stub
-		int _return;
+		int _return = 0;
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
-		_return = DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
+		try {
+			_return = DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
@@ -29,7 +34,12 @@ public class CatalogEJB implements CatalogEJBRemote {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
-		_return = DAO.get_businesspartner(parameters);
+		try {
+			_return = DAO.get_businesspartner(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
@@ -38,7 +48,12 @@ public class CatalogEJB implements CatalogEJBRemote {
 		// TODO Auto-generated method stub
 		BusinesspartnerTO _return = new BusinesspartnerTO();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
-		_return = DAO.get_businesspartnerByKey(parameters);
+		try {
+			_return = DAO.get_businesspartnerByKey(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}

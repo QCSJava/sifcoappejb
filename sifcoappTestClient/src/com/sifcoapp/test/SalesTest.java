@@ -12,9 +12,14 @@ public class SalesTest {
 		if 		(SalesEJBService==null)
 			SalesEJBService=new SalesEJBClient();
 		
-		String retorno;
+		String retorno=null;
 		
-		retorno=SalesEJBService.doSales();
+		try {
+			retorno=SalesEJBService.doSales();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println(retorno);
 		

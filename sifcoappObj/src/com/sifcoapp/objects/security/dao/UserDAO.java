@@ -32,7 +32,7 @@ public class UserDAO extends CommonDAO {
 		super();
 	}
 
-	public UserAppOutTO getUserValid(UserAppInTO parameters) {
+	public UserAppOutTO getUserValid(UserAppInTO parameters) throws Exception {
 
 		UserAppOutTO v_return = new UserAppOutTO();
 		List lstResultSets = new Vector();
@@ -53,7 +53,7 @@ public class UserDAO extends CommonDAO {
 
 	}
 
-	public ProfileOutTO getUserProfiles(ProfileInTO parameters) {
+	public ProfileOutTO getUserProfiles(ProfileInTO parameters) throws Exception {
 
 		ProfileOutTO v_return = new ProfileOutTO();
 		List lstResultSets = new Vector();
@@ -73,7 +73,7 @@ public class UserDAO extends CommonDAO {
 
 	}
 
-	public int cat_users_mtto(UserTO parameters, int action) {
+	public int cat_users_mtto(UserTO parameters, int action) throws Exception {
 		int v_resp = 0;
 		// t.setDbObject("{call sp_cat_users_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_cat_users_mtto(?,?,?,?,?,?,?,?,?)}");
@@ -90,7 +90,7 @@ public class UserDAO extends CommonDAO {
 		return v_resp;
 	}
 	
-	public List getUser() {
+	public List getUser() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -132,7 +132,7 @@ public class UserDAO extends CommonDAO {
 		return _return;
 	}
 	
-	public ProfileOutTO getUsrProfileHeader(String _nickname){
+	public ProfileOutTO getUsrProfileHeader(String _nickname)throws Exception {
 		ProfileOutTO _return = null;
 
 		List lstResultSet = null;
@@ -176,7 +176,7 @@ public class UserDAO extends CommonDAO {
 	 * 
 	 * @author Rutilio
 	 */
-	public List getUsrProfileDetail(Integer _profileCode) {
+	public List getUsrProfileDetail(Integer _profileCode) throws Exception {
 
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -244,7 +244,7 @@ public class UserDAO extends CommonDAO {
 	 * de acuerdo a un TO parent,todos los valores del menu y elfiltro setea los nodos hijos
 	 */
 	
-	private void filterParent(ProfileDetOutTO parent, Hashtable _allvalues, int parentFilter){
+	private void filterParent(ProfileDetOutTO parent, Hashtable _allvalues, int parentFilter)throws Exception {
 		
 		Enumeration enParameters = _allvalues.keys();
 		ProfileDetOutTO profileDetTmp = null;

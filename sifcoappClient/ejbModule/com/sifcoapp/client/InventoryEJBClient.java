@@ -18,7 +18,7 @@ import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
 import com.sifcoapp.objects.inventory.to.TransfersInTO;
 import com.sifcoapp.objects.inventory.to.TransfersTO;
 
-public class InventoryEJBClient implements InventoryEJBRemote {
+public class InventoryEJBClient {
 
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/InventoryEJB!com.sifcoapp.bussinessLogic.InventoryEJBRemote";
 	private static InventoryEJBRemote bean;
@@ -36,7 +36,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		}
 	}
 
-	public List getGoodsreceipt(GoodsReceiptInTO param) {
+	public List getGoodsreceipt(GoodsReceiptInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List lstPeriods = new Vector();
 
@@ -45,7 +45,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstPeriods;
 	}
 
-	public List getGoodsissues(GoodsissuesInTO param) {
+	public List getGoodsissues(GoodsissuesInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List lstPeriods = new Vector();
 
@@ -54,14 +54,14 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstPeriods;
 	}
 
-	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) {
+	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) throws Exception {
 		// TODO Auto-generated method stub
 		int lstVector;
 		lstVector = bean.inv_goodsissues_mtto(parameters, accion);
 		return lstVector;
 	}
 
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion) {
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion) throws Exception {
 		// TODO Auto-generated method stub
 		int _return;
 
@@ -71,7 +71,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 	}
 
 	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,
-			int accion) {
+			int accion) throws Exception {
 		// TODO Auto-generated method stub
 		int _return = 0;
 
@@ -81,7 +81,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 	}
 
 	public int inv_goodsReceiptDetail_mtto(GoodsReceiptDetailTO parameters,
-			int accion) {
+			int accion) throws Exception {
 		// TODO Auto-generated method stub
 		int _return = 0;
 
@@ -90,7 +90,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public List getGoodsIssuesDetail(int docentry) {
+	public List getGoodsIssuesDetail(int docentry)throws Exception {
 		// TODO Auto-generated method stub
 		List lstVector = new Vector();
 
@@ -99,7 +99,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstVector;
 	}
 
-	public List getGoodsReceiptDetail(int docentry) {
+	public List getGoodsReceiptDetail(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		List lstVector = new Vector();
 
@@ -108,20 +108,20 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstVector;
 	}
 	
-	public GoodsissuesTO getGoodsissuesByKey(int docentry) {
+	public GoodsissuesTO getGoodsissuesByKey(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		GoodsissuesTO lstPeriods = new GoodsissuesTO();
 		lstPeriods = bean.getGoodsissuesByKey(docentry);
 		return lstPeriods;
 	}
-	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) {
+	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		GoodsreceiptTO lstPeriods = new GoodsreceiptTO();
 		lstPeriods = bean.getGoodsReceiptByKey(docentry);
 		return lstPeriods;
 	}
 
-	public List getTransfers(TransfersInTO param) {
+	public List getTransfers(TransfersInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List lstPeriods = new Vector();
 
@@ -130,21 +130,21 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstPeriods;
 	}
 
-	public TransfersTO getTransfersByKey(int docentry) {
+	public TransfersTO getTransfersByKey(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		TransfersTO lstPeriods = new TransfersTO();
 		lstPeriods = bean.getTransfersByKey(docentry);
 		return lstPeriods;
 	}
 
-	public int inv_transfers_mtto(TransfersTO parameters, int accion) {
+	public int inv_transfers_mtto(TransfersTO parameters, int accion) throws Exception {
 		// TODO Auto-generated method stub
 		int lstVector;
 		lstVector = bean.inv_transfers_mtto(parameters, accion);
 		return lstVector;
 	}
 
-	public List getTransfersDetail(int docentry) {
+	public List getTransfersDetail(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		List lstVector = new Vector();
 
@@ -153,7 +153,7 @@ public class InventoryEJBClient implements InventoryEJBRemote {
 		return lstVector;
 	}
 
-	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action) {
+	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action) throws Exception {
 		// TODO Auto-generated method stub
 		int _return = 0;
 

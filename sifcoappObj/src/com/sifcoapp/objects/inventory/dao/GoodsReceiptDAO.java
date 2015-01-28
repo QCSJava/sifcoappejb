@@ -7,6 +7,7 @@ import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sun.rowset.CachedRowSetImpl;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -15,7 +16,7 @@ import java.util.Vector;
 
 public class GoodsReceiptDAO extends CommonDAO{
 	
-	public List getGoodsreceipt(GoodsReceiptInTO param){
+	public List getGoodsreceipt(GoodsReceiptInTO param)throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		
@@ -82,7 +83,7 @@ public class GoodsReceiptDAO extends CommonDAO{
 		return _return;
 	}
 	//Retorna elemento goodsreceipt con detalle por clave
-	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) {
+	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) throws Exception {
 		GoodsreceiptTO _return = new GoodsreceiptTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -131,7 +132,7 @@ public class GoodsReceiptDAO extends CommonDAO{
 		return _return;
 	}
 	
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) {
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) throws Exception {
 
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsreceipt_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");

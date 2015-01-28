@@ -176,7 +176,7 @@ public class CommonDAO {
 	/*
 	 * Ejecuta sps de insercion, update o delete
 	 */
-	public int runUpdate() {
+	public int runUpdate() throws Exception {
 
 		CallableStatement statementToExecute = null;
 		int v_result = 0;
@@ -291,7 +291,14 @@ public class CommonDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
+			throw new Exception(e);
+		} catch (Exception ex){
+			ex.printStackTrace();
+			throw new Exception(ex);
+		}
+		finally {
+		
+		
 
 		}
 		return v_result;
@@ -300,7 +307,7 @@ public class CommonDAO {
 	/*
 	 * 
 	 */
-	public List runQuery() {
+	public List runQuery()throws Exception {
 
 		// Primero creamos el prepareStatement
 
@@ -430,7 +437,12 @@ public class CommonDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
+			throw new Exception(e);
+		} catch (Exception ex){
+			ex.printStackTrace();
+			throw new Exception(ex);
+		}
+		finally {
 
 		}
 		return rsDataList;

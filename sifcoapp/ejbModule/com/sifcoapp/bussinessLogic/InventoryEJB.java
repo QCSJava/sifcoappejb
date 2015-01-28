@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.catalogos.Common;
@@ -32,11 +33,13 @@ public class InventoryEJB implements InventoryEJBRemote {
 	 * return _return; }
 	 */
 
-	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int action) {
+	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int action) throws EJBException {
 		// TODO Auto-generated method stub
-		int _return = 5;
+		int _return = 0;
 		Double total=0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
+		try {
+			_return = DAO.inv_goodsissues_mtto(parameters, action);
 		@SuppressWarnings("unchecked")
 		Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail().iterator();
 		while (iterator2.hasNext()) {
@@ -47,6 +50,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		parameters.setDoctotal(total);
 		_return = DAO.inv_goodsissues_mtto(parameters, action);
+		
 		
 		Iterator<GoodsIssuesDetailTO> iterator = parameters.getGoodIssuesDetail().iterator();
 		while (iterator.hasNext()) {
@@ -61,37 +65,52 @@ public class InventoryEJB implements InventoryEJBRemote {
 				goodDAO1.inv_goodsIssuesDetail_mtto(articleDetalle,Common.MTTODELETE);
 			}
 		}
-
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 		
 	}
 
 	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,
-			int accion) {
+			int accion)throws EJBException {
 		// TODO Auto-generated method stub
 		int _return = 0;
 		GoodsissuesDetailDAO DAO = new GoodsissuesDetailDAO();
-		_return = DAO.inv_goodsIssuesDetail_mtto(parameters, accion);
+		try {
+			_return = DAO.inv_goodsIssuesDetail_mtto(parameters, accion);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 
 	}
 
 	public int inv_goodsReceiptDetail_mtto(GoodsReceiptDetailTO parameters,
-			int accion) {
+			int accion)throws EJBException {
 		// TODO Auto-generated method stub
 		int _return = 0;
 		GoodReceiptDetailDAO DAO = new GoodReceiptDetailDAO();
-		_return = DAO.inv_goodReceiptDetail_mtto(parameters, accion);
+		try {
+			_return = DAO.inv_goodReceiptDetail_mtto(parameters, accion);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 
 	}
 
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action) {
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action)throws EJBException {
 		// TODO Auto-generated method stub
-		int _return;
+		int _return = 0;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		try {
+			_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
 		Double total=0.0;
 		@SuppressWarnings("unchecked")
 		Iterator<GoodsReceiptDetailTO> iterator2 = parameters.getGoodReceiptDetail().iterator();
@@ -103,6 +122,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		parameters.setDoctotal(total);
 		_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
+		
 		
 		Iterator<GoodsReceiptDetailTO> iterator = parameters.getGoodReceiptDetail().iterator();
 		while (iterator.hasNext()) {
@@ -118,84 +138,129 @@ public class InventoryEJB implements InventoryEJBRemote {
 			}
 		}
 		
-
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public List getGoodsissues(GoodsissuesInTO param) {
+	public List getGoodsissues(GoodsissuesInTO param)throws EJBException {
 		// TODO Auto-generated method stub GoodsissuesDAO
 		List _return = new Vector();
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
-		_return = DAO.getGoodsissues(param);
+		try {
+			_return = DAO.getGoodsissues(param);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 
-	public List getGoodsIssuesDetail(int docentry) {
+	public List getGoodsIssuesDetail(int docentry)throws EJBException {
 		// TODO Auto-generated method stub GoodsissuesDAO
 		List _return = new Vector();
 		GoodsissuesDetailDAO DAO = new GoodsissuesDetailDAO();
-		_return = DAO.getGoodsIssuesDetail(docentry);
+		try {
+			_return = DAO.getGoodsIssuesDetail(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 
-	public List getGoodsReceiptDetail(int docentry) {
+	public List getGoodsReceiptDetail(int docentry)throws EJBException {
 		// TODO Auto-generated method stub GoodsissuesDAO
 		List _return = new Vector();
 		GoodReceiptDetailDAO DAO = new GoodReceiptDetailDAO();
-		_return = DAO.getGoodReceiptDetail(docentry);
+		try {
+			_return = DAO.getGoodReceiptDetail(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 
-	public List getGoodsreceipt(GoodsReceiptInTO param) {
+	public List getGoodsreceipt(GoodsReceiptInTO param)throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
-		_return = DAO.getGoodsreceipt(param);
+		try {
+			_return = DAO.getGoodsreceipt(param);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 
-	public GoodsissuesTO getGoodsissuesByKey(int docentry) {
+	public GoodsissuesTO getGoodsissuesByKey(int docentry)throws EJBException {
 		// TODO Auto-generated method stub
-		GoodsissuesTO _return;
+		GoodsissuesTO _return = null;
 		GoodsIssuesDAO GoodDAO=new GoodsIssuesDAO();
-		_return=GoodDAO.getGoodsissuesByKey(docentry);
+		try {
+			_return=GoodDAO.getGoodsissuesByKey(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
-	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) {
+	public GoodsreceiptTO getGoodsReceiptByKey(int docentry)throws EJBException {
 		// TODO Auto-generated method stub
-		GoodsreceiptTO _return;
+		GoodsreceiptTO _return = null;
 		GoodsReceiptDAO GoodDAO=new GoodsReceiptDAO();
-		_return=GoodDAO.getGoodsReceiptByKey(docentry);
+		try {
+			_return=GoodDAO.getGoodsReceiptByKey(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
 	
-	public List getTransfers(TransfersInTO param) {
+	public List getTransfers(TransfersInTO param)throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		TransfersDAO DAO = new TransfersDAO();
-		_return = DAO.getTransfers(param);
+		try {
+			_return = DAO.getTransfers(param);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return _return;
 	}
 
-	public TransfersTO getTransfersByKey(int docentry) {
+	public TransfersTO getTransfersByKey(int docentry)throws EJBException {
 		// TODO Auto-generated method stub
-		TransfersTO _return;
+		TransfersTO _return = null;
 		TransfersDAO TraDAO= new TransfersDAO();
-		_return=TraDAO.getTransfersByKey(docentry);
+		try {
+			_return=TraDAO.getTransfersByKey(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public int inv_transfers_mtto(TransfersTO parameters, int action) {
+	public int inv_transfers_mtto(TransfersTO parameters, int action)throws EJBException {
 		// TODO Auto-generated method stub
-		int _return;
+		int _return = 0;
 		TransfersDAO Trans= new TransfersDAO();
-		_return= Trans.inv_transfers_mtto(parameters, action);
+		try {
+			_return= Trans.inv_transfers_mtto(parameters, action);
+		
 		Iterator<TransfersDetailTO> iterator= parameters.getTransfersDetail().iterator();
 		
 		while(iterator.hasNext()){
@@ -210,22 +275,36 @@ public class InventoryEJB implements InventoryEJBRemote {
 				TransDAO.inv_transfersDetail_mtto(articleDetalle,Common.MTTODELETE);
 			}
 		}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public List getTransfersDetail(int docentry) {
+	public List getTransfersDetail(int docentry)throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		TransfersDetailDAO DAO = new TransfersDetailDAO();
-		_return=DAO.getTransfersDetail(docentry);
+		try {
+			_return=DAO.getTransfersDetail(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 
-	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action) {
+	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action)throws EJBException {
 		// TODO Auto-generated method stub
-		int _return;
+		int _return = 0;
 		TransfersDetailDAO Trans= new TransfersDetailDAO();
-		_return= Trans.inv_transfersDetail_mtto(parameters, action);
+		try {
+			_return= Trans.inv_transfersDetail_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 

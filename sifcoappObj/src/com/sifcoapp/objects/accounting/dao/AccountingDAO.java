@@ -21,7 +21,7 @@ public class AccountingDAO extends CommonDAO {
 	/*
 	 * Mantenimiento de periodos contables
 	 */
-	public int cat_accPeriod_mtto(AccPeriodTO parameters, int action) {
+	public int cat_accPeriod_mtto(AccPeriodTO parameters, int action) throws Exception {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_period_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
@@ -43,7 +43,7 @@ public class AccountingDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public List getTreeAccount() {
+	public List getTreeAccount()throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -118,7 +118,7 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 	
-	public List getAccount(int type) {
+	public List getAccount(int type) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -207,7 +207,7 @@ public class AccountingDAO extends CommonDAO {
 
 	// ######### RETORNA REGISTRO DE ACCOUNT POR FILTROS
 	// ############################
-	public List getAccountByFilter(String acctcode, String acctname) {
+	public List getAccountByFilter(String acctcode, String acctname)throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -261,7 +261,7 @@ public class AccountingDAO extends CommonDAO {
 
 	// ######### RETORNA REGISTRO DE ACCOUNT POR CLAVE
 	// ############################
-	public AccountTO getAccountByKey(String acctcode) {
+	public AccountTO getAccountByKey(String acctcode) throws Exception {
 		AccountTO _return = new AccountTO();
 		List lstResultSet = null;
 
@@ -316,7 +316,7 @@ public class AccountingDAO extends CommonDAO {
 
 	// ##################### MANTEMINIENTO DE LA TABLA ACCOUNT
 	// ############################
-	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) {
+	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) throws Exception {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_period(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
@@ -346,7 +346,7 @@ public class AccountingDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public List getAccPeriods() {
+	public List getAccPeriods() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -389,7 +389,7 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) {
+	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)throws Exception {
 
 		int v_resp = 0;
 		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
@@ -482,7 +482,7 @@ public class AccountingDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public AccassignmentTO getAccAssignment() {
+	public AccassignmentTO getAccAssignment() throws Exception {
 		AccassignmentTO _return = new AccassignmentTO();
 		List lstResultSet = null;
 
@@ -500,7 +500,7 @@ public class AccountingDAO extends CommonDAO {
 
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
-			try {
+			
 				while (rowsetActual.next()) {
 					_return.setAbsentry(rowsetActual.getInt(1));
 					_return.setPeriodcat(rowsetActual.getString(2));
@@ -647,10 +647,7 @@ public class AccountingDAO extends CommonDAO {
 					_return.setPdfltwt(rowsetActual.getString(142));
 				}
 				rowsetActual.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
 		}
 		return _return;
 	}

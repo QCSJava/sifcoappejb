@@ -65,7 +65,12 @@ public class AccountingTest {
 
 		List lstPeriods = new Vector();
 
-		lstPeriods = AccountingEJBService.getAccPeriods();
+		try {
+			lstPeriods = AccountingEJBService.getAccPeriods();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Iterator<AccPeriodTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
@@ -80,7 +85,12 @@ public class AccountingTest {
 
 		List lstPeriods = new Vector();
 
-		lstPeriods = AccountingEJBService.getAccount(2);
+		try {
+			lstPeriods = AccountingEJBService.getAccount(2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Iterator<AccountTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
@@ -92,7 +102,12 @@ public class AccountingTest {
 
 		List lstPeriods = new Vector();
 
-		lstPeriods = AccountingEJBService.getTreeAccount();
+		try {
+			lstPeriods = AccountingEJBService.getTreeAccount();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Iterator<AccountTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
@@ -101,7 +116,7 @@ public class AccountingTest {
 		}
 	}
 
-	public static void accPeridod_mtto() {
+	public static void accPeridod_mtto() throws Exception {
 
 		int _result;
 		int parameters = 2015;
@@ -169,7 +184,7 @@ public class AccountingTest {
 
 	}
 
-	public static void getAccAssignment() {
+	public static void getAccAssignment() throws Exception {
 		AccassignmentTO acc = null;
 
 		acc = AccountingEJBService.getAccAssignment();
@@ -196,7 +211,12 @@ public static void getAccountByFilter() {
 
 	List lstPeriods = new Vector();
 
-	lstPeriods = AccountingEJBService.getAccountByFilter(null,"de");
+	try {
+		lstPeriods = AccountingEJBService.getAccountByFilter(null,"de");
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
 	Iterator<AccountTO> iterator = lstPeriods.iterator();
 	while (iterator.hasNext()) {
@@ -206,7 +226,7 @@ public static void getAccountByFilter() {
 	}
 }
 
-public static void getAccountByKey() {
+public static void getAccountByKey() throws Exception {
 
 	AccountTO acc = new AccountTO();
 
@@ -216,7 +236,7 @@ public static void getAccountByKey() {
 	
 }
 
-public static void cat_Acc0_account_mtto() {
+public static void cat_Acc0_account_mtto() throws Exception {
 	int _return=8;
 	AccountTO acc = new AccountTO();
 	acc.setAcctcode("101013");

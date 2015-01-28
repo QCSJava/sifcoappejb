@@ -77,16 +77,27 @@ public class AdminTest {
 		parameters.setPhone2("2222-3333");
 		parameters.setTaxIdNum("1234-5");
 
-		resp = AdminEJBService.saveEnterprise(parameters);
+		try {
+			resp = AdminEJBService.saveEnterprise(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.out.println("Error EJB" + e.getMessage());
+		}
 
-		System.out.println(resp.getRespCode());
+		//System.out.println(resp.getRespCode());
 
 	}
 
 	public static void getEnterpriseInfo() {
 		EnterpriseTO resp = null;
 
-		resp = AdminEJBService.getEnterpriseInfo();
+		try {
+			resp = AdminEJBService.getEnterpriseInfo();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println(resp.getCompnyName());
 		System.out.println(resp.getCompnyAddr());
@@ -97,7 +108,12 @@ public class AdminTest {
 
 		List catlgLst = null;
 
-		catlgLst = AdminEJBService.findCatalog("paises");
+		try {
+			catlgLst = AdminEJBService.findCatalog("paises");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("luego de servicio mod   ");
 
 		Iterator<CatalogTO> iterator = catlgLst.iterator();
@@ -116,7 +132,12 @@ public class AdminTest {
 
 		List catlgLst = null;
 
-		catlgLst = AdminEJBService.getTablesCatalog();
+		try {
+			catlgLst = AdminEJBService.getTablesCatalog();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("luego de servicio");
 		Iterator<TablesCatalogTO> iterator = catlgLst.iterator();
 		while (iterator.hasNext()) {
@@ -130,7 +151,7 @@ public class AdminTest {
 
 	public static void cat_tab1_catalogos_mtto() {
 
-		int _result;
+		int _result = 0;
 		CatalogTO parameters = new CatalogTO();
 
 		parameters.setTablecode(1);
@@ -149,8 +170,13 @@ public class AdminTest {
 
 		parameters.setCatvalue("Honduras UPD -1");
 
-		_result = AdminEJBService.cat_tab1_catalogos_mtto(parameters,
-				Common.MTTOUPDATE);
+		try {
+			_result = AdminEJBService.cat_tab1_catalogos_mtto(parameters,
+					Common.MTTOUPDATE);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Borrar
 
@@ -164,7 +190,7 @@ public class AdminTest {
 
 	public static void articles_mtto() {
 
-		int _result;
+		int _result = 0;
 		ArticlesTO parameters = new ArticlesTO();
 		parameters.setItemCode("art-005");
 		parameters.setItemName("Nombre Prueba 7");
@@ -200,8 +226,13 @@ public class AdminTest {
 
 		// Agregar
 
-		_result = AdminEJBService.cat_articles_mtto(parameters,
-				Common.MTTOINSERT);
+		try {
+			_result = AdminEJBService.cat_articles_mtto(parameters,
+					Common.MTTOINSERT);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Actualizar
 
@@ -226,7 +257,12 @@ public class AdminTest {
 		String name = null;
 		String code = "art-001";
 
-		resp = AdminEJBService.getArticles(code, name);
+		try {
+			resp = AdminEJBService.getArticles(code, name);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Iterator<ArticlesTO> iterator = resp.iterator();
 		while (iterator.hasNext()) {
@@ -241,7 +277,12 @@ public class AdminTest {
 
 		String code = "art-001";
 
-		article = AdminEJBService.getArticlesByKey(code);
+		try {
+			article = AdminEJBService.getArticlesByKey(code);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println(article.getItemCode() + " - "
 				+ article.getItemName());
@@ -295,7 +336,7 @@ public class AdminTest {
 	
 	public static void brach_mtto() {
 
-		int _result;
+		int _result  =0 ;
 		BranchTO parameters = new BranchTO();
 		parameters.setWhscode("SUC-002");
 		parameters.setWhsname("Sucursal de pruebas");
@@ -317,8 +358,13 @@ public class AdminTest {
 
 		// Actualizar
 
-		 _result=AdminEJBService.cat_branch_mtto(parameters,
-		 Common.MTTOUPDATE);
+		 try {
+			_result=AdminEJBService.cat_branch_mtto(parameters,
+			 Common.MTTOUPDATE);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Borrar
 
@@ -336,7 +382,12 @@ public class AdminTest {
 		String name = null;
 		String code = null;
 
-		resp = AdminEJBService.getBranch(code, name);
+		try {
+			resp = AdminEJBService.getBranch(code, name);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Iterator<BranchTO> iterator = resp.iterator();
 		while (iterator.hasNext()) {
