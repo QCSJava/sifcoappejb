@@ -1,16 +1,13 @@
 package com.sifcoapp.admin.ejb;
 //fyrtyrtyrtyrt
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
-import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
@@ -71,7 +68,7 @@ public class AdminEJB implements AdminEJBRemote {
 	 * com.sifcoapp.admin.ejb.AdminEJBRemote#saveEnterprise(com.sifcoapp.objects
 	 * .admin.to.EnterpriseTO)
 	 */
-	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) {
+	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) throws EJBException{
 
 		EnterpriseTO enterpriseOutTO = null;
 
@@ -81,13 +78,13 @@ public class AdminEJB implements AdminEJBRemote {
 			enterpriseOutTO = adminDAO.getEnterpriseInfo(enterpriseCode);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return enterpriseOutTO;
 	}
 
-	public EnterpriseTO getEnterpriseInfo() {
+	public EnterpriseTO getEnterpriseInfo() throws EJBException{
 		// TODO Auto-generated method stub
 		EnterpriseTO enterpriseOutTO = new EnterpriseTO();
 		enterpriseOutTO = this.getEnterpriseInfo(0);
@@ -99,7 +96,7 @@ public class AdminEJB implements AdminEJBRemote {
 	 * 
 	 * @see com.sifcoapp.admin.ejb.AdminEJBRemote#findCatalog(java.lang.String)
 	 */
-	public List findCatalog(String nameCatalog) {
+	public List findCatalog(String nameCatalog) throws EJBException{
 		// TODO Auto-generated method stub
 		// List catlgLst=new Vector();
 		List catlgLst = null;
@@ -110,7 +107,7 @@ public class AdminEJB implements AdminEJBRemote {
 			catlgLst = adminDAO.findCatalog(nameCatalog);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return catlgLst;
@@ -121,7 +118,7 @@ public class AdminEJB implements AdminEJBRemote {
 	 * 
 	 * @author Rutilio
 	 */
-	public List getTablesCatalog() {
+	public List getTablesCatalog() throws EJBException{
 		List _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
@@ -130,7 +127,7 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.getTablesCatalog();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -139,7 +136,7 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de Catalogos
 	 */
-	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) {
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) throws EJBException{
 
 		int _return=0;
 
@@ -148,7 +145,7 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.cat_tab1_catalogos_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -157,7 +154,7 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public int cat_articles_mtto(ArticlesTO parameters, int action) {
+	public int cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException{
 
 		int _return = 0;
 
@@ -190,7 +187,7 @@ public class AdminEJB implements AdminEJBRemote {
 		_return = adminDAO.cat_articles_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -210,7 +207,7 @@ public class AdminEJB implements AdminEJBRemote {
 	 * return _return; }
 	 */
 
-	public List getArticles(String itemcode, String itemname) {
+	public List getArticles(String itemcode, String itemname) throws EJBException{
 
 		List _return = null;
 
@@ -219,13 +216,13 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.getArticles(itemcode, itemname);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
 	}
 
-	public ArticlesTO getArticlesByKey(String itemcode) {
+	public ArticlesTO getArticlesByKey(String itemcode) throws EJBException{
 		ArticlesTO _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
@@ -236,7 +233,7 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.getArticlesByKey(itemcode);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		// adminDAO.forceCommit();
@@ -248,7 +245,7 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de almacenes
 	 */
-	public int cat_branch_mtto(BranchTO parameters, int action) {
+	public int cat_branch_mtto(BranchTO parameters, int action) throws EJBException{
 		// TODO Auto-generated method stub
 		int _return = 0;
 
@@ -257,13 +254,13 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.cat_branch_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
 	}
 
-	public List getBranch(String whscode, String whsname) {
+	public List getBranch(String whscode, String whsname) throws EJBException{
 		// TODO Auto-generated method stub
 
 		List _return = null;
@@ -273,13 +270,13 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.getBranch(whscode, whsname);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
 	}
 
-	public BranchTO getBranchByKey(String whscode) {
+	public BranchTO getBranchByKey(String whscode) throws EJBException{
 		// TODO Auto-generated method stub
 		BranchTO _return = null;
 
@@ -288,7 +285,7 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.getBranchByKey(whscode);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;

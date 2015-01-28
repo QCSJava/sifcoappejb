@@ -3,6 +3,7 @@ package com.sifcoapp.bussinessLogic;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
@@ -17,7 +18,7 @@ public class CatalogEJB implements CatalogEJBRemote {
 	}
 
 	public int cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
-			int accion) {
+			int accion) throws EJBException{
 		// TODO Auto-generated method stub
 		int _return = 0;
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
@@ -25,12 +26,12 @@ public class CatalogEJB implements CatalogEJBRemote {
 			_return = DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
 
-	public List get_businesspartner(BusinesspartnerInTO parameters) {
+	public List get_businesspartner(BusinesspartnerInTO parameters) throws EJBException{
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
@@ -38,13 +39,13 @@ public class CatalogEJB implements CatalogEJBRemote {
 			_return = DAO.get_businesspartner(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
 	}
 
-	public BusinesspartnerTO get_businesspartnerBykey(String parameters) {
+	public BusinesspartnerTO get_businesspartnerBykey(String parameters) throws EJBException{
 		// TODO Auto-generated method stub
 		BusinesspartnerTO _return = new BusinesspartnerTO();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
@@ -52,7 +53,7 @@ public class CatalogEJB implements CatalogEJBRemote {
 			_return = DAO.get_businesspartnerByKey(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;

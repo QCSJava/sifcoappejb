@@ -500,7 +500,7 @@ public class AccountingDAO extends CommonDAO {
 
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
-			
+			try{
 				while (rowsetActual.next()) {
 					_return.setAbsentry(rowsetActual.getInt(1));
 					_return.setPeriodcat(rowsetActual.getString(2));
@@ -647,7 +647,10 @@ public class AccountingDAO extends CommonDAO {
 					_return.setPdfltwt(rowsetActual.getString(142));
 				}
 				rowsetActual.close();
-		
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return _return;
 	}

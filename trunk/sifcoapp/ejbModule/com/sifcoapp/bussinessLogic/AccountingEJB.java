@@ -36,7 +36,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			_return = DAO.getAccPeriods();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -49,7 +49,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			_return = DAO.getAccount(type);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		
 		/*AccountTO account = new AccountTO();
@@ -103,7 +103,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				_return = DAO.cat_accPeriod_mtto(periodo, action);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw (EJBException) new EJBException(e);
 			}
 		}
 		
@@ -121,7 +121,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			_return = DAO.cat_accAssignment_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -134,7 +134,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			_return = DAO.getAccAssignment();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -147,7 +147,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			_return= DAO.getAccountByFilter(acctcode, acctname);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -160,7 +160,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			acc = DAO.getAccountByKey(acctcode);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return acc;
 	}
@@ -173,7 +173,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			_return= DAO.cat_acc0_ACCOUNT_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -186,7 +186,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			_return=DAO.getTreeAccount();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
