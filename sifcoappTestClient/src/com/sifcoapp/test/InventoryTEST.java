@@ -227,9 +227,9 @@ public class InventoryTEST {
 		document.setItemcode("ART-001");
 		document.setDscription("Articulo de prueba");
 		document.setQuantity(10.25);
-		document.setOpenqty(1.56);
+		//document.setOpenqty(1.56);
 		document.setPrice(11.25);
-		document.setLinetotal(5.6);
+		//document.setLinetotal(5.6);
 		prueba.add(document);
 		//document1.setDocentry(1);
 		document1.setLinenum(6);

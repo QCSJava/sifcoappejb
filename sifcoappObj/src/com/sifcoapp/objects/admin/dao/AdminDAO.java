@@ -77,7 +77,7 @@ public class AdminDAO extends CommonDAO {
 	public int updEnterprise(EnterpriseTO parameters) throws Exception {
 
 		int v_resp = 0;
-
+		
 		this.setDbObject("{call sp_upd_enterprise33(?,?,?,?,?,?,?,?,?,?)}");
 
 		this.setString(1, "_name", parameters.getCompnyName());

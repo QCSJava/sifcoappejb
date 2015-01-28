@@ -67,7 +67,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 		
@@ -82,7 +82,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return = DAO.inv_goodsIssuesDetail_mtto(parameters, accion);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -98,7 +98,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return = DAO.inv_goodReceiptDetail_mtto(parameters, accion);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -140,7 +140,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -153,7 +153,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return = DAO.getGoodsissues(param);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -167,7 +167,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return = DAO.getGoodsIssuesDetail(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -181,7 +181,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return = DAO.getGoodReceiptDetail(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -195,7 +195,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return = DAO.getGoodsreceipt(param);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -209,7 +209,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return=GoodDAO.getGoodsissuesByKey(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -221,7 +221,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return=GoodDAO.getGoodsReceiptByKey(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -235,7 +235,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return = DAO.getTransfers(param);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -249,7 +249,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return=TraDAO.getTransfersByKey(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -277,7 +277,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -290,7 +290,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return=DAO.getTransfersDetail(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
@@ -303,7 +303,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return= Trans.inv_transfersDetail_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		return _return;
 	}
