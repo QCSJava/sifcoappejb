@@ -35,9 +35,10 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int action) throws EJBException {
 		// TODO Auto-generated method stub
-		int _return = 0;
+		int _return;
 		Double total=0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
+		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
 		try {
 		Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail().iterator();
 		while (iterator2.hasNext()) {
@@ -54,7 +55,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		while (iterator.hasNext()) {
 			GoodsIssuesDetailTO articleDetalle = (GoodsIssuesDetailTO) iterator.next();
 			// Para articulos nuevos
-			GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
+			System.out.println(""+_return+"");
 			articleDetalle.setDocentry(_return);
 			if (action == Common.MTTOINSERT) {
 				goodDAO1.inv_goodsIssuesDetail_mtto(articleDetalle,Common.MTTOINSERT);
@@ -105,7 +106,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action)throws EJBException {
 		// TODO Auto-generated method stub
-		int _return = 0;
+		int _return;
 		Double total=0.00;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		try {
