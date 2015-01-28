@@ -8,15 +8,7 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.bussinessLogic.InventoryEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
-import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
-import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
-import com.sifcoapp.objects.inventory.to.TransfersInTO;
-import com.sifcoapp.objects.inventory.to.TransfersTO;
+import com.sifcoapp.objects.inventory.to.*;
 
 public class InventoryEJBClient {
 
