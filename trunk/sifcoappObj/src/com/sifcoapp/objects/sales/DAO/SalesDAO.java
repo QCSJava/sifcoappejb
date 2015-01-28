@@ -51,28 +51,53 @@ public class SalesDAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					GoodsreceiptTO docu = new GoodsreceiptTO();
-					docu.setDocentry(rowsetActual.getInt(1));
-					docu.setDocnum(rowsetActual.getInt(2));
-					docu.setDoctype(rowsetActual.getString(3));
-					docu.setCanceled(rowsetActual.getString(4));
-					docu.setDocstatus(rowsetActual.getString(5));
-					docu.setObjtype(rowsetActual.getString(6));
-					docu.setDocdate(rowsetActual.getDate(7));
-					docu.setDocduedate(rowsetActual.getDate(8));
-					docu.setDoctotal(rowsetActual.getDouble(9));
-					docu.setRef1(rowsetActual.getString(10));
-					docu.setComments(rowsetActual.getString(11));
-					docu.setJrnlmemo(rowsetActual.getString(12));
-					docu.setTransid(rowsetActual.getInt(13));
-					docu.setSeries(rowsetActual.getInt(14));
-					docu.setTowhscode(rowsetActual.getString(15));
-					docu.setFromwhscode(rowsetActual.getString(16));
-					docu.setConfirmed(rowsetActual.getString(17));
-					docu.setUsersign(rowsetActual.getInt(18));
-					docu.setCreatedate(rowsetActual.getDate(19));
-					docu.setCreatetime(rowsetActual.getInt(20));
-					_return.add(docu);
+					SalesTO sales = new SalesTO();
+					sales.setDocentry(rowsetActual.getInt(1));
+					sales.setDocnum(rowsetActual.getInt(2));
+					sales.setDoctype(rowsetActual.getString(3));
+					sales.setCanceled(rowsetActual.getString(4));
+					sales.setDocstatus(rowsetActual.getString(5));
+					sales.setObjtype(rowsetActual.getString(6));
+					sales.setDocdate(rowsetActual.getDate(7));
+					sales.setDocduedate(rowsetActual.getDate(8));
+					sales.setCardcode(rowsetActual.getString(9));
+					sales.setNumatcard(rowsetActual.getString(10));
+					sales.setCardname(rowsetActual.getString(11));
+					sales.setVatsum(rowsetActual.getString(12));
+					sales.setDiscsum(rowsetActual.getDouble(13));
+					sales.setDoctotal(rowsetActual.getDouble(14));
+					sales.setRef1(rowsetActual.getString(15));
+					sales.setRef2(rowsetActual.getString(16));
+					sales.setComments(rowsetActual.getString(17));
+					sales.setJrnlmemo(rowsetActual.getString(18));
+					sales.setPaidtodate(rowsetActual.getDate(19));
+					sales.setTransid(rowsetActual.getInt(20));
+					sales.setReceiptnum(rowsetActual.getInt(21));
+					sales.setGroupnum(rowsetActual.getInt(22));
+					sales.setConfirmed(rowsetActual.getString(23));
+					sales.setCreatetran(rowsetActual.getString(24));
+					sales.setSeries(rowsetActual.getInt(25));
+					sales.setTaxdate(rowsetActual.getDate(26));
+					sales.setFiller(rowsetActual.getString(27));
+					sales.setRounddif(rowsetActual.getDouble(28));
+					sales.setRounding(rowsetActual.getString(29));
+					sales.setCanceldate(rowsetActual.getDate(30));
+					sales.setPeymethod(rowsetActual.getString(31));
+					sales.setCtlaccount(rowsetActual.getString(32));
+					sales.setBplname(rowsetActual.getString(33));
+					sales.setVatregnum(rowsetActual.getString(34));
+					sales.setPaidsum(rowsetActual.getDouble(35));
+					sales.setTowhscode(rowsetActual.getString(36));
+					sales.setNret(rowsetActual.getDouble(37));
+					sales.setNamenp(rowsetActual.getString(38));
+					sales.setQuedan(rowsetActual.getInt(39));
+					sales.setFechreciva(rowsetActual.getDate(40));
+					sales.setFquedan(rowsetActual.getDate(41));
+					sales.setUsersign(rowsetActual.getInt(42));
+					sales.setCreatedate(rowsetActual.getDate(43));
+					sales.setCreatetime(rowsetActual.getInt(43));
+
+					_return.add(sales);
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -155,7 +180,7 @@ public class SalesDAO extends CommonDAO{
 	}
 	
 	public int inv_Sales_mtto(SalesTO parameters, int accion) throws Exception {
-
+		Double DATO=0.00; //////////######## DATO QUEMADO###############
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsrecei(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_sal0_sales_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
@@ -218,7 +243,7 @@ public class SalesDAO extends CommonDAO{
 		this.setString(11,"_numatcard", parameters.getNumatcard());
 		this.setString(12,"_cardname", parameters.getCardname());
 		this.setString(13,"_vatsum", parameters.getVatsum());
-		this.setDouble(14,"_discsum", new Double(parameters.getDiscsum()));
+		this.setDouble(14,"_discsum", new Double(DATO));// ##############DATO QUEMADO
 		this.setDouble(15,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(16,"_ref1", parameters.getRef1());
 		this.setString(17,"_ref2", parameters.getRef2());
@@ -231,15 +256,15 @@ public class SalesDAO extends CommonDAO{
 		this.setString(25,"_createtran", parameters.getCreatetran());
 		this.setInt(26,"_series", new Integer(parameters.getSeries()));	
 		this.setString(28,"_filler", parameters.getFiller());
-		this.setDouble(29,"_rounddif", new Double(parameters.getRounddif()));
+		this.setDouble(29,"_rounddif", new Double(DATO));// ##############DATO QUEMADO
 		this.setString(30,"_rounding", parameters.getRounding());	
 		this.setString(32,"_peymethod", parameters.getPeymethod());
 		this.setString(33,"_ctlaccount", parameters.getCtlaccount());
 		this.setString(34,"_bplname", parameters.getBplname());
 		this.setString(35,"_vatregnum", parameters.getVatregnum());
-		this.setDouble(36,"_paidsum", new Double(parameters.getPaidsum()));
+		this.setDouble(36,"_paidsum", new Double(DATO));// ##############DATO QUEMADO
 		this.setString(37,"_towhscode", parameters.getTowhscode());
-		this.setDouble(38,"_nret", new Double(parameters.getNret()));
+		this.setDouble(38,"_nret", new Double(DATO));// ##############DATO QUEMADO
 		this.setString(39,"_namenp", parameters.getNamenp());
 		this.setInt(40,"_quedan", new Integer(parameters.getQuedan()));
 		this.setInt(43,"_usersign", new Integer(parameters.getUsersign()));
