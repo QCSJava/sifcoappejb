@@ -39,8 +39,6 @@ public class InventoryEJB implements InventoryEJBRemote {
 		Double total=0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		try {
-			_return = DAO.inv_goodsissues_mtto(parameters, action);
-		@SuppressWarnings("unchecked")
 		Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail().iterator();
 		while (iterator2.hasNext()) {
 			GoodsIssuesDetailTO articleDetalle = (GoodsIssuesDetailTO) iterator2.next();
@@ -110,7 +108,6 @@ public class InventoryEJB implements InventoryEJBRemote {
 		int _return = 0;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		try {
-			_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
 		Double total=0.0;
 		@SuppressWarnings("unchecked")
 		Iterator<GoodsReceiptDetailTO> iterator2 = parameters.getGoodReceiptDetail().iterator();

@@ -82,7 +82,7 @@ public class AdminTest {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			System.out.println("Error EJB" + e.getMessage()+e.getCause());
+			System.out.println("Error EJB " + e.getMessage());
 		}
 
 		//System.out.println(resp.getRespCode());
@@ -96,11 +96,11 @@ public class AdminTest {
 			resp = AdminEJBService.getEnterpriseInfo();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error EJB " + e.getMessage());
 		}
 
-		System.out.println(resp.getCompnyName());
-		System.out.println(resp.getCompnyAddr());
+		//System.out.println(resp.getCompnyName());
+		//System.out.println(resp.getCompnyAddr());
 
 	}
 

@@ -59,7 +59,7 @@ public class InventoryTEST {
 			lstPeriods = Inventory.getGoodsissues(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error EJB " + e.getMessage());
 		}
 		Iterator<GoodsissuesTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
@@ -132,12 +132,12 @@ public class InventoryTEST {
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
 		parameters.setDocnum(26);
 		parameters.setUsersign(1);
-		parameters.setDoctotal(111.2);
+		//parameters.setDoctotal(111.2);
 		try {
 			_result = Inventory.inv_GoodsReceipt_mtto(parameters, 1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error EJB " + e.getMessage());
 		}
 
 		System.out.println("luego de servicio");
@@ -236,14 +236,14 @@ public class InventoryTEST {
 		document1.setItemcode("ART-001");
 		document1.setDscription("Articulo de prueba");
 		document1.setQuantity(10.25);
-		document1.setOpenqty(15.56);
+		//document1.setOpenqty(15.56);
 		document1.setPrice(11.25);
-		document1.setLinetotal(5.6);
+		//document1.setLinetotal(5.6);
 		prueba.add(document1);
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
 		//parameters.setDocentry(26);
-		parameters.setDoctotal(3.6);
+		//parameters.setDoctotal(3.6);
 		Date fecha= new Date();
 		parameters.setDocdate(fecha);
 		parameters.setGoodReceiptDetail(prueba);
@@ -251,7 +251,7 @@ public class InventoryTEST {
 			_result = Inventory.inv_GoodsReceipt_mtto(parameters,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error EJB " + e.getMessage());
 		}
 
 		System.out.println("luego de servicio");

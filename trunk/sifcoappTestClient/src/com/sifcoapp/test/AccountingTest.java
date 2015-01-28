@@ -67,18 +67,19 @@ public class AccountingTest {
 
 		try {
 			lstPeriods = AccountingEJBService.getAccPeriods();
+			Iterator<AccPeriodTO> iterator = lstPeriods.iterator();
+			
+			while (iterator.hasNext()) {
+				AccPeriodTO periodo = (AccPeriodTO) iterator.next();
+				System.out.println(periodo.getAcccode() + " - "
+						+ periodo.getAccname() + " - "
+						+ periodo.getF_duedate().toString());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error EJB " + e.getMessage());
 		}
 
-		Iterator<AccPeriodTO> iterator = lstPeriods.iterator();
-		while (iterator.hasNext()) {
-			AccPeriodTO periodo = (AccPeriodTO) iterator.next();
-			System.out.println(periodo.getAcccode() + " - "
-					+ periodo.getAccname() + " - "
-					+ periodo.getF_duedate().toString());
-		}
 	}
 
 	public static void getAccount() {
