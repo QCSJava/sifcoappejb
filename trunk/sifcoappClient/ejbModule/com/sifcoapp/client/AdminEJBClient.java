@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -35,16 +36,20 @@ public class AdminEJBClient {
 		}
 	}
 
-	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) {
+	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) throws Exception {
 
 		EnterpriseOutTO enterpriseOutTO = null;
-
-		enterpriseOutTO = bean.saveEnterprise(parameters);
+		//try{
+			enterpriseOutTO = bean.saveEnterprise(parameters);	
+		//}catch(EJBException ex){
+			//throw new Exception(ex.getMessage());
+		//}
+		
 
 		return enterpriseOutTO;
 	}
 
-	public EnterpriseTO getEnterpriseInfo() {
+	public EnterpriseTO getEnterpriseInfo() throws Exception {
 
 		EnterpriseTO enterpriseTO;
 
@@ -54,7 +59,7 @@ public class AdminEJBClient {
 
 	}
 
-	public List findCatalog(String nameCatalog) {
+	public List findCatalog(String nameCatalog) throws Exception {
 		List catlgLst = null;
 
 		catlgLst = bean.findCatalog(nameCatalog);
@@ -67,7 +72,7 @@ public class AdminEJBClient {
 	 * 
 	 * @author Rutilio
 	 */
-	public List getTablesCatalog() {
+	public List getTablesCatalog() throws Exception {
 		List _return = null;
 
 		_return = bean.getTablesCatalog();
@@ -78,7 +83,7 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de Catalogos
 	 */
-	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) {
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) throws Exception {
 		int _return = 0;
 
 		_return = bean.cat_tab1_catalogos_mtto(parameters, action);
@@ -90,7 +95,7 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public int cat_articles_mtto(ArticlesTO parameters, int action) {
+	public int cat_articles_mtto(ArticlesTO parameters, int action) throws Exception {
 		int _return = 0;
 
 		_return = bean.cat_articles_mtto(parameters, action);
@@ -102,7 +107,7 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de almacenes
 	 */
-	public int cat_branch_mtto(BranchTO parameters, int action) {
+	public int cat_branch_mtto(BranchTO parameters, int action) throws Exception {
 		int _return = 0;
 
 		_return = bean.cat_branch_mtto(parameters, action);
@@ -111,7 +116,7 @@ public class AdminEJBClient {
 
 	}
 	
-	public List getArticles(String itemcode, String itemname ) {
+	public List getArticles(String itemcode, String itemname ) throws Exception {
 		List _return;
 
 		_return = bean.getArticles(itemcode, itemname);
@@ -119,7 +124,7 @@ public class AdminEJBClient {
 		return _return;
 	}
 	
-	public ArticlesTO getArticlesByKey(String itemcode) {
+	public ArticlesTO getArticlesByKey(String itemcode) throws Exception {
 		ArticlesTO _return;
 
 		_return = bean.getArticlesByKey(itemcode);
@@ -127,7 +132,7 @@ public class AdminEJBClient {
 		return _return;
 	}
 	
-	public List getBranch(String whscode, String whsname ) {
+	public List getBranch(String whscode, String whsname ) throws Exception {
 		List _return;
 
 		_return = bean.getBranch(whscode, whsname);
@@ -135,7 +140,7 @@ public class AdminEJBClient {
 		return _return;
 	}
 	
-	public BranchTO getBranchByKey(String whscode) {
+	public BranchTO getBranchByKey(String whscode) throws Exception {
 		BranchTO _return;
 
 		_return = bean.getBranchByKey(whscode);

@@ -11,7 +11,7 @@ import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 
-public class AccountingEJBClient implements AccountingEJBRemote {
+public class AccountingEJBClient {
 	
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AccountingEJB!com.sifcoapp.bussinessLogic.AccountingEJBRemote";
 	private static AccountingEJBRemote bean;
@@ -29,7 +29,7 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		}
 	}
 
-	public List getAccPeriods() {
+	public List getAccPeriods() throws Exception {
 		// TODO Auto-generated method stub
 		List lstPeriods = new Vector();
 
@@ -41,7 +41,7 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 	/*
 	 * Mantenimiento de periodos contables
 	 */
-	public int cat_accPeriod_mtto(int parameters, int usersign, int action) {
+	public int cat_accPeriod_mtto(int parameters, int usersign, int action) throws Exception {
 
 		int _return = 0;
 
@@ -50,7 +50,7 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) {
+	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action) throws Exception {
 		// TODO Auto-generated method stub
 		int _return = 0;
 
@@ -59,7 +59,7 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public AccassignmentTO getAccAssignment() {
+	public AccassignmentTO getAccAssignment() throws Exception {
 		// TODO Auto-generated method stub
 		AccassignmentTO acc = new AccassignmentTO();
 
@@ -68,7 +68,7 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		return acc;
 	}
 
-	public List getAccount(int type) {
+	public List getAccount(int type) throws Exception {
 		// TODO Auto-generated method stub
 		List acc = new Vector();
 
@@ -77,28 +77,28 @@ public class AccountingEJBClient implements AccountingEJBRemote {
 		return acc;
 	}
 
-	public List getAccountByFilter(String acctcode, String acctname) {
+	public List getAccountByFilter(String acctcode, String acctname) throws Exception {
 		// TODO Auto-generated method stub
 		List account = new Vector();
 		account = bean.getAccountByFilter(acctcode, acctname);
 		return account;
 	}
 
-	public AccountTO getAccountByKey(String acctcode) {
+	public AccountTO getAccountByKey(String acctcode) throws Exception {
 		// TODO Auto-generated method stub
 		AccountTO _return= new AccountTO();
 		_return= bean.getAccountByKey(acctcode);
 		return _return;
 	}
 
-	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) {
+	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) throws Exception {
 		// TODO Auto-generated method stub
 		int _return=0;
 		_return= bean.cat_acc0_ACCOUNT_mtto(parameters, action);
 		return _return;
 	}
 
-	public List getTreeAccount() {
+	public List getTreeAccount() throws Exception {
 		// TODO Auto-generated method stub
 		List account= new Vector();
 		account= bean.getTreeAccount();

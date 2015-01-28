@@ -13,7 +13,7 @@ import com.sun.rowset.CachedRowSetImpl;
 public class BusinesspartnerDAO extends CommonDAO{
 	
 	//##################################  CRUD DE TABLA BUSINESSPARTNER ####################################
-	public int inv_cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters, int action) {
+	public int inv_cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters, int action) throws Exception {
 		int v_resp = 0;
 		// s.setDbObject("{call sp_gis1_goodsissuedetail_mtto   (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_cat_bpa0_businesspartner_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
@@ -38,7 +38,7 @@ public class BusinesspartnerDAO extends CommonDAO{
 		return v_resp;
 	}
 //RETORNA DE REGISTROS DE LA TABLA BUSINESSPARTNER POR FILTRO (5 FILTROS)
-	public List get_businesspartner(BusinesspartnerInTO parameters){
+	public List get_businesspartner(BusinesspartnerInTO parameters)throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -88,7 +88,7 @@ public class BusinesspartnerDAO extends CommonDAO{
 	}
 	
 	//RETORNA DE LA TABLA BUSINEESPARTNER UN REGISTRO POR CLAVE
-	public BusinesspartnerTO get_businesspartnerByKey(String parameters){
+	public BusinesspartnerTO get_businesspartnerByKey(String parameters)throws Exception {
 		BusinesspartnerTO _return = new BusinesspartnerTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);

@@ -1,10 +1,10 @@
 package com.sifcoapp.test;
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
 import com.sifcoapp.client.InventoryEJBClient;
 import com.sifcoapp.objects.inventory.to.*;
 public class InventoryTEST {
@@ -55,7 +55,12 @@ public class InventoryTEST {
 		Date fecha= new Date();
 		nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
-		lstPeriods = Inventory.getGoodsissues(nuevo);
+		try {
+			lstPeriods = Inventory.getGoodsissues(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Iterator<GoodsissuesTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			GoodsissuesTO periodo = (GoodsissuesTO) iterator.next();
@@ -77,7 +82,12 @@ public class InventoryTEST {
 		//nuevo.setRef1("E");
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
-		lstPeriods = Inventory.getGoodsreceipt(nuevo);
+		try {
+			lstPeriods = Inventory.getGoodsreceipt(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Iterator<GoodsreceiptTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			GoodsreceiptTO periodo = (GoodsreceiptTO) iterator.next();
@@ -100,7 +110,12 @@ public class InventoryTEST {
 		//nuevo.setRef1("E");
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
-		lstPeriods = Inventory.getGoodsissues(nuevo);
+		try {
+			lstPeriods = Inventory.getGoodsissues(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Iterator<GoodsissuesTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			GoodsissuesTO periodo = (GoodsissuesTO) iterator.next();
@@ -113,12 +128,17 @@ public class InventoryTEST {
 	
 	public static void GoodReceipt_mtto() {
 
-		int _result;
+		int _result=0;
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
 		parameters.setDocnum(26);
 		parameters.setUsersign(1);
 		parameters.setDoctotal(111.2);
-		_result = Inventory.inv_GoodsReceipt_mtto(parameters, 1);
+		try {
+			_result = Inventory.inv_GoodsReceipt_mtto(parameters, 1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
@@ -131,7 +151,12 @@ public class InventoryTEST {
 		List lstPeriods = new Vector();
 		int	docentry = 5;
 
-		lstPeriods = Inventory.getGoodsReceiptDetail(docentry);
+		try {
+			lstPeriods = Inventory.getGoodsReceiptDetail(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Iterator<GoodsReceiptDetailTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			GoodsReceiptDetailTO periodo = (GoodsReceiptDetailTO) iterator.next();
@@ -146,7 +171,12 @@ public class InventoryTEST {
 		List lstPeriods = new Vector();
 		int	docentry = 5;
 
-		lstPeriods = Inventory.getGoodsIssuesDetail(docentry);
+		try {
+			lstPeriods = Inventory.getGoodsIssuesDetail(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Iterator<GoodsIssuesDetailTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			GoodsIssuesDetailTO periodo = (GoodsIssuesDetailTO) iterator.next();
@@ -171,14 +201,20 @@ public class InventoryTEST {
 
 
 
-		int resp = Inventory.inv_goodsIssuesDetail_mtto(document, 1);
+		int resp=0;
+		try {
+			resp = Inventory.inv_goodsIssuesDetail_mtto(document, 1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println(resp);
 
 	}
 	
 	public static void GoodReceipt_mtto_condetalle() {
-		int _result;
+		int _result=0;
 		GoodsReceiptDetailTO document = new GoodsReceiptDetailTO();
 
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
@@ -211,7 +247,12 @@ public class InventoryTEST {
 		Date fecha= new Date();
 		parameters.setDocdate(fecha);
 		parameters.setGoodReceiptDetail(prueba);
-		_result = Inventory.inv_GoodsReceipt_mtto(parameters,1);
+		try {
+			_result = Inventory.inv_GoodsReceipt_mtto(parameters,1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
@@ -220,7 +261,7 @@ public class InventoryTEST {
 	
 	public static void GoodsIssues_mtto() {
 
-		int _result;
+		int _result=0;
 		GoodsissuesTO parameters = new GoodsissuesTO();
 	
 		List prueba = new Vector();
@@ -250,7 +291,12 @@ public class InventoryTEST {
 		parameters.setDocentry(26);
 		//parameters.setDoctotal(15.5);
 		parameters.setGoodIssuesDetail(prueba);
-		_result = Inventory.inv_goodsissues_mtto(parameters,1);
+		try {
+			_result = Inventory.inv_goodsissues_mtto(parameters,1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
@@ -262,7 +308,12 @@ public class InventoryTEST {
 		List lstPeriods = new Vector();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
-		periodo = Inventory.getGoodsReceiptByKey(2);
+		try {
+			periodo = Inventory.getGoodsReceiptByKey(2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 			System.out.println(periodo.getDocnum()+ " - "
 					+ periodo.getSeries() + " - "
@@ -283,7 +334,12 @@ public class InventoryTEST {
 		List lstPeriods = new Vector();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
-		periodo = Inventory.getGoodsissuesByKey(1);
+		try {
+			periodo = Inventory.getGoodsissuesByKey(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 			System.out.println(periodo.getDocnum()+ " - "
 					+ periodo.getSeries() + " - "
@@ -303,7 +359,7 @@ public class InventoryTEST {
 	
 	public static void transfers_mtto() {
 
-		int _result;
+		int _result=0;
 		TransfersTO parameters = new TransfersTO();
 	
 		List prueba = new Vector();
@@ -333,7 +389,12 @@ public class InventoryTEST {
 		parameters.setDocentry(26);
 		parameters.setDoctotal(15.5);
 		parameters.setTransfersDetail(prueba);
-		_result = Inventory.inv_transfers_mtto(parameters,1);
+		try {
+			_result = Inventory.inv_transfers_mtto(parameters,1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
@@ -349,7 +410,12 @@ public class InventoryTEST {
 	
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
-		nuevo = Inventory.getTransfersByKey(1);
+		try {
+			nuevo = Inventory.getTransfersByKey(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//TransfersTO periodo = (TransfersTO) lstPeriods.get(0);
 		System.out.println(nuevo.getDocnum()+ " - "
 				+ nuevo.getSeries() + " - "
@@ -370,7 +436,12 @@ public class InventoryTEST {
 		//Date fecha= new Date();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
-		lstPeriods = Inventory.getTransfers(nuevo);
+		try {
+			lstPeriods = Inventory.getTransfers(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Iterator<TransfersTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
 			TransfersTO periodo = (TransfersTO) iterator.next();

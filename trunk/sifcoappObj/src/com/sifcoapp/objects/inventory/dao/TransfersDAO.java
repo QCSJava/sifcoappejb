@@ -3,6 +3,7 @@ import com.sifcoapp.objects.inventory.to.*;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -11,7 +12,7 @@ import java.util.Vector;
 public class TransfersDAO extends CommonDAO{
 	
 	//RETORNA REGISTROS DE LA TABLA TRANSFERS POR TRES TIPOS DE FILTO: DOCDATE, DOCNUM Y SERIES
-	public List getTransfers(TransfersInTO param) {
+	public List getTransfers(TransfersInTO param) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -71,7 +72,7 @@ public class TransfersDAO extends CommonDAO{
 	}
 	
 	//RETORNA UN REGISTRO DE LA TABLA TRANSFERS CON SUS HIJAS DE LA TABLA TRANSFERSDETAIL
-	public TransfersTO getTransfersByKey(int docentry) {
+	public TransfersTO getTransfersByKey(int docentry) throws Exception {
 		TransfersTO _return = new TransfersTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -120,7 +121,7 @@ public class TransfersDAO extends CommonDAO{
 		return _return;
 	}
 //#############################CRUD DE LA TABLA TRANSFERS###############################
-	public int inv_transfers_mtto(TransfersTO parameters,int accion){
+	public int inv_transfers_mtto(TransfersTO parameters,int accion)throws Exception {
 		List v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissues_mtto  (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_inv_tra0_transfers_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");

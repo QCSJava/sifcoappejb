@@ -13,7 +13,7 @@ import java.util.Vector;
 public class TransfersDetailDAO extends CommonDAO{
 	
 	//RETORNA DE LA TABLA TRANSFERSDETAIL (SE USA JUNTOS A EL GET DE LA TABLA PADRE: TRANSFERS) RETORNA TODAS SUS HIJAS
-	public List getTransfersDetail(int docentry) {
+	public List getTransfersDetail(int docentry) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -62,7 +62,7 @@ public class TransfersDetailDAO extends CommonDAO{
 	}
 
 	//########################CRUD DE LA TABLA TRANSFERSDETAILS (SE USA JUNTO CON EL CRUD DE LA TABLA PADRE: TRANSFERS) GUARDA TODOS LOS DETALLES DE SU PADRE
-	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action){
+	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action)throws Exception {
 
 		int v_resp = 0;
 

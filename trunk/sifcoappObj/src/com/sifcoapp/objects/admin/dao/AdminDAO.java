@@ -23,7 +23,7 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Retorna un catalogo specifico de la base de datos
 	 */
-	public List findCatalog(String nameCatalog) {
+	public List findCatalog(String nameCatalog) throws Exception {
 
 		List lstResult = new Vector();
 		List lstResultSet = null;
@@ -74,11 +74,11 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Actualiza los datos de la empresa
 	 */
-	public int updEnterprise(EnterpriseTO parameters) {
+	public int updEnterprise(EnterpriseTO parameters) throws Exception {
 
 		int v_resp = 0;
 
-		this.setDbObject("{call sp_upd_enterprise(?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_upd_enterprise33(?,?,?,?,?,?,?,?,?,?)}");
 
 		this.setString(1, "_name", parameters.getCompnyName());
 		this.setString(2, "_addr", parameters.getCompnyAddr());
@@ -99,7 +99,7 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Obtiene la informacion de la empresa
 	 */
-	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) {
+	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) throws Exception {
 
 		List lstResult = new Vector();
 		List lstResultSet = null;
@@ -151,7 +151,7 @@ public class AdminDAO extends CommonDAO {
 	 * 
 	 * @author Rutilio
 	 */
-	public List getTablesCatalog() {
+	public List getTablesCatalog() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		TablesCatalogTO _returnTO = new TablesCatalogTO();
@@ -188,7 +188,8 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Mantenimiento tabla de catalogos de sistema
 	 */
-	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) {
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action)
+			throws Exception {
 		int _return;
 
 		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?,?,?,?,?)}");
@@ -210,7 +211,8 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Guarda los cambios en los articulos
 	 */
-	public int cat_articles_mtto(ArticlesTO parameters, int action) {
+	public int cat_articles_mtto(ArticlesTO parameters, int action)
+			throws Exception {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_articles_mtto_5(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
@@ -252,7 +254,7 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public List getArticles(String itemcode, String itemname) {
+	public List getArticles(String itemcode, String itemname) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -317,7 +319,7 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 
-	public ArticlesTO getArticlesByKey(String itemcode) {
+	public ArticlesTO getArticlesByKey(String itemcode) throws Exception {
 		ArticlesTO _return = new ArticlesTO();
 		List lstResultSet = null;
 
@@ -382,7 +384,7 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 
-	public List getBranchArticles(String itemcode) {
+	public List getBranchArticles(String itemcode) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -436,7 +438,8 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Guarda los cambios en los articulos
 	 */
-	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action) {
+	public int cat_brancharticles_mtto(BranchArticlesTO parameters, int action)
+			throws Exception {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_brancharticles_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
@@ -461,7 +464,7 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Guarda los cambios en los articulos
 	 */
-	public int cat_branch_mtto(BranchTO parameters, int action) {
+	public int cat_branch_mtto(BranchTO parameters, int action)	throws Exception {
 
 		int v_resp = 0;
 		// thsetDbObject("{call sp_cat_branch_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
@@ -524,7 +527,7 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public List getBranch(String whscode, String whsname) {
+	public List getBranch(String whscode, String whsname) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -610,7 +613,7 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 
-	public BranchTO getBranchByKey(String whscode) {
+	public BranchTO getBranchByKey(String whscode) throws Exception {
 		BranchTO _return = new BranchTO();
 		List lstResultSet = null;
 

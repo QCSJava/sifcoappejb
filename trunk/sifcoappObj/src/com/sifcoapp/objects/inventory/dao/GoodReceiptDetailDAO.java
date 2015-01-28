@@ -12,7 +12,7 @@ import java.util.Vector;
 public class GoodReceiptDetailDAO extends CommonDAO{
 	
 	//Retorna de goodIssuesDetail
-	public List getGoodReceiptDetail(int docentry) {
+	public List getGoodReceiptDetail(int docentry) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -60,7 +60,7 @@ public class GoodReceiptDetailDAO extends CommonDAO{
 		return _return;
 	}
 
-	public int inv_goodReceiptDetail_mtto(GoodsReceiptDetailTO parameters, int action){
+	public int inv_goodReceiptDetail_mtto(GoodsReceiptDetailTO parameters, int action)throws Exception {
 		
 		int v_resp = 0;
 		

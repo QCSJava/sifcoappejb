@@ -69,7 +69,12 @@ public class BusinesspartnerTest {
 				+ lstPeriods.getNit() + " - "
 				+ lstPeriods.getAddid());
 		/**/
-		lstPeriods3 = catalog.get_businesspartner(nuevo);
+		try {
+			lstPeriods3 = catalog.get_businesspartner(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Iterator<BusinesspartnerTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
 			BusinesspartnerTO periodo = (BusinesspartnerTO) iterator.next();
@@ -80,13 +85,18 @@ public class BusinesspartnerTest {
 	}
 	
 	public static void businesspartner_mtto(){
-		int resp;
+		int resp=0;
 		BusinesspartnerTO bus= new BusinesspartnerTO();
 		bus.setCardcode("prueba3");
 		bus.setCardname("testeo");
 		bus.setGroupcode(26);
 		
-		resp= catalog.cat_bpa_businesspartner_mtto(bus,3);
+		try {
+			resp= catalog.cat_bpa_businesspartner_mtto(bus,3);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(resp);
 		
 		

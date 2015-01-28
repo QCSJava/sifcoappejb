@@ -13,7 +13,7 @@ import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 
-public class CatalogEJBClient implements CatalogEJBRemote {
+public class CatalogEJBClient {
 
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/CatalogEJB!com.sifcoapp.bussinessLogic.CatalogEJBRemote";
 	private static CatalogEJBRemote bean;
@@ -30,7 +30,7 @@ public class CatalogEJBClient implements CatalogEJBRemote {
 			e.printStackTrace();
 		}
 	}
-	public int cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,int accion){
+	public int cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,int accion)throws Exception {
 		
 		int _return = 0;
 
@@ -38,12 +38,12 @@ public class CatalogEJBClient implements CatalogEJBRemote {
 
 		return _return;
 	}
-	public List get_businesspartner(BusinesspartnerInTO parameters){
+	public List get_businesspartner(BusinesspartnerInTO parameters)throws Exception {
 		List lstPeriods = new Vector();
 		lstPeriods = bean.get_businesspartner(parameters);
 		return lstPeriods;
 	}
-	public BusinesspartnerTO get_businesspartnerBykey(String parameters) {
+	public BusinesspartnerTO get_businesspartnerBykey(String parameters) throws Exception {
 		// TODO Auto-generated method stub
 		BusinesspartnerTO lstPeriods = new BusinesspartnerTO();
 		lstPeriods = bean.get_businesspartnerBykey(parameters);
