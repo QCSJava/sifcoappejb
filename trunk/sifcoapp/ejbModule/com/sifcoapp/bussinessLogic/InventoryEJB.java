@@ -106,9 +106,9 @@ public class InventoryEJB implements InventoryEJBRemote {
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action)throws EJBException {
 		// TODO Auto-generated method stub
 		int _return = 0;
+		Double total=0.00;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		try {
-		Double total=0.0;
 		@SuppressWarnings("unchecked")
 		Iterator<GoodsReceiptDetailTO> iterator2 = parameters.getGoodReceiptDetail().iterator();
 		while (iterator2.hasNext()) {
