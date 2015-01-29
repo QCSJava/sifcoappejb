@@ -67,6 +67,8 @@ public class SalesEJB implements SalesEJBRemote {
 		Double total=0.0;
 		SalesDAO DAO = new SalesDAO();
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO();
+		DAO.setIstransaccional(true);
+		goodDAO1.setIstransaccional(true);
 		try {
 		Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails().iterator();
 		while (iterator2.hasNext()) {
@@ -75,6 +77,10 @@ public class SalesEJB implements SalesEJBRemote {
 			total=total+articleDetalle.getLinetotal();
 		}
 		parameters.setDoctotal(total);
+		parameters.setDiscsum(0.00);
+		parameters.setNret(0.00);
+		parameters.setPaidsum(0.00);
+		parameters.setRounddif(0.00);
 		_return = DAO.inv_Sales_mtto(parameters, action);
 		
 		
@@ -94,6 +100,7 @@ public class SalesEJB implements SalesEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		DAO.forceCommit();
 		return _return;
 	}
 
@@ -109,21 +116,6 @@ public class SalesEJB implements SalesEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-		return _return;
-	}
-
-	public int inv_SalesDetail_mtto(SalesDetailTO parameters, int action)
-			throws Exception {
-		// TODO Auto-generated method stub
-		int _return;
-		SalesDetailDAO DAO = new SalesDetailDAO();
-		try {
-			_return=DAO.inv_SalesDetail_mtto(parameters, action);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-
 		return _return;
 	}
 

@@ -186,32 +186,7 @@ public class InventoryTEST {
 		}
 	}
 	
-	public static void GoodIssuesDetail_mtto() {
-
-		GoodsIssuesDetailTO document = new GoodsIssuesDetailTO();
-
-		document.setDocentry(1);
-		document.setLinenum(1);
-		document.setItemcode("ART-001");
-		document.setDscription("Articulo de prueba");
-		document.setQuantity(10.25);
-		document.setOpenqty(10.25);
-		document.setPrice(11.25);
-		document.setLinetotal(100.00);
-
-
-
-		int resp=0;
-		try {
-			resp = Inventory.inv_goodsIssuesDetail_mtto(document, 1);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		System.out.println(resp);
-
-	}
+	
 	
 	public static void GoodReceipt_mtto_condetalle() {
 		int _result=0;

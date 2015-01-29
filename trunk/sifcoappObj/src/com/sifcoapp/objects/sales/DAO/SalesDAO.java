@@ -243,7 +243,7 @@ public class SalesDAO extends CommonDAO{
 		this.setString(11,"_numatcard", parameters.getNumatcard());
 		this.setString(12,"_cardname", parameters.getCardname());
 		this.setString(13,"_vatsum", parameters.getVatsum());
-		this.setDouble(14,"_discsum", new Double(DATO));// ##############DATO QUEMADO
+		this.setDouble(14,"_discsum",new Double(parameters.getDiscsum()));
 		this.setDouble(15,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(16,"_ref1", parameters.getRef1());
 		this.setString(17,"_ref2", parameters.getRef2());
@@ -256,15 +256,15 @@ public class SalesDAO extends CommonDAO{
 		this.setString(25,"_createtran", parameters.getCreatetran());
 		this.setInt(26,"_series", new Integer(parameters.getSeries()));	
 		this.setString(28,"_filler", parameters.getFiller());
-		this.setDouble(29,"_rounddif", new Double(DATO));// ##############DATO QUEMADO
+		this.setDouble(29,"_rounddif", new Double(parameters.getRounddif()));
 		this.setString(30,"_rounding", parameters.getRounding());	
 		this.setString(32,"_peymethod", parameters.getPeymethod());
 		this.setString(33,"_ctlaccount", parameters.getCtlaccount());
 		this.setString(34,"_bplname", parameters.getBplname());
 		this.setString(35,"_vatregnum", parameters.getVatregnum());
-		this.setDouble(36,"_paidsum", new Double(DATO));// ##############DATO QUEMADO
+		this.setDouble(36,"_paidsum", new Double(parameters.getPaidsum()));
 		this.setString(37,"_towhscode", parameters.getTowhscode());
-		this.setDouble(38,"_nret", new Double(DATO));// ##############DATO QUEMADO
+		this.setDouble(38,"_nret", new Double(parameters.getNret()));
 		this.setString(39,"_namenp", parameters.getNamenp());
 		this.setInt(40,"_quedan", new Integer(parameters.getQuedan()));
 		this.setInt(43,"_usersign", new Integer(parameters.getUsersign()));

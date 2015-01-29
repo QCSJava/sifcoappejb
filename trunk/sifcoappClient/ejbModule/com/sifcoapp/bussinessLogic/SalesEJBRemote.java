@@ -21,7 +21,7 @@ public interface SalesEJBRemote {
 	
 	public List getSalesDetail(int docentry) throws Exception;
 	
-	public int inv_SalesDetail_mtto(SalesDetailTO parameters, int action) throws Exception;
+
 	
 	
 
