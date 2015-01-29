@@ -8,6 +8,7 @@ import javax.naming.NamingException;
 import com.sifcoapp.bussinessLogic.AccountingEJBRemote;
 import com.sifcoapp.bussinessLogic.SalesEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.to.SalesDetailTO;
 import com.sifcoapp.objects.sales.to.SalesInTO;
 import com.sifcoapp.objects.sales.to.SalesTO;
@@ -46,8 +47,8 @@ public class SalesEJBClient {
 		return _return;
 	}
 	
-	public int inv_Sales_mtto(SalesTO parameters, int accion) throws Exception{
-		int _return;
+	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int accion) throws Exception{
+		ResultOutTO _return;
 		_return=bean.inv_Sales_mtto(parameters, accion);
 		return _return;
 	}

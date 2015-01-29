@@ -7,6 +7,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.GoodsIssuesDAO;
 import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
 import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
@@ -61,9 +62,9 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	public int inv_Sales_mtto(SalesTO parameters, int action) throws Exception {
+	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int action) throws Exception {
 		// TODO Auto-generated method stub
-		int _return;
+		ResultOutTO _return = new ResultOutTO();
 		Double total=0.0;
 		SalesDAO DAO = new SalesDAO();
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO();
@@ -77,18 +78,18 @@ public class SalesEJB implements SalesEJBRemote {
 			total=total+articleDetalle.getLinetotal();
 		}
 		parameters.setDoctotal(total);
-		parameters.setDiscsum(0.00);
+		parameters.setDiscsum(0.00);			///////////############  DATOS QUEMADOS      #######################
 		parameters.setNret(0.00);
 		parameters.setPaidsum(0.00);
 		parameters.setRounddif(0.00);
-		_return = DAO.inv_Sales_mtto(parameters, action);
+		_return.setDocentry(DAO.inv_Sales_mtto(parameters, action));
 		
 		
 		Iterator<SalesDetailTO> iterator = parameters.getSalesDetails().iterator();
 		while (iterator.hasNext()) {
 			SalesDetailTO articleDetalle = (SalesDetailTO) iterator.next();
 			// Para articulos nuevos
-			articleDetalle.setDocentry(_return);
+			articleDetalle.setDocentry(_return.getDocentry());
 			if (action == Common.MTTOINSERT) {
 				goodDAO1.inv_SalesDetail_mtto(articleDetalle,Common.MTTOINSERT);
 			}
@@ -101,6 +102,7 @@ public class SalesEJB implements SalesEJBRemote {
 			throw (EJBException) new EJBException(e);
 		}
 		DAO.forceCommit();
+		_return.setCodigoError(0);
 		return _return;
 	}
 

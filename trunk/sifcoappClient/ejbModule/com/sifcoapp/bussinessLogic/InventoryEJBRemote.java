@@ -2,6 +2,7 @@ package com.sifcoapp.bussinessLogic;
 
 import java.util.List;
 
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.to.*;
 
 import javax.ejb.EJBException;
@@ -10,11 +11,9 @@ import javax.ejb.Remote;
 @Remote
 public interface InventoryEJBRemote {
 
-	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion)
-			throws EJBException;
+	public ResultOutTO inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) throws EJBException;
 
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion)
-			throws EJBException;
+	public ResultOutTO inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion)throws EJBException;
 
 	public List getGoodsissues(GoodsissuesInTO param) throws EJBException;
 
@@ -32,8 +31,7 @@ public interface InventoryEJBRemote {
 
 	public TransfersTO getTransfersByKey(int docentry) throws EJBException;
 
-	public int inv_transfers_mtto(TransfersTO parameters, int accion)
-			throws EJBException;
+	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int accion)throws EJBException;
 
 	public List getTransfersDetail(int docentry) throws EJBException;
 

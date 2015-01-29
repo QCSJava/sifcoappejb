@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.SalesEJBClient;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.to.*;
 
 public class SalesTest {
@@ -100,7 +101,7 @@ public class SalesTest {
 	}
 	public static void Sales_mtto() {
 
-		int _result=0;
+		ResultOutTO _result=new ResultOutTO();
 		SalesTO parameters = new SalesTO();
 	
 		List prueba = new Vector();
@@ -137,7 +138,7 @@ public class SalesTest {
 		}
 
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		System.out.println(_result.getCodigoError()+"---"+_result.getDocentry());
 
 	}
 }
