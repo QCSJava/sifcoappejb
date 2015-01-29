@@ -8,6 +8,7 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.bussinessLogic.InventoryEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.to.*;
 
 public class InventoryEJBClient {
@@ -46,16 +47,16 @@ public class InventoryEJBClient {
 		return lstPeriods;
 	}
 
-	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) throws Exception {
+	public ResultOutTO inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) throws Exception {
 		// TODO Auto-generated method stub
-		int lstVector;
-		lstVector = bean.inv_goodsissues_mtto(parameters, accion);
-		return lstVector;
+		ResultOutTO result;
+		result = bean.inv_goodsissues_mtto(parameters, accion);
+		return result;
 	}
 
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion) throws Exception {
+	public ResultOutTO inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion) throws Exception {
 		// TODO Auto-generated method stub
-		int _return;
+		ResultOutTO _return;
 
 		_return = bean.inv_GoodsReceipt_mtto(param, accion);
 
@@ -109,11 +110,11 @@ public class InventoryEJBClient {
 		return lstPeriods;
 	}
 
-	public int inv_transfers_mtto(TransfersTO parameters, int accion) throws Exception {
+	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int accion) throws Exception {
 		// TODO Auto-generated method stub
-		int lstVector;
-		lstVector = bean.inv_transfers_mtto(parameters, accion);
-		return lstVector;
+		ResultOutTO _return;
+		_return = bean.inv_transfers_mtto(parameters, accion);
+		return _return;
 	}
 
 	public List getTransfersDetail(int docentry) throws Exception {

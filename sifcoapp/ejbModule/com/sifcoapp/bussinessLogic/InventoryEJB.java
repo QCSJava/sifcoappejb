@@ -8,6 +8,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.*;
 import com.sifcoapp.objects.inventory.to.*;
 
@@ -33,9 +34,9 @@ public class InventoryEJB implements InventoryEJBRemote {
 	 * return _return; }
 	 */
 
-	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int action) throws EJBException {
+	public ResultOutTO inv_goodsissues_mtto(GoodsissuesTO parameters, int action) throws EJBException {
 		// TODO Auto-generated method stub
-		int _return;
+		ResultOutTO _return= new ResultOutTO();
 		Double total=0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
@@ -50,15 +51,13 @@ public class InventoryEJB implements InventoryEJBRemote {
 			total=total+articleDetalle.getLinetotal();
 		}
 		parameters.setDoctotal(total);
-		_return = DAO.inv_goodsissues_mtto(parameters, action);
-		
-		
+		_return.setDocentry( DAO.inv_goodsissues_mtto(parameters, action));
 		Iterator<GoodsIssuesDetailTO> iterator = parameters.getGoodIssuesDetail().iterator();
 		while (iterator.hasNext()) {
 			GoodsIssuesDetailTO articleDetalle = (GoodsIssuesDetailTO) iterator.next();
 			// Para articulos nuevos
 			System.out.println(""+_return+"");
-			articleDetalle.setDocentry(_return);
+			articleDetalle.setDocentry(_return.getDocentry());
 			if (action == Common.MTTOINSERT) {
 				goodDAO1.inv_goodsIssuesDetail_mtto(articleDetalle,Common.MTTOINSERT);
 			}
@@ -71,13 +70,14 @@ public class InventoryEJB implements InventoryEJBRemote {
 			throw (EJBException) new EJBException(e);
 		}
 		DAO.forceCommit();
+		_return.setCodigoError(0);
 		return _return;
 		
 	}
 
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action)throws EJBException {
+	public ResultOutTO inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action)throws EJBException {
 		// TODO Auto-generated method stub
-		int _return;
+		ResultOutTO _return= new ResultOutTO();
 		Double total=0.00;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO();
@@ -93,14 +93,13 @@ public class InventoryEJB implements InventoryEJBRemote {
 			total=total+articleDetalle.getLinetotal();
 		}
 		parameters.setDoctotal(total);
-		_return = DAO.inv_GoodsReceipt_mtto(parameters, action);
-		
-		
+		_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
+	
 		Iterator<GoodsReceiptDetailTO> iterator = parameters.getGoodReceiptDetail().iterator();
 		while (iterator.hasNext()) {
 			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator.next();
 			// Para articulos nuevos
-			detalleReceipt.setDocentry(_return);
+			detalleReceipt.setDocentry(_return.getDocentry());
 			if (action == Common.MTTOINSERT) {
 				goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,Common.MTTOINSERT);
 			}
@@ -114,6 +113,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			throw (EJBException) new EJBException(e);
 		}
 		DAO.forceCommit();
+		_return.setCodigoError(0);
 		return _return;
 	}
 
@@ -226,13 +226,13 @@ public class InventoryEJB implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public int inv_transfers_mtto(TransfersTO parameters, int action)throws EJBException {
+	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int action)throws EJBException {
 		// TODO Auto-generated method stub
-		int _return = 0;
+		ResultOutTO _return = new ResultOutTO();
 		TransfersDAO Trans= new TransfersDAO();
 		Trans.setIstransaccional(true);
 		try {
-			_return= Trans.inv_transfers_mtto(parameters, action);
+			_return.setDocentry(Trans.inv_transfers_mtto(parameters, action));
 		
 		Iterator<TransfersDetailTO> iterator= parameters.getTransfersDetail().iterator();
 		
@@ -240,7 +240,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			TransfersDetailTO articleDetalle = (TransfersDetailTO) iterator.next();
 			// Para articulos nuevos
 			TransfersDetailDAO TransDAO = new TransfersDetailDAO();
-			articleDetalle.setDocentry(_return);
+			articleDetalle.setDocentry(_return.getDocentry());
 			if (action == Common.MTTOINSERT) {
 				TransDAO.inv_transfersDetail_mtto(articleDetalle,Common.MTTOINSERT);
 			}
@@ -253,6 +253,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			throw (EJBException) new EJBException(e);
 		}
 		Trans.forceCommit();
+		_return.setCodigoError(0);
 		return _return;
 	}
 

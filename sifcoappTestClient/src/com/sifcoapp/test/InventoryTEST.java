@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.InventoryEJBClient;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.to.*;
 public class InventoryTEST {
 	
@@ -128,7 +129,7 @@ public class InventoryTEST {
 	
 	public static void GoodReceipt_mtto() {
 
-		int _result=0;
+		ResultOutTO _result= new ResultOutTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
 		parameters.setDocnum(26);
 		parameters.setUsersign(1);
@@ -141,7 +142,7 @@ public class InventoryTEST {
 		}
 
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		System.out.println(_result.getCodigoError()+"----"+_result.getDocentry());
 
 	}
 
@@ -189,7 +190,7 @@ public class InventoryTEST {
 	
 	
 	public static void GoodReceipt_mtto_condetalle() {
-		int _result=0;
+		ResultOutTO _result=new ResultOutTO();
 		GoodsReceiptDetailTO document = new GoodsReceiptDetailTO();
 
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
@@ -230,13 +231,13 @@ public class InventoryTEST {
 		}
 
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		System.out.println(_result.getCodigoError()+"----"+_result.getCodigoError());
 
 	}
 	
 	public static void GoodsIssues_mtto() {
 
-		int _result=0;
+		ResultOutTO _result=new ResultOutTO();
 		GoodsissuesTO parameters = new GoodsissuesTO();
 	
 		List prueba = new Vector();
@@ -274,7 +275,7 @@ public class InventoryTEST {
 		}
 
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		System.out.println(_result.getDocentry());
 
 	}
 	public static void getGoodreceiptbykey() {
@@ -334,7 +335,7 @@ public class InventoryTEST {
 	
 	public static void transfers_mtto() {
 
-		int _result=0;
+		ResultOutTO _result=new ResultOutTO();
 		TransfersTO parameters = new TransfersTO();
 	
 		List prueba = new Vector();
@@ -372,7 +373,7 @@ public class InventoryTEST {
 		}
 
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		System.out.println(_result.getDocentry());
 
 	}
 	
