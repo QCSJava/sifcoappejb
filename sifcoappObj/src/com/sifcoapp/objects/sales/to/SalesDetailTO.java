@@ -1,6 +1,13 @@
 package com.sifcoapp.objects.sales.to;
 
-public class SalesDetailTO {
+import com.sifcoapp.objects.common.to.CommonTO;
+
+public class SalesDetailTO extends CommonTO{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7958579106966310270L;
 	private int docentry;
 	private int linenum;
 	private String itemcode;

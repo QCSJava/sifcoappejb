@@ -13,12 +13,6 @@ public interface InventoryEJBRemote {
 	public int inv_goodsissues_mtto(GoodsissuesTO parameters, int accion)
 			throws EJBException;
 
-	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,
-			int accion) throws EJBException;
-
-	public int inv_goodsReceiptDetail_mtto(GoodsReceiptDetailTO parameters,
-			int accion) throws EJBException;
-
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion)
 			throws EJBException;
 
@@ -42,8 +36,5 @@ public interface InventoryEJBRemote {
 			throws EJBException;
 
 	public List getTransfersDetail(int docentry) throws EJBException;
-
-	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action)
-			throws EJBException;
 
 }

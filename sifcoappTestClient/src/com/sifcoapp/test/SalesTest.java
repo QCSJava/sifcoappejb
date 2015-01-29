@@ -10,7 +10,7 @@ import com.sifcoapp.client.SalesEJBClient;
 import com.sifcoapp.objects.sales.to.*;
 
 public class SalesTest {
-	private static SalesEJBClient sales=null;
+	private static SalesEJBClient sales;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		if 		(sales==null)
@@ -79,7 +79,7 @@ public class SalesTest {
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		try {
-			periodo = sales.getSalesByKey(1);
+			periodo = sales.getSalesByKey(15);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -110,7 +110,7 @@ public class SalesTest {
 		//document.setDocentry(1);
 		document.setLinenum(1);
 		document.setItemcode("ART-001");
-		document.setDscription("Articulo de prueba");
+		document.setDscription("A");
 		document.setQuantity(10.25);
 		document.setPrice(11.25);
 		document.setLinetotal(100.00);
@@ -118,7 +118,7 @@ public class SalesTest {
 		//document1.setDocentry(1);
 		document1.setLinenum(2);
 		document1.setItemcode("ART-001");
-		document1.setDscription("Articulo de prueba");
+		document1.setDscription("A");
 		document1.setQuantity(10.25);
 		document1.setPrice(11.25);
 		document1.setLinetotal(100.00);
@@ -126,13 +126,14 @@ public class SalesTest {
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
 		parameters.setDocentry(26);
+		parameters.setCardcode("P");
 		//parameters.setDoctotal(15.5);
 		parameters.setSalesDetails(prueba);
 		try {
 			_result = sales.inv_Sales_mtto(parameters,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error EJB " + e.getMessage());
 		}
 
 		System.out.println("luego de servicio");

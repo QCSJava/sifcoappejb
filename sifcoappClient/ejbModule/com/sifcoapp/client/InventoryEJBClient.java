@@ -62,26 +62,6 @@ public class InventoryEJBClient {
 		return _return;
 	}
 
-	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,
-			int accion) throws Exception {
-		// TODO Auto-generated method stub
-		int _return = 0;
-
-		_return = bean.inv_goodsIssuesDetail_mtto(parameters, accion);
-
-		return _return;
-	}
-
-	public int inv_goodsReceiptDetail_mtto(GoodsReceiptDetailTO parameters,
-			int accion) throws Exception {
-		// TODO Auto-generated method stub
-		int _return = 0;
-
-		_return = bean.inv_goodsReceiptDetail_mtto(parameters, accion);
-
-		return _return;
-	}
-
 	public List getGoodsIssuesDetail(int docentry)throws Exception {
 		// TODO Auto-generated method stub
 		List lstVector = new Vector();
@@ -143,15 +123,6 @@ public class InventoryEJBClient {
 		lstVector = bean.getTransfersDetail(docentry);
 
 		return lstVector;
-	}
-
-	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action) throws Exception {
-		// TODO Auto-generated method stub
-		int _return = 0;
-
-		_return = bean.inv_transfersDetail_mtto(parameters, action);
-
-		return _return;
 	}
 
 }

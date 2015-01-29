@@ -58,9 +58,4 @@ public class SalesEJBClient {
 		return _return;
 	}
 	
-	public int inv_SalesDetail_mtto(SalesDetailTO parameters, int action) throws Exception{
-		int _return;
-		_return= bean.inv_SalesDetail_mtto(parameters, action);
-		return _return;
-	}
 }

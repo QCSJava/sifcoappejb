@@ -39,6 +39,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 		Double total=0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
+		DAO.setIstransaccional(true);
+		goodDAO1.setIstransaccional(true);
 		try {
 		Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail().iterator();
 		while (iterator2.hasNext()) {
@@ -68,40 +70,9 @@ public class InventoryEJB implements InventoryEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		DAO.forceCommit();
 		return _return;
 		
-	}
-
-	public int inv_goodsIssuesDetail_mtto(GoodsIssuesDetailTO parameters,
-			int accion)throws EJBException {
-		// TODO Auto-generated method stub
-		int _return = 0;
-		GoodsissuesDetailDAO DAO = new GoodsissuesDetailDAO();
-		try {
-			_return = DAO.inv_goodsIssuesDetail_mtto(parameters, accion);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-
-		return _return;
-
-	}
-
-	public int inv_goodsReceiptDetail_mtto(GoodsReceiptDetailTO parameters,
-			int accion)throws EJBException {
-		// TODO Auto-generated method stub
-		int _return = 0;
-		GoodReceiptDetailDAO DAO = new GoodReceiptDetailDAO();
-		try {
-			_return = DAO.inv_goodReceiptDetail_mtto(parameters, accion);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-
-		return _return;
-
 	}
 
 	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int action)throws EJBException {
@@ -109,6 +80,9 @@ public class InventoryEJB implements InventoryEJBRemote {
 		int _return;
 		Double total=0.00;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO();
+		DAO.setIstransaccional(true);
+		goodDAO1.setIstransaccional(true);
 		try {
 		@SuppressWarnings("unchecked")
 		Iterator<GoodsReceiptDetailTO> iterator2 = parameters.getGoodReceiptDetail().iterator();
@@ -126,7 +100,6 @@ public class InventoryEJB implements InventoryEJBRemote {
 		while (iterator.hasNext()) {
 			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator.next();
 			// Para articulos nuevos
-			GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO();
 			detalleReceipt.setDocentry(_return);
 			if (action == Common.MTTOINSERT) {
 				goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,Common.MTTOINSERT);
@@ -140,6 +113,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		DAO.forceCommit();
 		return _return;
 	}
 
@@ -256,6 +230,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// TODO Auto-generated method stub
 		int _return = 0;
 		TransfersDAO Trans= new TransfersDAO();
+		Trans.setIstransaccional(true);
 		try {
 			_return= Trans.inv_transfers_mtto(parameters, action);
 		
@@ -277,6 +252,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		Trans.forceCommit();
 		return _return;
 	}
 
@@ -293,17 +269,5 @@ public class InventoryEJB implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public int inv_transfersDetail_mtto(TransfersDetailTO parameters, int action)throws EJBException {
-		// TODO Auto-generated method stub
-		int _return = 0;
-		TransfersDetailDAO Trans= new TransfersDetailDAO();
-		try {
-			_return= Trans.inv_transfersDetail_mtto(parameters, action);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-		return _return;
-	}
 
 }
