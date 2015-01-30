@@ -2,18 +2,12 @@ package com.sifcoapp.bussinessLogic;
 
 import java.util.List;
 import java.util.Vector;
-
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
-import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
-import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
-import com.sifcoapp.objects.admin.dao.AdminDAO;
-import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 
 /**
@@ -51,22 +45,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-		
-		/*AccountTO account = new AccountTO();
-		
-		account.setAcctcode("101010");
-		account.setAcctname("Cuenta de activos");
-		_return.add(account);
-		
-		AccountTO account1 = new AccountTO();
-		account1.setAcctcode("101011");
-		account1.setAcctname("Cuenta de pasivos");
-		_return.add(account1);
-		
-		AccountTO account2 = new AccountTO();
-		account2.setAcctcode("101011");
-		account2.setAcctname("Cuenta de Otras");
-		_return.add(account2);*/
 
 		return _return;
 	}

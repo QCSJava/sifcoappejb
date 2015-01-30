@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 //import org.myorg.SystemUnavailableException;
 import sun.misc.BASE64Encoder;
-import sun.misc.CharacterEncoder;
 
 public final class PasswordService {
 

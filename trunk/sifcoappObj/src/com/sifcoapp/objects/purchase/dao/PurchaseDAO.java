@@ -1,4 +1,4 @@
-package com.sifcoapp.objects.sales.DAO;
+package com.sifcoapp.objects.purchase.dao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,21 +7,17 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
-import com.sifcoapp.objects.sales.to.SalesInTO;
-import com.sifcoapp.objects.sales.to.SalesTO;
+import com.sifcoapp.objects.purchase.to.*;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class SalesDAO extends CommonDAO{
+public class PurchaseDAO extends CommonDAO{
 	
-	public List getSales(SalesInTO param) throws Exception{
+	public List getPurchase(PurchaseInTO param) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_purchase(?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -37,8 +33,8 @@ public class SalesDAO extends CommonDAO{
 			java.sql.Date fecha= new java.sql.Date(param.getDocduedate().getTime());
 			this.setDate(8, "_docduedate", fecha);
 		}
-		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
 		
+		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
 		this.setInt(3, "_series", new Integer(param.getSeries()));
 		this.setString(4, "_towhscode", param.getTowhscode());
 		this.setString(5, "_ref1", param.getRef1());
@@ -57,53 +53,53 @@ public class SalesDAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					SalesTO sales = new SalesTO();
-					sales.setDocentry(rowsetActual.getInt(1));
-					sales.setDocnum(rowsetActual.getInt(2));
-					sales.setDoctype(rowsetActual.getString(3));
-					sales.setCanceled(rowsetActual.getString(4));
-					sales.setDocstatus(rowsetActual.getString(5));
-					sales.setObjtype(rowsetActual.getString(6));
-					sales.setDocdate(rowsetActual.getDate(7));
-					sales.setDocduedate(rowsetActual.getDate(8));
-					sales.setCardcode(rowsetActual.getString(9));
-					sales.setNumatcard(rowsetActual.getString(10));
-					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
-					sales.setDiscsum(rowsetActual.getDouble(13));
-					sales.setDoctotal(rowsetActual.getDouble(14));
-					sales.setRef1(rowsetActual.getString(15));
-					sales.setRef2(rowsetActual.getString(16));
-					sales.setComments(rowsetActual.getString(17));
-					sales.setJrnlmemo(rowsetActual.getString(18));
-					sales.setPaidtodate(rowsetActual.getDate(19));
-					sales.setTransid(rowsetActual.getInt(20));
-					sales.setReceiptnum(rowsetActual.getInt(21));
-					sales.setGroupnum(rowsetActual.getInt(22));
-					sales.setConfirmed(rowsetActual.getString(23));
-					sales.setCreatetran(rowsetActual.getString(24));
-					sales.setSeries(rowsetActual.getInt(25));
-					sales.setTaxdate(rowsetActual.getDate(26));
-					sales.setFiller(rowsetActual.getString(27));
-					sales.setRounddif(rowsetActual.getDouble(28));
-					sales.setRounding(rowsetActual.getString(29));
-					sales.setCanceldate(rowsetActual.getDate(30));
-					sales.setPeymethod(rowsetActual.getString(31));
-					sales.setCtlaccount(rowsetActual.getString(32));
-					sales.setBplname(rowsetActual.getString(33));
-					sales.setVatregnum(rowsetActual.getString(34));
-					sales.setPaidsum(rowsetActual.getDouble(35));
-					sales.setTowhscode(rowsetActual.getString(36));
-					sales.setNret(rowsetActual.getDouble(37));
-					sales.setNamenp(rowsetActual.getString(38));
-					sales.setQuedan(rowsetActual.getInt(39));
-					sales.setFechreciva(rowsetActual.getDate(40));
-					sales.setFquedan(rowsetActual.getDate(41));
-					sales.setUsersign(rowsetActual.getInt(42));
-					sales.setCreatedate(rowsetActual.getDate(43));
-					sales.setCreatetime(rowsetActual.getInt(44));
+					PurchaseTO purchase = new PurchaseTO();
+					purchase.setDocentry(rowsetActual.getInt(1));
+					purchase.setDocnum(rowsetActual.getInt(2));
+					purchase.setDoctype(rowsetActual.getString(3));
+					purchase.setCanceled(rowsetActual.getString(4));
+					purchase.setDocstatus(rowsetActual.getString(5));
+					purchase.setObjtype(rowsetActual.getString(6));
+					purchase.setDocdate(rowsetActual.getDate(7));
+					purchase.setDocduedate(rowsetActual.getDate(8));
+					purchase.setCardcode(rowsetActual.getString(9));
+					purchase.setNumatcard(rowsetActual.getString(10));
+					purchase.setCardname(rowsetActual.getString(11));
+					purchase.setVatsum(rowsetActual.getString(12));
+					purchase.setDiscsum(rowsetActual.getDouble(13));
+					purchase.setDoctotal(rowsetActual.getDouble(14));
+					purchase.setRef1(rowsetActual.getString(15));
+					purchase.setRef2(rowsetActual.getString(16));
+					purchase.setComments(rowsetActual.getString(17));
+					purchase.setJrnlmemo(rowsetActual.getString(18));
+					purchase.setPaidtodate(rowsetActual.getDate(19));
+					purchase.setTransid(rowsetActual.getInt(20));
+					purchase.setReceiptnum(rowsetActual.getInt(21));
+					purchase.setGroupnum(rowsetActual.getInt(22));
+					purchase.setConfirmed(rowsetActual.getString(23));
+					purchase.setCreatetran(rowsetActual.getString(24));
+					purchase.setSeries(rowsetActual.getInt(25));
+					purchase.setTaxdate(rowsetActual.getDate(26));
+					purchase.setFiller(rowsetActual.getString(27));
+					purchase.setRounddif(rowsetActual.getDouble(28));
+					purchase.setRounding(rowsetActual.getString(29));
+					purchase.setCanceldate(rowsetActual.getDate(30));
+					purchase.setPeymethod(rowsetActual.getString(31));
+					purchase.setCtlaccount(rowsetActual.getString(32));
+					purchase.setBplname(rowsetActual.getString(33));
+					purchase.setVatregnum(rowsetActual.getString(34));
+					purchase.setPaidsum(rowsetActual.getDouble(35));
+					purchase.setTowhscode(rowsetActual.getString(36));
+					purchase.setNret(rowsetActual.getDouble(37));
+					purchase.setNamenp(rowsetActual.getString(38));
+					purchase.setQuedan(rowsetActual.getInt(39));
+					purchase.setFechreciva(rowsetActual.getDate(40));
+					purchase.setFquedan(rowsetActual.getDate(41));
+					purchase.setUsersign(rowsetActual.getInt(42));
+					purchase.setCreatedate(rowsetActual.getDate(43));
+					purchase.setCreatetime(rowsetActual.getInt(44));
 
-					_return.add(sales);
+					_return.add(purchase);
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -114,67 +110,67 @@ public class SalesDAO extends CommonDAO{
 		return _return;
 	}
 	//Retorna elemento goodsreceipt con detalle por clave
-	public SalesTO getSalesByKey(int docentry) throws Exception {
-		SalesTO _return = new SalesTO();
+	public PurchaseTO getPurchaseByKey(int docentry) throws Exception {
+		PurchaseTO _return = new PurchaseTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_sales_by_key(?)}");
+		this.setDbObject("{call sp_get_purchase_by_key(?)}");
 		this.setInt(1, "_docentry", new Integer(docentry));
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		SalesDetailDAO Detail = new SalesDetailDAO();
+		PurchaseDetailDAO Detail = new PurchaseDetailDAO();
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					SalesTO sales= new SalesTO();
-					sales.setDocentry(rowsetActual.getInt(1));
-					sales.setDocnum(rowsetActual.getInt(2));
-					sales.setDoctype(rowsetActual.getString(3));
-					sales.setCanceled(rowsetActual.getString(4));
-					sales.setDocstatus(rowsetActual.getString(5));
-					sales.setObjtype(rowsetActual.getString(6));
-					sales.setDocdate(rowsetActual.getDate(7));
-					sales.setDocduedate(rowsetActual.getDate(8));
-					sales.setCardcode(rowsetActual.getString(9));
-					sales.setNumatcard(rowsetActual.getString(10));
-					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
-					sales.setDiscsum(rowsetActual.getDouble(13));
-					sales.setDoctotal(rowsetActual.getDouble(14));
-					sales.setRef1(rowsetActual.getString(15));
-					sales.setRef2(rowsetActual.getString(16));
-					sales.setComments(rowsetActual.getString(17));
-					sales.setJrnlmemo(rowsetActual.getString(18));
-					sales.setPaidtodate(rowsetActual.getDate(19));
-					sales.setTransid(rowsetActual.getInt(20));
-					sales.setReceiptnum(rowsetActual.getInt(21));
-					sales.setGroupnum(rowsetActual.getInt(22));
-					sales.setConfirmed(rowsetActual.getString(23));
-					sales.setCreatetran(rowsetActual.getString(24));
-					sales.setSeries(rowsetActual.getInt(25));
-					sales.setTaxdate(rowsetActual.getDate(26));
-					sales.setFiller(rowsetActual.getString(27));
-					sales.setRounddif(rowsetActual.getDouble(28));
-					sales.setRounding(rowsetActual.getString(29));
-					sales.setCanceldate(rowsetActual.getDate(30));
-					sales.setPeymethod(rowsetActual.getString(31));
-					sales.setCtlaccount(rowsetActual.getString(32));
-					sales.setBplname(rowsetActual.getString(33));
-					sales.setVatregnum(rowsetActual.getString(34));
-					sales.setPaidsum(rowsetActual.getDouble(35));
-					sales.setTowhscode(rowsetActual.getString(36));
-					sales.setNret(rowsetActual.getDouble(37));
-					sales.setNamenp(rowsetActual.getString(38));
-					sales.setQuedan(rowsetActual.getInt(39));
-					sales.setFechreciva(rowsetActual.getDate(40));
-					sales.setFquedan(rowsetActual.getDate(41));
-					sales.setUsersign(rowsetActual.getInt(42));
-					sales.setSalesDetails(Detail.getSalesDetail(rowsetActual.getInt(1)));
-					_return=sales;
+					PurchaseTO purchase= new PurchaseTO();
+					purchase.setDocentry(rowsetActual.getInt(1));
+					purchase.setDocnum(rowsetActual.getInt(2));
+					purchase.setDoctype(rowsetActual.getString(3));
+					purchase.setCanceled(rowsetActual.getString(4));
+					purchase.setDocstatus(rowsetActual.getString(5));
+					purchase.setObjtype(rowsetActual.getString(6));
+					purchase.setDocdate(rowsetActual.getDate(7));
+					purchase.setDocduedate(rowsetActual.getDate(8));
+					purchase.setCardcode(rowsetActual.getString(9));
+					purchase.setNumatcard(rowsetActual.getString(10));
+					purchase.setCardname(rowsetActual.getString(11));
+					purchase.setVatsum(rowsetActual.getString(12));
+					purchase.setDiscsum(rowsetActual.getDouble(13));
+					purchase.setDoctotal(rowsetActual.getDouble(14));
+					purchase.setRef1(rowsetActual.getString(15));
+					purchase.setRef2(rowsetActual.getString(16));
+					purchase.setComments(rowsetActual.getString(17));
+					purchase.setJrnlmemo(rowsetActual.getString(18));
+					purchase.setPaidtodate(rowsetActual.getDate(19));
+					purchase.setTransid(rowsetActual.getInt(20));
+					purchase.setReceiptnum(rowsetActual.getInt(21));
+					purchase.setGroupnum(rowsetActual.getInt(22));
+					purchase.setConfirmed(rowsetActual.getString(23));
+					purchase.setCreatetran(rowsetActual.getString(24));
+					purchase.setSeries(rowsetActual.getInt(25));
+					purchase.setTaxdate(rowsetActual.getDate(26));
+					purchase.setFiller(rowsetActual.getString(27));
+					purchase.setRounddif(rowsetActual.getDouble(28));
+					purchase.setRounding(rowsetActual.getString(29));
+					purchase.setCanceldate(rowsetActual.getDate(30));
+					purchase.setPeymethod(rowsetActual.getString(31));
+					purchase.setCtlaccount(rowsetActual.getString(32));
+					purchase.setBplname(rowsetActual.getString(33));
+					purchase.setVatregnum(rowsetActual.getString(34));
+					purchase.setPaidsum(rowsetActual.getDouble(35));
+					purchase.setTowhscode(rowsetActual.getString(36));
+					purchase.setNret(rowsetActual.getDouble(37));
+					purchase.setNamenp(rowsetActual.getString(38));
+					purchase.setQuedan(rowsetActual.getInt(39));
+					purchase.setFechreciva(rowsetActual.getDate(40));
+					purchase.setFquedan(rowsetActual.getDate(41));
+					purchase.setUsersign(rowsetActual.getInt(42));
+					purchase.setpurchaseDetails(Detail.getpurchaseDetail(rowsetActual.getInt(1)));
+					_return=purchase;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -185,11 +181,11 @@ public class SalesDAO extends CommonDAO{
 		return _return;
 	}
 	
-	public int inv_Sales_mtto(SalesTO parameters, int accion) throws Exception {
+	public int inv_Purchase_mtto(PurchaseTO parameters, int accion) throws Exception {
 		Double DATO=0.00; //////////######## DATO QUEMADO###############
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsrecei(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{? = call sp_sal0_sales_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{? = call sp_purchase_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		if (parameters.getDocdate() == null){
 			this.setDate(8,"_docdate", parameters.getDocdate());
 		}else

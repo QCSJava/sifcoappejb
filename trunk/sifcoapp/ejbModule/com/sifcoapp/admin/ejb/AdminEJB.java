@@ -3,11 +3,8 @@ package com.sifcoapp.admin.ejb;
 
 import java.util.Iterator;
 import java.util.List;
-
-
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
@@ -231,6 +228,7 @@ public class AdminEJB implements AdminEJBRemote {
 		adminDAO.setIstransaccional(true);
 		try {
 			_return = adminDAO.getArticlesByKey(itemcode);
+			adminDAO.forceCloseConnection();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);

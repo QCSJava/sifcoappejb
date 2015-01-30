@@ -15,19 +15,19 @@ public class TransfersInTO extends CommonTO{
 	
 	private int docnum;
 	private Date docdate;
+	private Date docduedate;
 	private int series;
 	public TransfersInTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	public TransfersInTO(int docnum, Date docdate, int series) {
+	public TransfersInTO(int docnum, Date docdate, Date docduedate, int series) {
 		super();
 		this.docnum = docnum;
 		this.docdate = docdate;
+		this.docduedate = docduedate;
 		this.series = series;
 	}
-
 	public int getDocnum() {
 		return docnum;
 	}
@@ -40,11 +40,19 @@ public class TransfersInTO extends CommonTO{
 	public void setDocdate(Date docdate) {
 		this.docdate = docdate;
 	}
+	public Date getDocduedate() {
+		return docduedate;
+	}
+	public void setDocduedate(Date docduedate) {
+		this.docduedate = docduedate;
+	}
 	public int getSeries() {
 		return series;
 	}
 	public void setSeries(int series) {
 		this.series = series;
-	} 
+	}
+	
+	
 	
 }

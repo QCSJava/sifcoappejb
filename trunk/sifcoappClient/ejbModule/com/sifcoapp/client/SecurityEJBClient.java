@@ -5,7 +5,6 @@ import java.util.List;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
@@ -37,15 +36,6 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 
 		return usrOutTO;
 
-	}
-
-	public String SayHello(String hellomsg) {
-		// TODO Auto-generated method stub
-		String message;
-
-		message = bean.SayHello(hellomsg);
-
-		return message;
 	}
 
 	public static void main(String[] args) {

@@ -217,7 +217,20 @@ public class AdminDAO extends CommonDAO {
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_articles_mtto_5(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_cat_articles_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-
+		if(parameters.getValidFrom()==null){
+			this.setDate(21, "_validfrom", parameters.getValidFrom());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getValidFrom().getTime());
+			this.setDate(21, "_validfrom", fecha);
+		}
+		if(parameters.getValidTo()==null){
+			this.setDate(22, "_validto", parameters.getValidTo());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getValidTo().getTime());
+			this.setDate(22, "_validto", fecha);
+		}
 		this.setString(1, "_itemcode", parameters.getItemCode());
 		this.setString(2, "_itemname", parameters.getItemName());
 		this.setString(3, "_itemtype", parameters.getItemType());
@@ -238,8 +251,6 @@ public class AdminDAO extends CommonDAO {
 		this.setDouble(18, "_avgprice", new Double(parameters.getAvgPrice()));
 		this.setDouble(19, "_onhand", new Double(parameters.getOnHand()));
 		this.setString(20, "_validfor", parameters.getValidFor());
-		this.setDate(21, "_validfrom", parameters.getValidFrom());
-		this.setDate(22, "_validto", parameters.getValidTo());
 		this.setString(23, "_invntryuom", parameters.getInvntryUom());
 		this.setDouble(24, "_numinsale", new Double(parameters.getNumInSale()));
 		this.setString(25, "_dfltwh", parameters.getDfltWH());

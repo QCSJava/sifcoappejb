@@ -6,16 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.sifcoapp.client.SalesEJBClient;
+import com.sifcoapp.client.PurchaseEJBClient;
 import com.sifcoapp.objects.common.to.ResultOutTO;
-import com.sifcoapp.objects.sales.to.*;
+import com.sifcoapp.objects.purchase.to.*;
 
-public class SalesTest {
-	private static SalesEJBClient sales;
+public class PurchaseTest {
+	private static PurchaseEJBClient Purchase;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		if 		(sales==null)
-			sales=new SalesEJBClient();
+		if 		(Purchase==null)
+			Purchase=new PurchaseEJBClient();
 		
 		String v_method = args[0];
 
@@ -28,7 +28,7 @@ public class SalesTest {
 		 */
 
 		try {
-			SalesTest.class.getMethod(args[0], null).invoke(null, null);
+			PurchaseTest.class.getMethod(args[0], null).invoke(null, null);
 			// testPeriods();
 
 		} catch (IllegalAccessException e) {
@@ -50,37 +50,38 @@ public class SalesTest {
 		
 	}
 	
-	public static void getSales() {
+	public static void getPurchase() {
 
 		List lstPeriods = new Vector();
-		SalesInTO nuevo = new SalesInTO();
-		nuevo.setSeries(8);
+		PurchaseInTO nuevo = new PurchaseInTO();
+		//nuevo.setSeries(8);
+		nuevo.setDocnum(485);
 		Date fecha= new Date();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		try {
-			lstPeriods = sales.getSales(nuevo);
+			lstPeriods = Purchase.getPurchase(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Iterator<SalesTO> iterator = lstPeriods.iterator();
+		Iterator<PurchaseTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
-			SalesTO periodo = (SalesTO) iterator.next();
+			PurchaseTO periodo = (PurchaseTO) iterator.next();
 			System.out.println(periodo.getDocnum()+ " - "
 					+ periodo.getSeries() + " - "
 					+ periodo.getDocentry());
 		}
 	}
 	
-	public static void getSalesbykey() {
+	public static void getPurchasebykey() {
 
-		SalesTO periodo = new SalesTO();
+		PurchaseTO periodo = new PurchaseTO();
 		List lstPeriods = new Vector();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		try {
-			periodo = sales.getSalesByKey(15);
+			periodo = Purchase.getPurchaseByKey(2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,23 +91,23 @@ public class SalesTest {
 					+ periodo.getSeries() + " - "
 					+ periodo.getDocentry());
 			
-			lstPeriods = periodo.getSalesDetails();
-			Iterator<SalesDetailTO> iterator = lstPeriods.iterator();
+			lstPeriods = periodo.getpurchaseDetails();
+			Iterator<PurchaseDetailTO> iterator = lstPeriods.iterator();
 			while (iterator.hasNext()) {
-				SalesDetailTO periodo2 = (SalesDetailTO) iterator.next();
+				PurchaseDetailTO periodo2 = (PurchaseDetailTO) iterator.next();
 				System.out.println(periodo2.getItemcode() + " - "
 						+ periodo2.getDscription() + " - "
 						+ periodo2.getAcctcode());
 			}	
 	}
-	public static void Sales_mtto() {
+	public static void Purchase_mtto() {
 
 		ResultOutTO _result=new ResultOutTO();
-		SalesTO parameters = new SalesTO();
+		PurchaseTO parameters = new PurchaseTO();
 	
 		List prueba = new Vector();
-		SalesDetailTO document = new SalesDetailTO();
-		SalesDetailTO document1 = new SalesDetailTO();
+		PurchaseDetailTO document = new PurchaseDetailTO();
+		PurchaseDetailTO document1 = new PurchaseDetailTO();
 		
 		//document.setDocentry(1);
 		document.setLinenum(1);
@@ -129,9 +130,9 @@ public class SalesTest {
 		//parameters.setDocentry(26);
 		parameters.setCardcode("P");
 		//parameters.setDoctotal(15.5);
-		parameters.setSalesDetails(prueba);
+		parameters.setpurchaseDetails(prueba);
 		try {
-			_result = sales.inv_Sales_mtto(parameters,1);
+			_result = Purchase.inv_Purchase_mtto(parameters,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error EJB " + e.getMessage());
@@ -143,38 +144,41 @@ public class SalesTest {
 	}
 	
 	
-	public static void getClientCredi() {
+	
+	
+	
+	public static void getSupplier() {
 
 		List lstPeriods = new Vector();
-		ClientCrediInTO nuevo = new ClientCrediInTO();
+		SupplierInTO nuevo = new SupplierInTO();
 		//nuevo.setSeries(8);
-		nuevo.setDocnum(1);
+		nuevo.setDocnum(485);
 		Date fecha= new Date();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		try {
-			lstPeriods = sales.getClientCredi(nuevo);
+			lstPeriods = Purchase.getSupplier(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Iterator<ClientCrediTO> iterator = lstPeriods.iterator();
+		Iterator<SupplierTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
-			ClientCrediTO periodo = (ClientCrediTO) iterator.next();
+			SupplierTO periodo = (SupplierTO) iterator.next();
 			System.out.println(periodo.getDocnum()+ " - "
 					+ periodo.getSeries() + " - "
 					+ periodo.getDocentry());
 		}
 	}
 	
-	public static void getClientCredibykey() {
+	public static void getSupplierbykey() {
 
-		ClientCrediTO periodo = new ClientCrediTO();
+		SupplierTO periodo = new SupplierTO();
 		List lstPeriods = new Vector();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		try {
-			periodo = sales.getClientCrediByKey(1);
+			periodo = Purchase.getSupplierByKey(2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -184,23 +188,23 @@ public class SalesTest {
 					+ periodo.getSeries() + " - "
 					+ periodo.getDocentry());
 			
-			lstPeriods = periodo.getclientDetails();
-			Iterator<ClientCrediDetailTO> iterator = lstPeriods.iterator();
+			lstPeriods = periodo.getsupplierDetails();
+			Iterator<SupplierDetailTO> iterator = lstPeriods.iterator();
 			while (iterator.hasNext()) {
-				ClientCrediDetailTO periodo2 = (ClientCrediDetailTO) iterator.next();
+				SupplierDetailTO periodo2 = (SupplierDetailTO) iterator.next();
 				System.out.println(periodo2.getItemcode() + " - "
 						+ periodo2.getDscription() + " - "
 						+ periodo2.getAcctcode());
 			}	
 	}
-	public static void ClientCredi_mtto() {
+	public static void Supplier_mtto() {
 
 		ResultOutTO _result=new ResultOutTO();
-		ClientCrediTO parameters = new ClientCrediTO();
+		SupplierTO parameters = new SupplierTO();
 	
 		List prueba = new Vector();
-		ClientCrediDetailTO document = new ClientCrediDetailTO();
-		ClientCrediDetailTO document1 = new ClientCrediDetailTO();
+		SupplierDetailTO document = new SupplierDetailTO();
+		SupplierDetailTO document1 = new SupplierDetailTO();
 		
 		//document.setDocentry(1);
 		document.setLinenum(1);
@@ -223,9 +227,9 @@ public class SalesTest {
 		//parameters.setDocentry(26);
 		parameters.setCardcode("P");
 		//parameters.setDoctotal(15.5);
-		parameters.setclientDetails(prueba);
+		parameters.setsupplierDetails(prueba);
 		try {
-			_result = sales.inv_ClientCredi_mtto(parameters,1);
+			_result = Purchase.inv_Supplier_mtto(parameters,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error EJB " + e.getMessage());

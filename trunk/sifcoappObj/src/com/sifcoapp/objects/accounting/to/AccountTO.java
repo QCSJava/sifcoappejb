@@ -1,8 +1,10 @@
 package com.sifcoapp.objects.accounting.to;
 
-import java.sql.Date;
+
 
 import com.sifcoapp.objects.common.to.CommonTO;
+
+import java.util.Date;
 import java.util.List;
 
 public class AccountTO extends CommonTO {

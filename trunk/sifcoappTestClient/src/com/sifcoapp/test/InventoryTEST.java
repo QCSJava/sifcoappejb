@@ -52,9 +52,9 @@ public class InventoryTEST {
 
 		List lstPeriods = new Vector();
 		GoodsissuesInTO nuevo = new GoodsissuesInTO();
-		nuevo.setDocnum(21);
+		nuevo.setDocnum(485);
 		Date fecha= new Date();
-		nuevo.setDocdate(fecha);
+		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		try {
 			lstPeriods = Inventory.getGoodsissues(nuevo);
@@ -67,7 +67,7 @@ public class InventoryTEST {
 			GoodsissuesTO periodo = (GoodsissuesTO) iterator.next();
 			System.out.println(periodo.getDocnum()+ " - "
 					+ periodo.getSeries() + " - "
-					+ periodo.getDocentry());
+					+ periodo.getDocentry()+periodo.getCreatedate());
 		}
 	}
 	

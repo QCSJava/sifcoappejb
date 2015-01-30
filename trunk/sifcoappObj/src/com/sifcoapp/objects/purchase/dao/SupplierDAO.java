@@ -1,4 +1,4 @@
-package com.sifcoapp.objects.sales.DAO;
+package com.sifcoapp.objects.purchase.dao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,21 +7,17 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
-import com.sifcoapp.objects.sales.to.SalesInTO;
-import com.sifcoapp.objects.sales.to.SalesTO;
+import com.sifcoapp.objects.purchase.to.*;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class SalesDAO extends CommonDAO{
+public class SupplierDAO extends CommonDAO{
 	
-	public List getSales(SalesInTO param) throws Exception{
+	public List getSupplier(SupplierInTO param) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_suppliercreditnotes(?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -57,53 +53,53 @@ public class SalesDAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					SalesTO sales = new SalesTO();
-					sales.setDocentry(rowsetActual.getInt(1));
-					sales.setDocnum(rowsetActual.getInt(2));
-					sales.setDoctype(rowsetActual.getString(3));
-					sales.setCanceled(rowsetActual.getString(4));
-					sales.setDocstatus(rowsetActual.getString(5));
-					sales.setObjtype(rowsetActual.getString(6));
-					sales.setDocdate(rowsetActual.getDate(7));
-					sales.setDocduedate(rowsetActual.getDate(8));
-					sales.setCardcode(rowsetActual.getString(9));
-					sales.setNumatcard(rowsetActual.getString(10));
-					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
-					sales.setDiscsum(rowsetActual.getDouble(13));
-					sales.setDoctotal(rowsetActual.getDouble(14));
-					sales.setRef1(rowsetActual.getString(15));
-					sales.setRef2(rowsetActual.getString(16));
-					sales.setComments(rowsetActual.getString(17));
-					sales.setJrnlmemo(rowsetActual.getString(18));
-					sales.setPaidtodate(rowsetActual.getDate(19));
-					sales.setTransid(rowsetActual.getInt(20));
-					sales.setReceiptnum(rowsetActual.getInt(21));
-					sales.setGroupnum(rowsetActual.getInt(22));
-					sales.setConfirmed(rowsetActual.getString(23));
-					sales.setCreatetran(rowsetActual.getString(24));
-					sales.setSeries(rowsetActual.getInt(25));
-					sales.setTaxdate(rowsetActual.getDate(26));
-					sales.setFiller(rowsetActual.getString(27));
-					sales.setRounddif(rowsetActual.getDouble(28));
-					sales.setRounding(rowsetActual.getString(29));
-					sales.setCanceldate(rowsetActual.getDate(30));
-					sales.setPeymethod(rowsetActual.getString(31));
-					sales.setCtlaccount(rowsetActual.getString(32));
-					sales.setBplname(rowsetActual.getString(33));
-					sales.setVatregnum(rowsetActual.getString(34));
-					sales.setPaidsum(rowsetActual.getDouble(35));
-					sales.setTowhscode(rowsetActual.getString(36));
-					sales.setNret(rowsetActual.getDouble(37));
-					sales.setNamenp(rowsetActual.getString(38));
-					sales.setQuedan(rowsetActual.getInt(39));
-					sales.setFechreciva(rowsetActual.getDate(40));
-					sales.setFquedan(rowsetActual.getDate(41));
-					sales.setUsersign(rowsetActual.getInt(42));
-					sales.setCreatedate(rowsetActual.getDate(43));
-					sales.setCreatetime(rowsetActual.getInt(44));
+					SupplierTO Supplier = new SupplierTO();
+					Supplier.setDocentry(rowsetActual.getInt(1));
+					Supplier.setDocnum(rowsetActual.getInt(2));
+					Supplier.setDoctype(rowsetActual.getString(3));
+					Supplier.setCanceled(rowsetActual.getString(4));
+					Supplier.setDocstatus(rowsetActual.getString(5));
+					Supplier.setObjtype(rowsetActual.getString(6));
+					Supplier.setDocdate(rowsetActual.getDate(7));
+					Supplier.setDocduedate(rowsetActual.getDate(8));
+					Supplier.setCardcode(rowsetActual.getString(9));
+					Supplier.setNumatcard(rowsetActual.getString(10));
+					Supplier.setCardname(rowsetActual.getString(11));
+					Supplier.setVatsum(rowsetActual.getString(12));
+					Supplier.setDiscsum(rowsetActual.getDouble(13));
+					Supplier.setDoctotal(rowsetActual.getDouble(14));
+					Supplier.setRef1(rowsetActual.getString(15));
+					Supplier.setRef2(rowsetActual.getString(16));
+					Supplier.setComments(rowsetActual.getString(17));
+					Supplier.setJrnlmemo(rowsetActual.getString(18));
+					Supplier.setPaidtodate(rowsetActual.getDate(19));
+					Supplier.setTransid(rowsetActual.getInt(20));
+					Supplier.setReceiptnum(rowsetActual.getInt(21));
+					Supplier.setGroupnum(rowsetActual.getInt(22));
+					Supplier.setConfirmed(rowsetActual.getString(23));
+					Supplier.setCreatetran(rowsetActual.getString(24));
+					Supplier.setSeries(rowsetActual.getInt(25));
+					Supplier.setTaxdate(rowsetActual.getDate(26));
+					Supplier.setFiller(rowsetActual.getString(27));
+					Supplier.setRounddif(rowsetActual.getDouble(28));
+					Supplier.setRounding(rowsetActual.getString(29));
+					Supplier.setCanceldate(rowsetActual.getDate(30));
+					Supplier.setPeymethod(rowsetActual.getString(31));
+					Supplier.setCtlaccount(rowsetActual.getString(32));
+					Supplier.setBplname(rowsetActual.getString(33));
+					Supplier.setVatregnum(rowsetActual.getString(34));
+					Supplier.setPaidsum(rowsetActual.getDouble(35));
+					Supplier.setTowhscode(rowsetActual.getString(36));
+					Supplier.setNret(rowsetActual.getDouble(37));
+					Supplier.setNamenp(rowsetActual.getString(38));
+					Supplier.setQuedan(rowsetActual.getInt(39));
+					Supplier.setFechreciva(rowsetActual.getDate(40));
+					Supplier.setFquedan(rowsetActual.getDate(41));
+					Supplier.setUsersign(rowsetActual.getInt(42));
+					Supplier.setCreatedate(rowsetActual.getDate(43));
+					Supplier.setCreatetime(rowsetActual.getInt(44));
 
-					_return.add(sales);
+					_return.add(Supplier);
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -114,67 +110,67 @@ public class SalesDAO extends CommonDAO{
 		return _return;
 	}
 	//Retorna elemento goodsreceipt con detalle por clave
-	public SalesTO getSalesByKey(int docentry) throws Exception {
-		SalesTO _return = new SalesTO();
+	public SupplierTO getSupplierByKey(int docentry) throws Exception {
+		SupplierTO _return = new SupplierTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_sales_by_key(?)}");
+		this.setDbObject("{call sp_get_suppliercreditnotes_by_key(?)}");
 		this.setInt(1, "_docentry", new Integer(docentry));
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		SalesDetailDAO Detail = new SalesDetailDAO();
+		SupplierDetailDAO Detail = new SupplierDetailDAO();
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					SalesTO sales= new SalesTO();
-					sales.setDocentry(rowsetActual.getInt(1));
-					sales.setDocnum(rowsetActual.getInt(2));
-					sales.setDoctype(rowsetActual.getString(3));
-					sales.setCanceled(rowsetActual.getString(4));
-					sales.setDocstatus(rowsetActual.getString(5));
-					sales.setObjtype(rowsetActual.getString(6));
-					sales.setDocdate(rowsetActual.getDate(7));
-					sales.setDocduedate(rowsetActual.getDate(8));
-					sales.setCardcode(rowsetActual.getString(9));
-					sales.setNumatcard(rowsetActual.getString(10));
-					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
-					sales.setDiscsum(rowsetActual.getDouble(13));
-					sales.setDoctotal(rowsetActual.getDouble(14));
-					sales.setRef1(rowsetActual.getString(15));
-					sales.setRef2(rowsetActual.getString(16));
-					sales.setComments(rowsetActual.getString(17));
-					sales.setJrnlmemo(rowsetActual.getString(18));
-					sales.setPaidtodate(rowsetActual.getDate(19));
-					sales.setTransid(rowsetActual.getInt(20));
-					sales.setReceiptnum(rowsetActual.getInt(21));
-					sales.setGroupnum(rowsetActual.getInt(22));
-					sales.setConfirmed(rowsetActual.getString(23));
-					sales.setCreatetran(rowsetActual.getString(24));
-					sales.setSeries(rowsetActual.getInt(25));
-					sales.setTaxdate(rowsetActual.getDate(26));
-					sales.setFiller(rowsetActual.getString(27));
-					sales.setRounddif(rowsetActual.getDouble(28));
-					sales.setRounding(rowsetActual.getString(29));
-					sales.setCanceldate(rowsetActual.getDate(30));
-					sales.setPeymethod(rowsetActual.getString(31));
-					sales.setCtlaccount(rowsetActual.getString(32));
-					sales.setBplname(rowsetActual.getString(33));
-					sales.setVatregnum(rowsetActual.getString(34));
-					sales.setPaidsum(rowsetActual.getDouble(35));
-					sales.setTowhscode(rowsetActual.getString(36));
-					sales.setNret(rowsetActual.getDouble(37));
-					sales.setNamenp(rowsetActual.getString(38));
-					sales.setQuedan(rowsetActual.getInt(39));
-					sales.setFechreciva(rowsetActual.getDate(40));
-					sales.setFquedan(rowsetActual.getDate(41));
-					sales.setUsersign(rowsetActual.getInt(42));
-					sales.setSalesDetails(Detail.getSalesDetail(rowsetActual.getInt(1)));
-					_return=sales;
+					SupplierTO Supplier= new SupplierTO();
+					Supplier.setDocentry(rowsetActual.getInt(1));
+					Supplier.setDocnum(rowsetActual.getInt(2));
+					Supplier.setDoctype(rowsetActual.getString(3));
+					Supplier.setCanceled(rowsetActual.getString(4));
+					Supplier.setDocstatus(rowsetActual.getString(5));
+					Supplier.setObjtype(rowsetActual.getString(6));
+					Supplier.setDocdate(rowsetActual.getDate(7));
+					Supplier.setDocduedate(rowsetActual.getDate(8));
+					Supplier.setCardcode(rowsetActual.getString(9));
+					Supplier.setNumatcard(rowsetActual.getString(10));
+					Supplier.setCardname(rowsetActual.getString(11));
+					Supplier.setVatsum(rowsetActual.getString(12));
+					Supplier.setDiscsum(rowsetActual.getDouble(13));
+					Supplier.setDoctotal(rowsetActual.getDouble(14));
+					Supplier.setRef1(rowsetActual.getString(15));
+					Supplier.setRef2(rowsetActual.getString(16));
+					Supplier.setComments(rowsetActual.getString(17));
+					Supplier.setJrnlmemo(rowsetActual.getString(18));
+					Supplier.setPaidtodate(rowsetActual.getDate(19));
+					Supplier.setTransid(rowsetActual.getInt(20));
+					Supplier.setReceiptnum(rowsetActual.getInt(21));
+					Supplier.setGroupnum(rowsetActual.getInt(22));
+					Supplier.setConfirmed(rowsetActual.getString(23));
+					Supplier.setCreatetran(rowsetActual.getString(24));
+					Supplier.setSeries(rowsetActual.getInt(25));
+					Supplier.setTaxdate(rowsetActual.getDate(26));
+					Supplier.setFiller(rowsetActual.getString(27));
+					Supplier.setRounddif(rowsetActual.getDouble(28));
+					Supplier.setRounding(rowsetActual.getString(29));
+					Supplier.setCanceldate(rowsetActual.getDate(30));
+					Supplier.setPeymethod(rowsetActual.getString(31));
+					Supplier.setCtlaccount(rowsetActual.getString(32));
+					Supplier.setBplname(rowsetActual.getString(33));
+					Supplier.setVatregnum(rowsetActual.getString(34));
+					Supplier.setPaidsum(rowsetActual.getDouble(35));
+					Supplier.setTowhscode(rowsetActual.getString(36));
+					Supplier.setNret(rowsetActual.getDouble(37));
+					Supplier.setNamenp(rowsetActual.getString(38));
+					Supplier.setQuedan(rowsetActual.getInt(39));
+					Supplier.setFechreciva(rowsetActual.getDate(40));
+					Supplier.setFquedan(rowsetActual.getDate(41));
+					Supplier.setUsersign(rowsetActual.getInt(42));
+					Supplier.setsupplierDetails(Detail.getsupplierDetail(rowsetActual.getInt(1)));
+					_return=Supplier;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -185,11 +181,11 @@ public class SalesDAO extends CommonDAO{
 		return _return;
 	}
 	
-	public int inv_Sales_mtto(SalesTO parameters, int accion) throws Exception {
+	public int inv_Supplier_mtto(SupplierTO parameters, int accion) throws Exception {
 		Double DATO=0.00; //////////######## DATO QUEMADO###############
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsrecei(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{? = call sp_sal0_sales_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{? = call sp_suppliercreditnotes_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		if (parameters.getDocdate() == null){
 			this.setDate(8,"_docdate", parameters.getDocdate());
 		}else

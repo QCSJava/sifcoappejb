@@ -5,7 +5,7 @@ public class ResultOutTO extends CommonTO{
 	 * 
 	 */
 	private static final long serialVersionUID = 380892981572094281L;
-	private int codigoError;
+	private int codigoError=999;
 	private int docentry;
 	private int linenum;
 	private String mensaje;

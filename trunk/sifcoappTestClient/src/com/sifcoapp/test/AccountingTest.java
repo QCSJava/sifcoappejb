@@ -1,25 +1,17 @@
 package com.sifcoapp.test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.AccountingEJBClient;
-import com.sifcoapp.client.SecurityEJBClient;
-import com.sifcoapp.objects.accounting.to.AccPeriodInTO;
-import com.sifcoapp.objects.accounting.to.AccPeriodOutTO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
-import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
-import com.sifcoapp.objects.security.to.ProfileInTO;
-import com.sifcoapp.objects.security.to.ProfileOutTO;
-import com.sifcoapp.objects.security.to.UserAppInTO;
-import com.sifcoapp.objects.security.to.UserAppOutTO;
-import com.sifcoapp.objects.security.to.UserTO;
-import com.sifcoapp.objects.utilities.PasswordService;
+
 
 public class AccountingTest {
 	private static AccountingEJBClient AccountingEJBService = null;
@@ -149,6 +141,7 @@ public class AccountingTest {
 		AccassignmentTO parameters = new AccassignmentTO();
 
 		// parameters.setUsersign();
+		//parameters.setAbsentry(2);
 		parameters.setLinkact_1("101010");
 		parameters.setLinkact_2("111111");
 		parameters.setLinkact_3("1212121");
@@ -161,7 +154,8 @@ public class AccountingTest {
 		parameters.setPdfltwt("Pdfltwt");
 		parameters.setShandlewt(true);
 		parameters.setPhandlewt(true);
-
+		Date fecha= new Date();
+		parameters.setT_taxdate(fecha);
 		// Agregar
 
 		// _result = AccountingEJBService.cat_accAssignment_mtto(parameters,
@@ -181,7 +175,7 @@ public class AccountingTest {
 		 */
 
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		System.out.println(fecha);
 
 	}
 

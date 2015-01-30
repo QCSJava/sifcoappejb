@@ -2,7 +2,7 @@ package com.sifcoapp.objects.accounting.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class AccPeriodTO extends CommonTO {
 

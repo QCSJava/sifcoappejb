@@ -11,6 +11,7 @@ public class SalesInTO extends CommonTO{
 	private static final long serialVersionUID = -6477982382258709727L;
 	private int docnum;
 	private Date docdate;
+	private Date docduedate;
 	private int series;
 	private String towhscode;
 	private String fromwhscode;
@@ -21,11 +22,13 @@ public class SalesInTO extends CommonTO{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public SalesInTO(int docnum, Date docdate, int series, String towhscode,
-			String fromwhscode, String ref1, String ref2, String comments) {
+	public SalesInTO(int docnum, Date docdate, Date docduedate, int series,
+			String towhscode, String fromwhscode, String ref1, String ref2,
+			String comments) {
 		super();
 		this.docnum = docnum;
 		this.docdate = docdate;
+		this.docduedate = docduedate;
 		this.series = series;
 		this.towhscode = towhscode;
 		this.fromwhscode = fromwhscode;
@@ -33,7 +36,6 @@ public class SalesInTO extends CommonTO{
 		this.ref2 = ref2;
 		this.comments = comments;
 	}
-
 	public int getDocnum() {
 		return docnum;
 	}
@@ -45,6 +47,12 @@ public class SalesInTO extends CommonTO{
 	}
 	public void setDocdate(Date docdate) {
 		this.docdate = docdate;
+	}
+	public Date getDocduedate() {
+		return docduedate;
+	}
+	public void setDocduedate(Date docduedate) {
+		this.docduedate = docduedate;
 	}
 	public int getSeries() {
 		return series;
@@ -70,17 +78,17 @@ public class SalesInTO extends CommonTO{
 	public void setRef1(String ref1) {
 		this.ref1 = ref1;
 	}
+	public String getRef2() {
+		return ref2;
+	}
+	public void setRef2(String ref2) {
+		this.ref2 = ref2;
+	}
 	public String getComments() {
 		return comments;
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	public String getRef2() {
-		return ref2;
-	}
-	public void setRef2(String ref2) {
-		this.ref2 = ref2;
-	} 
 	
 }

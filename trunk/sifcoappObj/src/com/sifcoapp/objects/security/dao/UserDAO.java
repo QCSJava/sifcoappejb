@@ -1,22 +1,19 @@
 package com.sifcoapp.objects.security.dao;
 
-import java.sql.DriverManager;
-import java.sql.Connection;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.TreeMap;
 import java.util.Vector;
 
-import com.sifcoapp.objects.admin.to.ArticlesTO;
+
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.DBManager;
-import com.sifcoapp.objects.common.to.DetailParameter;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
