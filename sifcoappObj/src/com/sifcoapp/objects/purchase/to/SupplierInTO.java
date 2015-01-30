@@ -1,14 +1,17 @@
-package com.sifcoapp.objects.inventory.to;
+package com.sifcoapp.objects.purchase.to;
 
 import java.util.Date;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
-public class GoodsissuesInTO extends CommonTO{
+public class SupplierInTO extends CommonTO{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6477982382258709727L;
+	private static final long serialVersionUID = -8567711120044437501L;
+	/**
+	 * 
+	 */
 	private int docnum;
 	private Date docdate;
 	private Date docduedate;
@@ -16,13 +19,14 @@ public class GoodsissuesInTO extends CommonTO{
 	private String towhscode;
 	private String fromwhscode;
 	private String ref1;
+	private String ref2;
 	private String comments;
-	public GoodsissuesInTO() {
+	public SupplierInTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public GoodsissuesInTO(int docnum, Date docdate, Date docduedate,
-			int series, String towhscode, String fromwhscode, String ref1,
+	public SupplierInTO(int docnum, Date docdate, Date docduedate, int series,
+			String towhscode, String fromwhscode, String ref1, String ref2,
 			String comments) {
 		super();
 		this.docnum = docnum;
@@ -32,6 +36,7 @@ public class GoodsissuesInTO extends CommonTO{
 		this.towhscode = towhscode;
 		this.fromwhscode = fromwhscode;
 		this.ref1 = ref1;
+		this.ref2 = ref2;
 		this.comments = comments;
 	}
 	public int getDocnum() {
@@ -76,12 +81,17 @@ public class GoodsissuesInTO extends CommonTO{
 	public void setRef1(String ref1) {
 		this.ref1 = ref1;
 	}
+	public String getRef2() {
+		return ref2;
+	}
+	public void setRef2(String ref2) {
+		this.ref2 = ref2;
+	}
 	public String getComments() {
 		return comments;
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
 	
 }

@@ -6,13 +6,10 @@ import javax.ejb.EJBException;
 import javax.ejb.Remote;
 
 import com.sifcoapp.objects.common.to.ResultOutTO;
-import com.sifcoapp.objects.sales.to.SalesDetailTO;
-import com.sifcoapp.objects.sales.to.SalesInTO;
-import com.sifcoapp.objects.sales.to.SalesTO;
+import com.sifcoapp.objects.sales.to.*;
 
 @Remote
 public interface SalesEJBRemote {
-	public String doSales() throws EJBException;
 	
 	public List getSales(SalesInTO param) throws Exception;
 	
@@ -23,7 +20,11 @@ public interface SalesEJBRemote {
 	public List getSalesDetail(int docentry) throws Exception;
 	
 
+	public List getClientCredi(ClientCrediInTO param) throws Exception;
 	
+	public ClientCrediTO getClientCrediByKey(int docentry) throws Exception;
 	
-
+	public ResultOutTO inv_ClientCredi_mtto(ClientCrediTO parameters, int accion) throws Exception;
+	
+	public List getClientCrediDetail(int docentry) throws Exception;
 }

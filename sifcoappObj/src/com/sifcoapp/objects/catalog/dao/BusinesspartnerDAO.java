@@ -3,12 +3,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
-
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sun.rowset.CachedRowSetImpl;
 public class BusinesspartnerDAO extends CommonDAO{
 	
@@ -17,6 +15,20 @@ public class BusinesspartnerDAO extends CommonDAO{
 		int v_resp = 0;
 		// s.setDbObject("{call sp_gis1_goodsissuedetail_mtto   (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_cat_bpa0_businesspartner_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		if(parameters.getValidfrom()==null){
+			this.setDate(13,"_validfrom", parameters.getValidfrom());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getValidfrom().getTime());
+			this.setDate(13, "_validfrom", fecha);
+		}
+		if(parameters.getValidto()==null){
+			this.setDate(14,"_validto", parameters.getValidto());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getValidto().getTime());
+			this.setDate(14,"_validto", fecha);
+		}
 		this.setString(1,"_cardcode", parameters.getCardcode());
 		this.setString(2,"_cardname", parameters.getCardname());
 		this.setInt(3,"_groupcode",new Integer (parameters.getGroupcode()));
@@ -29,8 +41,8 @@ public class BusinesspartnerDAO extends CommonDAO{
 		this.setString(10,"_cellular", parameters.getCellular());
 		this.setString(11,"_email", parameters.getEmail());
 		this.setString(12,"_validfor", parameters.getValidfor());
-		this.setDate(13,"_validfrom", parameters.getValidfrom());
-		this.setDate(14,"_validto", parameters.getValidto());
+		
+		
 		this.setString(15,"_nit", parameters.getNit());
 		this.setString(16,"_vatgroup", parameters.getVatgroup());
 		this.setInt(17, "_action", new Integer(action));

@@ -8,29 +8,29 @@ import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
-import com.sifcoapp.objects.sales.DAO.*;
-import com.sifcoapp.objects.sales.to.*;
+import com.sifcoapp.objects.purchase.dao.*;
+import com.sifcoapp.objects.purchase.to.*;
 
 /**
  * Session Bean implementation class SalesEJB
  */
 @Stateless
-public class SalesEJB implements SalesEJBRemote {
+public class PurchaseEJB implements PurchaseEJBRemote {
 
 	/**
 	 * Default constructor.
 	 */
-	public SalesEJB() {
+	public PurchaseEJB() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List getSales(SalesInTO param) throws Exception {
+	public List getPurchase(PurchaseInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
-		SalesDAO DAO = new SalesDAO();
+		PurchaseDAO DAO = new PurchaseDAO();
 
 		try {
-			_return = DAO.getSales(param);
+			_return = DAO.getPurchase(param);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -38,12 +38,12 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	public SalesTO getSalesByKey(int docentry) throws Exception {
+	public PurchaseTO getPurchaseByKey(int docentry) throws Exception {
 		// TODO Auto-generated method stub
-		SalesTO _return = new SalesTO();
-		SalesDAO DAO = new SalesDAO();
+		PurchaseTO _return = new PurchaseTO();
+		PurchaseDAO DAO = new PurchaseDAO();
 		try {
-			_return = DAO.getSalesByKey(docentry);
+			_return = DAO.getPurchaseByKey(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -52,20 +52,20 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int action)
+	public ResultOutTO inv_Purchase_mtto(PurchaseTO parameters, int action)
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
 		Double total = 0.0;
-		SalesDAO DAO = new SalesDAO();
-		SalesDetailDAO goodDAO1 = new SalesDetailDAO();
+		PurchaseDAO DAO = new PurchaseDAO();
+		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO();
 		DAO.setIstransaccional(true);
 		goodDAO1.setIstransaccional(true);
 		try {
-			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
+			Iterator<PurchaseDetailTO> iterator2 = parameters.getpurchaseDetails()
 					.iterator();
 			while (iterator2.hasNext()) {
-				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
+				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator2.next();
 				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############// DATOS// ESTATICOS// ##########											
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
@@ -86,20 +86,20 @@ public class SalesEJB implements SalesEJBRemote {
 			parameters.setNret(0.00);
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
-			_return.setDocentry(DAO.inv_Sales_mtto(parameters, action));
+			_return.setDocentry(DAO.inv_Purchase_mtto(parameters, action));
 
-			Iterator<SalesDetailTO> iterator = parameters.getSalesDetails()
+			Iterator<PurchaseDetailTO> iterator = parameters.getpurchaseDetails()
 					.iterator();
 			while (iterator.hasNext()) {
-				SalesDetailTO articleDetalle = (SalesDetailTO) iterator.next();
+				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator.next();
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
-					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
+					goodDAO1.inv_PurchaseDetail_mtto(articleDetalle,
 							Common.MTTOINSERT);
 				}
 				if (action == Common.MTTODELETE) {
-					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
+					goodDAO1.inv_PurchaseDetail_mtto(articleDetalle,
 							Common.MTTODELETE);
 				}
 			}
@@ -115,13 +115,13 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	public List getSalesDetail(int docentry) throws Exception {
+	public List getPurchaseDetail(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
-		SalesDetailDAO DAO = new SalesDetailDAO();
+		PurchaseDetailDAO DAO = new PurchaseDetailDAO();
 
 		try {
-			_return = DAO.getSalesDetail(docentry);
+			_return = DAO.getpurchaseDetail(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -131,13 +131,14 @@ public class SalesEJB implements SalesEJBRemote {
 	
 	
 	
-	public List getClientCredi(ClientCrediInTO param) throws Exception {
+	
+	public List getSupplier(SupplierInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
-		ClientCrediDAO DAO = new ClientCrediDAO();
+		SupplierDAO DAO = new SupplierDAO();
 
 		try {
-			_return = DAO.getClientCredi(param);
+			_return = DAO.getSupplier(param);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -145,12 +146,12 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	public ClientCrediTO getClientCrediByKey(int docentry) throws Exception {
+	public SupplierTO getSupplierByKey(int docentry) throws Exception {
 		// TODO Auto-generated method stub
-		ClientCrediTO _return = new ClientCrediTO();
-		ClientCrediDAO DAO = new ClientCrediDAO();
+		SupplierTO _return = new SupplierTO();
+		SupplierDAO DAO = new SupplierDAO();
 		try {
-			_return = DAO.getClientCrediByKey(docentry);
+			_return = DAO.getSupplierByKey(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -159,20 +160,20 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO inv_ClientCredi_mtto(ClientCrediTO parameters, int action)
+	public ResultOutTO inv_Supplier_mtto(SupplierTO parameters, int action)
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
 		Double total = 0.0;
-		ClientCrediDAO DAO = new ClientCrediDAO();
-		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO();
+		SupplierDAO DAO = new SupplierDAO();
+		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO();
 		DAO.setIstransaccional(true);
 		goodDAO1.setIstransaccional(true);
 		try {
-			Iterator<ClientCrediDetailTO> iterator2 = parameters.getclientDetails()
+			Iterator<SupplierDetailTO> iterator2 = parameters.getsupplierDetails()
 					.iterator();
 			while (iterator2.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator2.next();
+				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator2.next();
 				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############// DATOS// ESTATICOS// ##########											
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
@@ -193,20 +194,20 @@ public class SalesEJB implements SalesEJBRemote {
 			parameters.setNret(0.00);
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
-			_return.setDocentry(DAO.inv_ClientCredi_mtto(parameters, action));
+			_return.setDocentry(DAO.inv_Supplier_mtto(parameters, action));
 
-			Iterator<ClientCrediDetailTO> iterator = parameters.getclientDetails()
+			Iterator<SupplierDetailTO> iterator = parameters.getsupplierDetails()
 					.iterator();
 			while (iterator.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator.next();
+				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator.next();
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
-					goodDAO1.inv_ClientCrediDetail_mtto(articleDetalle,
+					goodDAO1.inv_SupplierDetail_mtto(articleDetalle,
 							Common.MTTOINSERT);
 				}
 				if (action == Common.MTTODELETE) {
-					goodDAO1.inv_ClientCrediDetail_mtto(articleDetalle,
+					goodDAO1.inv_SupplierDetail_mtto(articleDetalle,
 							Common.MTTODELETE);
 				}
 			}
@@ -222,13 +223,13 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	public List getClientCrediDetail(int docentry) throws Exception {
+	public List getSupplierDetail(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
-		ClientCrediDetailDAO DAO = new ClientCrediDetailDAO();
+		SupplierDetailDAO DAO = new SupplierDetailDAO();
 
 		try {
-			_return = DAO.getClientCrediDetail(docentry);
+			_return = DAO.getsupplierDetail(docentry);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);

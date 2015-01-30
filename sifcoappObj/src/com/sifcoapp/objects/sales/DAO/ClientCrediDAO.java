@@ -7,21 +7,17 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
-import com.sifcoapp.objects.sales.to.SalesInTO;
-import com.sifcoapp.objects.sales.to.SalesTO;
+import com.sifcoapp.objects.sales.to.*;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class SalesDAO extends CommonDAO{
+public class ClientCrediDAO extends CommonDAO{
 	
-	public List getSales(SalesInTO param) throws Exception{
+	public List getClientCredi(ClientCrediInTO param) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_clientcreditnotes(?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -57,53 +53,53 @@ public class SalesDAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					SalesTO sales = new SalesTO();
-					sales.setDocentry(rowsetActual.getInt(1));
-					sales.setDocnum(rowsetActual.getInt(2));
-					sales.setDoctype(rowsetActual.getString(3));
-					sales.setCanceled(rowsetActual.getString(4));
-					sales.setDocstatus(rowsetActual.getString(5));
-					sales.setObjtype(rowsetActual.getString(6));
-					sales.setDocdate(rowsetActual.getDate(7));
-					sales.setDocduedate(rowsetActual.getDate(8));
-					sales.setCardcode(rowsetActual.getString(9));
-					sales.setNumatcard(rowsetActual.getString(10));
-					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
-					sales.setDiscsum(rowsetActual.getDouble(13));
-					sales.setDoctotal(rowsetActual.getDouble(14));
-					sales.setRef1(rowsetActual.getString(15));
-					sales.setRef2(rowsetActual.getString(16));
-					sales.setComments(rowsetActual.getString(17));
-					sales.setJrnlmemo(rowsetActual.getString(18));
-					sales.setPaidtodate(rowsetActual.getDate(19));
-					sales.setTransid(rowsetActual.getInt(20));
-					sales.setReceiptnum(rowsetActual.getInt(21));
-					sales.setGroupnum(rowsetActual.getInt(22));
-					sales.setConfirmed(rowsetActual.getString(23));
-					sales.setCreatetran(rowsetActual.getString(24));
-					sales.setSeries(rowsetActual.getInt(25));
-					sales.setTaxdate(rowsetActual.getDate(26));
-					sales.setFiller(rowsetActual.getString(27));
-					sales.setRounddif(rowsetActual.getDouble(28));
-					sales.setRounding(rowsetActual.getString(29));
-					sales.setCanceldate(rowsetActual.getDate(30));
-					sales.setPeymethod(rowsetActual.getString(31));
-					sales.setCtlaccount(rowsetActual.getString(32));
-					sales.setBplname(rowsetActual.getString(33));
-					sales.setVatregnum(rowsetActual.getString(34));
-					sales.setPaidsum(rowsetActual.getDouble(35));
-					sales.setTowhscode(rowsetActual.getString(36));
-					sales.setNret(rowsetActual.getDouble(37));
-					sales.setNamenp(rowsetActual.getString(38));
-					sales.setQuedan(rowsetActual.getInt(39));
-					sales.setFechreciva(rowsetActual.getDate(40));
-					sales.setFquedan(rowsetActual.getDate(41));
-					sales.setUsersign(rowsetActual.getInt(42));
-					sales.setCreatedate(rowsetActual.getDate(43));
-					sales.setCreatetime(rowsetActual.getInt(44));
+					ClientCrediTO ClientCredi = new ClientCrediTO();
+					ClientCredi.setDocentry(rowsetActual.getInt(1));
+					ClientCredi.setDocnum(rowsetActual.getInt(2));
+					ClientCredi.setDoctype(rowsetActual.getString(3));
+					ClientCredi.setCanceled(rowsetActual.getString(4));
+					ClientCredi.setDocstatus(rowsetActual.getString(5));
+					ClientCredi.setObjtype(rowsetActual.getString(6));
+					ClientCredi.setDocdate(rowsetActual.getDate(7));
+					ClientCredi.setDocduedate(rowsetActual.getDate(8));
+					ClientCredi.setCardcode(rowsetActual.getString(9));
+					ClientCredi.setNumatcard(rowsetActual.getString(10));
+					ClientCredi.setCardname(rowsetActual.getString(11));
+					ClientCredi.setVatsum(rowsetActual.getString(12));
+					ClientCredi.setDiscsum(rowsetActual.getDouble(13));
+					ClientCredi.setDoctotal(rowsetActual.getDouble(14));
+					ClientCredi.setRef1(rowsetActual.getString(15));
+					ClientCredi.setRef2(rowsetActual.getString(16));
+					ClientCredi.setComments(rowsetActual.getString(17));
+					ClientCredi.setJrnlmemo(rowsetActual.getString(18));
+					ClientCredi.setPaidtodate(rowsetActual.getDate(19));
+					ClientCredi.setTransid(rowsetActual.getInt(20));
+					ClientCredi.setReceiptnum(rowsetActual.getInt(21));
+					ClientCredi.setGroupnum(rowsetActual.getInt(22));
+					ClientCredi.setConfirmed(rowsetActual.getString(23));
+					ClientCredi.setCreatetran(rowsetActual.getString(24));
+					ClientCredi.setSeries(rowsetActual.getInt(25));
+					ClientCredi.setTaxdate(rowsetActual.getDate(26));
+					ClientCredi.setFiller(rowsetActual.getString(27));
+					ClientCredi.setRounddif(rowsetActual.getDouble(28));
+					ClientCredi.setRounding(rowsetActual.getString(29));
+					ClientCredi.setCanceldate(rowsetActual.getDate(30));
+					ClientCredi.setPeymethod(rowsetActual.getString(31));
+					ClientCredi.setCtlaccount(rowsetActual.getString(32));
+					ClientCredi.setBplname(rowsetActual.getString(33));
+					ClientCredi.setVatregnum(rowsetActual.getString(34));
+					ClientCredi.setPaidsum(rowsetActual.getDouble(35));
+					ClientCredi.setTowhscode(rowsetActual.getString(36));
+					ClientCredi.setNret(rowsetActual.getDouble(37));
+					ClientCredi.setNamenp(rowsetActual.getString(38));
+					ClientCredi.setQuedan(rowsetActual.getInt(39));
+					ClientCredi.setFechreciva(rowsetActual.getDate(40));
+					ClientCredi.setFquedan(rowsetActual.getDate(41));
+					ClientCredi.setUsersign(rowsetActual.getInt(42));
+					ClientCredi.setCreatedate(rowsetActual.getDate(43));
+					ClientCredi.setCreatetime(rowsetActual.getInt(44));
 
-					_return.add(sales);
+					_return.add(ClientCredi);
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -114,67 +110,67 @@ public class SalesDAO extends CommonDAO{
 		return _return;
 	}
 	//Retorna elemento goodsreceipt con detalle por clave
-	public SalesTO getSalesByKey(int docentry) throws Exception {
-		SalesTO _return = new SalesTO();
+	public ClientCrediTO getClientCrediByKey(int docentry) throws Exception {
+		ClientCrediTO _return = new ClientCrediTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_sales_by_key(?)}");
+		this.setDbObject("{call sp_get_clientcreditnotes_by_key(?)}");
 		this.setInt(1, "_docentry", new Integer(docentry));
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		SalesDetailDAO Detail = new SalesDetailDAO();
+		ClientCrediDetailDAO Detail = new ClientCrediDetailDAO();
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					SalesTO sales= new SalesTO();
-					sales.setDocentry(rowsetActual.getInt(1));
-					sales.setDocnum(rowsetActual.getInt(2));
-					sales.setDoctype(rowsetActual.getString(3));
-					sales.setCanceled(rowsetActual.getString(4));
-					sales.setDocstatus(rowsetActual.getString(5));
-					sales.setObjtype(rowsetActual.getString(6));
-					sales.setDocdate(rowsetActual.getDate(7));
-					sales.setDocduedate(rowsetActual.getDate(8));
-					sales.setCardcode(rowsetActual.getString(9));
-					sales.setNumatcard(rowsetActual.getString(10));
-					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
-					sales.setDiscsum(rowsetActual.getDouble(13));
-					sales.setDoctotal(rowsetActual.getDouble(14));
-					sales.setRef1(rowsetActual.getString(15));
-					sales.setRef2(rowsetActual.getString(16));
-					sales.setComments(rowsetActual.getString(17));
-					sales.setJrnlmemo(rowsetActual.getString(18));
-					sales.setPaidtodate(rowsetActual.getDate(19));
-					sales.setTransid(rowsetActual.getInt(20));
-					sales.setReceiptnum(rowsetActual.getInt(21));
-					sales.setGroupnum(rowsetActual.getInt(22));
-					sales.setConfirmed(rowsetActual.getString(23));
-					sales.setCreatetran(rowsetActual.getString(24));
-					sales.setSeries(rowsetActual.getInt(25));
-					sales.setTaxdate(rowsetActual.getDate(26));
-					sales.setFiller(rowsetActual.getString(27));
-					sales.setRounddif(rowsetActual.getDouble(28));
-					sales.setRounding(rowsetActual.getString(29));
-					sales.setCanceldate(rowsetActual.getDate(30));
-					sales.setPeymethod(rowsetActual.getString(31));
-					sales.setCtlaccount(rowsetActual.getString(32));
-					sales.setBplname(rowsetActual.getString(33));
-					sales.setVatregnum(rowsetActual.getString(34));
-					sales.setPaidsum(rowsetActual.getDouble(35));
-					sales.setTowhscode(rowsetActual.getString(36));
-					sales.setNret(rowsetActual.getDouble(37));
-					sales.setNamenp(rowsetActual.getString(38));
-					sales.setQuedan(rowsetActual.getInt(39));
-					sales.setFechreciva(rowsetActual.getDate(40));
-					sales.setFquedan(rowsetActual.getDate(41));
-					sales.setUsersign(rowsetActual.getInt(42));
-					sales.setSalesDetails(Detail.getSalesDetail(rowsetActual.getInt(1)));
-					_return=sales;
+					ClientCrediTO ClientCredi= new ClientCrediTO();
+					ClientCredi.setDocentry(rowsetActual.getInt(1));
+					ClientCredi.setDocnum(rowsetActual.getInt(2));
+					ClientCredi.setDoctype(rowsetActual.getString(3));
+					ClientCredi.setCanceled(rowsetActual.getString(4));
+					ClientCredi.setDocstatus(rowsetActual.getString(5));
+					ClientCredi.setObjtype(rowsetActual.getString(6));
+					ClientCredi.setDocdate(rowsetActual.getDate(7));
+					ClientCredi.setDocduedate(rowsetActual.getDate(8));
+					ClientCredi.setCardcode(rowsetActual.getString(9));
+					ClientCredi.setNumatcard(rowsetActual.getString(10));
+					ClientCredi.setCardname(rowsetActual.getString(11));
+					ClientCredi.setVatsum(rowsetActual.getString(12));
+					ClientCredi.setDiscsum(rowsetActual.getDouble(13));
+					ClientCredi.setDoctotal(rowsetActual.getDouble(14));
+					ClientCredi.setRef1(rowsetActual.getString(15));
+					ClientCredi.setRef2(rowsetActual.getString(16));
+					ClientCredi.setComments(rowsetActual.getString(17));
+					ClientCredi.setJrnlmemo(rowsetActual.getString(18));
+					ClientCredi.setPaidtodate(rowsetActual.getDate(19));
+					ClientCredi.setTransid(rowsetActual.getInt(20));
+					ClientCredi.setReceiptnum(rowsetActual.getInt(21));
+					ClientCredi.setGroupnum(rowsetActual.getInt(22));
+					ClientCredi.setConfirmed(rowsetActual.getString(23));
+					ClientCredi.setCreatetran(rowsetActual.getString(24));
+					ClientCredi.setSeries(rowsetActual.getInt(25));
+					ClientCredi.setTaxdate(rowsetActual.getDate(26));
+					ClientCredi.setFiller(rowsetActual.getString(27));
+					ClientCredi.setRounddif(rowsetActual.getDouble(28));
+					ClientCredi.setRounding(rowsetActual.getString(29));
+					ClientCredi.setCanceldate(rowsetActual.getDate(30));
+					ClientCredi.setPeymethod(rowsetActual.getString(31));
+					ClientCredi.setCtlaccount(rowsetActual.getString(32));
+					ClientCredi.setBplname(rowsetActual.getString(33));
+					ClientCredi.setVatregnum(rowsetActual.getString(34));
+					ClientCredi.setPaidsum(rowsetActual.getDouble(35));
+					ClientCredi.setTowhscode(rowsetActual.getString(36));
+					ClientCredi.setNret(rowsetActual.getDouble(37));
+					ClientCredi.setNamenp(rowsetActual.getString(38));
+					ClientCredi.setQuedan(rowsetActual.getInt(39));
+					ClientCredi.setFechreciva(rowsetActual.getDate(40));
+					ClientCredi.setFquedan(rowsetActual.getDate(41));
+					ClientCredi.setUsersign(rowsetActual.getInt(42));
+					ClientCredi.setclientDetails(Detail.getClientCrediDetail(rowsetActual.getInt(1)));
+					_return=ClientCredi;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -185,11 +181,11 @@ public class SalesDAO extends CommonDAO{
 		return _return;
 	}
 	
-	public int inv_Sales_mtto(SalesTO parameters, int accion) throws Exception {
+	public int inv_ClientCredi_mtto(ClientCrediTO parameters, int accion) throws Exception {
 		Double DATO=0.00; //////////######## DATO QUEMADO###############
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsrecei(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{? = call sp_sal0_sales_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{? = call sp_clientcreditnotes_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		if (parameters.getDocdate() == null){
 			this.setDate(8,"_docdate", parameters.getDocdate());
 		}else

@@ -2,38 +2,72 @@ package com.sifcoapp.objects.accounting.dao;
 
 import java.sql.Array;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
-
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class AccountingDAO extends CommonDAO {
 	/*
 	 * Mantenimiento de periodos contables
 	 */
-	public int cat_accPeriod_mtto(AccPeriodTO parameters, int action) throws Exception {
+	public int cat_accPeriod_mtto(AccPeriodTO parameters, int action)
+			throws Exception {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_period_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_cat_acc_period_mtto(?,?,?,?,?,?,?,?,?,?,?)}");
+		if(parameters.getF_refdate()==null){
+			this.setDate(3, "_f_refdate", parameters.getF_refdate());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getF_refdate().getTime());
+			this.setDate(3, "_f_refdate", fecha);
+		}
+		if(parameters.getT_refdate()==null){
+			this.setDate(4, "_t_refdate", parameters.getT_refdate());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getT_refdate().getTime());
+			this.setDate(4, "_t_refdate", fecha);
+		}
+		if(parameters.getF_duedate()==null){
+			this.setDate(5, "_f_duedate", parameters.getF_duedate());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getF_duedate().getTime());
+			this.setDate(5, "_f_duedate", fecha);
+		}
+		if(parameters.getT_duedate()==null){
+			this.setDate(6, "_t_duedate", parameters.getT_duedate());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getT_duedate().getTime());
+			this.setDate(6, "_t_duedate", fecha);
+		}
+		if(parameters.getF_taxdate()==null){
+			this.setDate(7, "_f_taxdate", parameters.getF_taxdate());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getF_taxdate().getTime());
+			this.setDate(7, "_f_taxdate", fecha);
+		}
+		if(parameters.getT_taxdate()==null){
+			this.setDate(8, "_t_taxdate", parameters.getT_taxdate());
+		}
+		else{
+			java.sql.Date fecha= new java.sql.Date(parameters.getT_taxdate().getTime());
+			this.setDate(8,"_t_taxdate", fecha);
+		}
 		this.setString(1, "_acccode", parameters.getAcccode());
 		this.setString(2, "_accname", parameters.getAccname());
-		this.setDate(3, "_f_refdate", parameters.getF_refdate());
-		this.setDate(4, "_t_refdate", parameters.getT_refdate());
-		this.setDate(5, "_f_duedate", parameters.getF_duedate());
-		this.setDate(6, "_t_duedate", parameters.getT_duedate());
-		this.setDate(7, "_f_taxdate", parameters.getF_taxdate());
-		this.setDate(8, "_t_taxdate", parameters.getT_taxdate());
 		this.setInt(9, "_periodstat", new Integer(parameters.getPeriodstat()));
 		this.setInt(10, "_usersign", new Integer(parameters.getUsersign()));
 		this.setInt(11, "_action", new Integer(action));
@@ -43,13 +77,13 @@ public class AccountingDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public List getTreeAccount()throws Exception {
+	public List getTreeAccount() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_account(?)}");
-		this.setInt(1, "_type", 1);					// para devolver todas las cuentas
+		this.setInt(1, "_type", 1); // para devolver todas las cuentas
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
@@ -117,7 +151,7 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
+
 	public List getAccount(int type) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -187,15 +221,16 @@ public class AccountingDAO extends CommonDAO {
 			profileDetTmp = (AccountTO) _allvalues.get(_position);
 
 			String padre = profileDetTmp.getFathernum();
-			
-			if (padre!=null && padre.equals(parentFilter)) {
 
-				this.filterParent(profileDetTmp, _allvalues, profileDetTmp.getAcctcode());
-				
+			if (padre != null && padre.equals(parentFilter)) {
+
+				this.filterParent(profileDetTmp, _allvalues,
+						profileDetTmp.getAcctcode());
 
 				lstDetProfile.add(profileDetTmp);
-				
-				parent.setCurrtotal(parent.getCurrtotal()+profileDetTmp.getCurrtotal());
+
+				parent.setCurrtotal(parent.getCurrtotal()
+						+ profileDetTmp.getCurrtotal());
 
 			}
 
@@ -207,7 +242,8 @@ public class AccountingDAO extends CommonDAO {
 
 	// ######### RETORNA REGISTRO DE ACCOUNT POR FILTROS
 	// ############################
-	public List getAccountByFilter(String acctcode, String acctname)throws Exception {
+	public List getAccountByFilter(String acctcode, String acctname)
+			throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
@@ -316,7 +352,8 @@ public class AccountingDAO extends CommonDAO {
 
 	// ##################### MANTEMINIENTO DE LA TABLA ACCOUNT
 	// ############################
-	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action) throws Exception {
+	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
+			throws Exception {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_period(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
@@ -389,17 +426,19 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)throws Exception {
+	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
+			throws Exception {
 
 		int v_resp = 0;
 		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
-
+		
+			java.sql.Date fecha= new java.sql.Date(parameters.getT_taxdate().getTime());
 		Object[] param = { parameters.getAbsentry(), parameters.getPeriodcat(),
 				parameters.getFinancyear(), parameters.getYear(),
 				parameters.getPeriodname(), parameters.getSubtype(),
 				parameters.getPeriodnum(), parameters.getF_refdate(),
 				parameters.getT_refdate(), parameters.getF_duedate(),
-				parameters.getT_duedate(), parameters.getF_taxdate(),
+				parameters.getT_duedate(), fecha,
 				parameters.getT_taxdate(), parameters.getLinkact_1(),
 				parameters.getLinkact_2(), parameters.getLinkact_3(),
 				parameters.getLinkact_4(), parameters.getLinkact_5(),
@@ -500,7 +539,7 @@ public class AccountingDAO extends CommonDAO {
 
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
-			try{
+			try {
 				while (rowsetActual.next()) {
 					_return.setAbsentry(rowsetActual.getInt(1));
 					_return.setPeriodcat(rowsetActual.getString(2));

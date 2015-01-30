@@ -11,6 +11,7 @@ public class GoodsReceiptInTO extends CommonTO{
 	private static final long serialVersionUID = 5512739051796806200L;
 	private int docnum;
 	private Date docdate;
+	private Date docduedate;
 	private int series;
 	private String towhscode;
 	private String fromwhscode;
@@ -20,19 +21,19 @@ public class GoodsReceiptInTO extends CommonTO{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	public GoodsReceiptInTO(int docnum, Date docdate, int series,
-			String towhscode, String fromwhscode, String ref1, String comments) {
+	public GoodsReceiptInTO(int docnum, Date docdate, Date docduedate,
+			int series, String towhscode, String fromwhscode, String ref1,
+			String comments) {
 		super();
 		this.docnum = docnum;
 		this.docdate = docdate;
+		this.docduedate = docduedate;
 		this.series = series;
 		this.towhscode = towhscode;
 		this.fromwhscode = fromwhscode;
 		this.ref1 = ref1;
 		this.comments = comments;
 	}
-
 	public int getDocnum() {
 		return docnum;
 	}
@@ -44,6 +45,12 @@ public class GoodsReceiptInTO extends CommonTO{
 	}
 	public void setDocdate(Date docdate) {
 		this.docdate = docdate;
+	}
+	public Date getDocduedate() {
+		return docduedate;
+	}
+	public void setDocduedate(Date docduedate) {
+		this.docduedate = docduedate;
 	}
 	public int getSeries() {
 		return series;
@@ -74,6 +81,6 @@ public class GoodsReceiptInTO extends CommonTO{
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
-	} 
+	}
 	
 }

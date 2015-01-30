@@ -1,7 +1,6 @@
 package com.sifcoapp.objects.accounting.to;
 
-import java.sql.Date;
-
+import java.util.Date;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 public class AccassignmentTO extends CommonTO {

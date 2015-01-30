@@ -1,19 +1,12 @@
 package com.sifcoapp.client;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
-import javax.ejb.EJBException;
+import java.util.List;
 import javax.naming.Context;
 import javax.naming.NamingException;
-
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
-import com.sifcoapp.objects.accounting.to.AccPeriodTO;
-import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
-import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;

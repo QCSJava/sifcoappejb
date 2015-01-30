@@ -2,7 +2,7 @@ package com.sifcoapp.objects.sales.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
-public class SalesDetailTO extends CommonTO{
+public class ClientCrediDetailTO extends CommonTO{
 	
 	/**
 	 * 
@@ -40,12 +40,12 @@ public class SalesDetailTO extends CommonTO{
 	private Double stockpricestockprice;
 	private Double gtotal;
 	
-	public SalesDetailTO() {
+	public ClientCrediDetailTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SalesDetailTO(int docentry, int linenum, int targettype,
+	public ClientCrediDetailTO(int docentry, int linenum, int targettype,
 			String baseref, int basetype, int baseentry, int baseline,
 			String linestatus, String itemcode, String dscription,
 			Double quantity, Double openqty, Double price, Double discprcnt,

@@ -16,7 +16,7 @@ public class TransfersDAO extends CommonDAO{
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_transfers(?,?,?)}");
+		this.setDbObject("{call sp_get_transfers(?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -25,10 +25,15 @@ public class TransfersDAO extends CommonDAO{
 			java.sql.Date fecha= new java.sql.Date(param.getDocdate().getTime());
 			this.setDate(2, "_docdate", fecha);
 		}
+		if (param.getDocduedate() == null){
+			this.setDate(4, "_docduedate", param.getDocduedate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(param.getDocduedate().getTime());
+			this.setDate(4, "_docdate", fecha);
+		}
 		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
-		
 		this.setInt(3, "_series", new Integer(param.getSeries()));
-		
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
@@ -131,8 +136,20 @@ public class TransfersDAO extends CommonDAO{
 		this.setString(5,"_canceled", parameters.getCanceled());
 		this.setString(6,"_docstatus", parameters.getDocstatus());
 		this.setString(7,"_objtype", parameters.getObjtype());
-		this.setDate(8,"_docdate", parameters.getDocdate());
-		this.setDate(9,"_docduedate", parameters.getDocduedate());
+		if (parameters.getDocdate() == null){
+			this.setDate(8,"_docdate", parameters.getDocdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getDocdate().getTime());
+			this.setDate(8, "_docdate", fecha);
+		}
+		if (parameters.getDocduedate() == null){
+			this.setDate(9,"_docduedate", parameters.getDocduedate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getDocduedate().getTime());
+			this.setDate(9, "_docduedate", fecha);
+		}
 		this.setDouble(10,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(11,"_ref1", parameters.getRef1());
 		this.setString(12,"_comments", parameters.getComments());

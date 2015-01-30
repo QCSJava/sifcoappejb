@@ -1,7 +1,6 @@
 package com.sifcoapp.objects.security.to;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
 
 public class UserTO implements java.io.Serializable {
 	/**

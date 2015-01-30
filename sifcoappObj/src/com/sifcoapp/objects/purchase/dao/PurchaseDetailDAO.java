@@ -1,4 +1,4 @@
-package com.sifcoapp.objects.sales.DAO;
+package com.sifcoapp.objects.purchase.dao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,16 +7,16 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.sales.to.SalesDetailTO;
+import com.sifcoapp.objects.purchase.to.*;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class SalesDetailDAO extends CommonDAO{
+public class PurchaseDetailDAO extends CommonDAO{
 	//Retorna de goodIssuesDetail
-		public List getSalesDetail(int docentry) throws Exception {
+		public List getpurchaseDetail(int docentry) throws Exception {
 			List _return = new Vector();
 			List lstResultSet = null;
 			this.setTypeReturn(Common.TYPERETURN_CURSOR);
-			this.setDbObject("{call sp_get_salesdetail(?)}");		
+			this.setDbObject("{call sp_get_purchasedetail(?)}");		
 			this.setInt(1, "_docentry", new Integer(docentry));		
 			
 			lstResultSet = this.runQuery();
@@ -29,39 +29,39 @@ public class SalesDetailDAO extends CommonDAO{
 				rowsetActual = (CachedRowSetImpl) liRowset.next();
 				try {
 					while (rowsetActual.next()) {
-						SalesDetailTO sales = new SalesDetailTO();
-						sales.setDocentry(rowsetActual.getInt(1));
-						sales.setLinenum(rowsetActual.getInt(2));
-						sales.setTargettype(rowsetActual.getInt(3));
-						sales.setBaseref(rowsetActual.getString(4));
-						sales.setBasetype(rowsetActual.getInt(5));
-						sales.setBaseentry(rowsetActual.getInt(6));
-						sales.setBaseline(rowsetActual.getInt(7));
-						sales.setLinestatus(rowsetActual.getString(8));
-						sales.setItemcode(rowsetActual.getString(9));
-						sales.setDscription(rowsetActual.getString(10));
-						sales.setQuantity(rowsetActual.getDouble(11));
-						sales.setOpenqty(rowsetActual.getDouble(12));
-						sales.setPrice(rowsetActual.getDouble(13));
-						sales.setDiscprcnt(rowsetActual.getDouble(14));
-						sales.setLinetotal(rowsetActual.getDouble(15));
-						sales.setWhscode(rowsetActual.getString(16));
-						sales.setAcctcode(rowsetActual.getString(17));
-						sales.setTaxstatus(rowsetActual.getString(18));
-						sales.setPricebefdi(rowsetActual.getDouble(19));
-						sales.setOcrcode(rowsetActual.getString(20));
-						sales.setVatgroup(rowsetActual.getString(21));
-						sales.setPriceafvat(rowsetActual.getDouble(22));
-						sales.setFactor1(rowsetActual.getDouble(23));
-						sales.setVatsum(rowsetActual.getDouble(24));
-						sales.setObjtype(rowsetActual.getString(25));
-						sales.setGrssprofit(rowsetActual.getDouble(26));
-						sales.setTaxcode(rowsetActual.getString(27));
-						sales.setVatappld(rowsetActual.getDouble(28));
-						sales.setUnitmsr(rowsetActual.getString(29));
-						sales.setStockpricestockprice(rowsetActual.getDouble(30));
-						sales.setGtotal(rowsetActual.getDouble(31));
-						_return.add(sales);
+						PurchaseDetailTO purchase = new PurchaseDetailTO();
+						purchase.setDocentry(rowsetActual.getInt(1));
+						purchase.setLinenum(rowsetActual.getInt(2));
+						purchase.setTargettype(rowsetActual.getInt(3));
+						purchase.setBaseref(rowsetActual.getString(4));
+						purchase.setBasetype(rowsetActual.getInt(5));
+						purchase.setBaseentry(rowsetActual.getInt(6));
+						purchase.setBaseline(rowsetActual.getInt(7));
+						purchase.setLinestatus(rowsetActual.getString(8));
+						purchase.setItemcode(rowsetActual.getString(9));
+						purchase.setDscription(rowsetActual.getString(10));
+						purchase.setQuantity(rowsetActual.getDouble(11));
+						purchase.setOpenqty(rowsetActual.getDouble(12));
+						purchase.setPrice(rowsetActual.getDouble(13));
+						purchase.setDiscprcnt(rowsetActual.getDouble(14));
+						purchase.setLinetotal(rowsetActual.getDouble(15));
+						purchase.setWhscode(rowsetActual.getString(16));
+						purchase.setAcctcode(rowsetActual.getString(17));
+						purchase.setTaxstatus(rowsetActual.getString(18));
+						purchase.setPricebefdi(rowsetActual.getDouble(19));
+						purchase.setOcrcode(rowsetActual.getString(20));
+						purchase.setVatgroup(rowsetActual.getString(21));
+						purchase.setPriceafvat(rowsetActual.getDouble(22));
+						purchase.setFactor1(rowsetActual.getDouble(23));
+						purchase.setVatsum(rowsetActual.getDouble(24));
+						purchase.setObjtype(rowsetActual.getString(25));
+						purchase.setGrssprofit(rowsetActual.getDouble(26));
+						purchase.setTaxcode(rowsetActual.getString(27));
+						purchase.setVatappld(rowsetActual.getDouble(28));
+						purchase.setUnitmsr(rowsetActual.getString(29));
+						purchase.setStockpricestockprice(rowsetActual.getDouble(30));
+						purchase.setGtotal(rowsetActual.getDouble(31));
+						_return.add(purchase);
 					}
 					rowsetActual.close();
 				} catch (SQLException e) {
@@ -72,12 +72,12 @@ public class SalesDetailDAO extends CommonDAO{
 			return _return;
 		}
 
-		public int inv_SalesDetail_mtto(SalesDetailTO parameters, int action) throws Exception{
+		public int inv_PurchaseDetail_mtto(PurchaseDetailTO parameters, int action) throws Exception{
 			
 			int v_resp = 0;
 			
 			// s.setDbObject("{call sp_gis1_goodsissued(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-			this.setDbObject("{call sp_salesdetail_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+			this.setDbObject("{call sp_purchasedetail_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 			this.setInt(1,"_docentry,", new Integer(parameters.getDocentry()));
 			this.setInt(2,"_linenum,", new Integer(parameters.getLinenum()));
 			this.setInt(3,"_targettype,", new Integer(parameters.getTargettype()));

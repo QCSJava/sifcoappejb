@@ -21,7 +21,7 @@ public class GoodsReceiptDAO extends CommonDAO{
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_goodsreceipt(?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_goodsreceipt(?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -30,9 +30,15 @@ public class GoodsReceiptDAO extends CommonDAO{
 			java.sql.Date fecha= new java.sql.Date(param.getDocdate().getTime());
 			this.setDate(2, "_docdate", fecha);
 		}
+		if (param.getDocduedate() == null){
+			this.setDate(8, "_docduedate", param.getDocduedate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(param.getDocduedate().getTime());
+			this.setDate(8, "_docdate", fecha);
+		}
 		
 		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
-		
 		this.setInt(3, "_series", new Integer(param.getSeries()));
 		this.setString(4, "_towhscode", param.getTowhscode());
 		this.setString(5, "_fromwhscode", param.getFromwhscode());

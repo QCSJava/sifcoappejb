@@ -1,8 +1,7 @@
 package com.sifcoapp.objects.catalog.to;
 import com.sifcoapp.objects.common.to.CommonTO;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
 public class BusinesspartnerTO extends CommonTO {
 
 	/**

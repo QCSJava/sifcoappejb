@@ -1,13 +1,16 @@
-package com.sifcoapp.objects.sales.to;
+package com.sifcoapp.objects.purchase.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
-public class SalesDetailTO extends CommonTO{
+public class PurchaseDetailTO extends CommonTO{
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7958579106966310270L;
+	private static final long serialVersionUID = -2095081069827874925L;
+	/**
+	 * 
+	 */
 	private int docentry;
 	private int linenum;
 	private int targettype;
@@ -40,12 +43,12 @@ public class SalesDetailTO extends CommonTO{
 	private Double stockpricestockprice;
 	private Double gtotal;
 	
-	public SalesDetailTO() {
+	public PurchaseDetailTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SalesDetailTO(int docentry, int linenum, int targettype,
+	public PurchaseDetailTO(int docentry, int linenum, int targettype,
 			String baseref, int basetype, int baseentry, int baseline,
 			String linestatus, String itemcode, String dscription,
 			Double quantity, Double openqty, Double price, Double discprcnt,
