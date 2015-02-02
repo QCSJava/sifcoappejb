@@ -71,6 +71,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		DAO.forceCommit();
 		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
 		return _return;
 		
 	}
@@ -114,6 +115,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		DAO.forceCommit();
 		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
 		return _return;
 	}
 
@@ -254,6 +256,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		Trans.forceCommit();
 		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
 		return _return;
 	}
 
