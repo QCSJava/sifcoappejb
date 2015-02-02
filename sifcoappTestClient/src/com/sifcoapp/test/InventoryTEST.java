@@ -76,10 +76,10 @@ public class InventoryTEST {
 
 		List lstPeriods = new Vector();
 		GoodsReceiptInTO nuevo = new GoodsReceiptInTO();
-		nuevo.setDocnum(0);
-		nuevo.setComments("N");
-		nuevo.setFromwhscode("R");
-		nuevo.setTowhscode("i");
+		nuevo.setDocnum(55);
+		nuevo.setComments(null);
+		//nuevo.setTowhscode("COD-01");
+		//nuevo.setRef1("");
 		//nuevo.setRef1("E");
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
