@@ -62,100 +62,91 @@ public class SecurityTest {
 
 		UserAppInTO usr = new UserAppInTO();
 		UserAppOutTO usrRes = new UserAppOutTO();
-		
+
 		usr.setIdUserApp("admin");
-		usr.setPasswordUserApp("+GW1NiOxIf007lQmx5Llwzr4wic=");
+		usr.setPasswordUserApp("+a6GBN4BXm/BKh69vnLyYrmBovY=");
 
-
-
-		usrRes=SecurityEJBService.UserValidate(usr);
-		
+		usrRes = SecurityEJBService.UserValidate(usr);
 
 		// TODO Auto-generated method stub
 		System.out.println("Usuario Valido");
 		System.out.println(usrRes.getValidUser());
-		
+
 		System.out.println("Datos perfil");
 		System.out.println("id" + usrRes.getUsrprofile().getId_perfil());
 		System.out.println("desc" + usrRes.getUsrprofile().getDesc_perfil());
-				
-		
 
-		ProfileInTO profileInTO=new ProfileInTO();
-		ProfileOutTO profileOutTO=new ProfileOutTO();
-		
-				
+		ProfileInTO profileInTO = new ProfileInTO();
+		ProfileOutTO profileOutTO = new ProfileOutTO();
 
-		profileOutTO=SecurityEJBService.GetUserProfile(usr);
-		
+		profileOutTO = SecurityEJBService.GetUserProfile(usr);
 
 		System.out.println(profileOutTO.getDesc_perfil());
-		while (true){
-			ProfileDetOutTO profileDetOutTO= new ProfileDetOutTO();
-			List profileDetOutTOLst= new Vector();
-			profileDetOutTOLst=profileOutTO.getProfile_det();
-			//System.out.println(profileDetOutTO.getDesc_perfil_det());
-			
+		while (true) {
+			ProfileDetOutTO profileDetOutTO = new ProfileDetOutTO();
+			List profileDetOutTOLst = new Vector();
+			profileDetOutTOLst = profileOutTO.getProfile_det();
+			// System.out.println(profileDetOutTO.getDesc_perfil_det());
 
 			Iterator<ProfileDetOutTO> iterator = profileDetOutTOLst.iterator();
 			while (iterator.hasNext()) {
-				//System.out.println(iterator.next());
-				ProfileDetOutTO profileDetOutTO1=(ProfileDetOutTO)iterator.next();
+				// System.out.println(iterator.next());
+				ProfileDetOutTO profileDetOutTO1 = (ProfileDetOutTO) iterator
+						.next();
 
+				System.out
+						.println("->" + profileDetOutTO1.getDesc_perfil_det());
+				if (profileDetOutTO1.getNodeDetail() != null) {
 
-				System.out.println("->"+profileDetOutTO1.getDesc_perfil_det());
-				if (profileDetOutTO1.getNodeDetail()!=null){
+					// ProfileDetOutTO
+					// profileDetOutTO2=(ProfileDetOutTO)iterator.next();
+					List profileDetOutTOLst1 = profileDetOutTO1.getNodeDetail();
+					Iterator<ProfileDetOutTO> iterator1 = profileDetOutTOLst1
+							.iterator();
 
-					//ProfileDetOutTO profileDetOutTO2=(ProfileDetOutTO)iterator.next();
-					List profileDetOutTOLst1= profileDetOutTO1.getNodeDetail();
-					Iterator<ProfileDetOutTO> iterator1 = profileDetOutTOLst1.iterator();
-
-
-					try{
+					try {
 						while (iterator1.hasNext()) {
-							ProfileDetOutTO profileDetOutTO3=(ProfileDetOutTO)iterator1.next();
+							ProfileDetOutTO profileDetOutTO3 = (ProfileDetOutTO) iterator1
+									.next();
 
+							System.out.println("-->"
+									+ profileDetOutTO3.getDesc_perfil_det());
+							System.out.println("-->"
+									+ profileDetOutTO3.getUrl_perfil_det());
+							if (profileDetOutTO3.getNodeDetail() != null) {
 
-							System.out.println("-->"+profileDetOutTO3.getDesc_perfil_det());
-							System.out.println("-->"+profileDetOutTO3.getUrl_perfil_det());
-							if (profileDetOutTO3.getNodeDetail()!=null){
-
-								//ProfileDetOutTO profileDetOutTO2=(ProfileDetOutTO)iterator.next();
-								List profileDetOutTOLst2= profileDetOutTO3.getNodeDetail();
-								Iterator<ProfileDetOutTO> iterator2 = profileDetOutTOLst2.iterator();
-								try{
-
-
-
+								// ProfileDetOutTO
+								// profileDetOutTO2=(ProfileDetOutTO)iterator.next();
+								List profileDetOutTOLst2 = profileDetOutTO3
+										.getNodeDetail();
+								Iterator<ProfileDetOutTO> iterator2 = profileDetOutTOLst2
+										.iterator();
+								try {
 
 									while (iterator2.hasNext()) {
-										ProfileDetOutTO profileDetOutTO4=(ProfileDetOutTO)iterator2.next();
-										System.out.println("--->"+profileDetOutTO4.getDesc_perfil_det());
-										System.out.println("--->"+profileDetOutTO4.getUrl_perfil_det());
-									}	
+										ProfileDetOutTO profileDetOutTO4 = (ProfileDetOutTO) iterator2
+												.next();
+										System.out.println("--->"
+												+ profileDetOutTO4
+														.getDesc_perfil_det());
+										System.out.println("--->"
+												+ profileDetOutTO4
+														.getUrl_perfil_det());
+									}
 
-
-
-
-
-								}catch(Exception ex){
-									
+								} catch (Exception ex) {
 
 								}
-								
 
 							}
-						}	
+						}
 
-					}catch(Exception ex){
-						
+					} catch (Exception ex) {
 
 					}
-					
 
 				}
 			}
-			
 
 			break;
 		}
@@ -214,9 +205,8 @@ public class SecurityTest {
 		Iterator<UserTO> iterator = resp.iterator();
 		while (iterator.hasNext()) {
 			UserTO user = (UserTO) iterator.next();
-			System.out.println(user.getNickname() + " - "
-					+ user.getUsername()+ " - "
-					+ user.getUserdate());
+			System.out.println(user.getNickname() + " - " + user.getUsername()
+					+ " - " + user.getUserdate());
 		}
 	}
 }

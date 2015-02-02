@@ -60,7 +60,7 @@ public class AccountingTest {
 		try {
 			lstPeriods = AccountingEJBService.getAccPeriods();
 			Iterator<AccPeriodTO> iterator = lstPeriods.iterator();
-			
+
 			while (iterator.hasNext()) {
 				AccPeriodTO periodo = (AccPeriodTO) iterator.next();
 				System.out.println(periodo.getAcccode() + " - "
@@ -91,6 +91,7 @@ public class AccountingTest {
 			System.out.println(acc.getAcctcode() + " - " + acc.getCurrtotal());
 		}
 	}
+
 	public static void getAccountree() {
 
 		List lstPeriods = new Vector();
@@ -200,50 +201,48 @@ public class AccountingTest {
 		System.out.println(acc.getPdfltwt());
 	}
 
+	// ################## PRUEBAS DE TABLA ACCOUNT ############################
+	public static void getAccountByFilter() {
 
-//################## PRUEBAS DE TABLA ACCOUNT  ############################
-public static void getAccountByFilter() {
+		List lstPeriods = new Vector();
 
-	List lstPeriods = new Vector();
+		try {
+			lstPeriods = AccountingEJBService.getAccountByFilter(null, "de");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	try {
-		lstPeriods = AccountingEJBService.getAccountByFilter(null,"de");
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		Iterator<AccountTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			System.out.println("entrooo");
+			AccountTO acc = (AccountTO) iterator.next();
+			System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
+		}
 	}
 
-	Iterator<AccountTO> iterator = lstPeriods.iterator();
-	while (iterator.hasNext()) {
-		System.out.println("entrooo");
-		AccountTO acc = (AccountTO) iterator.next();
+	public static void getAccountByKey() throws Exception {
+
+		AccountTO acc = new AccountTO();
+
+		acc = AccountingEJBService.getAccountByKey("101010");
+
 		System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
+
 	}
-}
 
-public static void getAccountByKey() throws Exception {
+	public static void cat_Acc0_account_mtto() throws Exception {
+		int _return = 8;
+		AccountTO acc = new AccountTO();
+		acc.setAcctcode("101013");
+		acc.setAcctname("Pasivos Corrientes");
+		acc.setCurrtotal(42.5);
+		acc.setEndtotal(56.2);
 
-	AccountTO acc = new AccountTO();
+		_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 3);
 
-	acc = AccountingEJBService.getAccountByKey("101010");
-	
-		System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
-	
-}
-
-public static void cat_Acc0_account_mtto() throws Exception {
-	int _return=8;
-	AccountTO acc = new AccountTO();
-	acc.setAcctcode("101013");
-	acc.setAcctname("Pasivos Corrientes");
-	acc.setCurrtotal(42.5);
-	acc.setEndtotal(56.2);
-
-	_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 3);
-	
 		System.out.println(_return);
-	
-}
 
+	}
 
 }

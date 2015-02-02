@@ -1,19 +1,23 @@
 package com.sifcoapp.objects.security.dao;
 
-
+import java.sql.DriverManager;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.TreeMap;
 import java.util.Vector;
 
-
+import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.DBManager;
+import com.sifcoapp.objects.common.to.DetailParameter;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
@@ -50,7 +54,8 @@ public class UserDAO extends CommonDAO {
 
 	}
 
-	public ProfileOutTO getUserProfiles(ProfileInTO parameters) throws Exception {
+	public ProfileOutTO getUserProfiles(ProfileInTO parameters)
+			throws Exception {
 
 		ProfileOutTO v_return = new ProfileOutTO();
 		List lstResultSets = new Vector();
@@ -86,7 +91,7 @@ public class UserDAO extends CommonDAO {
 		v_resp = this.runUpdate();
 		return v_resp;
 	}
-	
+
 	public List getUser() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -128,35 +133,34 @@ public class UserDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
-	public ProfileOutTO getUsrProfileHeader(String _nickname)throws Exception {
+
+	public ProfileOutTO getUsrProfileHeader(String _nickname) throws Exception {
 		ProfileOutTO _return = null;
 
 		List lstResultSet = null;
 		TablesCatalogTO _returnTO = new TablesCatalogTO();
 
-
-		System.out.println("Desde DAO " + "{call sp_get_usr_profile_header(?)}");
+		System.out
+				.println("Desde DAO " + "{call sp_get_usr_profile_header(?)}");
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_usr_profile_header(?)}");
 		this.setString(1, "nickname", _nickname);
-				
+
 		lstResultSet = this.runQuery();
 
-
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		
+
 		while (liRowset.hasNext()) {
-			rowsetActual = (CachedRowSetImpl) liRowset.next();		
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					_return =  new ProfileOutTO();
+					_return = new ProfileOutTO();
 					_return.setId_perfil(rowsetActual.getInt(1));
 					_return.setDesc_perfil(rowsetActual.getString(2));
-					
+
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -165,11 +169,11 @@ public class UserDAO extends CommonDAO {
 			}
 		}
 		return _return;
-		
+
 	}
 
 	/*
-	 * Obtiene todas las opciones permitidas  para el perfil de usuario
+	 * Obtiene todas las opciones permitidas para el perfil de usuario
 	 * 
 	 * @author Rutilio
 	 */
@@ -182,7 +186,7 @@ public class UserDAO extends CommonDAO {
 		System.out.println("Desde DAO");
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_usr_profile(?)}");
-		this.setInt(1, "_profilecode", _profileCode);	
+		this.setInt(1, "_profilecode", _profileCode);
 
 		lstResultSet = this.runQuery();
 
@@ -191,9 +195,9 @@ public class UserDAO extends CommonDAO {
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		Hashtable _values=new Hashtable();
-		
-		 //Iterator<CachedRowSetImpl> iterator = lstResultSet.iterator();
+		Hashtable _values = new Hashtable();
+
+		// Iterator<CachedRowSetImpl> iterator = lstResultSet.iterator();
 
 		while (liRowset.hasNext()) {
 
@@ -202,64 +206,69 @@ public class UserDAO extends CommonDAO {
 			try {
 				while (rowsetActual.next()) {
 
-					ProfileDetOutTO profileDet=new ProfileDetOutTO();
-					profileDet.setId_perfil_det(rowsetActual.getInt(2));
+					ProfileDetOutTO profileDet = new ProfileDetOutTO();
+					profileDet.setId_perfil_det(rowsetActual.getInt(1));
+					profileDet.setPerfilOrder(rowsetActual.getString(2));					
 					profileDet.setDesc_perfil_det(rowsetActual.getString(4));
 					profileDet.setParent_id(rowsetActual.getInt(3));
-					profileDet.setUrl_perfil_det(rowsetActual.getString(5));										
-					_values.put(profileDet.getId_perfil_det(), profileDet);						
+					profileDet.setUrl_perfil_det(rowsetActual.getString(5));
+					
+					_values.put(profileDet.getPerfilOrder(), profileDet);
 				}
-								
-				Enumeration enParameters = _values.keys();
+				
 				ProfileDetOutTO profileDetTmp = null;
 				Integer _position = null;
-				List lstDetProfile=new Vector();
-				
-				//partimos de los nodos sin hijos
-				while (enParameters.hasMoreElements()) {
-					_position = (Integer) enParameters.nextElement();
-					
-					profileDetTmp = (ProfileDetOutTO) _values
-							.get(_position);
-															
-					
-					if (profileDetTmp.getParent_id()==0){
-						this.filterParent(profileDetTmp, _values, profileDetTmp.getId_perfil_det());						
-						_return.add(profileDetTmp);					
+				List lstDetProfile = new Vector();
+
+				String[] claves = (String[]) _values.keySet().toArray(
+						new String[0]);
+				java.util.Arrays.sort(claves);
+
+				// partimos de los nodos sin hijos
+				for (String clave : claves) {
+					profileDetTmp = (ProfileDetOutTO) _values.get(clave);
+
+					if (profileDetTmp.getParent_id() == 0) {
+						
+						this.filterParent(profileDetTmp, _values,
+								profileDetTmp.getId_perfil_det());
+						_return.add(profileDetTmp);
 					}
-				}					
+				}
 				rowsetActual.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}			
+			}
 		}
 		return _return;
 	}
-	
+
 	/*
-	 * de acuerdo a un TO parent,todos los valores del menu y elfiltro setea los nodos hijos
+	 * de acuerdo a un TO parent,todos los valores del menu y elfiltro setea los
+	 * nodos hijos
 	 */
-	
-	private void filterParent(ProfileDetOutTO parent, Hashtable _allvalues, int parentFilter)throws Exception {
-		
+	private void filterParent(ProfileDetOutTO parent, Hashtable _allvalues,
+			int parentFilter) throws Exception {
+
 		Enumeration enParameters = _allvalues.keys();
 		ProfileDetOutTO profileDetTmp = null;
 		Integer _position = null;
-		List lstDetProfile=new Vector();
-		
-		//partimos de los nodos sin hijos
-		while (enParameters.hasMoreElements()) {
-			_position = (Integer) enParameters.nextElement();
-			
-			profileDetTmp = (ProfileDetOutTO) _allvalues
-					.get(_position);
-			
-			if (profileDetTmp.getParent_id()==parentFilter){					
-				this.filterParent(profileDetTmp, _allvalues, profileDetTmp.getId_perfil_det());				
-				lstDetProfile.add(profileDetTmp);	
-			}			
-		}		
+		List lstDetProfile = new Vector();
+
+		String[] claves = (String[]) _allvalues.keySet().toArray(new String[0]);
+		java.util.Arrays.sort(claves);
+
+		// partimos de los nodos sin hijos
+		for (String clave : claves) {
+			profileDetTmp = (ProfileDetOutTO) _allvalues.get(clave);
+
+			if (profileDetTmp.getParent_id() == parentFilter) {
+				this.filterParent(profileDetTmp, _allvalues,
+						profileDetTmp.getId_perfil_det());
+				lstDetProfile.add(profileDetTmp);
+			}
+		}
 		parent.setNodeDetail(lstDetProfile);
 	}
 }

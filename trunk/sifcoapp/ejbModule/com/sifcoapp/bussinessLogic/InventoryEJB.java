@@ -25,6 +25,15 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * public List getListGoodsreceipt(int docnum, Date docdate, int series) {
+	 * // TODO Auto-generated method stub GoodsreceiptDAO List _return = new
+	 * Vector(); GoodsreceiptDAO DAO = new GoodsreceiptDAO(); _return =
+	 * DAO.getListGoodsreceipt(docnum, docdate, series);
+	 * 
+	 * return _return; }
+	 */
+
 	public ResultOutTO inv_goodsissues_mtto(GoodsissuesTO parameters, int action) throws EJBException {
 		// TODO Auto-generated method stub
 		ResultOutTO _return= new ResultOutTO();
@@ -62,7 +71,6 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		DAO.forceCommit();
 		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 		
 	}
@@ -106,7 +114,6 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		DAO.forceCommit();
 		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
 
@@ -247,7 +254,6 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		Trans.forceCommit();
 		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
 
