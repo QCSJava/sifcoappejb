@@ -39,9 +39,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 		ResultOutTO _return= new ResultOutTO();
 		Double total=0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
-		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO();
 		DAO.setIstransaccional(true);
-		goodDAO1.setIstransaccional(true);
+		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO(DAO.getConn());
 		try {
 		Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail().iterator();
 		while (iterator2.hasNext()) {
@@ -65,11 +64,15 @@ public class InventoryEJB implements InventoryEJBRemote {
 				goodDAO1.inv_goodsIssuesDetail_mtto(articleDetalle,Common.MTTODELETE);
 			}
 		}
+		DAO.forceCommit();	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		}finally{
+			
+			DAO.forceCloseConnection();
 		}
-		DAO.forceCommit();
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
@@ -81,9 +84,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 		ResultOutTO _return= new ResultOutTO();
 		Double total=0.00;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
-		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
 		DAO.setIstransaccional(true);
-		goodDAO1.setIstransaccional(true);
+		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
 		try {
 		@SuppressWarnings("unchecked")
 		Iterator<GoodsReceiptDetailTO> iterator2 = parameters.getGoodReceiptDetail().iterator();
@@ -237,6 +239,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		TransfersDAO Trans= new TransfersDAO();
 		Trans.setIstransaccional(true);
+		TransfersDetailDAO TransDAO = new TransfersDetailDAO(Trans.getConn());
 		try {
 			_return.setDocentry(Trans.inv_transfers_mtto(parameters, action));
 		
@@ -245,7 +248,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		while(iterator.hasNext()){
 			TransfersDetailTO articleDetalle = (TransfersDetailTO) iterator.next();
 			// Para articulos nuevos
-			TransfersDetailDAO TransDAO = new TransfersDetailDAO();
+			
 			articleDetalle.setDocentry(_return.getDocentry());
 			if (action == Common.MTTOINSERT) {
 				TransDAO.inv_transfersDetail_mtto(articleDetalle,Common.MTTOINSERT);
@@ -254,11 +257,15 @@ public class InventoryEJB implements InventoryEJBRemote {
 				TransDAO.inv_transfersDetail_mtto(articleDetalle,Common.MTTODELETE);
 			}
 		}
+		Trans.forceCommit();	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			Trans.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		}finally{
+			
+			Trans.forceCloseConnection();
 		}
-		Trans.forceCommit();
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;

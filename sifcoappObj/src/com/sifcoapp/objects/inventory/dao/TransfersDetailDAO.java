@@ -4,6 +4,7 @@ import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -12,6 +13,17 @@ import java.util.Vector;
 
 public class TransfersDetailDAO extends CommonDAO{
 	
+	
+	public TransfersDetailDAO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public TransfersDetailDAO(Connection _conn) {
+		super(_conn);
+		// TODO Auto-generated constructor stub
+	}
+
 	//RETORNA DE LA TABLA TRANSFERSDETAIL (SE USA JUNTOS A EL GET DE LA TABLA PADRE: TRANSFERS) RETORNA TODAS SUS HIJAS
 	public List getTransfersDetail(int docentry) throws Exception {
 		List _return = new Vector();
