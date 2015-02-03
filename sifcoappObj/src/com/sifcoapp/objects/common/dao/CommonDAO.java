@@ -41,6 +41,14 @@ public class CommonDAO {
 		this.initCommon();
 
 	}
+	/*
+	 * Reutilizando conexion
+	 */
+	public CommonDAO(Connection _conn) {
+
+		this.initCommon(_conn);
+
+	}
 
 	public void closeConnection() {
 		try {
@@ -508,7 +516,23 @@ public class CommonDAO {
 	}
 	public void initCommon(){
 
-		this.getConnectionDB();
+		/*this.getConnectionDB();
+		this.inParameters = new Hashtable();
+		this.outParameters = new Hashtable();*/
+		this.initCommon(null);
+		
+	}
+	/**
+	 * Reutilizando conexion
+	 * @param _conn
+	 */
+	public void initCommon(Connection _conn){
+		if (_conn==null){
+			this.getConnectionDB();	
+		}else{
+			this.setConn(_conn);
+		}			
+		
 		this.inParameters = new Hashtable();
 		this.outParameters = new Hashtable();
 		

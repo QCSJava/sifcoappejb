@@ -8,6 +8,7 @@ import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sun.rowset.CachedRowSetImpl;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;

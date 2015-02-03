@@ -4,13 +4,19 @@ import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
 public class GoodReceiptDetailDAO extends CommonDAO{
-	
+	public GoodReceiptDetailDAO(Connection _conn){
+		super(_conn);
+	}
+	public GoodReceiptDetailDAO(){
+		super();
+	}
 	//Retorna de goodIssuesDetail
 	public List getGoodReceiptDetail(int docentry) throws Exception {
 		List _return = new Vector();

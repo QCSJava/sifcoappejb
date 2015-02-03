@@ -81,7 +81,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		ResultOutTO _return= new ResultOutTO();
 		Double total=0.00;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
-		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO();
+		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
 		DAO.setIstransaccional(true);
 		goodDAO1.setIstransaccional(true);
 		try {
@@ -108,12 +108,16 @@ public class InventoryEJB implements InventoryEJBRemote {
 				goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,Common.MTTODELETE);
 			}
 		}
-		
+		DAO.forceCommit();	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		}finally{
+			
+			DAO.forceCloseConnection();
 		}
-		DAO.forceCommit();
+		
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
