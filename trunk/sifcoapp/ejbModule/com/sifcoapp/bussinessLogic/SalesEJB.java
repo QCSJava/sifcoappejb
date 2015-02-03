@@ -58,9 +58,8 @@ public class SalesEJB implements SalesEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		Double total = 0.0;
 		SalesDAO DAO = new SalesDAO();
-		SalesDetailDAO goodDAO1 = new SalesDetailDAO();
 		DAO.setIstransaccional(true);
-		goodDAO1.setIstransaccional(true);
+		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
 		try {
 			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
 					.iterator();
@@ -103,15 +102,17 @@ public class SalesEJB implements SalesEJBRemote {
 							Common.MTTODELETE);
 				}
 			}
-			DAO.forceCommit();
-			goodDAO1.forceCommit();
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");
+			DAO.forceCommit();	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		}finally{
+			
+			DAO.forceCloseConnection();
 		}
-
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
 
@@ -165,9 +166,8 @@ public class SalesEJB implements SalesEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		Double total = 0.0;
 		ClientCrediDAO DAO = new ClientCrediDAO();
-		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO();
 		DAO.setIstransaccional(true);
-		goodDAO1.setIstransaccional(true);
+		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO(DAO.getConn());
 		try {
 			Iterator<ClientCrediDetailTO> iterator2 = parameters.getclientDetails()
 					.iterator();
@@ -210,15 +210,17 @@ public class SalesEJB implements SalesEJBRemote {
 							Common.MTTODELETE);
 				}
 			}
-			DAO.forceCommit();
-			goodDAO1.forceCommit();
+		DAO.forceCommit();	
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				DAO.rollBackConnection();
+				throw (EJBException) new EJBException(e);
+			}finally{
+				
+				DAO.forceCloseConnection();
+			}
 			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-
+			_return.setMensaje("Datos guardados correctamente");		
 		return _return;
 	}
 

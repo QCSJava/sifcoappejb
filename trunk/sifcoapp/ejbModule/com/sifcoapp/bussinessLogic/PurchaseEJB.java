@@ -58,9 +58,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		Double total = 0.0;
 		PurchaseDAO DAO = new PurchaseDAO();
-		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO();
 		DAO.setIstransaccional(true);
-		goodDAO1.setIstransaccional(true);
+		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO(DAO.getConn());
 		try {
 			Iterator<PurchaseDetailTO> iterator2 = parameters.getpurchaseDetails()
 					.iterator();
@@ -103,15 +102,17 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 							Common.MTTODELETE);
 				}
 			}
-			DAO.forceCommit();
-			goodDAO1.forceCommit();
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");
+			DAO.forceCommit();	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		}finally{
+			
+			DAO.forceCloseConnection();
 		}
-
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
 
