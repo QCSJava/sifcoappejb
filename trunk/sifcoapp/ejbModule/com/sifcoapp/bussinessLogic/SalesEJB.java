@@ -60,6 +60,7 @@ public class SalesEJB implements SalesEJBRemote {
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
 		try {
 			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
 					.iterator();
@@ -168,6 +169,7 @@ public class SalesEJB implements SalesEJBRemote {
 		ClientCrediDAO DAO = new ClientCrediDAO();
 		DAO.setIstransaccional(true);
 		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
 		try {
 			Iterator<ClientCrediDetailTO> iterator2 = parameters.getclientDetails()
 					.iterator();

@@ -41,6 +41,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		DAO.setIstransaccional(true);
 		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
 		try {
 		Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail().iterator();
 		while (iterator2.hasNext()) {
@@ -86,6 +87,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		DAO.setIstransaccional(true);
 		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
 		try {
 		@SuppressWarnings("unchecked")
 		Iterator<GoodsReceiptDetailTO> iterator2 = parameters.getGoodReceiptDetail().iterator();
@@ -240,6 +242,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		TransfersDAO Trans= new TransfersDAO();
 		Trans.setIstransaccional(true);
 		TransfersDetailDAO TransDAO = new TransfersDetailDAO(Trans.getConn());
+		TransDAO.setIstransaccional(true);
 		try {
 			_return.setDocentry(Trans.inv_transfers_mtto(parameters, action));
 		
