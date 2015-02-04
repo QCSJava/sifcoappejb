@@ -60,6 +60,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		PurchaseDAO DAO = new PurchaseDAO();
 		DAO.setIstransaccional(true);
 		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
 		try {
 			Iterator<PurchaseDetailTO> iterator2 = parameters.getpurchaseDetails()
 					.iterator();
@@ -167,8 +168,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		Double total = 0.0;
 		SupplierDAO DAO = new SupplierDAO();
-		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO();
 		DAO.setIstransaccional(true);
+		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO();
 		goodDAO1.setIstransaccional(true);
 		try {
 			Iterator<SupplierDetailTO> iterator2 = parameters.getsupplierDetails()

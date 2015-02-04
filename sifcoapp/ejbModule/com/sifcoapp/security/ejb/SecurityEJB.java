@@ -92,11 +92,16 @@ public class SecurityEJB implements SecurityEJBRemote {
 		int _return = 0;
 
 		UserDAO userdao = new UserDAO();
+		userdao.setIstransaccional(true);
 		try {
 			_return = userdao.cat_users_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			userdao.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		}finally{
+			
+			userdao.forceCloseConnection();
 		}
 
 		return _return;

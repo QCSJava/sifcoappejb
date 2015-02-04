@@ -271,7 +271,7 @@ public class InventoryTEST {
 			_result = Inventory.inv_goodsissues_mtto(parameters,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error EJB " + e.getMessage());
 		}
 
 		System.out.println("luego de servicio");
