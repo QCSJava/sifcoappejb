@@ -1,5 +1,6 @@
 package com.sifcoapp.security.ejb;
 
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import java.io.Serializable;
@@ -53,7 +54,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 				userdao.getConn().close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw (EJBException) new EJBException(e);
 			}
 		}
 
@@ -61,16 +62,9 @@ public class SecurityEJB implements SecurityEJBRemote {
 		// usrValid.setId_perfil(1);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			throw (EJBException) new EJBException(e1);
 		}
 		return usrValid;
-	}
-
-	public String SayHello(String hellomsg) {
-		// TODO Auto-generated method stub
-		hellomsg = hellomsg + "EJB";
-		System.out.println(hellomsg);
-		return hellomsg;
 	}
 
 	// cambio
@@ -86,7 +80,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 				.getId_perfil()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 		// TODO Auto-generated method stub
 
@@ -102,7 +96,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 			_return = userdao.cat_users_mtto(parameters, action);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
@@ -117,9 +111,22 @@ public class SecurityEJB implements SecurityEJBRemote {
 			_return = userdao.getUser();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (EJBException) new EJBException(e);
 		}
 
+		return _return;
+	}
+
+	public UserTO getUserByNickname(String nickname) throws Exception {
+		// TODO Auto-generated method stub
+		UserTO _return= new UserTO();
+		UserDAO userdao= new UserDAO();
+		try {
+			_return = userdao.getUserByNickname(nickname);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
 		return _return;
 	}
 

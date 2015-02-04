@@ -209,4 +209,18 @@ public class SecurityTest {
 					+ " - " + user.getUserdate());
 		}
 	}
+	
+	public static void getUserByNickname() throws Exception {
+		UserTO user = new UserTO();
+		
+		String name = "jccc";
+		String code = "art-001";
+
+		user = SecurityEJBService.getUserByNickname(name);
+
+		
+			System.out.println(user.getNickname() + " - " + user.getUsername()
+					+ " - " + user.getUserdate());
+		
+	}
 }

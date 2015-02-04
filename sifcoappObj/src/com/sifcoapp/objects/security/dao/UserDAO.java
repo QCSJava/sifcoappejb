@@ -18,6 +18,8 @@ import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.DBManager;
 import com.sifcoapp.objects.common.to.DetailParameter;
+import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
+import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
@@ -270,5 +272,41 @@ public class UserDAO extends CommonDAO {
 			}
 		}
 		parent.setNodeDetail(lstDetProfile);
+	}
+	
+	public UserTO getUserByNickname(String nickname) throws Exception {
+		UserTO _return = new UserTO();
+		List lstResultSet = null;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_user_by_nickname(?)}");
+		this.setString(1, "_nickname", nickname);
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		GoodsissuesDetailDAO Detail = new GoodsissuesDetailDAO();
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					UserTO user = new UserTO();
+					user.setUsersign(rowsetActual.getInt(1));
+					user.setNickname(rowsetActual.getString(2));
+					user.setUsername(rowsetActual.getString(3));
+					user.setLastname(rowsetActual.getString(4));
+					user.setPassword(rowsetActual.getString(5));
+					user.setProfilecode(rowsetActual.getInt(6));
+					user.setLocked(rowsetActual.getString(7));
+					user.setUserdate(rowsetActual.getDate(8));
+					user.setCusersign(rowsetActual.getInt(9));
+					_return=user;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
 	}
 }

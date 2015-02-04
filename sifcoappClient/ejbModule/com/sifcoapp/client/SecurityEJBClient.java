@@ -94,4 +94,11 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 		return _return;
 	}
 
+	public UserTO getUserByNickname(String nickname) throws Exception {
+		// TODO Auto-generated method stub
+		UserTO _return= new UserTO();
+		_return= bean.getUserByNickname(nickname);
+		return _return;
+	}
+
 }
