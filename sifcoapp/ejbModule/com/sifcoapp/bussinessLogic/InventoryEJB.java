@@ -256,12 +256,21 @@ public class InventoryEJB implements InventoryEJBRemote {
 	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int action)
 			throws EJBException {
 		// TODO Auto-generated method stub
+		double total=0.0;
 		ResultOutTO _return = new ResultOutTO();
 		TransfersDAO Trans = new TransfersDAO();
 		Trans.setIstransaccional(true);
 		TransfersDetailDAO TransDAO = new TransfersDetailDAO(Trans.getConn());
 		TransDAO.setIstransaccional(true);
 		try {
+			Iterator<TransfersDetailTO> iterator2 = parameters.getTransfersDetail().iterator();
+			while (iterator2.hasNext()) {
+				TransfersDetailTO articleDetalle = (TransfersDetailTO) iterator2.next();
+				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
+				articleDetalle.setOpenqty(articleDetalle.getQuantity());
+				total = total + articleDetalle.getLinetotal();
+			}
+			parameters.setDoctotal(total);
 			_return.setDocentry(Trans.inv_transfers_mtto(parameters, action));
 
 			Iterator<TransfersDetailTO> iterator = parameters
