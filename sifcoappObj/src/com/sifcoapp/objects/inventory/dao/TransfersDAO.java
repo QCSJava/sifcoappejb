@@ -16,7 +16,7 @@ public class TransfersDAO extends CommonDAO{
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_transfers(?,?,?,?)}");
+		this.setDbObject("{call sp_get_transfers(?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -34,6 +34,10 @@ public class TransfersDAO extends CommonDAO{
 		}
 		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
 		this.setInt(3, "_series", new Integer(param.getSeries()));
+		this.setString(5, "_towshcode",param.getTowhscode());
+		this.setString(6, "_fromwshcode",param.getFromwhscode());
+		this.setString(7, "_ref1",param.getRef1());
+		this.setString(5, "_comments",param.getComments());
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
