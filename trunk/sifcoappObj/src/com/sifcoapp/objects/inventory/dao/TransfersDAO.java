@@ -37,7 +37,7 @@ public class TransfersDAO extends CommonDAO{
 		this.setString(5, "_towshcode",param.getTowhscode());
 		this.setString(6, "_fromwshcode",param.getFromwhscode());
 		this.setString(7, "_ref1",param.getRef1());
-		this.setString(5, "_comments",param.getComments());
+		this.setString(8, "_comments",param.getComments());
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
