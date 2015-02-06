@@ -101,4 +101,13 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 		return _return;
 	}
 
+	public List getProfile() throws Exception {
+		// TODO Auto-generated method stub
+		List _return = null;
+
+		_return = bean.getProfile();
+
+		return _return;
+	}
+
 }

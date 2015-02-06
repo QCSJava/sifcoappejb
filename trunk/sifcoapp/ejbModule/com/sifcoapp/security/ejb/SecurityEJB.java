@@ -135,4 +135,19 @@ public class SecurityEJB implements SecurityEJBRemote {
 		return _return;
 	}
 
+	public List getProfile() throws Exception {
+		// TODO Auto-generated method stub
+		List _return = null;
+
+		UserDAO userdao = new UserDAO();
+		try {
+			_return = userdao.getProfile();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
 }

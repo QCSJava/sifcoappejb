@@ -10,6 +10,7 @@ import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
+import com.sifcoapp.objects.security.to.ProfileTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
 import com.sifcoapp.objects.security.to.UserTO;
@@ -210,17 +211,32 @@ public class SecurityTest {
 		}
 	}
 	
+	public static void getProfile() throws Exception {
+		List resp = null;
+
+		String name = null;
+		String code = "art-001";
+
+		resp = SecurityEJBService.getProfile();
+
+		Iterator<ProfileTO> iterator = resp.iterator();
+		while (iterator.hasNext()) {
+			ProfileTO profile = (ProfileTO) iterator.next();
+			System.out.println(profile.getProfilecode() + " - " + profile.getProfilename());
+		}
+	}
+	
+
 	public static void getUserByNickname() throws Exception {
 		UserTO user = new UserTO();
-		
+
 		String name = "jccc";
 		String code = "art-001";
 
 		user = SecurityEJBService.getUserByNickname(name);
 
-		
-			System.out.println(user.getNickname() + " - " + user.getUsername()
-					+ " - " + user.getUserdate());
-		
+		System.out.println(user.getNickname() + " - " + user.getUsername()
+				+ " - " + user.getUserdate());
+
 	}
 }
