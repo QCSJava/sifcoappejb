@@ -3,8 +3,10 @@ package com.sifcoapp.admin.ejb;
 
 import java.util.Iterator;
 import java.util.List;
+
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
@@ -13,6 +15,7 @@ import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 /**
  * Session Bean implementation class AdminEJB
@@ -151,16 +154,30 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public int cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException{
-
-		int _return = 0;
-
+	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException{
+		ResultOutTO _return = new ResultOutTO();
+		AdminDAO adminDAO1 = new AdminDAO();
+		adminDAO1.setIstransaccional(true);
+		AdminDAO adminDAO = new AdminDAO(adminDAO1.getConn());
+		adminDAO.setIstransaccional(true);
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
 		try {
+			
 		while (iterator.hasNext()) {
 			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
 			// Para articulos nuevos
-			AdminDAO adminDAO1 = new AdminDAO();
+//############################ VALORES QUEMADOS ###################################
+			branch.setOnhand(0.0);
+			branch.setOnhand1(0.0);
+			branch.setIscommited(0.0);
+			branch.setOnorder(0.0);
+			branch.setMinorder(0.0);
+			if(branch.getMinstock()==null){
+				branch.setMinstock(0.0);
+			}
+			if(branch.getMaxstock()==null){
+				branch.setMaxstock(0.0);
+			}
 			if (action == Common.MTTOINSERT && branch.isIsasociated()) {
 
 					adminDAO1.cat_brancharticles_mtto(branch, action);
@@ -168,24 +185,35 @@ public class AdminEJB implements AdminEJBRemote {
 			}
 			if (action == Common.MTTOUPDATE) {
 				if (branch.isIsasociated()) {
-					adminDAO1
-							.cat_brancharticles_mtto(branch, Common.MTTOINSERT);
+					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTOINSERT);
 				} else {
-					adminDAO1
-							.cat_brancharticles_mtto(branch, Common.MTTODELETE);
+					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 				}
 			}
 			if (action == Common.MTTODELETE) {
 				adminDAO1.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 			}
 		}
-
-		AdminDAO adminDAO = new AdminDAO();
-		_return = adminDAO.cat_articles_mtto(parameters, action);
+//############################ VALORES QUEMADOS ###################################
+		parameters.setNumInBuy(0.0);
+		parameters.setSalPackUn(0.0);
+		parameters.setPurPackUn(0.0);
+		parameters.setAvgPrice(0.0);
+		parameters.setOnHand(0.0);
+		parameters.setNumInSale(0.0);
+		
+		adminDAO.cat_articles_mtto(parameters, action);
+		adminDAO1.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			adminDAO1.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		} finally {
+
+			adminDAO1.forceCloseConnection();
 		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
 		return _return;
 	}
 
