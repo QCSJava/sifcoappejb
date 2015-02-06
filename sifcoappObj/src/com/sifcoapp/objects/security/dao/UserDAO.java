@@ -23,6 +23,7 @@ import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
+import com.sifcoapp.objects.security.to.ProfileTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
 import com.sifcoapp.objects.security.to.UserTO;
@@ -174,6 +175,40 @@ public class UserDAO extends CommonDAO {
 
 	}
 
+	public List getProfile() throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{?=call sp_get_profile()}");
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ProfileTO profile = new ProfileTO();
+					profile.setProfilecode(rowsetActual.getInt(1));
+					profile.setProfilename(rowsetActual.getString(2));
+					_return.add(profile);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
 	/*
 	 * Obtiene todas las opciones permitidas para el perfil de usuario
 	 * 
@@ -210,14 +245,14 @@ public class UserDAO extends CommonDAO {
 
 					ProfileDetOutTO profileDet = new ProfileDetOutTO();
 					profileDet.setId_perfil_det(rowsetActual.getInt(1));
-					profileDet.setPerfilOrder(rowsetActual.getString(2));					
+					profileDet.setPerfilOrder(rowsetActual.getString(2));
 					profileDet.setDesc_perfil_det(rowsetActual.getString(4));
 					profileDet.setParent_id(rowsetActual.getInt(3));
 					profileDet.setUrl_perfil_det(rowsetActual.getString(5));
-					
+
 					_values.put(profileDet.getPerfilOrder(), profileDet);
 				}
-				
+
 				ProfileDetOutTO profileDetTmp = null;
 				Integer _position = null;
 				List lstDetProfile = new Vector();
@@ -231,7 +266,7 @@ public class UserDAO extends CommonDAO {
 					profileDetTmp = (ProfileDetOutTO) _values.get(clave);
 
 					if (profileDetTmp.getParent_id() == 0) {
-						
+
 						this.filterParent(profileDetTmp, _values,
 								profileDetTmp.getId_perfil_det());
 						_return.add(profileDetTmp);
@@ -273,7 +308,7 @@ public class UserDAO extends CommonDAO {
 		}
 		parent.setNodeDetail(lstDetProfile);
 	}
-	
+
 	public UserTO getUserByNickname(String nickname) throws Exception {
 		UserTO _return = new UserTO();
 		List lstResultSet = null;
@@ -299,7 +334,7 @@ public class UserDAO extends CommonDAO {
 					user.setLocked(rowsetActual.getString(7));
 					user.setUserdate(rowsetActual.getDate(8));
 					user.setCusersign(rowsetActual.getInt(9));
-					_return=user;
+					_return = user;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {

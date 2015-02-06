@@ -22,4 +22,6 @@ public interface SecurityEJBRemote {
 	public List getUser() throws EJBException;
 	
 	public UserTO getUserByNickname(String nickname) throws Exception;
+
+	public List getProfile() throws Exception;;
 }
