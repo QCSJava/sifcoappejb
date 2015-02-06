@@ -408,7 +408,7 @@ public class InventoryTEST {
 
 		List lstPeriods = new Vector();
 		TransfersInTO nuevo = new TransfersInTO();
-		nuevo.setDocnum(12);
+		//nuevo.setDocnum(12);
 		//Date fecha= new Date();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);

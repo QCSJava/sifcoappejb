@@ -13,6 +13,7 @@ import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Remote
 public interface AdminEJBRemote {
@@ -31,7 +32,7 @@ public interface AdminEJBRemote {
 	 */
 	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) throws EJBException;
 
-	public int cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException;
+	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException;
 	
 	public int cat_branch_mtto(BranchTO parameters, int action) throws EJBException;
 	

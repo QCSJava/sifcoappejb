@@ -2,8 +2,11 @@ package com.sifcoapp.client;
 
 
 import java.util.List;
+
+import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.NamingException;
+
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
@@ -11,6 +14,7 @@ import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class AdminEJBClient {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AdminEJB!com.sifcoapp.admin.ejb.AdminEJBRemote";
@@ -88,8 +92,8 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public int cat_articles_mtto(ArticlesTO parameters, int action) throws Exception {
-		int _return = 0;
+	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
 
 		_return = bean.cat_articles_mtto(parameters, action);
 

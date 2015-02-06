@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.admin.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,6 +20,17 @@ import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class AdminDAO extends CommonDAO {
+
+	
+	public AdminDAO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public AdminDAO(Connection _conn) {
+		super(_conn);
+		// TODO Auto-generated constructor stub
+	}
 
 	/*
 	 * Retorna un catalogo specifico de la base de datos
@@ -234,7 +246,7 @@ public class AdminDAO extends CommonDAO {
 		this.setString(1, "_itemcode", parameters.getItemCode());
 		this.setString(2, "_itemname", parameters.getItemName());
 		this.setString(3, "_itemtype", parameters.getItemType());
-		this.setInt(4, "_itmsgrpcod", new Integer(parameters.getItmsGrpCod()));
+		this.setString(4, "_itmsgrpcod", parameters.getItmsGrpCod());
 		this.setString(5, "_vatliable", parameters.getVatLiable());
 		this.setString(6, "_codebars", parameters.getCodeBars());
 		this.setString(7, "_prchseitem", parameters.getPrchseItem());
@@ -457,13 +469,13 @@ public class AdminDAO extends CommonDAO {
 		this.setDbObject("{call sp_cat_brancharticles_mtto(?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setString(1, "_itemcode", parameters.getItemcode());
 		this.setString(2, "_whscode", parameters.getWhscode());
-		this.setDouble(3, "_onhand", parameters.getOnhand());
-		this.setDouble(4, "_onhand1", parameters.getOnhand1());
-		this.setDouble(5, "_iscommited", parameters.getIscommited());
-		this.setDouble(6, "_onorder", parameters.getOnorder());
-		this.setDouble(7, "_minstock", parameters.getMinstock());
-		this.setDouble(8, "_maxstock", parameters.getMaxstock());
-		this.setDouble(9, "_minorder", parameters.getMinorder());
+		this.setDouble(3, "_onhand", new Double(parameters.getOnhand()));
+		this.setDouble(4, "_onhand1", new Double(parameters.getOnhand1()));
+		this.setDouble(5, "_iscommited", new Double(parameters.getIscommited()));
+		this.setDouble(6, "_onorder", new Double(parameters.getOnorder()));
+		this.setDouble(7, "_minstock", new Double(parameters.getMinstock()));
+		this.setDouble(8, "_maxstock", new Double(parameters.getMaxstock()));
+		this.setDouble(9, "_minorder", new Double(parameters.getMinorder()));
 		this.setString(10, "_locked", parameters.getLocked());
 		this.setInt(11, "_action", new Integer(action));
 

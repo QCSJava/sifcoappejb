@@ -16,6 +16,7 @@ import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 
 import java.sql.Date;
@@ -190,34 +191,34 @@ public class AdminTest {
 
 	public static void articles_mtto() {
 
-		int _result = 0;
+		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO parameters = new ArticlesTO();
 		parameters.setItemCode("art-005");
 		parameters.setItemName("Nombre Prueba 7");
 		parameters.setUserSign(2);
 		parameters.setItemType("S");
-		parameters.setNumInBuy(54.2);
-		parameters.setNumInSale(12.23);
-		parameters.setOnHand(2.5);
-		parameters.setPurPackUn(21.2);
-		parameters.setSalPackUn(12.2);
-		parameters.setAvgPrice(4.0);
+		//parameters.setNumInBuy(54.2);
+		//parameters.setNumInSale(12.23);
+		//parameters.setOnHand(2.5);
+		//parameters.setPurPackUn(21.2);
+		//parameters.setSalPackUn(12.2);
+		//parameters.setAvgPrice(4.0);
 
 		List branch = new Vector();
 
 		BranchArticlesTO branch1 = new BranchArticlesTO();
 		branch1.setIsasociated(true);
-		branch1.setIscommited(100.2);
-		branch1.setItemcode("art-005");
+		//branch1.setIscommited(100.2);
+		branch1.setItemcode("art-007");
 		branch1.setLocked("Y");
 		branch1.setWhscode("suc-001");
-		branch1.setMinstock(1.0);
-		branch1.setMaxstock(10.2);
-		branch1.setMinstock(1.2);
-		branch1.setOnhand(10.2);
-		branch1.setOnhand1(10.2);
-		branch1.setOnorder(2.5);
-		branch1.setMinorder(20.2);
+		//branch1.setMinstock(1.0);
+		//branch1.setMaxstock(10.2);
+		//branch1.setMinstock(1.2);
+		//branch1.setOnhand(10.2);
+		//branch1.setOnhand1(10.2);
+		//branch1.setOnorder(2.5);
+		//branch1.setMinorder(20.2);
 		branch.add(branch1);
 
 		parameters.setBranchArticles(branch);
