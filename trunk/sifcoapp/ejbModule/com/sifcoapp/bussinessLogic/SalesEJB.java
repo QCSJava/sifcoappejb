@@ -66,8 +66,12 @@ public class SalesEJB implements SalesEJBRemote {
 					.iterator();
 			while (iterator2.hasNext()) {
 				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
-				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############// DATOS// ESTATICOS// ##########											
+				articleDetalle.setLinetotal(articleDetalle.getQuantity()
+						* articleDetalle.getPrice());
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
+																			// DATOS//
+																			// ESTATICOS//
+																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
 				articleDetalle.setPricebefdi(articleDetalle.getPrice());
 				articleDetalle.setPriceafvat(articleDetalle.getPrice());
@@ -75,7 +79,8 @@ public class SalesEJB implements SalesEJBRemote {
 				articleDetalle.setVatsum(articleDetalle.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setVatappld(articleDetalle.getPrice());
-				articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				articleDetalle.setStockpricestockprice(articleDetalle
+						.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setGtotal(articleDetalle.getQuantity());
 				total = total + articleDetalle.getLinetotal();
@@ -103,13 +108,13 @@ public class SalesEJB implements SalesEJBRemote {
 							Common.MTTODELETE);
 				}
 			}
-			DAO.forceCommit();	
+			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
-		}finally{
-			
+		} finally {
+
 			DAO.forceCloseConnection();
 		}
 		_return.setCodigoError(0);
@@ -130,9 +135,7 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 		return _return;
 	}
-	
-	
-	
+
 	public List getClientCredi(ClientCrediInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
@@ -171,12 +174,17 @@ public class SalesEJB implements SalesEJBRemote {
 		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO(DAO.getConn());
 		goodDAO1.setIstransaccional(true);
 		try {
-			Iterator<ClientCrediDetailTO> iterator2 = parameters.getclientDetails()
-					.iterator();
+			Iterator<ClientCrediDetailTO> iterator2 = parameters
+					.getclientDetails().iterator();
 			while (iterator2.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator2.next();
-				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############// DATOS// ESTATICOS// ##########											
+				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator2
+						.next();
+				articleDetalle.setLinetotal(articleDetalle.getQuantity()
+						* articleDetalle.getPrice());
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
+																			// DATOS//
+																			// ESTATICOS//
+																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
 				articleDetalle.setPricebefdi(articleDetalle.getPrice());
 				articleDetalle.setPriceafvat(articleDetalle.getPrice());
@@ -184,7 +192,8 @@ public class SalesEJB implements SalesEJBRemote {
 				articleDetalle.setVatsum(articleDetalle.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setVatappld(articleDetalle.getPrice());
-				articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				articleDetalle.setStockpricestockprice(articleDetalle
+						.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setGtotal(articleDetalle.getQuantity());
 				total = total + articleDetalle.getLinetotal();
@@ -197,10 +206,11 @@ public class SalesEJB implements SalesEJBRemote {
 			parameters.setRounddif(0.00);
 			_return.setDocentry(DAO.inv_ClientCredi_mtto(parameters, action));
 
-			Iterator<ClientCrediDetailTO> iterator = parameters.getclientDetails()
-					.iterator();
+			Iterator<ClientCrediDetailTO> iterator = parameters
+					.getclientDetails().iterator();
 			while (iterator.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator.next();
+				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator
+						.next();
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
@@ -212,17 +222,17 @@ public class SalesEJB implements SalesEJBRemote {
 							Common.MTTODELETE);
 				}
 			}
-		DAO.forceCommit();	
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				DAO.rollBackConnection();
-				throw (EJBException) new EJBException(e);
-			}finally{
-				
-				DAO.forceCloseConnection();
-			}
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");		
+			DAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
 
