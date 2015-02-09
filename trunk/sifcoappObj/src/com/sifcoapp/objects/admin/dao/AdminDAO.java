@@ -246,7 +246,7 @@ public class AdminDAO extends CommonDAO {
 		this.setString(1, "_itemcode", parameters.getItemCode());
 		this.setString(2, "_itemname", parameters.getItemName());
 		this.setString(3, "_itemtype", parameters.getItemType());
-		this.setString(4, "_itmsgrpcod", parameters.getItmsGrpCod());
+		this.setString(4, "_itmsgrpcod", parameters.getItmsIsGrpCod());
 		this.setString(5, "_vatliable", parameters.getVatLiable());
 		this.setString(6, "_codebars", parameters.getCodeBars());
 		this.setString(7, "_prchseitem", parameters.getPrchseItem());
@@ -304,7 +304,7 @@ public class AdminDAO extends CommonDAO {
 					article.setItemCode(rowsetActual.getString(1));
 					article.setItemName(rowsetActual.getString(2));
 					article.setItemType(rowsetActual.getString(3));
-					article.setItmsGrpCod(rowsetActual.getString(4));
+					article.setItmsIsGrpCod(rowsetActual.getString(4));
 					article.setVatLiable(rowsetActual.getString(5));
 					article.setCodeBars(rowsetActual.getString(6));
 					article.setPrchseItem(rowsetActual.getString(7));
@@ -368,7 +368,7 @@ public class AdminDAO extends CommonDAO {
 					article.setItemCode(rowsetActual.getString(1));
 					article.setItemName(rowsetActual.getString(2));
 					article.setItemType(rowsetActual.getString(3));
-					article.setItmsGrpCod(rowsetActual.getString(4));
+					article.setItmsIsGrpCod(rowsetActual.getString(4));
 					article.setVatLiable(rowsetActual.getString(5));
 					article.setCodeBars(rowsetActual.getString(6));
 					article.setPrchseItem(rowsetActual.getString(7));
