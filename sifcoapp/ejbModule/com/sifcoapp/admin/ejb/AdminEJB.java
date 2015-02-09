@@ -185,7 +185,7 @@ public class AdminEJB implements AdminEJBRemote {
 			}
 			if (action == Common.MTTOUPDATE) {
 				if (branch.isIsasociated()) {
-					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTOINSERT);
+					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTOUPDATE);
 				} else {
 					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 				}
