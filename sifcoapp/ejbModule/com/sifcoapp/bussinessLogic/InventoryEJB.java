@@ -81,6 +81,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		} finally {
 
 			DAO.forceCloseConnection();
+			goodDAO1.forceCloseConnection();
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");

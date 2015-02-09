@@ -39,30 +39,25 @@ public class SecurityEJB implements SecurityEJBRemote {
 		userdao.setIstransaccional(true);
 		try {
 			usrValid = userdao.getUserValid(usr);
-		
 
-		if (usrValid.getValidUser() == 0) {
-			// usuario Valido
-			System.out.println("validate " + usr.getIdUserApp());
-			userdao.initCommon();
-			usrprofile = userdao.getUsrProfileHeader(usr.getIdUserApp());
-			usrValid.setUsrprofile(usrprofile);
-		}
-		// ToDo: forceconn
-		if (userdao.getConn() != null) {
-			try {
-				userdao.getConn().close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				throw (EJBException) new EJBException(e);
+			if (usrValid.getValidUser() == 0) {
+				// usuario Valido
+				System.out.println("validate " + usr.getIdUserApp());
+				userdao.initCommon();
+				usrprofile = userdao.getUsrProfileHeader(usr.getIdUserApp());
+				usrValid.setUsrprofile(usrprofile);
 			}
-		}
+			// ToDo: forceconn
+			if (userdao.getConn() != null) {
 
-		// usrValid.setDesc_usr("Administrator");
-		// usrValid.setId_perfil(1);
+				userdao.getConn().close();
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e1);
+		} finally {
+
+			userdao.forceCloseConnection();
 		}
 		return usrValid;
 	}
@@ -75,14 +70,16 @@ public class SecurityEJB implements SecurityEJBRemote {
 
 		try {
 			usrProfileOut = usrDAO.getUsrProfileHeader(usr.getIdUserApp());
-		
-		usrProfileOut.setProfile_det(usrDAO.getUsrProfileDetail(usrProfileOut
-				.getId_perfil()));
+
+			usrProfileOut.setProfile_det(usrDAO
+					.getUsrProfileDetail(usrProfileOut.getId_perfil()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
+		} finally {
+
+			usrDAO.forceCloseConnection();
 		}
-		// TODO Auto-generated method stub
 
 		return usrProfileOut;
 	}
@@ -99,8 +96,8 @@ public class SecurityEJB implements SecurityEJBRemote {
 			// TODO Auto-generated catch block
 			userdao.rollBackConnection();
 			throw (EJBException) new EJBException(e);
-		}finally{
-			
+		} finally {
+
 			userdao.forceCloseConnection();
 		}
 
@@ -124,8 +121,8 @@ public class SecurityEJB implements SecurityEJBRemote {
 
 	public UserTO getUserByNickname(String nickname) throws Exception {
 		// TODO Auto-generated method stub
-		UserTO _return= new UserTO();
-		UserDAO userdao= new UserDAO();
+		UserTO _return = new UserTO();
+		UserDAO userdao = new UserDAO();
 		try {
 			_return = userdao.getUserByNickname(nickname);
 		} catch (Exception e) {

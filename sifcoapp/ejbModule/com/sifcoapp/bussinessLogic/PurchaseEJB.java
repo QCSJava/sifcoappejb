@@ -62,12 +62,17 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO(DAO.getConn());
 		goodDAO1.setIstransaccional(true);
 		try {
-			Iterator<PurchaseDetailTO> iterator2 = parameters.getpurchaseDetails()
-					.iterator();
+			Iterator<PurchaseDetailTO> iterator2 = parameters
+					.getpurchaseDetails().iterator();
 			while (iterator2.hasNext()) {
-				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator2.next();
-				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############// DATOS// ESTATICOS// ##########											
+				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator2
+						.next();
+				articleDetalle.setLinetotal(articleDetalle.getQuantity()
+						* articleDetalle.getPrice());
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
+																			// DATOS//
+																			// ESTATICOS//
+																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
 				articleDetalle.setPricebefdi(articleDetalle.getPrice());
 				articleDetalle.setPriceafvat(articleDetalle.getPrice());
@@ -75,7 +80,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				articleDetalle.setVatsum(articleDetalle.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setVatappld(articleDetalle.getPrice());
-				articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				articleDetalle.setStockpricestockprice(articleDetalle
+						.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setGtotal(articleDetalle.getQuantity());
 				total = total + articleDetalle.getLinetotal();
@@ -88,10 +94,11 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			parameters.setRounddif(0.00);
 			_return.setDocentry(DAO.inv_Purchase_mtto(parameters, action));
 
-			Iterator<PurchaseDetailTO> iterator = parameters.getpurchaseDetails()
-					.iterator();
+			Iterator<PurchaseDetailTO> iterator = parameters
+					.getpurchaseDetails().iterator();
 			while (iterator.hasNext()) {
-				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator.next();
+				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator
+						.next();
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
@@ -103,13 +110,13 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 							Common.MTTODELETE);
 				}
 			}
-			DAO.forceCommit();	
+			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
-		}finally{
-			
+		} finally {
+
 			DAO.forceCloseConnection();
 		}
 		_return.setCodigoError(0);
@@ -130,10 +137,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		}
 		return _return;
 	}
-	
-	
-	
-	
+
 	public List getSupplier(SupplierInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
@@ -169,15 +173,20 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		Double total = 0.0;
 		SupplierDAO DAO = new SupplierDAO();
 		DAO.setIstransaccional(true);
-		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO();
+		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO(DAO.getConn());
 		goodDAO1.setIstransaccional(true);
 		try {
-			Iterator<SupplierDetailTO> iterator2 = parameters.getsupplierDetails()
-					.iterator();
+			Iterator<SupplierDetailTO> iterator2 = parameters
+					.getsupplierDetails().iterator();
 			while (iterator2.hasNext()) {
-				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator2.next();
-				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############// DATOS// ESTATICOS// ##########											
+				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator2
+						.next();
+				articleDetalle.setLinetotal(articleDetalle.getQuantity()
+						* articleDetalle.getPrice());
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
+																			// DATOS//
+																			// ESTATICOS//
+																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
 				articleDetalle.setPricebefdi(articleDetalle.getPrice());
 				articleDetalle.setPriceafvat(articleDetalle.getPrice());
@@ -185,7 +194,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				articleDetalle.setVatsum(articleDetalle.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setVatappld(articleDetalle.getPrice());
-				articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				articleDetalle.setStockpricestockprice(articleDetalle
+						.getPrice());
 				articleDetalle.setGrssprofit(articleDetalle.getPrice());
 				articleDetalle.setGtotal(articleDetalle.getQuantity());
 				total = total + articleDetalle.getLinetotal();
@@ -198,10 +208,11 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			parameters.setRounddif(0.00);
 			_return.setDocentry(DAO.inv_Supplier_mtto(parameters, action));
 
-			Iterator<SupplierDetailTO> iterator = parameters.getsupplierDetails()
-					.iterator();
+			Iterator<SupplierDetailTO> iterator = parameters
+					.getsupplierDetails().iterator();
 			while (iterator.hasNext()) {
-				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator.next();
+				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator
+						.next();
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
@@ -214,12 +225,14 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				}
 			}
 			DAO.forceCommit();
-			goodDAO1.forceCommit();
 			_return.setCodigoError(0);
 			_return.setMensaje("Datos guardados correctamente");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
 		}
 
 		return _return;
