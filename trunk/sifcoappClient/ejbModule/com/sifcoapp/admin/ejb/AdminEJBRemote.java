@@ -7,6 +7,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Remote;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
+import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
@@ -36,7 +37,7 @@ public interface AdminEJBRemote {
 	
 	public int cat_branch_mtto(BranchTO parameters, int action) throws EJBException;
 	
-	public List getArticles(String itemcode, String itemname ) throws EJBException;
+	public List getArticles(ArticlesInTO parameters ) throws EJBException;
 	
 	public ArticlesTO getArticlesByKey(String itemcode) throws EJBException;
 	

@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.client.AdminEJBClient;
+import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
@@ -255,11 +256,14 @@ public class AdminTest {
 	public static void getArticles() {
 		List resp = null;
 
-		String name = null;
-		String code = "art-001";
-
+		ArticlesInTO param= new ArticlesInTO();
+		param.setSellItem("N");
+		param.setPrchseItem("N");
+		param.setItemType("2");
+		param.setItmsIsGrpCod("1");
+		
 		try {
-			resp = AdminEJBService.getArticles(code, name);
+			resp = AdminEJBService.getArticles(param);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

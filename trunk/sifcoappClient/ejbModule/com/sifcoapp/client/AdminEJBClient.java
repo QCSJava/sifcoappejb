@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -113,10 +114,10 @@ public class AdminEJBClient {
 
 	}
 	
-	public List getArticles(String itemcode, String itemname ) throws Exception {
+	public List getArticles(ArticlesInTO parameters ) throws Exception {
 		List _return;
 
-		_return = bean.getArticles(itemcode, itemname);
+		_return = bean.getArticles(parameters);
 
 		return _return;
 	}
