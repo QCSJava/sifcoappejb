@@ -162,7 +162,7 @@ public class SecurityTest {
 		UserTO parameters = new UserTO();
 
 		// parameters.setUsersign();
-		parameters.setNickname("admin");
+		parameters.setNickname("admin3");
 		parameters.setUsername("Juan Carlos");
 		parameters.setLastname("Castro");
 		parameters.setPassword(PasswordService.getInstance().encrypt("jc"));

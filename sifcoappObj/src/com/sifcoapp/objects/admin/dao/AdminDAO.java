@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
+import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
@@ -277,15 +278,22 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public List getArticles(String itemcode, String itemname) throws Exception {
+	public List getArticles(ArticlesInTO parameters) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_get_articles(?,?)}");
-		this.setString(1, "_itemcode", itemcode);
-		this.setString(2, "_itemname", itemname);
+		this.setDbObject("{call sp_get_articles(?,?,?,?,?,?,?,?)}");
+		this.setString(1,"_itemcode", parameters.getItemCode());
+		this.setString(2,"_itemname", parameters.getItemName());
+		this.setString(3,"_itemtype", parameters.getItemType());
+		this.setString(4,"_itmsgrpcod", parameters.getItmsIsGrpCod());
+		this.setString(5,"_prchseitem", parameters.getPrchseItem());
+		this.setString(6,"_sellitem", parameters.getSellItem());
+		this.setString(7,"_invntitem", parameters.getInvntItem());
+		this.setString(8,"_assetitem", parameters.getAssetItem());
+
 
 		lstResultSet = this.runQuery();
 

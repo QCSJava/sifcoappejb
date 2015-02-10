@@ -8,6 +8,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
@@ -232,13 +233,13 @@ public class AdminEJB implements AdminEJBRemote {
 	 * return _return; }
 	 */
 
-	public List getArticles(String itemcode, String itemname) throws EJBException{
+	public List getArticles(ArticlesInTO parameters) throws EJBException{
 
 		List _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
 		try {
-			_return = adminDAO.getArticles(itemcode, itemname);
+			_return = adminDAO.getArticles(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
