@@ -7,10 +7,11 @@ import javax.ejb.Remote;
 
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Remote
 public interface CatalogEJBRemote {
-	public int cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
+	public ResultOutTO cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
 			int accion)throws Exception;
 
 	public List get_businesspartner(BusinesspartnerInTO parameters)throws EJBException;

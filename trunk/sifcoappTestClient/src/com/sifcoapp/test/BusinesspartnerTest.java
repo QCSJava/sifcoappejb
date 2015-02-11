@@ -8,6 +8,7 @@ import java.util.Vector;
 import com.sifcoapp.client.CatalogEJBClient;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 
 public class BusinesspartnerTest {
@@ -58,7 +59,7 @@ public class BusinesspartnerTest {
 		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
 	 List lstPeriods3 = new Vector();
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
-		nuevo.setCardname("PRUEBA");
+		nuevo.setCardcode("cod");
 		
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
@@ -78,18 +79,18 @@ public class BusinesspartnerTest {
 		Iterator<BusinesspartnerTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
 			BusinesspartnerTO periodo = (BusinesspartnerTO) iterator.next();
-			System.out.println(periodo.getGroupcode()+ " - "
+			System.out.println(periodo.getCardcode()+"  "+periodo.getGroupcode()+ " - "
 					+ periodo.getNit() + " - "
 					+ periodo.getAddid());
 		}
 	}
 	
 	public static void businesspartner_mtto(){
-		int resp=0;
+		ResultOutTO resp=null;
 		BusinesspartnerTO bus= new BusinesspartnerTO();
-		bus.setCardcode("prueba3");
-		bus.setCardname("testeo");
-		bus.setGroupcode(26);
+		bus.setCardcode("prueba6");
+		bus.setCardname("cardaneeeeee");
+		bus.setGroupcode("none");
 		
 		try {
 			resp= catalog.cat_bpa_businesspartner_mtto(bus,3);
@@ -97,7 +98,7 @@ public class BusinesspartnerTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(resp);
+		System.out.println(resp.getMensaje());
 		
 		
 	}

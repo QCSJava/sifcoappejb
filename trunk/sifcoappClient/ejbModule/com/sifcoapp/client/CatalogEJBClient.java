@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.naming.Context;
-
 import javax.naming.NamingException;
 
 import com.sifcoapp.bussinessLogic.CatalogEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class CatalogEJBClient {
 
@@ -30,10 +30,10 @@ public class CatalogEJBClient {
 		}
 	}
 
-	public int cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
+	public ResultOutTO cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
 			int accion) throws Exception {
 
-		int _return = 0;
+		ResultOutTO _return;
 
 		_return = bean.cat_bpa_businesspartner_mtto(parameters, accion);
 

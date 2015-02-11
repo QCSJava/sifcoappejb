@@ -9,25 +9,42 @@ import javax.ejb.Stateless;
 import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Stateless
 public class CatalogEJB implements CatalogEJBRemote {
+
+	
 
 	public CatalogEJB() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
+	public ResultOutTO cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
 			int accion) throws EJBException{
-		// TODO Auto-generated method stub
-		int _return = 0;
+		
+		ResultOutTO _return = new ResultOutTO();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
+		DAO.setIstransaccional(true);
+		parameters.setBalance(0.00);
+		parameters.setChecksbal(0.00);
+		parameters.setCreditline(0.00);
+		parameters.setDebtline(0.00);
+		parameters.setDiscount(0.00);
+		parameters.setOrdersbal(0.00);
 		try {
-			_return = DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
+			DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
+			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
+		}finally {
+
+			DAO.forceCloseConnection();
 		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos ingresados correctamente");
 		return _return;
 	}
 
