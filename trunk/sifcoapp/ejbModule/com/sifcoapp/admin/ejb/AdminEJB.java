@@ -3,6 +3,7 @@ package com.sifcoapp.admin.ejb;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -157,13 +158,16 @@ public class AdminEJB implements AdminEJBRemote {
 	 */
 	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException{
 		ResultOutTO _return = new ResultOutTO();
-		AdminDAO adminDAO1 = new AdminDAO();
-		adminDAO1.setIstransaccional(true);
-		AdminDAO adminDAO = new AdminDAO(adminDAO1.getConn());
+		
+		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
+		
 		try {
 			
+			List consult= new Vector();
+			consult = adminDAO.getBranchArticles(parameters.getItemCode());
+			Iterator<BranchArticlesTO> iterator2 = consult.iterator();
 		while (iterator.hasNext()) {
 			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
 			// Para articulos nuevos
@@ -181,18 +185,29 @@ public class AdminEJB implements AdminEJBRemote {
 			}
 			if (action == Common.MTTOINSERT && branch.isIsasociated()) {
 
-					adminDAO1.cat_brancharticles_mtto(branch, action);
+					adminDAO.cat_brancharticles_mtto(branch, action);
 				
 			}
 			if (action == Common.MTTOUPDATE) {
 				if (branch.isIsasociated()) {
-					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTOUPDATE);
+					int update=0;
+					while(iterator2.hasNext()){
+						BranchArticlesTO branch2 = (BranchArticlesTO) iterator2.next();
+						if(branch2.getWhscode().equals(branch.getWhscode())){
+							adminDAO.cat_brancharticles_mtto(branch, Common.MTTOUPDATE);
+							update=1;
+						}
+					}
+					if(update==0){
+						adminDAO.cat_brancharticles_mtto(branch, Common.MTTOINSERT);
+					}
+					
 				} else {
-					adminDAO1.cat_brancharticles_mtto(branch, Common.MTTODELETE);
+					adminDAO.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 				}
 			}
 			if (action == Common.MTTODELETE) {
-				adminDAO1.cat_brancharticles_mtto(branch, Common.MTTODELETE);
+				adminDAO.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 			}
 		}
 //############################ VALORES QUEMADOS ###################################
@@ -204,14 +219,14 @@ public class AdminEJB implements AdminEJBRemote {
 		parameters.setNumInSale(0.0);
 		
 		adminDAO.cat_articles_mtto(parameters, action);
-		adminDAO1.forceCommit();
+		adminDAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			adminDAO1.rollBackConnection();
+			adminDAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
 
-			adminDAO1.forceCloseConnection();
+			adminDAO.forceCloseConnection();
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");

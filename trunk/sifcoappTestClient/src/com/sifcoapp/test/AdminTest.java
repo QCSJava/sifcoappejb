@@ -194,9 +194,9 @@ public class AdminTest {
 
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO parameters = new ArticlesTO();
-		parameters.setItemCode("art-005");
-		parameters.setItemName("Nombre Prueba 7");
-		parameters.setUserSign(2);
+		parameters.setItemCode("articulo00001");
+		parameters.setItemName("fdsdfsdf");
+		//parameters.setUserSign(2);
 		parameters.setItemType("S");
 		//parameters.setNumInBuy(54.2);
 		//parameters.setNumInSale(12.23);
@@ -210,9 +210,17 @@ public class AdminTest {
 		BranchArticlesTO branch1 = new BranchArticlesTO();
 		branch1.setIsasociated(true);
 		//branch1.setIscommited(100.2);
-		branch1.setItemcode("art-007");
-		branch1.setLocked("Y");
-		branch1.setWhscode("suc-001");
+		branch1.setItemcode("articulo00001");
+		//branch1.setLocked("Y");
+		
+		branch1.setWhscode("COD-2");
+		BranchArticlesTO branch2 = new BranchArticlesTO();
+		branch2.setIsasociated(true);
+		//branch1.setIscommited(100.2);
+		branch2.setItemcode("articulo00001");
+		//branch1.setLocked("Y");
+		branch2.setIscommited(56.5);
+		branch2.setWhscode("COD-03");
 		//branch1.setMinstock(1.0);
 		//branch1.setMaxstock(10.2);
 		//branch1.setMinstock(1.2);
@@ -221,6 +229,7 @@ public class AdminTest {
 		//branch1.setOnorder(2.5);
 		//branch1.setMinorder(20.2);
 		branch.add(branch1);
+		branch.add(branch2);
 
 		parameters.setBranchArticles(branch);
 
@@ -230,7 +239,7 @@ public class AdminTest {
 
 		try {
 			_result = AdminEJBService.cat_articles_mtto(parameters,
-					Common.MTTOINSERT);
+					2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
