@@ -57,7 +57,7 @@ public class BusinesspartnerTest {
 
 		BusinesspartnerTO lstPeriods= new BusinesspartnerTO();
 		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
-	 List lstPeriods3 = new Vector();
+	 List lstPeriods3 = null;
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
 		nuevo.setCardcode("cod");
 		
