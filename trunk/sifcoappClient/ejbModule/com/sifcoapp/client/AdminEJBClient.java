@@ -1,6 +1,5 @@
 package com.sifcoapp.client;
 
-
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -34,15 +33,15 @@ public class AdminEJBClient {
 		}
 	}
 
-	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) throws Exception {
+	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters)
+			throws Exception {
 
 		EnterpriseOutTO enterpriseOutTO = null;
-		//try{
-			enterpriseOutTO = bean.saveEnterprise(parameters);	
-		//}catch(EJBException ex){
-			//throw new Exception(ex.getMessage());
-		//}
-		
+		// try{
+		enterpriseOutTO = bean.saveEnterprise(parameters);
+		// }catch(EJBException ex){
+		// throw new Exception(ex.getMessage());
+		// }
 
 		return enterpriseOutTO;
 	}
@@ -65,6 +64,15 @@ public class AdminEJBClient {
 		return catlgLst;
 	}
 
+	public CatalogTO findCatalogByKey(String catcode, int tablecode)
+			throws Exception {
+		CatalogTO _return = new CatalogTO();
+
+		_return = bean.findCatalogByKey(catcode, tablecode);
+
+		return _return;
+	}
+
 	/**
 	 * Obtiene los registros del catalogo de tablas del sistema
 	 * 
@@ -81,7 +89,8 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de Catalogos
 	 */
-	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) throws Exception {
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action)
+			throws Exception {
 		int _return = 0;
 
 		_return = bean.cat_tab1_catalogos_mtto(parameters, action);
@@ -93,7 +102,8 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException {
+	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action)
+			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
 
 		_return = bean.cat_articles_mtto(parameters, action);
@@ -105,7 +115,8 @@ public class AdminEJBClient {
 	/*
 	 * Mantenimiento de almacenes
 	 */
-	public int cat_branch_mtto(BranchTO parameters, int action) throws Exception {
+	public int cat_branch_mtto(BranchTO parameters, int action)
+			throws Exception {
 		int _return = 0;
 
 		_return = bean.cat_branch_mtto(parameters, action);
@@ -113,15 +124,15 @@ public class AdminEJBClient {
 		return _return;
 
 	}
-	
-	public List getArticles(ArticlesInTO parameters ) throws Exception {
+
+	public List getArticles(ArticlesInTO parameters) throws Exception {
 		List _return;
 
 		_return = bean.getArticles(parameters);
 
 		return _return;
 	}
-	
+
 	public ArticlesTO getArticlesByKey(String itemcode) throws Exception {
 		ArticlesTO _return;
 
@@ -129,15 +140,15 @@ public class AdminEJBClient {
 
 		return _return;
 	}
-	
-	public List getBranch(String whscode, String whsname ) throws Exception {
+
+	public List getBranch(String whscode, String whsname) throws Exception {
 		List _return;
 
 		_return = bean.getBranch(whscode, whsname);
 
 		return _return;
 	}
-	
+
 	public BranchTO getBranchByKey(String whscode) throws Exception {
 		BranchTO _return;
 
@@ -145,5 +156,5 @@ public class AdminEJBClient {
 
 		return _return;
 	}
-	
+
 }

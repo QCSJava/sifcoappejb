@@ -25,6 +25,8 @@ public interface AdminEJBRemote {
 	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) throws EJBException;
 
 	public List findCatalog(String nameCatalog) throws EJBException;
+	
+	public CatalogTO findCatalogByKey(String catcode, int tablecode) throws EJBException;
 
 	public List getTablesCatalog() throws EJBException;
 
