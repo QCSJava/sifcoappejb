@@ -22,7 +22,6 @@ import com.sun.rowset.CachedRowSetImpl;
 
 public class AdminDAO extends CommonDAO {
 
-	
 	public AdminDAO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -85,12 +84,120 @@ public class AdminDAO extends CommonDAO {
 	}
 
 	/*
+	 * Retorna un catalogo specifico de la base de datos
+	 */
+	public CatalogTO findCatalogByKey(String catcode, int tablecode) throws Exception {
+
+		CatalogTO _return = new CatalogTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_catalogbykey(?,?)}");
+		this.setString(1, "_catcode", catcode);
+		this.setInt(2, "_tablecode", tablecode);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					
+					CatalogTO catalogo = new CatalogTO();
+					catalogo.setCatcode(rowsetActual.getString(1));
+					catalogo.setTablecode(rowsetActual.getInt(2));
+					catalogo.setCatvalue(rowsetActual.getString(3));
+					catalogo.setCatvalue2(rowsetActual.getString(4));		
+					catalogo.setCatvalue3(rowsetActual.getString(5));		
+					_return = catalogo;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return _return;
+
+	}
+	
+	/*
+	 * Obtiene los registros del catalogo de tablas del sistema
+	 * 
+	 * @author Rutilio
+	 */
+	public List getTablesCatalog() throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+		TablesCatalogTO _returnTO = new TablesCatalogTO();
+
+		System.out.println("Desde DAO");
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{? = call sp_get_tables_catalog()}");
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					_return.add(new TablesCatalogTO(rowsetActual.getInt(1),
+							rowsetActual.getString(2), rowsetActual
+									.getString(3)));
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	/*
+	 * Mantenimiento tabla de catalogos de sistema
+	 */
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action)
+			throws Exception {
+		int _return;
+
+		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?,?,?,?,?)}");
+
+		this.setString(1, "_catcode", parameters.getCatcode());
+		this.setInt(2, "_tablecode", new Integer(parameters.getTablecode()));
+		this.setString(3, "_catvalue", parameters.getCatvalue());
+		this.setString(4, "_catvalue2", parameters.getCatvalue2());
+		this.setString(5, "_catvalue3", parameters.getCatvalue3());
+		this.setString(6, "_catstatus", parameters.getCatstatus());
+		this.setInt(7, "_usersign", new Integer(parameters.getUsersign()));
+		this.setInt(8, "_action", new Integer(action));
+
+		_return = this.runUpdate();
+
+		return _return;
+	}
+
+	/*
 	 * Actualiza los datos de la empresa
 	 */
 	public int updEnterprise(EnterpriseTO parameters) throws Exception {
 
 		int v_resp = 0;
-		
+
 		this.setDbObject("{call sp_upd_enterprise33(?,?,?,?,?,?,?,?,?,?)}");
 
 		this.setString(1, "_name", parameters.getCompnyName());
@@ -160,68 +267,6 @@ public class AdminDAO extends CommonDAO {
 	}
 
 	/*
-	 * Obtiene los registros del catalogo de tablas del sistema
-	 * 
-	 * @author Rutilio
-	 */
-	public List getTablesCatalog() throws Exception {
-		List _return = new Vector();
-		List lstResultSet = null;
-		TablesCatalogTO _returnTO = new TablesCatalogTO();
-
-		System.out.println("Desde DAO");
-		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{? = call sp_get_tables_catalog()}");
-
-		lstResultSet = this.runQuery();
-
-		CachedRowSetImpl rowsetActual;
-
-		ListIterator liRowset = null;
-		liRowset = lstResultSet.listIterator();
-		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
-		while (liRowset.hasNext()) {
-			rowsetActual = (CachedRowSetImpl) liRowset.next();
-
-			try {
-				while (rowsetActual.next()) {
-					_return.add(new TablesCatalogTO(rowsetActual.getInt(1),
-							rowsetActual.getString(2), rowsetActual
-									.getString(3)));
-				}
-				rowsetActual.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return _return;
-	}
-
-	/*
-	 * Mantenimiento tabla de catalogos de sistema
-	 */
-	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action)
-			throws Exception {
-		int _return;
-
-		this.setDbObject("{call sp_cat_tab1_catalogos_mtto(?,?,?,?,?,?,?,?)}");
-
-		this.setString(1, "_catcode", parameters.getCatcode());
-		this.setInt(2, "_tablecode", new Integer(parameters.getTablecode()));
-		this.setString(3, "_catvalue", parameters.getCatvalue());
-		this.setString(4, "_catvalue2", parameters.getCatvalue2());
-		this.setString(5, "_catvalue3", parameters.getCatvalue3());
-		this.setString(6, "_catstatus", parameters.getCatstatus());
-		this.setInt(7, "_usersign", new Integer(parameters.getUsersign()));
-		this.setInt(8, "_action", new Integer(action));
-
-		_return = this.runUpdate();
-
-		return _return;
-	}
-
-	/*
 	 * Guarda los cambios en los articulos
 	 */
 	public int cat_articles_mtto(ArticlesTO parameters, int action)
@@ -230,18 +275,18 @@ public class AdminDAO extends CommonDAO {
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_articles_mtto_5(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_cat_articles_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		if(parameters.getValidFrom()==null){
+		if (parameters.getValidFrom() == null) {
 			this.setDate(21, "_validfrom", parameters.getValidFrom());
-		}
-		else{
-			java.sql.Date fecha= new java.sql.Date(parameters.getValidFrom().getTime());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getValidFrom()
+					.getTime());
 			this.setDate(21, "_validfrom", fecha);
 		}
-		if(parameters.getValidTo()==null){
+		if (parameters.getValidTo() == null) {
 			this.setDate(22, "_validto", parameters.getValidTo());
-		}
-		else{
-			java.sql.Date fecha= new java.sql.Date(parameters.getValidTo().getTime());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getValidTo()
+					.getTime());
 			this.setDate(22, "_validto", fecha);
 		}
 		this.setString(1, "_itemcode", parameters.getItemCode());
@@ -285,15 +330,14 @@ public class AdminDAO extends CommonDAO {
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_articles(?,?,?,?,?,?,?,?)}");
-		this.setString(1,"_itemcode", parameters.getItemCode());
-		this.setString(2,"_itemname", parameters.getItemName());
-		this.setString(3,"_itemtype", parameters.getItemType());
-		this.setString(4,"_itmsgrpcod", parameters.getItmsIsGrpCod());
-		this.setString(5,"_prchseitem", parameters.getPrchseItem());
-		this.setString(6,"_sellitem", parameters.getSellItem());
-		this.setString(7,"_invntitem", parameters.getInvntItem());
-		this.setString(8,"_assetitem", parameters.getAssetItem());
-
+		this.setString(1, "_itemcode", parameters.getItemCode());
+		this.setString(2, "_itemname", parameters.getItemName());
+		this.setString(3, "_itemtype", parameters.getItemType());
+		this.setString(4, "_itmsgrpcod", parameters.getItmsIsGrpCod());
+		this.setString(5, "_prchseitem", parameters.getPrchseItem());
+		this.setString(6, "_sellitem", parameters.getSellItem());
+		this.setString(7, "_invntitem", parameters.getInvntItem());
+		this.setString(8, "_assetitem", parameters.getAssetItem());
 
 		lstResultSet = this.runQuery();
 
@@ -495,7 +539,8 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Guarda los cambios en los articulos
 	 */
-	public int cat_branch_mtto(BranchTO parameters, int action)	throws Exception {
+	public int cat_branch_mtto(BranchTO parameters, int action)
+			throws Exception {
 
 		int v_resp = 0;
 		// thsetDbObject("{call sp_cat_branch_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");

@@ -1,4 +1,5 @@
 package com.sifcoapp.admin.ejb;
+
 //fyrtyrtyrtyrt
 
 import java.util.Iterator;
@@ -43,7 +44,8 @@ public class AdminEJB implements AdminEJBRemote {
 	 * com.sifcoapp.admin.ejb.AdminEJBRemote#saveEnterprise(com.sifcoapp.objects
 	 * .admin.to.EnterpriseTO)
 	 */
-	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters) throws EJBException {
+	public EnterpriseOutTO saveEnterprise(EnterpriseTO parameters)
+			throws EJBException {
 
 		EnterpriseOutTO enterpriseOutTO = new EnterpriseOutTO();
 
@@ -54,7 +56,7 @@ public class AdminEJB implements AdminEJBRemote {
 			_return = adminDAO.updEnterprise(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 			throw (EJBException) new EJBException(e);
 		}
 
@@ -70,7 +72,8 @@ public class AdminEJB implements AdminEJBRemote {
 	 * com.sifcoapp.admin.ejb.AdminEJBRemote#saveEnterprise(com.sifcoapp.objects
 	 * .admin.to.EnterpriseTO)
 	 */
-	public EnterpriseTO getEnterpriseInfo(int enterpriseCode) throws EJBException{
+	public EnterpriseTO getEnterpriseInfo(int enterpriseCode)
+			throws EJBException {
 
 		EnterpriseTO enterpriseOutTO = null;
 
@@ -86,7 +89,7 @@ public class AdminEJB implements AdminEJBRemote {
 		return enterpriseOutTO;
 	}
 
-	public EnterpriseTO getEnterpriseInfo() throws EJBException{
+	public EnterpriseTO getEnterpriseInfo() throws EJBException {
 		// TODO Auto-generated method stub
 		EnterpriseTO enterpriseOutTO = new EnterpriseTO();
 		enterpriseOutTO = this.getEnterpriseInfo(0);
@@ -98,7 +101,7 @@ public class AdminEJB implements AdminEJBRemote {
 	 * 
 	 * @see com.sifcoapp.admin.ejb.AdminEJBRemote#findCatalog(java.lang.String)
 	 */
-	public List findCatalog(String nameCatalog) throws EJBException{
+	public List findCatalog(String nameCatalog) throws EJBException {
 		// TODO Auto-generated method stub
 		// List catlgLst=new Vector();
 		List catlgLst = null;
@@ -115,12 +118,28 @@ public class AdminEJB implements AdminEJBRemote {
 		return catlgLst;
 	}
 
+	public CatalogTO findCatalogByKey(String catcode, int tablecode)
+			throws EJBException {
+
+		CatalogTO _return = new CatalogTO();
+		AdminDAO adminDAO = new AdminDAO();
+
+		try {
+			_return = adminDAO.findCatalogByKey(catcode, tablecode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
 	/*
 	 * Obtiene los registros del catalogo de tablas del sistema
 	 * 
 	 * @author Rutilio
 	 */
-	public List getTablesCatalog() throws EJBException{
+	public List getTablesCatalog() throws EJBException {
 		List _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
@@ -138,9 +157,10 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de Catalogos
 	 */
-	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action) throws EJBException{
+	public int cat_tab1_catalogos_mtto(CatalogTO parameters, int action)
+			throws EJBException {
 
-		int _return=0;
+		int _return = 0;
 
 		AdminDAO adminDAO = new AdminDAO();
 		try {
@@ -156,71 +176,80 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de Articulos
 	 */
-	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action) throws EJBException{
+	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action)
+			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
-		
+
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
-		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
-		
+		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
+				.iterator();
+
 		try {
-			
-			List<BranchArticlesTO> consult= new Vector<BranchArticlesTO>();
+
+			List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
 			consult = adminDAO.getBranchArticles(parameters.getItemCode());
 			Iterator<BranchArticlesTO> iterator2 = consult.iterator();
-		while (iterator.hasNext()) {
-			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
-			// Para articulos nuevos
-//############################ VALORES QUEMADOS ###################################
-			branch.setOnhand(0.0);
-			branch.setOnhand1(0.0);
-			branch.setIscommited(0.0);
-			branch.setOnorder(0.0);
-			branch.setMinorder(0.0);
-			if(branch.getMinstock()==null){
-				branch.setMinstock(0.0);
-			}
-			if(branch.getMaxstock()==null){
-				branch.setMaxstock(0.0);
-			}
-			if (action == Common.MTTOINSERT && branch.isIsasociated()) {
+			while (iterator.hasNext()) {
+				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
+				// Para articulos nuevos
+				// ############################ VALORES QUEMADOS
+				// ###################################
+				branch.setOnhand(0.0);
+				branch.setOnhand1(0.0);
+				branch.setIscommited(0.0);
+				branch.setOnorder(0.0);
+				branch.setMinorder(0.0);
+				if (branch.getMinstock() == null) {
+					branch.setMinstock(0.0);
+				}
+				if (branch.getMaxstock() == null) {
+					branch.setMaxstock(0.0);
+				}
+				if (action == Common.MTTOINSERT && branch.isIsasociated()) {
 
 					adminDAO.cat_brancharticles_mtto(branch, action);
-				
-			}
-			if (action == Common.MTTOUPDATE) {
-				if (branch.isIsasociated()) {
-					int update=0;
-					iterator2 = consult.iterator();
-					while(iterator2.hasNext()){
-						BranchArticlesTO branch2 = (BranchArticlesTO) iterator2.next();
-						if(branch2.getWhscode().equals(branch.getWhscode())){
-							adminDAO.cat_brancharticles_mtto(branch, Common.MTTOUPDATE);
-							update=1;
+
+				}
+				if (action == Common.MTTOUPDATE) {
+					if (branch.isIsasociated()) {
+						int update = 0;
+						iterator2 = consult.iterator();
+						while (iterator2.hasNext()) {
+							BranchArticlesTO branch2 = (BranchArticlesTO) iterator2
+									.next();
+							if (branch2.getWhscode()
+									.equals(branch.getWhscode())) {
+								adminDAO.cat_brancharticles_mtto(branch,
+										Common.MTTOUPDATE);
+								update = 1;
+							}
 						}
+						if (update == 0) {
+							adminDAO.cat_brancharticles_mtto(branch,
+									Common.MTTOINSERT);
+						}
+
+					} else {
+						adminDAO.cat_brancharticles_mtto(branch,
+								Common.MTTODELETE);
 					}
-					if(update==0){
-						adminDAO.cat_brancharticles_mtto(branch, Common.MTTOINSERT);
-					}
-					
-				} else {
+				}
+				if (action == Common.MTTODELETE) {
 					adminDAO.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 				}
 			}
-			if (action == Common.MTTODELETE) {
-				adminDAO.cat_brancharticles_mtto(branch, Common.MTTODELETE);
-			}
-		}
-//############################ VALORES QUEMADOS ###################################
-		parameters.setNumInBuy(0.0);
-		parameters.setSalPackUn(0.0);
-		parameters.setPurPackUn(0.0);
-		parameters.setAvgPrice(0.0);
-		parameters.setOnHand(0.0);
-		parameters.setNumInSale(0.0);
-		
-		adminDAO.cat_articles_mtto(parameters, action);
-		adminDAO.forceCommit();
+			// ############################ VALORES QUEMADOS
+			// ###################################
+			parameters.setNumInBuy(0.0);
+			parameters.setSalPackUn(0.0);
+			parameters.setPurPackUn(0.0);
+			parameters.setAvgPrice(0.0);
+			parameters.setOnHand(0.0);
+			parameters.setNumInSale(0.0);
+
+			adminDAO.cat_articles_mtto(parameters, action);
+			adminDAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			adminDAO.rollBackConnection();
@@ -249,7 +278,7 @@ public class AdminEJB implements AdminEJBRemote {
 	 * return _return; }
 	 */
 
-	public List getArticles(ArticlesInTO parameters) throws EJBException{
+	public List getArticles(ArticlesInTO parameters) throws EJBException {
 
 		List _return = null;
 
@@ -264,7 +293,7 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public ArticlesTO getArticlesByKey(String itemcode) throws EJBException{
+	public ArticlesTO getArticlesByKey(String itemcode) throws EJBException {
 		ArticlesTO _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
@@ -288,7 +317,8 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de almacenes
 	 */
-	public int cat_branch_mtto(BranchTO parameters, int action) throws EJBException{
+	public int cat_branch_mtto(BranchTO parameters, int action)
+			throws EJBException {
 		// TODO Auto-generated method stub
 		int _return = 0;
 
@@ -303,7 +333,7 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public List getBranch(String whscode, String whsname) throws EJBException{
+	public List getBranch(String whscode, String whsname) throws EJBException {
 		// TODO Auto-generated method stub
 
 		List _return = null;
@@ -319,7 +349,7 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public BranchTO getBranchByKey(String whscode) throws EJBException{
+	public BranchTO getBranchByKey(String whscode) throws EJBException {
 		// TODO Auto-generated method stub
 		BranchTO _return = null;
 
@@ -333,4 +363,5 @@ public class AdminEJB implements AdminEJBRemote {
 
 		return _return;
 	}
+
 }

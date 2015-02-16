@@ -83,11 +83,11 @@ public class AdminTest {
 			resp = AdminEJBService.saveEnterprise(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println("Error EJB " + e.getMessage());
 		}
 
-		//System.out.println(resp.getRespCode());
+		// System.out.println(resp.getRespCode());
 
 	}
 
@@ -101,8 +101,8 @@ public class AdminTest {
 			System.out.println("Error EJB " + e.getMessage());
 		}
 
-		//System.out.println(resp.getCompnyName());
-		//System.out.println(resp.getCompnyAddr());
+		// System.out.println(resp.getCompnyName());
+		// System.out.println(resp.getCompnyAddr());
 
 	}
 
@@ -125,6 +125,23 @@ public class AdminTest {
 			System.out.println("--->" + catalogTO.getCatcode() + "-"
 					+ catalogTO.getCatvalue() + "-" + catalogTO.getCatvalue2());
 		}
+	}
+
+	public static void findCatalogByKey() {
+
+		CatalogTO catlgLst = null;
+
+		try {
+			catlgLst = AdminEJBService.findCatalogByKey("1", 1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("luego de servicio mod   ");
+
+		System.out.println("--->" + catlgLst.getCatcode() + "-"
+				+ catlgLst.getCatvalue() + "-" + catlgLst.getCatvalue2());
+
 	}
 
 	/*
@@ -196,38 +213,38 @@ public class AdminTest {
 		ArticlesTO parameters = new ArticlesTO();
 		parameters.setItemCode("articulo00001");
 		parameters.setItemName("fdsdfsdf");
-		//parameters.setUserSign(2);
+		// parameters.setUserSign(2);
 		parameters.setItemType("S");
-		//parameters.setNumInBuy(54.2);
-		//parameters.setNumInSale(12.23);
-		//parameters.setOnHand(2.5);
-		//parameters.setPurPackUn(21.2);
-		//parameters.setSalPackUn(12.2);
-		//parameters.setAvgPrice(4.0);
+		// parameters.setNumInBuy(54.2);
+		// parameters.setNumInSale(12.23);
+		// parameters.setOnHand(2.5);
+		// parameters.setPurPackUn(21.2);
+		// parameters.setSalPackUn(12.2);
+		// parameters.setAvgPrice(4.0);
 
 		List branch = new Vector();
 
 		BranchArticlesTO branch1 = new BranchArticlesTO();
 		branch1.setIsasociated(true);
-		//branch1.setIscommited(100.2);
+		// branch1.setIscommited(100.2);
 		branch1.setItemcode("articulo00001");
-		//branch1.setLocked("Y");
-		
+		// branch1.setLocked("Y");
+
 		branch1.setWhscode("COD-2");
 		BranchArticlesTO branch2 = new BranchArticlesTO();
 		branch2.setIsasociated(true);
-		//branch1.setIscommited(100.2);
+		// branch1.setIscommited(100.2);
 		branch2.setItemcode("articulo00001");
-		//branch1.setLocked("Y");
+		// branch1.setLocked("Y");
 		branch2.setIscommited(56.5);
 		branch2.setWhscode("COD-03");
-		//branch1.setMinstock(1.0);
-		//branch1.setMaxstock(10.2);
-		//branch1.setMinstock(1.2);
-		//branch1.setOnhand(10.2);
-		//branch1.setOnhand1(10.2);
-		//branch1.setOnorder(2.5);
-		//branch1.setMinorder(20.2);
+		// branch1.setMinstock(1.0);
+		// branch1.setMaxstock(10.2);
+		// branch1.setMinstock(1.2);
+		// branch1.setOnhand(10.2);
+		// branch1.setOnhand1(10.2);
+		// branch1.setOnorder(2.5);
+		// branch1.setMinorder(20.2);
 		branch.add(branch1);
 		branch.add(branch2);
 
@@ -238,8 +255,7 @@ public class AdminTest {
 		// Agregar
 
 		try {
-			_result = AdminEJBService.cat_articles_mtto(parameters,
-					2);
+			_result = AdminEJBService.cat_articles_mtto(parameters, 2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -265,12 +281,12 @@ public class AdminTest {
 	public static void getArticles() {
 		List resp = null;
 
-		ArticlesInTO param= new ArticlesInTO();
+		ArticlesInTO param = new ArticlesInTO();
 		param.setSellItem("N");
 		param.setPrchseItem("N");
 		param.setItemType("2");
 		param.setItmsIsGrpCod("1");
-		
+
 		try {
 			resp = AdminEJBService.getArticles(param);
 		} catch (Exception e) {
@@ -311,46 +327,40 @@ public class AdminTest {
 		}
 	}
 
-	/*public static void bracharticles_mtto() {
+	/*
+	 * public static void bracharticles_mtto() {
+	 * 
+	 * int _result; BranchArticlesTO parameters = new BranchArticlesTO();
+	 * parameters.setIsasociated(true); parameters.setIscommited(100.2);
+	 * parameters.setItemcode("110100"); parameters.setLocked("Y");
+	 * parameters.setWhscode("suc-001"); parameters.setMinstock(1.0);
+	 * parameters.setMaxstock(10.2); parameters.setMinstock(1.2);
+	 * parameters.setOnhand(10.2); parameters.setOnhand1(10.2);
+	 * parameters.setOnorder(2.5); parameters.setMinorder(20.2);
+	 * 
+	 * // Agregar
+	 * 
+	 * _result = AdminEJBService.cat_brancharticles_mtto(parameters,
+	 * Common.MTTOINSERT);
+	 * 
+	 * // Actualizar
+	 * 
+	 * // _result=AdminEJBService.cat_brancharticles_mtto(parameters, //
+	 * Common.MTTOUPDATE);
+	 * 
+	 * // Borrar
+	 * 
+	 * // _result=AdminEJBService.cat_brancharticles_mtto(parameters, //
+	 * Common.MTTODELETE);
+	 * 
+	 * System.out.println("luego de servicio"); System.out.println(_result);
+	 * 
+	 * }
+	 */
 
-		int _result;
-		BranchArticlesTO parameters = new BranchArticlesTO();
-		parameters.setIsasociated(true);
-		parameters.setIscommited(100.2);
-		parameters.setItemcode("110100");
-		parameters.setLocked("Y");
-		parameters.setWhscode("suc-001");
-		parameters.setMinstock(1.0);
-		parameters.setMaxstock(10.2);
-		parameters.setMinstock(1.2);
-		parameters.setOnhand(10.2);
-		parameters.setOnhand1(10.2);
-		parameters.setOnorder(2.5);
-		parameters.setMinorder(20.2);
-
-		// Agregar
-
-		_result = AdminEJBService.cat_brancharticles_mtto(parameters,
-				Common.MTTOINSERT);
-
-		// Actualizar
-
-		// _result=AdminEJBService.cat_brancharticles_mtto(parameters,
-		// Common.MTTOUPDATE);
-
-		// Borrar
-
-		// _result=AdminEJBService.cat_brancharticles_mtto(parameters,
-		// Common.MTTODELETE);
-
-		System.out.println("luego de servicio");
-		System.out.println(_result);
-
-	}*/
-	
 	public static void brach_mtto() {
 
-		int _result  =0 ;
+		int _result = 0;
 		BranchTO parameters = new BranchTO();
 		parameters.setWhscode("SUC-002");
 		parameters.setWhsname("Sucursal de pruebas");
@@ -361,20 +371,21 @@ public class AdminTest {
 		parameters.setCountry("ES");
 		parameters.setLocation("M");
 		parameters.setUsetax("N");
-		parameters.setBalinvntac("1111111");		
+		parameters.setBalinvntac("1111111");
 		parameters.setUsersign(1);
-
 
 		// Agregar
 
-		/*_result = AdminEJBService.cat_branch_mtto(parameters,
-				Common.MTTOINSERT);*/
+		/*
+		 * _result = AdminEJBService.cat_branch_mtto(parameters,
+		 * Common.MTTOINSERT);
+		 */
 
 		// Actualizar
 
-		 try {
-			_result=AdminEJBService.cat_branch_mtto(parameters,
-			 Common.MTTOUPDATE);
+		try {
+			_result = AdminEJBService.cat_branch_mtto(parameters,
+					Common.MTTOUPDATE);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -410,6 +421,5 @@ public class AdminTest {
 					+ branch.getWhsname());
 		}
 	}
-
 
 }
