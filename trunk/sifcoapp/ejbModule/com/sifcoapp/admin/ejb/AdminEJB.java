@@ -165,7 +165,7 @@ public class AdminEJB implements AdminEJBRemote {
 		
 		try {
 			
-			List consult= new Vector();
+			List<BranchArticlesTO> consult= new Vector<BranchArticlesTO>();
 			consult = adminDAO.getBranchArticles(parameters.getItemCode());
 			Iterator<BranchArticlesTO> iterator2 = consult.iterator();
 		while (iterator.hasNext()) {
@@ -191,6 +191,7 @@ public class AdminEJB implements AdminEJBRemote {
 			if (action == Common.MTTOUPDATE) {
 				if (branch.isIsasociated()) {
 					int update=0;
+					iterator2 = consult.iterator();
 					while(iterator2.hasNext()){
 						BranchArticlesTO branch2 = (BranchArticlesTO) iterator2.next();
 						if(branch2.getWhscode().equals(branch.getWhscode())){
