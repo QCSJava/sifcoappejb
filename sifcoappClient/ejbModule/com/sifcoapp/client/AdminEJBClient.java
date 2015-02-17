@@ -14,6 +14,8 @@ import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.admin.to.PricesListInTO;
+import com.sifcoapp.objects.admin.to.PricesListTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class AdminEJBClient {
@@ -153,6 +155,32 @@ public class AdminEJBClient {
 		BranchTO _return;
 
 		_return = bean.getBranchByKey(whscode);
+
+		return _return;
+	}
+
+	/* Listas de precios */
+
+	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters, int action) {
+		ResultOutTO _return;
+
+		_return = bean.cat_prl0_priceslist_mtto(parameters, action);
+
+		return _return;
+	}
+
+	public List getPricesList(PricesListInTO parameters) throws Exception {
+		List _return;
+
+		_return = bean.getPricesList(parameters);
+
+		return _return;
+	}
+
+	public PricesListTO getPricesListByKey(int listnum) throws Exception {
+		PricesListTO _return;
+
+		_return = bean.getPricesListByKey(listnum);
 
 		return _return;
 	}

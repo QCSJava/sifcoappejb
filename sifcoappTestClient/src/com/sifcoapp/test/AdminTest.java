@@ -15,6 +15,8 @@ import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.admin.to.PricesListInTO;
+import com.sifcoapp.objects.admin.to.PricesListTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -422,4 +424,64 @@ public class AdminTest {
 		}
 	}
 
+	/*listas de precios*/
+	
+	public static void getPricesList() {
+		List resp = null;
+		PricesListInTO para = null;
+
+		String name = null;
+		String code = null;
+
+		try {
+			resp = AdminEJBService.getPricesList(para);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Iterator<PricesListTO> iterator = resp.iterator();
+		while (iterator.hasNext()) {
+			PricesListTO branch = (PricesListTO) iterator.next();
+			System.out.println(branch.getListnum() + " - "
+					+ branch.getListname() + " - " + branch.getFactor());
+		}
+	}
+	
+	public static void pricesList_mtto() {
+
+		ResultOutTO _result = new ResultOutTO();
+		PricesListTO para = new PricesListTO();
+		
+		para.setListname("Lista desde Eclipse");
+		para.setBase_num(1);
+		para.setFactor(1.1);
+
+		// Agregar
+
+		try {
+			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Actualizar
+
+		// parameters.setItemName("Honduras UPD");
+
+		// _result=AdminEJBService.cat_articles_mtto(parameters,
+		// Common.MTTOUPDATE);
+
+		// Borrar
+
+		// _result = AdminEJBService.cat_articles_mtto(parameters,
+		// Common.MTTODELETE);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
+	}
+	
 }
+

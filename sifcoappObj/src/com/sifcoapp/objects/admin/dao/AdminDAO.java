@@ -15,6 +15,8 @@ import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.admin.to.PricesListInTO;
+import com.sifcoapp.objects.admin.to.PricesListTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
@@ -86,7 +88,8 @@ public class AdminDAO extends CommonDAO {
 	/*
 	 * Retorna un catalogo specifico de la base de datos
 	 */
-	public CatalogTO findCatalogByKey(String catcode, int tablecode) throws Exception {
+	public CatalogTO findCatalogByKey(String catcode, int tablecode)
+			throws Exception {
 
 		CatalogTO _return = new CatalogTO();
 		List lstResultSet = null;
@@ -109,13 +112,13 @@ public class AdminDAO extends CommonDAO {
 
 			try {
 				while (rowsetActual.next()) {
-					
+
 					CatalogTO catalogo = new CatalogTO();
 					catalogo.setCatcode(rowsetActual.getString(1));
 					catalogo.setTablecode(rowsetActual.getInt(2));
 					catalogo.setCatvalue(rowsetActual.getString(3));
-					catalogo.setCatvalue2(rowsetActual.getString(4));		
-					catalogo.setCatvalue3(rowsetActual.getString(5));		
+					catalogo.setCatvalue2(rowsetActual.getString(4));
+					catalogo.setCatvalue3(rowsetActual.getString(5));
 					_return = catalogo;
 				}
 				rowsetActual.close();
@@ -128,7 +131,7 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 
 	}
-	
+
 	/*
 	 * Obtiene los registros del catalogo de tablas del sistema
 	 * 
@@ -775,4 +778,123 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 
+	/* Manejo de listas de precios */
+	public int cat_prl0_priceslist_mtto(PricesListTO parameters, int action)
+			throws Exception {
+
+		int v_resp = 0;
+		// thsetDbObject("{call sp_prl0_priceslist_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
+		this.setInt(1,"_listnum,", new Integer(parameters.getListnum()));
+		this.setString(2,"_listname,", parameters.getListname());
+		this.setInt(3,"_base_num,", new Integer(parameters.getBase_num()));
+		this.setDouble(4,"_factor,", new Double(parameters.getFactor()));
+		this.setInt(5,"_roundsys,", new Integer(parameters.getRoundsys()));
+		this.setInt(6,"_groupcode,", new Integer(parameters.getGroupcode()));
+		this.setString(7,"_isgrossprc,", parameters.getIsgrossprc());
+		this.setString(8,"_validfor,", parameters.getValidfor());
+		this.setString(9,"_roundrule,", parameters.getRoundrule());
+		this.setString(10,"_rndfrmtint,", parameters.getRndfrmtint());
+		this.setString(11,"_rndfrmtdec,", parameters.getRndfrmtdec());
+		this.setInt(12,"_usersign,", new Integer(parameters.getUsersign()));
+		this.setInt(13, "_action", new Integer(action));
+
+		v_resp = this.runUpdate();
+
+		return v_resp;
+	}
+
+	public List getPricesList(PricesListInTO parameters) throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// this.setDbOct("{call sp_get_branch(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{? = call sp_get_priceslist()}");
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					PricesListTO result = new PricesListTO();
+					result.setListnum(rowsetActual.getInt(1));
+					result.setListname(rowsetActual.getString(2));
+					result.setBase_num(rowsetActual.getInt(3));
+					result.setFactor(rowsetActual.getDouble(4));
+					result.setRoundsys(rowsetActual.getInt(5));
+					result.setGroupcode(rowsetActual.getInt(6));
+					result.setIsgrossprc(rowsetActual.getString(7));
+					result.setValidfor(rowsetActual.getString(8));
+					result.setRoundrule(rowsetActual.getString(9));
+					result.setRndfrmtint(rowsetActual.getString(10));
+					result.setRndfrmtdec(rowsetActual.getString(11));
+					result.setUsersign(rowsetActual.getInt(12));
+
+
+					_return.add(result);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	public PricesListTO getPricesListByKey(int listnum) throws Exception {
+		PricesListTO _return = new PricesListTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// this.setDbOct("{call sp_get_branch(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_priceslist_by_key(?)}");
+		this.setString(1, "_listnum", listnum);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					PricesListTO result = new PricesListTO();
+					result.setListnum(rowsetActual.getInt(1));
+					result.setListname(rowsetActual.getString(2));
+					result.setBase_num(rowsetActual.getInt(3));
+					result.setFactor(rowsetActual.getDouble(4));
+					result.setRoundsys(rowsetActual.getInt(5));
+					result.setGroupcode(rowsetActual.getInt(6));
+					result.setIsgrossprc(rowsetActual.getString(7));
+					result.setValidfor(rowsetActual.getString(8));
+					result.setRoundrule(rowsetActual.getString(9));
+					result.setRndfrmtint(rowsetActual.getString(10));
+					result.setRndfrmtdec(rowsetActual.getString(11));
+					result.setUsersign(rowsetActual.getInt(12));
+					// result.setArticlesPrices(articlesPrices);
+
+					_return = result;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	// public List getPricesArticles(int listnum) throws Exception {
+
+	// }
 }
