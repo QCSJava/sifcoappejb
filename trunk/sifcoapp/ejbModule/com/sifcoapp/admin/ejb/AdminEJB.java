@@ -17,8 +17,13 @@ import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
+import com.sifcoapp.objects.admin.to.PricesListInTO;
+import com.sifcoapp.objects.admin.to.PricesListTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.inventory.dao.TransfersDAO;
+import com.sifcoapp.objects.inventory.dao.TransfersDetailDAO;
+import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
 
 /**
  * Session Bean implementation class AdminEJB
@@ -356,6 +361,93 @@ public class AdminEJB implements AdminEJBRemote {
 		AdminDAO adminDAO = new AdminDAO();
 		try {
 			_return = adminDAO.getBranchByKey(whscode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
+	/* Mantenimiento de listas de precios */
+	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters,
+			int action) throws EJBException {
+
+		// TODO Auto-generated method stub
+
+		ResultOutTO _return = new ResultOutTO();
+		AdminDAO adminDAO = new AdminDAO();
+
+		adminDAO.setIstransaccional(true);
+
+		try {
+			// Primero guardar la lista
+			// int id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
+
+			// Consultar la lista de articulos registrados en la base de datos
+
+			ArticlesInTO parametro = new ArticlesInTO();
+			List articles = adminDAO.getArticles(parametro);
+
+			Iterator<ArticlesTO> iterator2 = articles.iterator();
+			while (iterator2.hasNext()) {
+				ArticlesTO articleDetalle = (ArticlesTO) iterator2.next();
+				// Calcular el precio para cada articulo
+
+			}
+			int id = -1;
+
+			if (action == Common.MTTOINSERT) {
+				id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
+				// Agregar los detalles
+			}
+			if (action == Common.MTTOUPDATE) {
+				id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
+				// Borrar los detalles de la lista anterior e ingresarlos todos
+				// nuevamente ya con los precios actualizados
+			}
+			if (action == Common.MTTODELETE) {
+				id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
+				// Borrar los detalles
+			}
+
+			adminDAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			adminDAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			adminDAO.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
+		return _return;
+	}
+
+	public List getPricesList(PricesListInTO getPricesList) throws EJBException {
+		// TODO Auto-generated method stub
+
+		List _return = null;
+
+		AdminDAO adminDAO = new AdminDAO();
+		try {
+			_return = adminDAO.getPricesList(getPricesList);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
+	public PricesListTO getPricesListByKey(int listnum) throws EJBException {
+		// TODO Auto-generated method stub
+		PricesListTO _return = null;
+
+		AdminDAO adminDAO = new AdminDAO();
+		try {
+			_return = adminDAO.getPricesListByKey(listnum);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
