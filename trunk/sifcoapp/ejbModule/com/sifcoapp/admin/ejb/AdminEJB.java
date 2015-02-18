@@ -390,15 +390,15 @@ public class AdminEJB implements AdminEJBRemote {
 			AdminDAO adminDAO2 = new AdminDAO(adminDAO.getConn());
 			adminDAO2.setIstransaccional(true);
 
-			// todo:Se crear otra instacia de AdminDAO, porque en la primera ya
+			// TODO:Se crear otra instacia de AdminDAO, porque en la primera ya
 			// quedan seteados los parametros y por eso da error
 			AdminDAO adminDAO3 = new AdminDAO(adminDAO.getConn());
 			adminDAO3.setIstransaccional(true);
 
-			PricesListTO Baselist = adminDAO2.getPricesListByKey(parameters
-					.getBase_num());
-
 			if (action == Common.MTTOINSERT) {
+
+				PricesListTO Baselist = adminDAO2.getPricesListByKey(parameters
+						.getBase_num());
 
 				// Insertamos detalles en base a lista base
 				Iterator<ArticlesPriceTO> iterator = Baselist
@@ -425,6 +425,9 @@ public class AdminEJB implements AdminEJBRemote {
 			}
 
 			if (action == Common.MTTOUPDATE) {
+
+				PricesListTO Baselist = adminDAO2.getPricesListByKey(parameters
+						.getBase_num());
 
 				// Validar si se actualizaran todos los detalles
 				if (UdpDetail) {
@@ -483,7 +486,6 @@ public class AdminEJB implements AdminEJBRemote {
 				// Borrar los detalles
 				adminDAO3
 						.cat_art1_articlesprice_delete(parameters.getListnum());
-				adminDAO3.cat_prl0_priceslist_mtto(parameters, action);
 			}
 
 			adminDAO.forceCommit();

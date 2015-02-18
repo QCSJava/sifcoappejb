@@ -966,7 +966,7 @@ public class AdminDAO extends CommonDAO {
 		int v_resp = 0;
 		// thsetDbObject("{call sp_prl0_priceslist_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
 		this.setDbObject("{call sp_art1_articlesprice_delete(?)}");
-		this.setString(1, "_listnum", listnum);
+		this.setInt(1, "_listnum", listnum);
 
 		v_resp = this.runUpdate();
 
