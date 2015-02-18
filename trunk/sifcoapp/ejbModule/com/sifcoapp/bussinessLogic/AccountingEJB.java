@@ -118,11 +118,15 @@ public class AccountingEJB implements AccountingEJBRemote {
 	}
 
 	public List getAccountByFilter(String acctcode, String acctname) throws EJBException {
+		return  getAccountByFilter(acctcode, acctname, null);
+	}
+
+	public List getAccountByFilter(String acctcode, String acctname, String postable) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
-			_return= DAO.getAccountByFilter(acctcode, acctname);
+			_return= DAO.getAccountByFilter(acctcode, acctname,postable);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
