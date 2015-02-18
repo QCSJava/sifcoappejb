@@ -12,7 +12,6 @@ import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.catalogos.Common;
 
-
 public class AccountingTest {
 	private static AccountingEJBClient AccountingEJBService = null;
 
@@ -142,7 +141,7 @@ public class AccountingTest {
 		AccassignmentTO parameters = new AccassignmentTO();
 
 		// parameters.setUsersign();
-		//parameters.setAbsentry(2);
+		// parameters.setAbsentry(2);
 		parameters.setLinkact_1("101010");
 		parameters.setLinkact_2("111111");
 		parameters.setLinkact_3("1212121");
@@ -155,7 +154,7 @@ public class AccountingTest {
 		parameters.setPdfltwt("Pdfltwt");
 		parameters.setShandlewt(true);
 		parameters.setPhandlewt(true);
-		Date fecha= new Date();
+		Date fecha = new Date();
 		parameters.setT_taxdate(fecha);
 		// Agregar
 
@@ -205,9 +204,10 @@ public class AccountingTest {
 	public static void getAccountByFilter() {
 
 		List lstPeriods = new Vector();
-
+		// 558,7954
 		try {
-			lstPeriods = AccountingEJBService.getAccountByFilter(null, "de");
+			lstPeriods = AccountingEJBService
+					.getAccountByFilter(null, "ingresos", "Y");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -215,9 +215,10 @@ public class AccountingTest {
 
 		Iterator<AccountTO> iterator = lstPeriods.iterator();
 		while (iterator.hasNext()) {
-			System.out.println("entrooo");
+			// System.out.println("entrooo");
 			AccountTO acc = (AccountTO) iterator.next();
-			System.out.println(acc.getAcctcode() + " - " + acc.getAcctname());
+			System.out.println(acc.getAcctcode() + " - " + acc.getAcctname()
+					+ " - " + acc.getPostable());
 		}
 	}
 
