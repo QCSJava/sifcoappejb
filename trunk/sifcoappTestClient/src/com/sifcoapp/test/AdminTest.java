@@ -455,24 +455,30 @@ public class AdminTest {
 		
 		para.setListname("Lista desde Eclipse");
 		para.setBase_num(1);
-		para.setFactor(1.1);
+		para.setFactor(2.0);
 
 		// Agregar
 
+		//try {
+		//	_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
+		//} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+
+		// Actualizar
+
+		
+		
 		try {
-			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 1);
+			
+			para = AdminEJBService.getPricesListByKey(18);
+			para.setFactor(3.0);
+			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// Actualizar
-
-		// parameters.setItemName("Honduras UPD");
-
-		// _result=AdminEJBService.cat_articles_mtto(parameters,
-		// Common.MTTOUPDATE);
-
 		// Borrar
 
 		// _result = AdminEJBService.cat_articles_mtto(parameters,
