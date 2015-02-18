@@ -424,8 +424,8 @@ public class AdminTest {
 		}
 	}
 
-	/*listas de precios*/
-	
+	/* listas de precios */
+
 	public static void getPricesList() {
 		List resp = null;
 		PricesListInTO para = null;
@@ -447,47 +447,50 @@ public class AdminTest {
 					+ branch.getListname() + " - " + branch.getFactor());
 		}
 	}
-	
+
 	public static void pricesList_mtto() {
 
 		ResultOutTO _result = new ResultOutTO();
 		PricesListTO para = new PricesListTO();
-		
+
 		para.setListname("Lista desde Eclipse");
 		para.setBase_num(1);
 		para.setFactor(2.0);
 
 		// Agregar
 
-		//try {
-		//	_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
-		//} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
+		// try {
+		// _result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
+		// } catch (Exception e) {
+		// TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
 		// Actualizar
 
-		
-		
-		try {
-			
-			para = AdminEJBService.getPricesListByKey(18);
-			para.setFactor(3.0);
-			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/*
+		 * try {
+		 * 
+		 * para = AdminEJBService.getPricesListByKey(18); para.setFactor(3.0);
+		 * _result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true); }
+		 * catch (Exception e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+
 		// Borrar
 
-		// _result = AdminEJBService.cat_articles_mtto(parameters,
-		// Common.MTTODELETE);
+		try {
+
+			// para = AdminEJBService.getPricesListByKey(18);
+			 para.setListnum(18);
+			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 3, true);
+		} catch (Exception e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("luego de servicio");
 		System.out.println(_result);
 
 	}
-	
-}
 
+}
