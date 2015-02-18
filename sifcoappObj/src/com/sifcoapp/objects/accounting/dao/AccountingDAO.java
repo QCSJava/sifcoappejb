@@ -91,8 +91,8 @@ public class AccountingDAO extends CommonDAO {
 				}
 				AccountTO profileDetTmp = null;
 				String _position = null;
-				List lstDetProfile = new Vector();				
-				
+				List lstDetProfile = new Vector();
+
 				String[] claves = (String[]) _values.keySet().toArray(
 						new String[0]);
 				java.util.Arrays.sort(claves);
@@ -213,15 +213,23 @@ public class AccountingDAO extends CommonDAO {
 
 	// ######### RETORNA REGISTRO DE ACCOUNT POR FILTROS
 	// ############################
+	// ######### RETORNA REGISTRO DE ACCOUNT POR FILTROS
+	// ############################
 	public List getAccountByFilter(String acctcode, String acctname)
 			throws Exception {
+		return getAccountByFilter(acctcode, acctname, null);
+	}
+
+	public List getAccountByFilter(String acctcode, String acctname,
+			String postable) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_acc0_account(?,?)}");
+		this.setDbObject("{call sp_get_acc0_account(?,?,?)}");
 		this.setString(1, "_acctcode", acctcode);
 		this.setString(2, "_acctname", acctname);
+		this.setString(3, "_postable", postable);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
