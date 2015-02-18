@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
+import com.sifcoapp.objects.admin.to.ArticlesPriceTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
@@ -57,11 +58,13 @@ public interface AdminEJBRemote {
 
 	/* Mantenimeinto de listas de precios */
 
-	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters, int action)
+	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters, int action, Boolean UdpDetail)
 			throws EJBException;
 
 	public List getPricesList(PricesListInTO parameters) throws EJBException;
 
 	public PricesListTO getPricesListByKey(int listnum) throws EJBException;
+	
+	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters, int action) throws EJBException;
 
 }

@@ -161,10 +161,10 @@ public class AdminEJBClient {
 
 	/* Listas de precios */
 
-	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters, int action) {
+	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters, int action, Boolean UdpDetail) {
 		ResultOutTO _return;
 
-		_return = bean.cat_prl0_priceslist_mtto(parameters, action);
+		_return = bean.cat_prl0_priceslist_mtto(parameters, action, UdpDetail);
 
 		return _return;
 	}

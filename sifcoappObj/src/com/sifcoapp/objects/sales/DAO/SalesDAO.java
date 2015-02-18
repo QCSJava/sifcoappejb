@@ -113,6 +113,7 @@ public class SalesDAO extends CommonDAO{
 		}
 		return _return;
 	}
+	
 	//Retorna elemento goodsreceipt con detalle por clave
 	public SalesTO getSalesByKey(int docentry) throws Exception {
 		SalesTO _return = new SalesTO();

@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
+import com.sifcoapp.objects.admin.to.ArticlesPriceTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
@@ -371,44 +372,118 @@ public class AdminEJB implements AdminEJBRemote {
 
 	/* Mantenimiento de listas de precios */
 	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters,
-			int action) throws EJBException {
+			int action, Boolean UdpDetail) throws EJBException {
 
 		// TODO Auto-generated method stub
-
+		int idlist = -1;
 		ResultOutTO _return = new ResultOutTO();
 		AdminDAO adminDAO = new AdminDAO();
 
 		adminDAO.setIstransaccional(true);
 
 		try {
-			// Primero guardar la lista
-			// int id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
 
-			// Consultar la lista de articulos registrados en la base de datos
+			// Realizamos la acción indica por el usuario para el encabezado
+			idlist = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
 
-			ArticlesInTO parametro = new ArticlesInTO();
-			List articles = adminDAO.getArticles(parametro);
+			// Consultar la lista base para crear la nueva
+			AdminDAO adminDAO2 = new AdminDAO(adminDAO.getConn());
+			adminDAO2.setIstransaccional(true);
 
-			Iterator<ArticlesTO> iterator2 = articles.iterator();
-			while (iterator2.hasNext()) {
-				ArticlesTO articleDetalle = (ArticlesTO) iterator2.next();
-				// Calcular el precio para cada articulo
+			// todo:Se crear otra instacia de AdminDAO, porque en la primera ya
+			// quedan seteados los parametros y por eso da error
+			AdminDAO adminDAO3 = new AdminDAO(adminDAO.getConn());
+			adminDAO3.setIstransaccional(true);
 
-			}
-			int id = -1;
+			PricesListTO Baselist = adminDAO2.getPricesListByKey(parameters
+					.getBase_num());
 
 			if (action == Common.MTTOINSERT) {
-				id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
-				// Agregar los detalles
+
+				// Insertamos detalles en base a lista base
+				Iterator<ArticlesPriceTO> iterator = Baselist
+						.getArticlesPrices().iterator();
+				while (iterator.hasNext()) {
+					ArticlesPriceTO newpPrice = new ArticlesPriceTO();
+					ArticlesPriceTO baseprice = (ArticlesPriceTO) iterator
+							.next();
+
+					// Calcular el precio para cada articulo
+					newpPrice.setItemcode(baseprice.getItemcode());
+					newpPrice.setPricelist(idlist);
+					newpPrice.setFactor(parameters.getFactor());
+					newpPrice.setPrice(baseprice.getPrice()
+							* parameters.getFactor());
+					newpPrice.setOvrwritten("N");
+					// Valores por derfecto
+					newpPrice.setAddprice1(0.0);
+					newpPrice.setAddprice2(0.0);
+
+					adminDAO3.cat_art1_articlesprice_mtto(newpPrice, action);
+
+				}
 			}
+
 			if (action == Common.MTTOUPDATE) {
-				id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
-				// Borrar los detalles de la lista anterior e ingresarlos todos
-				// nuevamente ya con los precios actualizados
+
+				// Validar si se actualizaran todos los detalles
+				if (UdpDetail) {
+					// Actualizar todo el detalle de precios en base a la lista
+					// base, no modificar los indicados como handWritten
+					Iterator<ArticlesPriceTO> iterator = Baselist
+							.getArticlesPrices().iterator();
+					while (iterator.hasNext()) {
+						Boolean actualizado = false;
+						ArticlesPriceTO basePrice = (ArticlesPriceTO) iterator
+								.next();
+
+						// Comparara lista base con la lista recibida
+						Iterator<ArticlesPriceTO> iterator2 = parameters
+								.getArticlesPrices().iterator();
+						while (iterator2.hasNext()) {
+							ArticlesPriceTO NowPrice = (ArticlesPriceTO) iterator2
+									.next();
+
+							if (NowPrice.getItemcode().equals(
+									basePrice.getItemcode())) {
+								actualizado = true;
+
+								NowPrice.setFactor(parameters.getFactor());
+								if (NowPrice.getOvrwritten().equals("N")) {
+									NowPrice.setPrice(basePrice.getPrice()
+											* parameters.getFactor());
+								}
+								adminDAO3.cat_art1_articlesprice_mtto(NowPrice,
+										Common.MTTOUPDATE);
+								break;
+							}
+						}
+						// Si no lo encontro se agregara a la colección
+						if (!actualizado) {
+							ArticlesPriceTO newPrice = new ArticlesPriceTO();
+
+							// Calcular el precio para cada articulo
+							newPrice.setItemcode(basePrice.getItemcode());
+							newPrice.setPricelist(idlist);
+							newPrice.setFactor(parameters.getFactor());
+							newPrice.setPrice(basePrice.getPrice()
+									* parameters.getFactor());
+							newPrice.setOvrwritten("N");
+
+							adminDAO3.cat_art1_articlesprice_mtto(newPrice,
+									Common.MTTOINSERT);
+
+						}
+					}
+				}
 			}
+
 			if (action == Common.MTTODELETE) {
-				id = adminDAO.cat_prl0_priceslist_mtto(parameters, action);
+
 				// Borrar los detalles
+				adminDAO3
+						.cat_art1_articlesprice_delete(parameters.getListnum());
+				adminDAO3.cat_prl0_priceslist_mtto(parameters, action);
 			}
 
 			adminDAO.forceCommit();
@@ -446,13 +521,41 @@ public class AdminEJB implements AdminEJBRemote {
 		PricesListTO _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
+		adminDAO.setIstransaccional(true);
 		try {
 			_return = adminDAO.getPricesListByKey(listnum);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			adminDAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
-		}
+		} finally {
 
+			adminDAO.forceCloseConnection();
+		}
+		return _return;
+	}
+
+	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters,
+			int action) throws EJBException {
+		// TODO Auto-generated method stub
+		ResultOutTO _return = new ResultOutTO();
+
+		AdminDAO adminDAO = new AdminDAO();
+		adminDAO.setIstransaccional(true);
+
+		try {
+			adminDAO.cat_art1_articlesprice_mtto(parameters, action);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			adminDAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			adminDAO.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
 		return _return;
 	}
 

@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
+import com.sifcoapp.objects.admin.to.ArticlesPriceTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
@@ -782,25 +783,27 @@ public class AdminDAO extends CommonDAO {
 	public int cat_prl0_priceslist_mtto(PricesListTO parameters, int action)
 			throws Exception {
 
-		int v_resp = 0;
-		// thsetDbObject("{call sp_prl0_priceslist_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
-		this.setInt(1,"_listnum,", new Integer(parameters.getListnum()));
-		this.setString(2,"_listname,", parameters.getListname());
-		this.setInt(3,"_base_num,", new Integer(parameters.getBase_num()));
-		this.setDouble(4,"_factor,", new Double(parameters.getFactor()));
-		this.setInt(5,"_roundsys,", new Integer(parameters.getRoundsys()));
-		this.setInt(6,"_groupcode,", new Integer(parameters.getGroupcode()));
-		this.setString(7,"_isgrossprc,", parameters.getIsgrossprc());
-		this.setString(8,"_validfor,", parameters.getValidfor());
-		this.setString(9,"_roundrule,", parameters.getRoundrule());
-		this.setString(10,"_rndfrmtint,", parameters.getRndfrmtint());
-		this.setString(11,"_rndfrmtdec,", parameters.getRndfrmtdec());
-		this.setInt(12,"_usersign,", new Integer(parameters.getUsersign()));
-		this.setInt(13, "_action", new Integer(action));
+		List v_resp;
+		// thsetDbObject("{? = call sp_prl0_priceslist_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
+		this.setDbObject("{? = call sp_prl0_priceslist_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 
-		v_resp = this.runUpdate();
+		this.setInt(2, "_listnum,", new Integer(parameters.getListnum()));
+		this.setString(3, "_listname,", parameters.getListname());
+		this.setInt(4, "_base_num,", new Integer(parameters.getBase_num()));
+		this.setDouble(5, "_factor,", new Double(parameters.getFactor()));
+		this.setInt(6, "_roundsys,", new Integer(parameters.getRoundsys()));
+		this.setInt(7, "_groupcode,", new Integer(parameters.getGroupcode()));
+		this.setString(8, "_isgrossprc,", parameters.getIsgrossprc());
+		this.setString(9, "_validfor,", parameters.getValidfor());
+		this.setString(10, "_roundrule,", parameters.getRoundrule());
+		this.setString(11, "_rndfrmtint,", parameters.getRndfrmtint());
+		this.setString(12, "_rndfrmtdec,", parameters.getRndfrmtdec());
+		this.setInt(13, "_usersign,", new Integer(parameters.getUsersign()));
+		this.setInt(14, "_action", new Integer(action));
 
-		return v_resp;
+		v_resp = this.runQuery();
+
+		return this.getInt();
 	}
 
 	public List getPricesList(PricesListInTO parameters) throws Exception {
@@ -836,7 +839,6 @@ public class AdminDAO extends CommonDAO {
 					result.setRndfrmtdec(rowsetActual.getString(11));
 					result.setUsersign(rowsetActual.getInt(12));
 
-
 					_return.add(result);
 				}
 				rowsetActual.close();
@@ -855,7 +857,7 @@ public class AdminDAO extends CommonDAO {
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		// this.setDbOct("{call sp_get_branch(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_priceslist_by_key(?)}");
-		this.setString(1, "_listnum", listnum);
+		this.setInt(1, "_listnum", listnum);
 
 		lstResultSet = this.runQuery();
 
@@ -881,7 +883,7 @@ public class AdminDAO extends CommonDAO {
 					result.setRndfrmtint(rowsetActual.getString(10));
 					result.setRndfrmtdec(rowsetActual.getString(11));
 					result.setUsersign(rowsetActual.getInt(12));
-					// result.setArticlesPrices(articlesPrices);
+					result.setArticlesPrices(getArticlesPrices(listnum));
 
 					_return = result;
 				}
@@ -894,7 +896,81 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 
-	// public List getPricesArticles(int listnum) throws Exception {
+	public int cat_art1_articlesprice_mtto(ArticlesPriceTO parameters,
+			int action) throws Exception {
+		int v_resp = 0;
+		// thsetDbObject("{call sp_art1_articlesprice_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
+		this.setDbObject("{call sp_art1_articlesprice_mtto(?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setString(1, "_itemcode,", parameters.getItemcode());
+		this.setInt(2, "_pricelist,", parameters.getPricelist());
+		this.setDouble(3, "_price,", parameters.getPrice());
+		this.setString(4, "_ovrwritten,", parameters.getOvrwritten());
+		this.setDouble(5, "_factor,", parameters.getFactor());
+		this.setString(6, "_objtype,", parameters.getObjtype());
+		this.setDouble(7, "_addprice1,", parameters.getAddprice1());
+		this.setDouble(8, "_addprice2,", parameters.getAddprice2());
+		this.setString(9, "_ovrwrite1,", parameters.getOvrwrite1());
+		this.setString(10, "_ovrwrite2,", parameters.getOvrwrite2());
+		this.setInt(11, "_action", new Integer(action));
 
-	// }
+		v_resp = this.runUpdate();
+
+		return v_resp;
+	}
+
+	public List getArticlesPrices(int listnum) throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// this.setDbOct("{call sp_get_branch(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_articlesprice(?)}");
+		this.setInt(1, "_listnum", listnum);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ArticlesPriceTO result = new ArticlesPriceTO();
+					result.setItemcode(rowsetActual.getString(1));
+					result.setPricelist(rowsetActual.getInt(2));
+					result.setPrice(rowsetActual.getDouble(3));
+					result.setOvrwritten(rowsetActual.getString(4));
+					result.setFactor(rowsetActual.getDouble(5));
+					result.setObjtype(rowsetActual.getString(6));
+					result.setAddprice1(rowsetActual.getDouble(7));
+					result.setAddprice2(rowsetActual.getDouble(8));
+					result.setOvrwrite1(rowsetActual.getString(9));
+					result.setOvrwrite2(rowsetActual.getString(10));
+
+					_return.add(result);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	public int cat_art1_articlesprice_delete(int listnum) throws Exception {
+
+		int v_resp = 0;
+		// thsetDbObject("{call sp_prl0_priceslist_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2)}");
+		this.setDbObject("{call sp_art1_articlesprice_delete(?)}");
+		this.setString(1, "_listnum", listnum);
+
+		v_resp = this.runUpdate();
+
+		return v_resp;
+	}
+
 }
