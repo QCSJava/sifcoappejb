@@ -77,11 +77,14 @@ public class AccountingEJBClient {
 		return acc;
 	}
 
-	public List getAccountByFilter(String acctcode, String acctname)
+	public List getAccountByFilter(String acctcode, String acctname)throws Exception {
+		return getAccountByFilter(acctcode, acctname, null);
+	}
+	public List getAccountByFilter(String acctcode, String acctname, String postable)
 			throws Exception {
 		// TODO Auto-generated method stub
 		List account = new Vector();
-		account = bean.getAccountByFilter(acctcode, acctname);
+		account = bean.getAccountByFilter(acctcode, acctname, postable);
 		return account;
 	}
 
