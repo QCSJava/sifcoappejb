@@ -23,6 +23,8 @@ public interface AccountingEJBRemote {
 	
 	public List getAccountByFilter(String acctcode,String acctname)throws EJBException;
 	
+	public List getAccountByFilter(String acctcode,String acctname, String postable)throws EJBException;
+	
 	public AccountTO getAccountByKey(String acctcode)throws EJBException;
 	
 	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)throws EJBException;
