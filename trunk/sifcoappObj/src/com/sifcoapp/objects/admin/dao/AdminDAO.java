@@ -450,9 +450,10 @@ public class AdminDAO extends CommonDAO {
 					article.setSww(rowsetActual.getString(27));
 					article.setValidComm(rowsetActual.getString(28));
 					article.setUserSign(rowsetActual.getInt(29));
-					article.setBranchArticles(getBranchArticles(rowsetActual
-							.getString(1)));
+					article.setBranchArticles(getBranchArticles(itemcode));
+					article.setArticleprices(getArticlePrices(itemcode));
 					_return = article;
+
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -949,6 +950,51 @@ public class AdminDAO extends CommonDAO {
 					result.setAddprice2(rowsetActual.getDouble(8));
 					result.setOvrwrite1(rowsetActual.getString(9));
 					result.setOvrwrite2(rowsetActual.getString(10));
+					result.setDscription(rowsetActual.getString(11));
+
+					_return.add(result);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	public List getArticlePrices(String itemcode) throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// this.setDbOct("{call sp_get_branch(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_articleprices(?)}");
+		this.setString(1, "_itemcode", itemcode);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ArticlesPriceTO result = new ArticlesPriceTO();
+					result.setItemcode(rowsetActual.getString(1));
+					result.setPricelist(rowsetActual.getInt(2));
+					result.setPrice(rowsetActual.getDouble(3));
+					result.setOvrwritten(rowsetActual.getString(4));
+					result.setFactor(rowsetActual.getDouble(5));
+					result.setObjtype(rowsetActual.getString(6));
+					result.setAddprice1(rowsetActual.getDouble(7));
+					result.setAddprice2(rowsetActual.getDouble(8));
+					result.setOvrwrite1(rowsetActual.getString(9));
+					result.setOvrwrite2(rowsetActual.getString(10));
+					result.setDscription(rowsetActual.getString(11));
 
 					_return.add(result);
 				}
