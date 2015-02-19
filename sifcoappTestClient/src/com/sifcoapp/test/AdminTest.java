@@ -481,9 +481,9 @@ public class AdminTest {
 
 		try {
 
-			// para = AdminEJBService.getPricesListByKey(18);
-			 para.setListnum(18);
-			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 3, true);
+			 para = AdminEJBService.getPricesListByKey(1);
+			 para.setListnum(1);
+			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
 		} catch (Exception e) { // TODO Auto-generated catch block
 			e.printStackTrace();
 		}
