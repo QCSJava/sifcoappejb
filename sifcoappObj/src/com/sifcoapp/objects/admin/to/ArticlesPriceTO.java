@@ -13,6 +13,7 @@ public class ArticlesPriceTO extends CommonTO {
 	private static final long serialVersionUID = 3045349286567836074L;
 
 	private String itemcode;
+	private String dscription;
 	private int pricelist;
 	private Double price;
 	private String ovrwritten;
@@ -123,5 +124,15 @@ public class ArticlesPriceTO extends CommonTO {
 	public void setOvrwrite2(String ovrwrite2) {
 		this.ovrwrite2 = ovrwrite2;
 	}
+
+	public String getDscription() {
+		return dscription;
+	}
+
+	public void setDscription(String dscription) {
+		this.dscription = dscription;
+	}
+	
+	
 
 }
