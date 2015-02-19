@@ -156,6 +156,7 @@ public class AccountingTest {
 		parameters.setPhandlewt(true);
 		Date fecha = new Date();
 		parameters.setT_taxdate(fecha);
+		parameters.setF_duedate(fecha);
 		// Agregar
 
 		// _result = AccountingEJBService.cat_accAssignment_mtto(parameters,
@@ -165,7 +166,7 @@ public class AccountingTest {
 
 		parameters.setUsersign(1);
 		_result = AccountingEJBService.cat_accAssignment_mtto(parameters,
-				Common.MTTOUPDATE);
+				Common.MTTOINSERT);
 
 		// Borrar
 		/*

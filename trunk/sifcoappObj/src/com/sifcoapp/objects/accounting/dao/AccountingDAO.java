@@ -3,6 +3,7 @@ package com.sifcoapp.objects.accounting.dao;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -407,17 +408,45 @@ public class AccountingDAO extends CommonDAO {
 
 	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
 			throws Exception {
-
+		Date financyear=null;
+		Date f_refdate=null;
+		Date t_refdate=null;
+		Date f_duedate=null;
+		Date t_duedate=null;
+		Date f_taxdate=null;
+		Date t_taxdate=null;
 		int v_resp = 0;
 		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
+		if (parameters.getFinancyear() != null){
+			financyear=new java.sql.Date(parameters.getFinancyear().getTime());
+		}
+		if (parameters.getF_refdate() != null){
+			f_refdate=new java.sql.Date(parameters.getF_refdate().getTime());
+		}
+		if (parameters.getT_refdate() != null){
+			t_refdate=new java.sql.Date(parameters.getT_refdate().getTime());
+		}
+		if (parameters.getF_duedate() != null){
+			f_duedate=new java.sql.Date(parameters.getF_duedate().getTime());
+		}
+		if (parameters.getT_duedate()!= null){
+			t_duedate=new java.sql.Date(parameters.getT_duedate().getTime());
+		}
+		if (parameters.getF_taxdate() != null){
+			f_taxdate=new java.sql.Date(parameters.getF_taxdate() .getTime());
+		}
+		if (parameters.getT_taxdate() != null){
+			t_taxdate=new java.sql.Date(parameters.getT_taxdate().getTime());
+		}
+		
 
 		Object[] param = { parameters.getAbsentry(), parameters.getPeriodcat(),
-				parameters.getFinancyear(), parameters.getYear(),
+				financyear, parameters.getYear(),
 				parameters.getPeriodname(), parameters.getSubtype(),
-				parameters.getPeriodnum(), parameters.getF_refdate(),
-				parameters.getT_refdate(), parameters.getF_duedate(),
-				parameters.getT_duedate(), parameters.getF_taxdate(),
-				parameters.getT_taxdate(), parameters.getLinkact_1(),
+				parameters.getPeriodnum(), f_refdate,
+				t_refdate, f_duedate,
+				t_duedate, f_taxdate,
+				t_taxdate, parameters.getLinkact_1(),
 				parameters.getLinkact_2(), parameters.getLinkact_3(),
 				parameters.getLinkact_4(), parameters.getLinkact_5(),
 				parameters.getLinkact_6(), parameters.getLinkact_8(),
