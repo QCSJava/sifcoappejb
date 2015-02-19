@@ -159,12 +159,12 @@ public class AccountingTest {
 		parameters.setF_duedate(fecha);
 		// Agregar
 
-		// _result = AccountingEJBService.cat_accAssignment_mtto(parameters,
-		// Common.MTTOINSERT);
+		 //_result = AccountingEJBService.cat_accAssignment_mtto(parameters,
+		 //Common.MTTOINSERT);
 
 		// Actualizar
 
-		parameters.setUsersign(1);
+		//parameters.setUsersign(1);
 		_result = AccountingEJBService.cat_accAssignment_mtto(parameters,
 				Common.MTTOINSERT);
 
