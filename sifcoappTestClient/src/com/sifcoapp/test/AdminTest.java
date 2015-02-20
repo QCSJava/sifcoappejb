@@ -284,10 +284,10 @@ public class AdminTest {
 		List resp = null;
 
 		ArticlesInTO param = new ArticlesInTO();
-		param.setSellItem("N");
-		param.setPrchseItem("N");
-		param.setItemType("2");
-		param.setItmsIsGrpCod("1");
+		//param.setSellItem("N");
+		//param.setPrchseItem("N");
+		//param.setItemType("2");
+		//param.setItmsIsGrpCod("1");
 
 		try {
 			resp = AdminEJBService.getArticles(param);
@@ -481,8 +481,8 @@ public class AdminTest {
 
 		try {
 
-			 para = AdminEJBService.getPricesListByKey(1);
-			 para.setListnum(1);
+			 para = AdminEJBService.getPricesListByKey(2);
+			 para.setBase_num(1);
 			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
 		} catch (Exception e) { // TODO Auto-generated catch block
 			e.printStackTrace();

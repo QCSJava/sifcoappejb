@@ -277,8 +277,8 @@ public class AdminDAO extends CommonDAO {
 			throws Exception {
 
 		int v_resp = 0;
-		// this.setDbObject("{call sp_cat_articles_mtto_5(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_cat_articles_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		// this.setDject("{call sp_cat_articles_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_cat_articles_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		if (parameters.getValidFrom() == null) {
 			this.setDate(21, "_validfrom", parameters.getValidFrom());
 		} else {
@@ -320,7 +320,8 @@ public class AdminDAO extends CommonDAO {
 		this.setString(27, "_sww", parameters.getSww());
 		this.setString(28, "_validcomm", parameters.getValidComm());
 		this.setInt(29, "_usersign", new Integer(parameters.getUserSign()));
-		this.setInt(30, "_action", new Integer(action));
+		this.setString(30,"_vatgourpsa,", parameters.getVatgourpsa());
+		this.setInt(31, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
 
@@ -386,6 +387,7 @@ public class AdminDAO extends CommonDAO {
 					article.setSww(rowsetActual.getString(27));
 					article.setValidComm(rowsetActual.getString(28));
 					article.setUserSign(rowsetActual.getInt(29));
+					article.setVatgourpsa(rowsetActual.getString(30));
 
 					_return.add(article);
 				}
@@ -450,6 +452,7 @@ public class AdminDAO extends CommonDAO {
 					article.setSww(rowsetActual.getString(27));
 					article.setValidComm(rowsetActual.getString(28));
 					article.setUserSign(rowsetActual.getInt(29));
+					article.setVatgourpsa(rowsetActual.getString(30));
 					article.setBranchArticles(getBranchArticles(itemcode));
 					article.setArticleprices(getArticlePrices(itemcode));
 					_return = article;

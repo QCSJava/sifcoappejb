@@ -36,11 +36,23 @@ public class ArticlesTO extends CommonTO {
 	private Date validTo;
 	private String invntryUom;
 	private double numInSale;
+	private String vatgourpsa;
 	private String dfltWH;
 	private String wtliable;
 	private String sww;
 	private String validComm;
 	private int userSign;
+	private String qrygroup1;
+	private String qrygroup2;
+	private String qrygroup3;
+	private String qrygroup4;
+	private String qrygroup5;
+	private String qrygroup6;
+	private String qrygroup7;
+	private String qrygroup8;
+	private String qrygroup9;
+	private String qrygroup10;
+
 	private List branchArticles;
 	private List Articleprices;
 
@@ -322,6 +334,94 @@ public class ArticlesTO extends CommonTO {
 
 	public void setUserSign(int userSign) {
 		this.userSign = userSign;
+	}
+
+	public String getVatgourpsa() {
+		return vatgourpsa;
+	}
+
+	public void setVatgourpsa(String vatgourpsa) {
+		this.vatgourpsa = vatgourpsa;
+	}
+
+	public String getQrygroup1() {
+		return qrygroup1;
+	}
+
+	public void setQrygroup1(String qrygroup1) {
+		this.qrygroup1 = qrygroup1;
+	}
+
+	public String getQrygroup2() {
+		return qrygroup2;
+	}
+
+	public void setQrygroup2(String qrygroup2) {
+		this.qrygroup2 = qrygroup2;
+	}
+
+	public String getQrygroup3() {
+		return qrygroup3;
+	}
+
+	public void setQrygroup3(String qrygroup3) {
+		this.qrygroup3 = qrygroup3;
+	}
+
+	public String getQrygroup4() {
+		return qrygroup4;
+	}
+
+	public void setQrygroup4(String qrygroup4) {
+		this.qrygroup4 = qrygroup4;
+	}
+
+	public String getQrygroup5() {
+		return qrygroup5;
+	}
+
+	public void setQrygroup5(String qrygroup5) {
+		this.qrygroup5 = qrygroup5;
+	}
+
+	public String getQrygroup6() {
+		return qrygroup6;
+	}
+
+	public void setQrygroup6(String qrygroup6) {
+		this.qrygroup6 = qrygroup6;
+	}
+
+	public String getQrygroup7() {
+		return qrygroup7;
+	}
+
+	public void setQrygroup7(String qrygroup7) {
+		this.qrygroup7 = qrygroup7;
+	}
+
+	public String getQrygroup8() {
+		return qrygroup8;
+	}
+
+	public void setQrygroup8(String qrygroup8) {
+		this.qrygroup8 = qrygroup8;
+	}
+
+	public String getQrygroup9() {
+		return qrygroup9;
+	}
+
+	public void setQrygroup9(String qrygroup9) {
+		this.qrygroup9 = qrygroup9;
+	}
+
+	public String getQrygroup10() {
+		return qrygroup10;
+	}
+
+	public void setQrygroup10(String qrygroup10) {
+		this.qrygroup10 = qrygroup10;
 	}
 
 	public List getBranchArticles() {
