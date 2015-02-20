@@ -404,22 +404,22 @@ public class AdminEJB implements AdminEJBRemote {
 				Iterator<ArticlesPriceTO> iterator = Baselist
 						.getArticlesPrices().iterator();
 				while (iterator.hasNext()) {
-					ArticlesPriceTO newpPrice = new ArticlesPriceTO();
+					ArticlesPriceTO newPrice = new ArticlesPriceTO();
 					ArticlesPriceTO baseprice = (ArticlesPriceTO) iterator
 							.next();
 
 					// Calcular el precio para cada articulo
-					newpPrice.setItemcode(baseprice.getItemcode());
-					newpPrice.setPricelist(idlist);
-					newpPrice.setFactor(parameters.getFactor());
-					newpPrice.setPrice(baseprice.getPrice()
+					newPrice.setItemcode(baseprice.getItemcode());
+					newPrice.setPricelist(idlist);
+					newPrice.setFactor(parameters.getFactor());
+					newPrice.setPrice(baseprice.getPrice()
 							* parameters.getFactor());
-					newpPrice.setOvrwritten("N");
+					newPrice.setOvrwritten("N");
 					// Valores por derfecto
-					newpPrice.setAddprice1(0.0);
-					newpPrice.setAddprice2(0.0);
+					newPrice.setAddprice1(0.0);
+					newPrice.setAddprice2(0.0);
 
-					adminDAO3.cat_art1_articlesprice_mtto(newpPrice, action);
+					adminDAO3.cat_art1_articlesprice_mtto(newPrice, action);
 
 				}
 			}
@@ -467,11 +467,14 @@ public class AdminEJB implements AdminEJBRemote {
 
 							// Calcular el precio para cada articulo
 							newPrice.setItemcode(basePrice.getItemcode());
-							newPrice.setPricelist(idlist);
+							newPrice.setPricelist(parameters.getListnum());
 							newPrice.setFactor(parameters.getFactor());
 							newPrice.setPrice(basePrice.getPrice()
 									* parameters.getFactor());
 							newPrice.setOvrwritten("N");
+							// Valores por derfecto
+							newPrice.setAddprice1(0.0);
+							newPrice.setAddprice2(0.0);
 
 							adminDAO3.cat_art1_articlesprice_mtto(newPrice,
 									Common.MTTOINSERT);
