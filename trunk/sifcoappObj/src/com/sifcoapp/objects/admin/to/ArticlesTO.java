@@ -3,6 +3,7 @@ package com.sifcoapp.objects.admin.to;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class ArticlesTO extends CommonTO {
@@ -56,6 +57,7 @@ public class ArticlesTO extends CommonTO {
 	private List branchArticles;
 	private List Articleprices;
 	private List vatgourpsaList;
+	private double price;
 
 	public ArticlesTO() {
 		super();
@@ -466,6 +468,17 @@ public class ArticlesTO extends CommonTO {
 		this.vatgourpsaList = vatgourpsaList;
 	}
 
-	
+	public double getPrice(int selectedListPrice ) {
+		Iterator<ArticlesPriceTO> iterator = this.getArticleprices().iterator();
+		this.price = -1.0;
 
+		while (iterator.hasNext()) {
+			ArticlesPriceTO prices = (ArticlesPriceTO) iterator.next();
+			if (prices.getPricelist() == selectedListPrice) {
+				this.price = prices.getPrice();
+			}
+		}
+
+		return price;
+	}
 }

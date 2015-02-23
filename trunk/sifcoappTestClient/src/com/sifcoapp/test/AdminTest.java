@@ -307,10 +307,12 @@ public class AdminTest {
 	public static void getArticlesByKey() {
 		ArticlesTO article = null;
 
-		String code = "001-064";
+		String code = "001-004-545-6114";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
+			System.out.println(article.getPrice(42));
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -327,6 +329,7 @@ public class AdminTest {
 			System.out.println(branch.isIsasociated() + " - "
 					+ branch.getWhscode() + " - " + branch.getWhsname());
 		}
+		
 	}
 
 	/*
