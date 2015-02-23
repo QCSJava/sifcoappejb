@@ -55,6 +55,7 @@ public class ArticlesTO extends CommonTO {
 
 	private List branchArticles;
 	private List Articleprices;
+	private List vatgourpsaList;
 
 	public ArticlesTO() {
 		super();
@@ -68,9 +69,13 @@ public class ArticlesTO extends CommonTO {
 			double numInBuy, String salUnitMsr, double salPackUn,
 			String suppCatNum, double purPackUn, double avgPrice,
 			double onHand, String validFor, Date validFrom, Date validTo,
-			String invntryUom, double numInSale, String dfltWH,
-			String wtliable, String sww, String validComm, int userSign,
-			List branchArticles) {
+			String invntryUom, double numInSale, String vatgourpsa,
+			String dfltWH, String wtliable, String sww, String validComm,
+			int userSign, String qrygroup1, String qrygroup2, String qrygroup3,
+			String qrygroup4, String qrygroup5, String qrygroup6,
+			String qrygroup7, String qrygroup8, String qrygroup9,
+			String qrygroup10, List branchArticles, List articleprices,
+			List vatgourpsaList) {
 		super();
 		this.itemCode = itemCode;
 		this.itemName = itemName;
@@ -96,12 +101,25 @@ public class ArticlesTO extends CommonTO {
 		this.validTo = validTo;
 		this.invntryUom = invntryUom;
 		this.numInSale = numInSale;
+		this.vatgourpsa = vatgourpsa;
 		this.dfltWH = dfltWH;
 		this.wtliable = wtliable;
 		this.sww = sww;
 		this.validComm = validComm;
 		this.userSign = userSign;
+		this.qrygroup1 = qrygroup1;
+		this.qrygroup2 = qrygroup2;
+		this.qrygroup3 = qrygroup3;
+		this.qrygroup4 = qrygroup4;
+		this.qrygroup5 = qrygroup5;
+		this.qrygroup6 = qrygroup6;
+		this.qrygroup7 = qrygroup7;
+		this.qrygroup8 = qrygroup8;
+		this.qrygroup9 = qrygroup9;
+		this.qrygroup10 = qrygroup10;
 		this.branchArticles = branchArticles;
+		Articleprices = articleprices;
+		this.vatgourpsaList = vatgourpsaList;
 	}
 
 	public String getItemCode() {
@@ -296,6 +314,14 @@ public class ArticlesTO extends CommonTO {
 		this.numInSale = numInSale;
 	}
 
+	public String getVatgourpsa() {
+		return vatgourpsa;
+	}
+
+	public void setVatgourpsa(String vatgourpsa) {
+		this.vatgourpsa = vatgourpsa;
+	}
+
 	public String getDfltWH() {
 		return dfltWH;
 	}
@@ -334,14 +360,6 @@ public class ArticlesTO extends CommonTO {
 
 	public void setUserSign(int userSign) {
 		this.userSign = userSign;
-	}
-
-	public String getVatgourpsa() {
-		return vatgourpsa;
-	}
-
-	public void setVatgourpsa(String vatgourpsa) {
-		this.vatgourpsa = vatgourpsa;
 	}
 
 	public String getQrygroup1() {
@@ -436,8 +454,18 @@ public class ArticlesTO extends CommonTO {
 		return Articleprices;
 	}
 
-	public void setArticleprices(List articlesprices) {
-		Articleprices = articlesprices;
+	public void setArticleprices(List articleprices) {
+		Articleprices = articleprices;
 	}
+
+	public List getVatgourpsaList() {
+		return vatgourpsaList;
+	}
+
+	public void setVatgourpsaList(List vatgourpsaList) {
+		this.vatgourpsaList = vatgourpsaList;
+	}
+
+	
 
 }

@@ -132,6 +132,49 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 
 	}
+	public List findCatalogByKey_List(String catcode, int tablecode)
+			throws Exception {
+
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_catalogbykey(?,?)}");
+		this.setString(1, "_catcode", catcode);
+		this.setInt(2, "_tablecode", tablecode);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+
+					CatalogTO catalogo = new CatalogTO();
+					catalogo.setCatcode(rowsetActual.getString(1));
+					catalogo.setTablecode(rowsetActual.getInt(2));
+					catalogo.setCatvalue(rowsetActual.getString(3));
+					catalogo.setCatvalue2(rowsetActual.getString(4));
+					catalogo.setCatvalue3(rowsetActual.getString(5));
+					_return.add(catalogo);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return _return;
+
+	}
 
 	/*
 	 * Obtiene los registros del catalogo de tablas del sistema
@@ -403,7 +446,7 @@ public class AdminDAO extends CommonDAO {
 	public ArticlesTO getArticlesByKey(String itemcode) throws Exception {
 		ArticlesTO _return = new ArticlesTO();
 		List lstResultSet = null;
-
+		int tablecode=10;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_articles_by_key(?)}");
@@ -455,6 +498,7 @@ public class AdminDAO extends CommonDAO {
 					article.setVatgourpsa(rowsetActual.getString(30));
 					article.setBranchArticles(getBranchArticles(itemcode));
 					article.setArticleprices(getArticlePrices(itemcode));
+					article.setVatgourpsaList(findCatalogByKey_List(article.getVatgourpsa(), tablecode));
 					_return = article;
 
 				}
