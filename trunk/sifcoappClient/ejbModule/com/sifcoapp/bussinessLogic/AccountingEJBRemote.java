@@ -7,6 +7,9 @@ import javax.ejb.Remote;
 
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Remote
 public interface AccountingEJBRemote {
@@ -30,5 +33,12 @@ public interface AccountingEJBRemote {
 	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)throws EJBException;
 	
 	public List getTreeAccount()throws EJBException;
+	
+//////###### journal entry####/////////////////////////////
+	public List getJournalEntry(JournalEntryInTO parameters) throws EJBException;
+	
+	public JournalEntryTO getJournalEntryByKey(int transid) throws EJBException;
+	
+	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters,int action) throws EJBException;
 	
 }

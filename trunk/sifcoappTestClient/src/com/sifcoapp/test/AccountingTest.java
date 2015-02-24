@@ -10,7 +10,11 @@ import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class AccountingTest {
 	private static AccountingEJBClient AccountingEJBService = null;
@@ -247,4 +251,53 @@ public class AccountingTest {
 
 	}
 
+	
+	//###############  PRUEBAS DE JOURNALENTRYS  ##################################
+	
+	public static void journal_matto() throws Exception{
+		ResultOutTO _result= new ResultOutTO();
+		List detail = new Vector();
+		JournalEntryTO nuevo = new JournalEntryTO();
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		
+		nuevo.setBatchnum(1);
+		art1.setLine_id(1);
+		detail.add(art1);
+		art2.setLine_id(2);
+		detail.add(art2);
+		nuevo.setJournalentryList(detail);
+		
+		_result= AccountingEJBService.journalEntry_mtto(nuevo,Common.MTTOINSERT);
+		
+		System.out.println(_result.getMensaje());
+	}
+	
+	public static void getjournalEntry(){
+		JournalEntryInTO nuevo = new JournalEntryInTO();
+		List consul= new Vector();
+		//nuevo.setTransid(1);
+		//nuevo.setBtfstatus("Y");
+		
+		consul= AccountingEJBService.getJournalEntry(nuevo);
+		Iterator<JournalEntryTO> iterator = consul.iterator();
+		while (iterator.hasNext()) {
+			JournalEntryTO acc = (JournalEntryTO) iterator.next();
+			System.out.println(acc.getTransid() + " - " + acc.getBtfstatus());
+		}
+		
+	}
+	public static void getjournalentry_by_key(){
+		List consul= new Vector();
+		JournalEntryTO result= new JournalEntryTO();
+		int trans=14;
+		result= AccountingEJBService.getJournalEntryByKey(trans);
+		System.out.println(result.getBtfstatus()+result.getTransid());
+		consul= result.getJournalentryList();
+		Iterator<JournalEntryLinesTO> iterator = consul.iterator();
+		while (iterator.hasNext()) {
+			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
+			System.out.println(acc.getTransid() + " - " + acc.getLine_id());
+		}
+	}
 }
