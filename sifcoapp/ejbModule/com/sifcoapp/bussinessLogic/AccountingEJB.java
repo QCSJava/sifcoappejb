@@ -1,14 +1,23 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
+import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
+import com.sifcoapp.objects.accounting.dao.JournalEntryLinesDAO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 /**
  * Session Bean implementation class AccountingEJB
@@ -172,5 +181,113 @@ public class AccountingEJB implements AccountingEJBRemote {
 		}
 		return _return;
 	}
+	
+//////###### journal entry####/////////////////////////////
+	public List getJournalEntry(JournalEntryInTO parameters)
+			throws EJBException {
+		List _return= new Vector();
+		JournalEntryDAO DAO= new JournalEntryDAO();
+		try {
+			_return= DAO.getJournalEntry(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
+
+	public JournalEntryTO getJournalEntryByKey(int transid) throws EJBException {
+		JournalEntryTO _return = new JournalEntryTO();
+		JournalEntryDAO DAO = new JournalEntryDAO();
+		try {
+			_return= DAO.getJournalEntryByKey(transid);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
+
+	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) throws EJBException {
+		//  VALOR POR DEFECTO PARA LOS DOUBLES##############
+		double zero=0.00;
+		ResultOutTO _return = new ResultOutTO();
+		JournalEntryDAO DAO = new JournalEntryDAO();
+		DAO.setIstransaccional(true);
+		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(DAO.getConn());
+		JournalLinesDAO.setIstransaccional(true);
+		try {
+			if(parameters.getLoctotal()==null){
+				parameters.setLoctotal(zero);
+			}
+			if(parameters.getSystotal()==null){
+				parameters.setSystotal(zero);
+			}
+			if(parameters.getTransrate()==null){
+				parameters.setTransrate(zero);
+			}
+			if(parameters.getWtapplied()==null){
+				parameters.setWtapplied(zero);
+			}
+			if(parameters.getBaseamnt()==null){
+				parameters.setBaseamnt(zero);
+			}
+			if(parameters.getBasevtat()==null){
+				parameters.setBasevtat(zero);
+			}
+			_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
+			_return.getDocentry();
+		Iterator<JournalEntryLinesTO> iterator = parameters.getJournalentryList().iterator();
+		while (iterator.hasNext()) {
+			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator.next();
+			if(Detalle.getDebit()==null){
+				Detalle.setDebit(zero);
+			}if(Detalle.getCredit()==null){
+				Detalle.setCredit(zero);
+			}if(Detalle.getTomthsum()==null){
+				Detalle.setTomthsum(zero);
+			}if(Detalle.getBasesum()==null){
+				Detalle.setBasesum(zero);
+			}if(Detalle.getVatrate()==null){
+				Detalle.setVatrate(zero);
+			}if(Detalle.getSysbasesum()==null){
+				Detalle.setSysbasesum(zero);
+			}if(Detalle.getVatamount()==null){
+				Detalle.setVatamount(zero);
+			}if(Detalle.getGrossvalue()==null){
+				Detalle.setGrossvalue(zero);
+			}if(Detalle.getBalduedeb()==null){
+				Detalle.setBalduedeb(zero);
+			}if(Detalle.getBalduecred()==null){
+				Detalle.setBalduecred(zero);
+			}if(Detalle.getTotalvat()==null){
+				Detalle.setTotalvat(zero);
+			}
+			// Para articulos nuevos
+			System.out.println("" + _return + "");
+			Detalle.setTransid(_return.getDocentry());
+			if (action == Common.MTTOINSERT) {
+				JournalLinesDAO.journalEntryLines_mtto(Detalle,Common.MTTOINSERT);
+			}
+			if (action == Common.MTTODELETE) {
+				JournalLinesDAO.journalEntryLines_mtto(Detalle,Common.MTTODELETE);
+			}
+		}
+		DAO.forceCommit();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		DAO.rollBackConnection();
+		throw (EJBException) new EJBException(e);
+	} finally {
+
+		DAO.forceCloseConnection();
+		JournalLinesDAO.forceCloseConnection();
+	}
+	_return.setCodigoError(0);
+	_return.setMensaje("Datos guardados con exito");
+	return _return;
+	}
+	
+	
 	
 }

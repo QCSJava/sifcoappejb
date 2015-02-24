@@ -2,12 +2,19 @@ package com.sifcoapp.client;
 
 import java.util.List;
 import java.util.Vector;
+
+import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.NamingException;
+
 import com.sifcoapp.bussinessLogic.AccountingEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class AccountingEJBClient {
 
@@ -110,4 +117,26 @@ public class AccountingEJBClient {
 		return account;
 	}
 
+	// ######## JOURNALENTRYS ########
+	
+	public List getJournalEntry(JournalEntryInTO parameters)
+			throws EJBException {
+		List _return= new Vector();
+			_return= bean.getJournalEntry(parameters);
+		return _return;
+	}
+
+	public JournalEntryTO getJournalEntryByKey(int transid) throws EJBException {
+		JournalEntryTO _return = new JournalEntryTO();
+		
+			_return= bean.getJournalEntryByKey(transid);
+		
+		return _return;
+	}
+
+	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) throws EJBException {
+		ResultOutTO _return;
+		_return= bean.journalEntry_mtto(parameters, action);
+		return _return;
+	}
 }
