@@ -24,6 +24,7 @@ public class Common {
 	public static final int MTTOINSERT = 1;
 	public static final int MTTOUPDATE = 2;
 	public static final int MTTODELETE = 3;
+	
 
 	public static Date getPrimerDiaDelMes(int anno, int mes) {
 

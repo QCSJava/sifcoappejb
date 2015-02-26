@@ -56,7 +56,7 @@ public class SalesEJB implements SalesEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		Double total = 0.0;
+		//Double total = 0.0;
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
@@ -66,26 +66,23 @@ public class SalesEJB implements SalesEJBRemote {
 					.iterator();
 			while (iterator2.hasNext()) {
 				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
-				articleDetalle.setLinetotal(articleDetalle.getQuantity()
-						* articleDetalle.getPrice());
+				//articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
 																			// DATOS//
 																			// ESTATICOS//
 																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				articleDetalle.setPriceafvat(articleDetalle.getPrice());
+				//articleDetalle.setPricebefdi(articleDetalle.getPrice());
+				//articleDetalle.setPriceafvat(articleDetalle.getPrice());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				articleDetalle.setVatsum(articleDetalle.getPrice());
-				articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				articleDetalle.setVatappld(articleDetalle.getPrice());
-				articleDetalle.setStockpricestockprice(articleDetalle
-						.getPrice());
-				articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				articleDetalle.setGtotal(articleDetalle.getQuantity());
-				total = total + articleDetalle.getLinetotal();
+				//articleDetalle.setVatsum(articleDetalle.getPrice());
+				//articleDetalle.setGrssprofit(articleDetalle.getPrice());
+				//articleDetalle.setVatappld(articleDetalle.getPrice());
+				//articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				//articleDetalle.setGtotal(articleDetalle.getQuantity());
+				//total = total + articleDetalle.getLinetotal();
 			}
-			parameters.setDoctotal(total);
+			//parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
 											// #######################
 			parameters.setNret(0.00);
