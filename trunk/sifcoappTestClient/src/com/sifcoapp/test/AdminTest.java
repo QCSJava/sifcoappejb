@@ -13,6 +13,7 @@ import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
+import com.sifcoapp.objects.admin.to.DocStatusTO;
 import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
@@ -494,6 +495,44 @@ public class AdminTest {
 		System.out.println("luego de servicio");
 		System.out.println(_result);
 
+	}
+	public static void articlesprices() {
+
+		ResultOutTO _result = new ResultOutTO();
+		PricesListTO para = new PricesListTO();
+	
+		try {
+
+			 para = AdminEJBService.getPricesListByKey(2);
+			
+		} catch (Exception e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("luego de servicio");
+		System.out.println(_result);
+
+	}
+
+	
+	/*Estados*/
+	public static void ListStatus() {
+		List resp = null;
+	
+
+		try {
+			resp = Common.getDocStatusList();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Iterator<DocStatusTO> iterator = resp.iterator();
+		while (iterator.hasNext()) {
+			DocStatusTO branch = (DocStatusTO) iterator.next();
+			System.out.println(branch.getCode() + " - "
+					+ branch.getValue());
+		}
 	}
 
 }

@@ -41,6 +41,7 @@ public class CommonDAO {
 		this.initCommon();
 
 	}
+
 	/*
 	 * Reutilizando conexion
 	 */
@@ -60,6 +61,7 @@ public class CommonDAO {
 			e.printStackTrace();
 		}
 	}
+
 	public void forceCloseConnection() {
 		try {
 			if (this.conn != null) {
@@ -70,7 +72,7 @@ public class CommonDAO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void rollBackConnection() {
 		try {
 			if (this.conn != null) {
@@ -300,13 +302,10 @@ public class CommonDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new Exception(e);
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new Exception(ex);
-		}
-		finally {
-		
-		
+		} finally {
 
 		}
 		return v_result;
@@ -315,7 +314,7 @@ public class CommonDAO {
 	/*
 	 * 
 	 */
-	public List runQuery()throws Exception {
+	public List runQuery() throws Exception {
 
 		// Primero creamos el prepareStatement
 
@@ -446,11 +445,10 @@ public class CommonDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new Exception(e);
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new Exception(ex);
-		}
-		finally {
+		} finally {
 
 		}
 		return rsDataList;
@@ -514,27 +512,31 @@ public class CommonDAO {
 	public void setTypeReturn(String typeReturn) {
 		this.typeReturn = typeReturn;
 	}
-	public void initCommon(){
 
-		/*this.getConnectionDB();
-		this.inParameters = new Hashtable();
-		this.outParameters = new Hashtable();*/
+	public void initCommon() {
+
+		/*
+		 * this.getConnectionDB(); this.inParameters = new Hashtable();
+		 * this.outParameters = new Hashtable();
+		 */
 		this.initCommon(null);
-		
+
 	}
+
 	/**
 	 * Reutilizando conexion
+	 * 
 	 * @param _conn
 	 */
-	public void initCommon(Connection _conn){
-		if (_conn==null){
-			this.getConnectionDB();	
-		}else{
+	public void initCommon(Connection _conn) {
+		if (_conn == null) {
+			this.getConnectionDB();
+		} else {
 			this.setConn(_conn);
-		}			
-		
+		}
+
 		this.inParameters = new Hashtable();
 		this.outParameters = new Hashtable();
-		
+
 	}
 }
