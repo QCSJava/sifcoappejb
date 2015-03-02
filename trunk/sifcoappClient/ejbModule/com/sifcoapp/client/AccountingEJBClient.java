@@ -1,5 +1,6 @@
 package com.sifcoapp.client;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -12,6 +13,7 @@ import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -137,6 +139,19 @@ public class AccountingEJBClient {
 	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) throws EJBException {
 		ResultOutTO _return;
 		_return= bean.journalEntry_mtto(parameters, action);
+		return _return;
+	}
+
+	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws Exception{
+		ResultOutTO _return;
+		_return=bean.cat_budget_mtto(parameters, action);
+		return _return;
+
+	}
+	
+	public List getBudget(Date _financeyear){
+		List _return= new Vector();
+		_return= bean.getBudget(_financeyear);
 		return _return;
 	}
 }

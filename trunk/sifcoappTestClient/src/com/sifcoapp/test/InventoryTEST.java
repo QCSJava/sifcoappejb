@@ -171,7 +171,7 @@ public class InventoryTEST {
 	public static void getGoodIssuesDetail() {
 
 		List lstPeriods = new Vector();
-		int docentry = 5;
+		int docentry = 10;
 
 		try {
 			lstPeriods = Inventory.getGoodsIssuesDetail(docentry);
