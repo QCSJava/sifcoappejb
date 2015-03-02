@@ -176,24 +176,21 @@ public class SalesEJB implements SalesEJBRemote {
 			while (iterator2.hasNext()) {
 				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator2
 						.next();
-				articleDetalle.setLinetotal(articleDetalle.getQuantity()
-						* articleDetalle.getPrice());
+				//articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
 																			// DATOS//
 																			// ESTATICOS//
 																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				articleDetalle.setPriceafvat(articleDetalle.getPrice());
+				//articleDetalle.setPricebefdi(articleDetalle.getPrice());
+				//articleDetalle.setPriceafvat(articleDetalle.getPrice());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				articleDetalle.setVatsum(articleDetalle.getPrice());
-				articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				articleDetalle.setVatappld(articleDetalle.getPrice());
-				articleDetalle.setStockpricestockprice(articleDetalle
-						.getPrice());
-				articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				articleDetalle.setGtotal(articleDetalle.getQuantity());
-				total = total + articleDetalle.getLinetotal();
+				//articleDetalle.setVatsum(articleDetalle.getPrice());
+				//articleDetalle.setGrssprofit(articleDetalle.getPrice());
+				//articleDetalle.setVatappld(articleDetalle.getPrice());
+				//articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				//articleDetalle.setGtotal(articleDetalle.getQuantity());
+				//total = total + articleDetalle.getLinetotal();
 			}
 			parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
