@@ -175,7 +175,7 @@ public class SalesTest {
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);
 		try {
-			periodo = sales.getClientCrediByKey(1);
+			periodo = sales.getClientCrediByKey(5);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

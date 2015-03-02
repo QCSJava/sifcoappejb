@@ -6,10 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
+
 import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
@@ -299,5 +302,35 @@ public class AccountingTest {
 			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
 			System.out.println(acc.getTransid() + " - " + acc.getLine_id());
 		}
+	}
+
+	//################pruebas budget###############################
+	public static void budget_mtto() throws Exception{
+		ResultOutTO _result= new ResultOutTO();
+		List detail = new Vector();
+		BudgetTO nuevo = new BudgetTO();
+		Date fecha = new Date();
+		nuevo.setFinancyear(fecha);
+		nuevo.setAcctcode("1255");
+		nuevo.setBgdcode(1);
+		
+		_result= AccountingEJBService.cat_budget_mtto(nuevo, Common.MTTOINSERT);
+		
+		System.out.println(_result.getMensaje());
+	}
+	public static void getBudget(){
+		
+		List consul= new Vector();
+		Date fecha = new Date();
+		//nuevo.setTransid(1);
+		//nuevo.setBtfstatus("Y");
+		
+		consul= AccountingEJBService.getBudget(fecha);
+		Iterator<BudgetTO> iterator = consul.iterator();
+		while (iterator.hasNext()) {
+			BudgetTO acc = (BudgetTO) iterator.next();
+			System.out.println(acc.getAbsid()+""+acc.getAcctcode());
+		}
+		
 	}
 }

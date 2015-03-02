@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -13,6 +14,7 @@ import com.sifcoapp.objects.accounting.dao.JournalEntryLinesDAO;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
@@ -288,6 +290,56 @@ public class AccountingEJB implements AccountingEJBRemote {
 	return _return;
 	}
 	
+	//################### BUDGET ######################
+	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws Exception{
+		Double zero=0.00;
+		ResultOutTO _return = new ResultOutTO();
+		AccountingDAO DAO = new AccountingDAO();
+		DAO.setIstransaccional(true);
+		if(parameters.getCrdrltotal()==null){
+			parameters.setCrdrltotal(zero);
+		}
+		if(parameters.getCredltotal()==null){
+			parameters.setCredltotal(zero);
+		}
+		if(parameters.getDebltotal()==null){
+			parameters.setDebltotal(zero);
+		}
+		if(parameters.getDebrltotal()==null){
+			parameters.setDebrltotal(zero);
+		}
+		if(parameters.getFthrprcnt()==null){
+			parameters.setFthrprcnt(zero);
+		}
+		if(parameters.getFtridrlsum()==null){
+			parameters.setFtridrlsum(zero);
+		}
+		if(parameters.getFtridrssum()==null){
+			parameters.setFtridrssum(zero);
+		}
+		if(parameters.getFtrocrlsum()==null){
+			parameters.setFtrocrlsum(zero);
+		}
+		if(parameters.getFtrodrlsum()==null){
+			parameters.setFtrodrlsum(zero);
+		}
+		
+		_return.setDocentry(DAO.cat_budget_mtto(parameters, action));
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Ingresados con Éxito");
+		return _return;
+	}
 	
+	public List getBudget(Date _financeyear)throws EJBException{
+		List _return = new Vector();
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			_return= DAO.getBudget(_financeyear);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
 	
 }

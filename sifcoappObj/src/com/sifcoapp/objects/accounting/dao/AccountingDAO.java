@@ -10,11 +10,15 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
+
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -701,4 +705,86 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
+	//############## MANTENIMIENTO DE LA TABLA BUDGET######################
+	public int cat_budget_mtto(BudgetTO parameters, int action) throws Exception{
+		int v_resp = 0;
+		// this.setDbObject("{call sp_cat_acc_peri(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_cat_budget_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setInt(1,"_absid", new Integer(parameters.getAbsid()));
+		this.setString(2,"_acctcode ",  parameters.getAcctcode());
+		this.setInt(3,"_bgdcode ", new Integer(parameters.getBgdcode()));
+		this.setString(4,"_fathercode ", parameters.getFathercode());
+		this.setDouble(5,"_fthrprcnt ",new Double( parameters.getFthrprcnt()));
+		this.setDouble(6,"_debltotal ", new Double(parameters.getDebltotal()));
+		this.setDouble(7,"_credltotal ",new Double( parameters.getCredltotal()));
+		this.setDouble(8,"_debrltotal ",new Double( parameters.getDebrltotal()));
+		this.setDouble(9,"_crdrltotal ",new Double( parameters.getCrdrltotal()));
+		this.setDouble(10,"_ftridrlsum ",new Double( parameters.getFtridrlsum()));
+		this.setDouble(11,"_ftridrssum ",new Double( parameters.getFtridrssum()));
+		this.setDouble(12,"_ftrodrlsum ",new Double( parameters.getFtrodrlsum()));
+		this.setDouble(13,"_ftrocrlsum ",new Double( parameters.getFtrocrlsum()));
+		java.sql.Date fecha = new java.sql.Date(parameters.getFinancyear().getTime());
+		this.setDate(14,"_financyear ", fecha);
+		this.setInt(15,"_usersign ", new Integer(parameters.getUsersign()));
+		this.setInt(16,"_action ", new Integer(action));
+		
+		v_resp = this.runUpdate();
+		
+		return v_resp;
+		
+	}
+	
+	public List getBudget(Date _financeyear) throws EJBException{
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{ call sp_get_budget(?)}");
+		java.sql.Date fecha = new java.sql.Date(_financeyear.getTime());
+		this.setDate(1,"_financyear ", fecha);
+
+		try {
+			lstResultSet = this.runQuery();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					BudgetTO budget = new BudgetTO();
+					budget.setAbsid(rowsetActual.getInt(1));
+					budget.setAcctcode(rowsetActual.getString(2));
+					budget.setBgdcode(rowsetActual.getInt(3));
+					budget.setFathercode(rowsetActual.getString(4));
+					budget.setFthrprcnt(rowsetActual.getDouble(5));
+					budget.setDebltotal(rowsetActual.getDouble(6));
+					budget.setCredltotal(rowsetActual.getDouble(7));
+					budget.setDebrltotal(rowsetActual.getDouble(8));
+					budget.setCrdrltotal(rowsetActual.getDouble(9));
+					budget.setFtridrlsum(rowsetActual.getDouble(10));
+					budget.setFtridrssum(rowsetActual.getDouble(11));
+					budget.setFtrodrlsum(rowsetActual.getDouble(12));
+					budget.setFtrocrlsum(rowsetActual.getDouble(13));
+					budget.setFinancyear(rowsetActual.getDate(14));
+					budget.setUsersign(rowsetActual.getInt(15));
+					_return.add(budget);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 }

@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -7,6 +8,7 @@ import javax.ejb.Remote;
 
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -40,5 +42,10 @@ public interface AccountingEJBRemote {
 	public JournalEntryTO getJournalEntryByKey(int transid) throws EJBException;
 	
 	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters,int action) throws EJBException;
+	
+	//############### BUDGET ####################################
+	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws Exception;
+	
+	public List getBudget(Date _financeyear)throws EJBException;
 	
 }
