@@ -28,7 +28,7 @@ public class ClientCrediDetailDAO extends CommonDAO{
 			List _return = new Vector();
 			List lstResultSet = null;
 			this.setTypeReturn(Common.TYPERETURN_CURSOR);
-			this.setDbObject("{call sp_get_screditnotedetail(?)}");		
+			this.setDbObject("{call sp_get_clientcreditnotedetail(?)}");		
 			this.setInt(1, "_docentry", new Integer(docentry));		
 			
 			lstResultSet = this.runQuery();
