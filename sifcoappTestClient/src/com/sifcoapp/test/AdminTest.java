@@ -308,29 +308,28 @@ public class AdminTest {
 	public static void getArticlesByKey() {
 		ArticlesTO article = null;
 
-		String code = "001-004-545-6114";
+		String code = "001-021";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
-			System.out.println(article.getPrice(42));
+			//System.out.println(article.getPrice(42));
+			
+			System.out.println(article.getItemCode() + " - "
+					+ article.getItemName());
+			System.out.println("Almacenes asociados");
+
+			Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
+					.iterator();
+			while (iterator.hasNext()) {
+				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
+				System.out.println(branch.isIsasociated() + " - "
+						+ branch.getWhscode() + " - " + branch.getWhsname());
+			}
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-		System.out.println(article.getItemCode() + " - "
-				+ article.getItemName());
-		System.out.println("Almacenes asociados");
-
-		Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
-				.iterator();
-		while (iterator.hasNext()) {
-			BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
-			System.out.println(branch.isIsasociated() + " - "
-					+ branch.getWhscode() + " - " + branch.getWhsname());
-		}
-		
+		}			
 	}
 
 	/*
