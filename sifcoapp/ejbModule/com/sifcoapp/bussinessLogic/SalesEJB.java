@@ -165,7 +165,7 @@ public class SalesEJB implements SalesEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		Double total = 0.0;
+		//Double total = 0.0;
 		ClientCrediDAO DAO = new ClientCrediDAO();
 		DAO.setIstransaccional(true);
 		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO(DAO.getConn());
@@ -192,7 +192,7 @@ public class SalesEJB implements SalesEJBRemote {
 				//articleDetalle.setGtotal(articleDetalle.getQuantity());
 				//total = total + articleDetalle.getLinetotal();
 			}
-			parameters.setDoctotal(total);
+			//parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
 											// #######################
 			parameters.setNret(0.00);

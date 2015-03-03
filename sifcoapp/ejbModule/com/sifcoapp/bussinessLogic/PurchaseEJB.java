@@ -56,7 +56,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		Double total = 0.0;
+		//Double total = 0.0;
 		PurchaseDAO DAO = new PurchaseDAO();
 		DAO.setIstransaccional(true);
 		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO(DAO.getConn());
@@ -83,7 +83,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				//articleDetalle.setGtotal(articleDetalle.getQuantity());
 				//total = total + articleDetalle.getLinetotal();
 			}
-			parameters.setDoctotal(total);
+			//parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
 											// #######################
 			parameters.setNret(0.00);
@@ -167,7 +167,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		Double total = 0.0;
+		//Double total = 0.0;
 		SupplierDAO DAO = new SupplierDAO();
 		DAO.setIstransaccional(true);
 		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO(DAO.getConn());
@@ -194,7 +194,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				//articleDetalle.setGtotal(articleDetalle.getQuantity());
 				//total = total + articleDetalle.getLinetotal();
 			}
-			parameters.setDoctotal(total);
+			//parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
 											// #######################
 			parameters.setNret(0.00);
