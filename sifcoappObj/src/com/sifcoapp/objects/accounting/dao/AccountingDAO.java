@@ -740,7 +740,7 @@ public class AccountingDAO extends CommonDAO {
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{ call sp_get_budget(?)}");
-		this.setDate(1,"_bgdcode",_bgdcode);
+		this.setInt(1,"_bgdcode",new Integer(_bgdcode));
 
 		try {
 			lstResultSet = this.runQuery();
