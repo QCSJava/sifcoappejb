@@ -149,9 +149,9 @@ public class AccountingEJBClient {
 
 	}
 	
-	public List getBudget(Date _financeyear){
+	public List getBudget(int _bgdcode){
 		List _return= new Vector();
-		_return= bean.getBudget(_financeyear);
+		_return= bean.getBudget(_bgdcode);
 		return _return;
 	}
 }

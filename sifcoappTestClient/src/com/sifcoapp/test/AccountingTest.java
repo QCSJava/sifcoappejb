@@ -321,11 +321,11 @@ public class AccountingTest {
 	public static void getBudget(){
 		
 		List consul= new Vector();
-		Date fecha = new Date();
+		//Date fecha = new Date();
 		//nuevo.setTransid(1);
 		//nuevo.setBtfstatus("Y");
 		
-		consul= AccountingEJBService.getBudget(fecha);
+		consul= AccountingEJBService.getBudget(2015);
 		Iterator<BudgetTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			BudgetTO acc = (BudgetTO) iterator.next();
