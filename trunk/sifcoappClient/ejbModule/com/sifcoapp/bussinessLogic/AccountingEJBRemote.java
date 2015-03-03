@@ -46,6 +46,6 @@ public interface AccountingEJBRemote {
 	//############### BUDGET ####################################
 	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws Exception;
 	
-	public List getBudget(Date _financeyear)throws EJBException;
+	public List getBudget(int _bgdcode)throws EJBException;
 	
 }

@@ -734,14 +734,13 @@ public class AccountingDAO extends CommonDAO {
 		
 	}
 	
-	public List getBudget(Date _financeyear) throws EJBException{
+	public List getBudget(int _bgdcode) throws EJBException{
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{ call sp_get_budget(?)}");
-		java.sql.Date fecha = new java.sql.Date(_financeyear.getTime());
-		this.setDate(1,"_financyear ", fecha);
+		this.setDate(1,"_bgdcode",_bgdcode);
 
 		try {
 			lstResultSet = this.runQuery();

@@ -339,11 +339,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 	
-	public List getBudget(Date _financeyear)throws EJBException{
+	public List getBudget(int _bgdcode) throws EJBException{
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
-			_return= DAO.getBudget(_financeyear);
+			_return= DAO.getBudget(_bgdcode);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
