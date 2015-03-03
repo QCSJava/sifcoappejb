@@ -323,8 +323,17 @@ public class AccountingEJB implements AccountingEJBRemote {
 		if(parameters.getFtrodrlsum()==null){
 			parameters.setFtrodrlsum(zero);
 		}
-		
+		try {
 		_return.setDocentry(DAO.cat_budget_mtto(parameters, action));
+		DAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos Ingresados con Éxito");
 		return _return;
