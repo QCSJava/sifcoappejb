@@ -731,20 +731,14 @@ public class AccountingDAO extends CommonDAO {
 		
 	}
 	
-	public List getBudget(int _bgdcode) throws EJBException{
+	public List getBudget(int _bgdcode) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{ call sp_get_budget(?)}");
 		this.setInt(1,"_bgdcode",new Integer(_bgdcode));
-
-		try {
-			lstResultSet = this.runQuery();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
 
@@ -752,7 +746,7 @@ public class AccountingDAO extends CommonDAO {
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-
+		Hashtable _values = new Hashtable();
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
@@ -774,7 +768,25 @@ public class AccountingDAO extends CommonDAO {
 					budget.setFtrocrlsum(rowsetActual.getDouble(14));
 					budget.setFinancyear(rowsetActual.getDate(15));
 					budget.setUsersign(rowsetActual.getInt(16));
-					_return.add(budget);
+					budget.setPostable(rowsetActual.getString(17));
+					budget.setCurrtotal(rowsetActual.getDouble(18));
+					_values.put(budget.getAcctcode(), budget);
+				}
+				BudgetTO profileDetTmp = null;
+				String _position = null;
+				List lstDetProfile = new Vector();
+
+				String[] claves = (String[]) _values.keySet().toArray(new String[0]);
+				java.util.Arrays.sort(claves);
+
+				// partimos de los nodos sin hijos
+				for (String clave : claves) {
+					profileDetTmp = (BudgetTO) _values.get(clave);
+					if (profileDetTmp.getFathercode()== null) {
+						profileDetTmp.setCurrtotal(0.00);
+						this.filterParentBudget(profileDetTmp, _values,profileDetTmp.getAcctcode());
+						_return.add(profileDetTmp);
+					}
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -783,5 +795,41 @@ public class AccountingDAO extends CommonDAO {
 			}
 		}
 		return _return;
+	}
+	private void filterParentBudget(BudgetTO parent, Hashtable _allvalues,String parentFilter) {
+
+		// Enumeration enParameters = _allvalues.keys();
+		BudgetTO profileDetTmp = null;
+		String _position = null;
+		List lstDetProfile = new Vector();
+		
+
+		// partimos de los nodos sin hijos
+
+		String[] claves = (String[]) _allvalues.keySet().toArray(new String[0]);
+		java.util.Arrays.sort(claves);
+
+		for (String clave : claves) {
+			// _position = (String) enParameters.nextElement();
+			profileDetTmp = (BudgetTO) _allvalues.get(clave);
+
+			String padre = profileDetTmp.getFathercode();
+
+			if (padre!=null && padre.equals(parentFilter)) {
+				
+				
+
+				this.filterParentBudget(profileDetTmp, _allvalues,profileDetTmp.getAcctcode());
+
+				lstDetProfile.add(profileDetTmp);
+				
+				parent.setCurrtotal(parent.getCurrtotal()+ profileDetTmp.getCurrtotal());
+
+			}
+
+		}
+
+		parent.setNodeDetail(lstDetProfile);
+
 	}
 }
