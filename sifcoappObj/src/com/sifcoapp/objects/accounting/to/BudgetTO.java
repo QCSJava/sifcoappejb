@@ -20,6 +20,7 @@ public class BudgetTO extends CommonTO {
 
 	private int absid;
 	private String acctcode;
+	private String acctname;
 	private int bgdcode;
 	private String fathercode;
 	private Double fthrprcnt;
@@ -37,14 +38,15 @@ public class BudgetTO extends CommonTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public BudgetTO(int absid, String acctcode, int bgdcode, String fathercode,
-			Double fthrprcnt, Double debltotal, Double credltotal,
-			Double debrltotal, Double crdrltotal, Double ftridrlsum,
-			Double ftridrssum, Double ftrodrlsum, Double ftrocrlsum,
-			Date financyear, int usersign) {
+	public BudgetTO(int absid, String acctcode, String acctname, int bgdcode,
+			String fathercode, Double fthrprcnt, Double debltotal,
+			Double credltotal, Double debrltotal, Double crdrltotal,
+			Double ftridrlsum, Double ftridrssum, Double ftrodrlsum,
+			Double ftrocrlsum, Date financyear, int usersign) {
 		super();
 		this.absid = absid;
 		this.acctcode = acctcode;
+		this.acctname = acctname;
 		this.bgdcode = bgdcode;
 		this.fathercode = fathercode;
 		this.fthrprcnt = fthrprcnt;
@@ -70,6 +72,12 @@ public class BudgetTO extends CommonTO {
 	}
 	public void setAcctcode(String acctcode) {
 		this.acctcode = acctcode;
+	}
+	public String getAcctname() {
+		return acctname;
+	}
+	public void setAcctname(String acctname) {
+		this.acctname = acctname;
 	}
 	public int getBgdcode() {
 		return bgdcode;
@@ -149,7 +157,5 @@ public class BudgetTO extends CommonTO {
 	public void setUsersign(int usersign) {
 		this.usersign = usersign;
 	}
-
-
-
+	
 }

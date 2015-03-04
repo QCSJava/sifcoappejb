@@ -98,17 +98,15 @@ public class AccountingDAO extends CommonDAO {
 				String _position = null;
 				List lstDetProfile = new Vector();
 
-				String[] claves = (String[]) _values.keySet().toArray(
-						new String[0]);
+				String[] claves = (String[]) _values.keySet().toArray(new String[0]);
 				java.util.Arrays.sort(claves);
 
 				// partimos de los nodos sin hijos
 				for (String clave : claves) {
 					profileDetTmp = (AccountTO) _values.get(clave);
 					if (profileDetTmp.getFathernum() == null) {
-
-						this.filterParent(profileDetTmp, _values,
-								profileDetTmp.getAcctcode());
+						profileDetTmp.setCurrtotal(0.00);
+						this.filterParent(profileDetTmp, _values,profileDetTmp.getAcctcode());
 						_return.add(profileDetTmp);
 					}
 				}
@@ -124,13 +122,13 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	private void filterParent(AccountTO parent, Hashtable _allvalues,
-			String parentFilter) {
+	private void filterParent(AccountTO parent, Hashtable _allvalues,String parentFilter) {
 
 		// Enumeration enParameters = _allvalues.keys();
 		AccountTO profileDetTmp = null;
 		String _position = null;
 		List lstDetProfile = new Vector();
+		
 
 		// partimos de los nodos sin hijos
 
@@ -139,20 +137,19 @@ public class AccountingDAO extends CommonDAO {
 
 		for (String clave : claves) {
 			// _position = (String) enParameters.nextElement();
-
 			profileDetTmp = (AccountTO) _allvalues.get(clave);
 
 			String padre = profileDetTmp.getFathernum();
 
 			if (padre != null && padre.equals(parentFilter)) {
+				
+				
 
-				this.filterParent(profileDetTmp, _allvalues,
-						profileDetTmp.getAcctcode());
+				this.filterParent(profileDetTmp, _allvalues,profileDetTmp.getAcctcode());
 
 				lstDetProfile.add(profileDetTmp);
-
-				parent.setCurrtotal(parent.getCurrtotal()
-						+ profileDetTmp.getCurrtotal());
+				
+				parent.setCurrtotal(parent.getCurrtotal()+ profileDetTmp.getCurrtotal());
 
 			}
 
@@ -763,19 +760,20 @@ public class AccountingDAO extends CommonDAO {
 					BudgetTO budget = new BudgetTO();
 					budget.setAbsid(rowsetActual.getInt(1));
 					budget.setAcctcode(rowsetActual.getString(2));
-					budget.setBgdcode(rowsetActual.getInt(3));
-					budget.setFathercode(rowsetActual.getString(4));
-					budget.setFthrprcnt(rowsetActual.getDouble(5));
-					budget.setDebltotal(rowsetActual.getDouble(6));
-					budget.setCredltotal(rowsetActual.getDouble(7));
-					budget.setDebrltotal(rowsetActual.getDouble(8));
-					budget.setCrdrltotal(rowsetActual.getDouble(9));
-					budget.setFtridrlsum(rowsetActual.getDouble(10));
-					budget.setFtridrssum(rowsetActual.getDouble(11));
-					budget.setFtrodrlsum(rowsetActual.getDouble(12));
-					budget.setFtrocrlsum(rowsetActual.getDouble(13));
-					budget.setFinancyear(rowsetActual.getDate(14));
-					budget.setUsersign(rowsetActual.getInt(15));
+					budget.setAcctname(rowsetActual.getString(3));
+					budget.setBgdcode(rowsetActual.getInt(4));
+					budget.setFathercode(rowsetActual.getString(5));
+					budget.setFthrprcnt(rowsetActual.getDouble(6));
+					budget.setDebltotal(rowsetActual.getDouble(7));
+					budget.setCredltotal(rowsetActual.getDouble(8));
+					budget.setDebrltotal(rowsetActual.getDouble(9));
+					budget.setCrdrltotal(rowsetActual.getDouble(10));
+					budget.setFtridrlsum(rowsetActual.getDouble(11));
+					budget.setFtridrssum(rowsetActual.getDouble(12));
+					budget.setFtrodrlsum(rowsetActual.getDouble(13));
+					budget.setFtrocrlsum(rowsetActual.getDouble(14));
+					budget.setFinancyear(rowsetActual.getDate(15));
+					budget.setUsersign(rowsetActual.getInt(16));
 					_return.add(budget);
 				}
 				rowsetActual.close();
