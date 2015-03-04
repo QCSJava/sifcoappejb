@@ -832,4 +832,10 @@ public class AccountingDAO extends CommonDAO {
 		parent.setNodeDetail(lstDetProfile);
 
 	}
+
+	//################ MANTENIMIENTO DE LA TABLA RecurringPostings ###########################
+	
+	
+
+	
 }
