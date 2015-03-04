@@ -34,6 +34,9 @@ public class BudgetTO extends CommonTO {
 	private Double ftrocrlsum;
 	private Date financyear;
 	private int usersign;
+	private String postable;
+	private List nodeDetail;
+	private Double currtotal;
 	public BudgetTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -42,7 +45,8 @@ public class BudgetTO extends CommonTO {
 			String fathercode, Double fthrprcnt, Double debltotal,
 			Double credltotal, Double debrltotal, Double crdrltotal,
 			Double ftridrlsum, Double ftridrssum, Double ftrodrlsum,
-			Double ftrocrlsum, Date financyear, int usersign) {
+			Double ftrocrlsum, Date financyear, int usersign, String postable,
+			List nodeDetail, Double currtotal) {
 		super();
 		this.absid = absid;
 		this.acctcode = acctcode;
@@ -60,6 +64,9 @@ public class BudgetTO extends CommonTO {
 		this.ftrocrlsum = ftrocrlsum;
 		this.financyear = financyear;
 		this.usersign = usersign;
+		this.postable = postable;
+		this.nodeDetail = nodeDetail;
+		this.currtotal = currtotal;
 	}
 	public int getAbsid() {
 		return absid;
@@ -156,6 +163,24 @@ public class BudgetTO extends CommonTO {
 	}
 	public void setUsersign(int usersign) {
 		this.usersign = usersign;
+	}
+	public String getPostable() {
+		return postable;
+	}
+	public void setPostable(String postable) {
+		this.postable = postable;
+	}
+	public List getNodeDetail() {
+		return nodeDetail;
+	}
+	public void setNodeDetail(List nodeDetail) {
+		this.nodeDetail = nodeDetail;
+	}
+	public Double getCurrtotal() {
+		return currtotal;
+	}
+	public void setCurrtotal(Double currtotal) {
+		this.currtotal = currtotal;
 	}
 	
 }
