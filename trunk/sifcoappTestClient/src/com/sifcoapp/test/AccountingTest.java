@@ -16,8 +16,12 @@ import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 
 public class AccountingTest {
 	private static AccountingEJBClient AccountingEJBService = null;
@@ -329,8 +333,60 @@ public class AccountingTest {
 		Iterator<BudgetTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			BudgetTO acc = (BudgetTO) iterator.next();
-			System.out.println(acc.getAbsid()+""+acc.getAcctcode());
+			System.out.println(acc.getAbsid()+" - "+acc.getAcctcode());
 		}
 		
+	}
+
+	//#################### pruebas de recurringposting #####################
+	public static void recurring_mtto() throws Exception{
+		ResultOutTO _result= new ResultOutTO();
+		List detail = new Vector();
+		RecurringPostingsTO nuevo = new RecurringPostingsTO();
+		RecurringPostingsDetailTO detalle1= new RecurringPostingsDetailTO();
+		RecurringPostingsDetailTO detalle2= new RecurringPostingsDetailTO();
+		
+		nuevo.setRcurcode("Prueba1");
+		detalle1.setAcctdesc("probando");
+		detalle1.setLineid(1);
+		detalle1.setCredit(45.50);
+		detalle2.setAcctdesc("probando");
+		detalle2.setLineid(2);
+		detalle2.setCredit(45.50);
+		detail.add(detalle1);
+		detail.add(detalle2);
+		nuevo.setRecurringPostingsDetail(detail);
+		
+		_result= AccountingEJBService.fin_recurringPosting_mtto(nuevo, Common.MTTOINSERT);
+		System.out.println(_result.getMensaje()+" - "+ _result.getCodigoError());
+		
+	}
+	public static void getRecurring(){
+		RecurringPostingsInTO nuevo = new RecurringPostingsInTO();
+		List consul= new Vector();
+		RecurringPostingsTO consul2= new RecurringPostingsTO();
+		//nuevo.setTransid(1);
+		//nuevo.setBtfstatus("Y");
+		nuevo.setRcurdesc("n");
+		consul= AccountingEJBService.getrecurringPosting(nuevo);
+		Iterator<RecurringPostingsTO> iterator = consul.iterator();
+		while (iterator.hasNext()) {
+			RecurringPostingsTO acc = (RecurringPostingsTO) iterator.next();
+			System.out.println(acc.getRcurcode() + " - " + acc.getRcurdesc());
+			
+		}
+		
+	}
+	
+	public static void getReccuring_by_key(){
+		RecurringPostingsTO consul2= new RecurringPostingsTO();
+		List consul= new Vector();
+		consul2= AccountingEJBService.getrecurringPosting_by_key("Prueba1");
+		Iterator<RecurringPostingsDetailTO> iterator = consul2.getRecurringPostingsDetail().iterator();
+		while (iterator.hasNext()) {
+			RecurringPostingsDetailTO acc = (RecurringPostingsDetailTO) iterator.next();
+			System.out.println(acc.getRcurcode() + " - " + acc.getLineid());
+			
+		}
 	}
 }

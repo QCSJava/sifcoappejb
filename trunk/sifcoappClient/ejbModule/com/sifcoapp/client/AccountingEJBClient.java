@@ -16,6 +16,8 @@ import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class AccountingEJBClient {
@@ -142,7 +144,8 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
-	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws Exception{
+	/* MANTENIMIENTO DE TABLA BUDGET */
+	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action)throws EJBException{
 		ResultOutTO _return;
 		_return=bean.cat_budget_mtto(parameters, action);
 		return _return;
@@ -154,4 +157,26 @@ public class AccountingEJBClient {
 		_return= bean.getBudget(_bgdcode);
 		return _return;
 	}
+	
+	/*MANTENIMIENTO DE TABLA RECURRINGPOSTING */
+	public ResultOutTO fin_recurringPosting_mtto(RecurringPostingsTO parameters, int action) throws EJBException{
+		ResultOutTO _return;
+		_return=bean.fin_recurringPosting_mtto(parameters, action);
+		return _return;
+	}
+	
+	public List getrecurringPosting(RecurringPostingsInTO parameters) throws EJBException{
+		List _return = new Vector();
+		_return= bean.getrecurringPosting(parameters);
+		return _return;
+	}
+	
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws EJBException{
+		RecurringPostingsTO _return = new RecurringPostingsTO();
+		
+		_return= bean.getrecurringPosting_by_key(_rcurcode);
+	
+	return _return;
+	}
+	
 }

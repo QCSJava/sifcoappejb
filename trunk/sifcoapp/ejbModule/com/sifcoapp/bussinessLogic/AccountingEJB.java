@@ -18,15 +18,19 @@ import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
 
 /**
  * Session Bean implementation class AccountingEJB
  */
 @Stateless
 public class AccountingEJB implements AccountingEJBRemote {
-
+	Double zero=0.00;
 	/**
 	 * Default constructor.
 	 */
@@ -291,8 +295,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 	}
 	
 	//################### BUDGET ######################
-	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws Exception{
-		Double zero=0.00;
+	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws EJBException{
+		
 		ResultOutTO _return = new ResultOutTO();
 		AccountingDAO DAO = new AccountingDAO();
 		DAO.setIstransaccional(true);
@@ -350,5 +354,87 @@ public class AccountingEJB implements AccountingEJBRemote {
 		}
 		return _return;
 	}
+
+	//######################## RecurringPosting ####################
+	public ResultOutTO fin_recurringPosting_mtto(RecurringPostingsTO parameters,int action) throws EJBException {
+		// TODO Auto-generated method stub
+		ResultOutTO _return = new ResultOutTO();
+		AccountingDAO DAO = new AccountingDAO();
+		DAO.setIstransaccional(true);
+		if(parameters.getFinancvol()==null){
+			parameters.setFinancvol(zero);
+		}
+		if(parameters.getVolume()==null){
+			parameters.setVolume(zero);
+		}
+		Iterator<RecurringPostingsDetailTO> iterator = parameters.getRecurringPostingsDetail().iterator();
+		try {
+		while (iterator.hasNext()) {
+			RecurringPostingsDetailTO Detalle = (RecurringPostingsDetailTO) iterator.next();
+			// Para articulos nuevos
+			//System.out.println("" + _return + "");
+			Detalle.setRcurcode(parameters.getRcurcode());
+			if(Detalle.getCredit()==null){
+				Detalle.setCredit(zero);
+			}
+			if(Detalle.getDebit()==null){
+				Detalle.setDebit(zero);
+			}
+			if(Detalle.getGrossvalue()==null){
+				Detalle.setGrossvalue(zero);
+			}
+			if (action == Common.MTTOINSERT) {
+				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTOINSERT);
+			}
+			if (action == Common.MTTODELETE) {
+				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTODELETE);
+			}
+			if (action == Common.MTTOUPDATE) {
+				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTOUPDATE);
+			}
+		}
+		
+			DAO.fin_recurringPosting_mtto(parameters, action);
+			DAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Ingresados con Éxito");
+		return _return;
+	}
+
+	public List getrecurringPosting(RecurringPostingsInTO parameters)throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			_return= DAO.getrecurringPosting(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
+
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws EJBException {
+		// TODO Auto-generated method stub
+		RecurringPostingsTO _return= new RecurringPostingsTO();
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			_return= DAO.getrecurringPosting_by_key(_rcurcode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
+
+	
 	
 }
