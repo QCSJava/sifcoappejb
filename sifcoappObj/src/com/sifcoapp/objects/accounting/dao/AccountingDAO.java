@@ -1,6 +1,7 @@
 package com.sifcoapp.objects.accounting.dao;
 
 import java.sql.Array;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,9 +17,13 @@ import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -26,6 +31,7 @@ public class AccountingDAO extends CommonDAO {
 	/*
 	 * Mantenimiento de periodos contables
 	 */
+	
 	public int cat_accPeriod_mtto(AccPeriodTO parameters, int action)
 			throws Exception {
 
@@ -47,6 +53,16 @@ public class AccountingDAO extends CommonDAO {
 		v_resp = this.runUpdate();
 
 		return v_resp;
+	}
+
+	public AccountingDAO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public AccountingDAO(Connection _conn) {
+		super(_conn);
+		// TODO Auto-generated constructor stub
 	}
 
 	public List getTreeAccount() throws Exception {
@@ -798,6 +814,7 @@ public class AccountingDAO extends CommonDAO {
 	}
 	private void filterParentBudget(BudgetTO parent, Hashtable _allvalues,String parentFilter) {
 
+
 		// Enumeration enParameters = _allvalues.keys();
 		BudgetTO profileDetTmp = null;
 		String _position = null;
@@ -835,7 +852,257 @@ public class AccountingDAO extends CommonDAO {
 
 	//################ MANTENIMIENTO DE LA TABLA RecurringPostings ###########################
 	
-	
+	public int fin_recurringPosting_mtto(RecurringPostingsTO parameters, int action) throws Exception{
+		int v_resp = 0;
+		// this.setDbObject("{call sp_cat_acc_peri(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_fin_rep0_recurringpostings_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setString(1,"_rcurcode", parameters.getRcurcode());
+		this.setString(2,"_rcurdesc ", parameters.getRcurdesc());
+		this.setString(3,"_frequency ", parameters.getFrequency());
+		this.setInt(4,"_remind ", new Integer(parameters.getRemind()));
+		if (parameters.getLastposted() == null){
+			this.setDate(5,"_lastposted ", parameters.getLastposted());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getLastposted().getTime());
+			this.setDate(5,"_lastposted ",fecha);
+		}
+		if (parameters.getNextdeu() == null){
+			this.setDate(6,"_nextdeu ", parameters.getNextdeu());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getNextdeu().getTime());
+			this.setDate(6,"_nextdeu ", fecha);
+		}
+		this.setInt(7,"_entrycount ", new Integer(parameters.getEntrycount()));
+		this.setDouble(8,"_volume ",new Double( parameters.getVolume()));
+		this.setString(9,"_volcurr ", parameters.getVolcurr());
+		this.setDouble(10,"_financvol ",new Double( parameters.getFinancvol()));
+		this.setString(11,"_ref1 ", parameters.getRef1());
+		this.setString(12,"_ref2 ", parameters.getRef2());
+		this.setString(13,"_transcode ", parameters.getTranscode());
+		this.setString(14,"_memo ", parameters.getMemo());
+		this.setString(15,"_limitrtrns ", parameters.getLimitrtrns());
+		this.setInt(16,"_returns ", new Integer(parameters.getReturns()));
+		if (parameters.getLimitdate() == null){
+			this.setDate(17,"_limitdate ", parameters.getLimitdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getLimitdate().getTime());
+			this.setDate(17,"_limitdate ",fecha);
+		}
+		this.setInt(18,"_instance ", new Integer(parameters.getInstance()));
+		this.setString(19,"_autovat ", parameters.getAutovat());
+		this.setString(20,"_managewtax ", parameters.getManagewtax());
+		this.setString(21,"_ref3 ", parameters.getRef3());
+		this.setString(22,"_deferedtax ", parameters.getDeferedtax());
+		this.setInt(23,"_usersign ", new Integer(parameters.getUsersign()));
+		this.setInt(24,"_action ", new Integer(action));
+		v_resp = this.runUpdate();
+		
+		return v_resp;
+		
+	}
 
+	public List getrecurringPosting(RecurringPostingsInTO parameters) throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_recurringpostings(?,?,?,?,?,?)}");
+		this.setString(1,"_rcurcode", parameters.getRcurcode());
+		this.setString(2,"_rcurdesc ", parameters.getRcurdesc());
+		this.setString(3,"_ref1 ", parameters.getRef1());
+		this.setString(4,"_ref2 ", parameters.getRef2());
+		this.setString(5,"_ref3 ", parameters.getRef3());
+		this.setString(6,"_memo ", parameters.getMemo());
+		
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					RecurringPostingsTO Diary = new RecurringPostingsTO();
+					Diary.setRcurcode(rowsetActual.getString(1));
+					Diary.setRcurdesc(rowsetActual.getString(2));
+					Diary.setFrequency(rowsetActual.getString(3));
+					Diary.setRemind(rowsetActual.getInt(4));
+					Diary.setLastposted(rowsetActual.getDate(5));
+					Diary.setNextdeu(rowsetActual.getDate(6));
+					Diary.setEntrycount(rowsetActual.getInt(7));
+					Diary.setVolume(rowsetActual.getDouble(8));
+					Diary.setVolcurr(rowsetActual.getString(9));
+					Diary.setFinancvol(rowsetActual.getDouble(10));
+					Diary.setRef1(rowsetActual.getString(11));
+					Diary.setRef2(rowsetActual.getString(12));
+					Diary.setTranscode(rowsetActual.getString(13));
+					Diary.setMemo(rowsetActual.getString(14));
+					Diary.setLimitrtrns(rowsetActual.getString(15));
+					Diary.setReturns(rowsetActual.getInt(16));
+					Diary.setLimitdate(rowsetActual.getDate(17));
+					Diary.setInstance(rowsetActual.getInt(18));
+					Diary.setAutovat(rowsetActual.getString(19));
+					Diary.setManagewtax(rowsetActual.getString(20));
+					Diary.setRef3(rowsetActual.getString(21));
+					Diary.setDeferedtax(rowsetActual.getString(22));
+					Diary.setUsersign(rowsetActual.getInt(23));
+					Diary.setUpdatedate(rowsetActual.getDate(24));
+					Diary.setUpdatetime(rowsetActual.getInt(25));
+
+					_return.add(Diary);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws Exception{
+		RecurringPostingsTO _return = new RecurringPostingsTO();
+		List lstResultSet = null;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_recurringpostings_by_key(?)}");
+		this.setString(1,"_rcurcode", _rcurcode);
+		AccountingDAO DAO= new AccountingDAO();
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					RecurringPostingsTO Diary = new RecurringPostingsTO();
+					Diary.setRcurcode(rowsetActual.getString(1));
+					Diary.setRcurdesc(rowsetActual.getString(2));
+					Diary.setFrequency(rowsetActual.getString(3));
+					Diary.setRemind(rowsetActual.getInt(4));
+					Diary.setLastposted(rowsetActual.getDate(5));
+					Diary.setNextdeu(rowsetActual.getDate(6));
+					Diary.setEntrycount(rowsetActual.getInt(7));
+					Diary.setVolume(rowsetActual.getDouble(8));
+					Diary.setVolcurr(rowsetActual.getString(9));
+					Diary.setFinancvol(rowsetActual.getDouble(10));
+					Diary.setRef1(rowsetActual.getString(11));
+					Diary.setRef2(rowsetActual.getString(12));
+					Diary.setTranscode(rowsetActual.getString(13));
+					Diary.setMemo(rowsetActual.getString(14));
+					Diary.setLimitrtrns(rowsetActual.getString(15));
+					Diary.setReturns(rowsetActual.getInt(16));
+					Diary.setLimitdate(rowsetActual.getDate(17));
+					Diary.setInstance(rowsetActual.getInt(18));
+					Diary.setAutovat(rowsetActual.getString(19));
+					Diary.setManagewtax(rowsetActual.getString(20));
+					Diary.setRef3(rowsetActual.getString(21));
+					Diary.setDeferedtax(rowsetActual.getString(22));
+					Diary.setUsersign(rowsetActual.getInt(23));
+					Diary.setUpdatedate(rowsetActual.getDate(24));
+					Diary.setUpdatetime(rowsetActual.getInt(25));
+					Diary.setRecurringPostingsDetail(DAO.getrecurringPostingDetail(rowsetActual.getString(1)));
+					
+					_return=Diary;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+		
+	}
 	
+	public int fin_recurringPostingDetail_mtto(RecurringPostingsDetailTO parameters, int action) throws Exception{
+		int v_resp = 0;
+		// this.setDbObject("{call sp_cat_acc_perwwwwwwwwwwwwwwwwwwwwwi(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_fin_rep1_recurringpostingsdetai_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setString(1,"_rcurcode", parameters.getRcurcode());
+		this.setInt(2,"_lineid ",new Integer(parameters.getLineid()));
+		this.setString(3,"_acctcode ", parameters.getAcctcode());
+		this.setString(4,"_acctdesc ", parameters.getAcctdesc());
+		this.setDouble(5,"_debit ",new Double(parameters.getDebit()));
+		this.setDouble(6,"_credit ",new Double(parameters.getCredit()));
+		this.setString(7,"_currency ", parameters.getCurrency());
+		this.setInt(8,"_instance ",new Integer( parameters.getInstance()));
+		this.setString(9,"_vatgroup ", parameters.getVatgroup());
+		this.setString(10,"_vatline ", parameters.getVatline());
+		this.setString(11,"_ctrlacct ", parameters.getCtrlacct());
+		this.setString(12,"_ocrcode ", parameters.getOcrcode());
+		this.setInt(13,"_taxtype ",new Integer( parameters.getTaxtype()));
+		this.setString(14,"_taxpostacc ", parameters.getTaxpostacc());
+		this.setString(15,"_taxcode ", parameters.getTaxcode());
+		this.setString(16,"_ocrcode1 ", parameters.getOcrcode1());
+		this.setString(17,"_ocrcode2 ", parameters.getOcrcode2());
+		this.setString(18,"_ocrcode3 ", parameters.getOcrcode3());
+		this.setString(19,"_ocrcode4 ", parameters.getOcrcode4());
+		this.setString(20,"_wtliable ", parameters.getWtliable());
+		this.setString(21,"_wtaxline ", parameters.getWtaxline());
+		this.setDouble(22,"_grossvalue ",new Double(parameters.getGrossvalue()));
+		this.setInt(23,"_bplid ",new Integer( parameters.getBplid()));
+		this.setInt(24,"_action ",new Integer( action));
+
+		v_resp = this.runUpdate();
+		
+		return v_resp;
+		
+	}
+	
+	public List getrecurringPostingDetail(String _rcurcode) throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_recurringpostingsdetai(?)}");
+		this.setString(1,"_rcurcode", _rcurcode);
+		
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					RecurringPostingsDetailTO Diary = new RecurringPostingsDetailTO();
+					Diary.setRcurcode(rowsetActual.getString(1));
+					Diary.setLineid(rowsetActual.getInt(2));
+					Diary.setAcctcode(rowsetActual.getString(3));
+					Diary.setAcctdesc(rowsetActual.getString(4));
+					Diary.setDebit(rowsetActual.getDouble(5));
+					Diary.setCredit(rowsetActual.getDouble(6));
+					Diary.setCurrency(rowsetActual.getString(7));
+					Diary.setInstance(rowsetActual.getInt(8));
+					Diary.setVatgroup(rowsetActual.getString(9));
+					Diary.setVatline(rowsetActual.getString(10));
+					Diary.setCtrlacct(rowsetActual.getString(11));
+					Diary.setOcrcode(rowsetActual.getString(12));
+					Diary.setTaxtype(rowsetActual.getInt(13));
+					Diary.setTaxpostacc(rowsetActual.getString(14));
+					Diary.setTaxcode(rowsetActual.getString(15));
+					Diary.setOcrcode1(rowsetActual.getString(16));
+					Diary.setOcrcode2(rowsetActual.getString(17));
+					Diary.setOcrcode3(rowsetActual.getString(18));
+					Diary.setOcrcode4(rowsetActual.getString(19));
+					Diary.setWtliable(rowsetActual.getString(20));
+					Diary.setWtaxline(rowsetActual.getString(21));
+					Diary.setGrossvalue(rowsetActual.getDouble(22));
+					Diary.setBplid(rowsetActual.getInt(23));
+					
+					_return.add(Diary);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 }

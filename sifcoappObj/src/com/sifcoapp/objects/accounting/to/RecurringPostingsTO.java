@@ -34,6 +34,9 @@ public class RecurringPostingsTO extends CommonTO  {
 	private String ref3;
 	private String deferedtax;
 	private int usersign;
+	private Date updatedate;
+	private int updatetime;
+
 
 	private List RecurringPostingsDetail;
 
@@ -48,7 +51,8 @@ public class RecurringPostingsTO extends CommonTO  {
 			String ref1, String ref2, String transcode, String memo,
 			String limitrtrns, int returns, Date limitdate, int instance,
 			String autovat, String managewtax, String ref3, String deferedtax,
-			int usersign, List recurringPostingsDetail) {
+			int usersign, Date updatedate, int updatetime,
+			List recurringPostingsDetail) {
 		super();
 		this.rcurcode = rcurcode;
 		this.rcurdesc = rcurdesc;
@@ -73,6 +77,8 @@ public class RecurringPostingsTO extends CommonTO  {
 		this.ref3 = ref3;
 		this.deferedtax = deferedtax;
 		this.usersign = usersign;
+		this.updatedate = updatedate;
+		this.updatetime = updatetime;
 		RecurringPostingsDetail = recurringPostingsDetail;
 	}
 
@@ -260,6 +266,22 @@ public class RecurringPostingsTO extends CommonTO  {
 		this.usersign = usersign;
 	}
 
+	public Date getUpdatedate() {
+		return updatedate;
+	}
+
+	public void setUpdatedate(Date updatedate) {
+		this.updatedate = updatedate;
+	}
+
+	public int getUpdatetime() {
+		return updatetime;
+	}
+
+	public void setUpdatetime(int updatetime) {
+		this.updatetime = updatetime;
+	}
+
 	public List getRecurringPostingsDetail() {
 		return RecurringPostingsDetail;
 	}
@@ -267,5 +289,6 @@ public class RecurringPostingsTO extends CommonTO  {
 	public void setRecurringPostingsDetail(List recurringPostingsDetail) {
 		RecurringPostingsDetail = recurringPostingsDetail;
 	}
+
 	
 }

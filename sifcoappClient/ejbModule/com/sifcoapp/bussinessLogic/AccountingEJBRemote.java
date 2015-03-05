@@ -11,6 +11,9 @@ import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
+import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Remote
@@ -44,8 +47,16 @@ public interface AccountingEJBRemote {
 	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters,int action) throws EJBException;
 	
 	//############### BUDGET ####################################
-	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws Exception;
+	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action) throws EJBException;
 	
 	public List getBudget(int _bgdcode)throws EJBException;
+	
+	//################# RecurringPosting #################################
+	public ResultOutTO fin_recurringPosting_mtto(RecurringPostingsTO parameters, int action) throws EJBException;
+	
+	public List getrecurringPosting(RecurringPostingsInTO parameters) throws EJBException;
+	
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws EJBException;
+	
 	
 }
