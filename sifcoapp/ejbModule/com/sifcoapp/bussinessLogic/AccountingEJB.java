@@ -359,6 +359,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 	public ResultOutTO fin_recurringPosting_mtto(RecurringPostingsTO parameters,int action) throws EJBException {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+		List Detalles= new Vector();
+		RecurringPostingsTO padre= new RecurringPostingsTO();
 		AccountingDAO DAO = new AccountingDAO();
 		DAO.setIstransaccional(true);
 		if(parameters.getFinancvol()==null){
@@ -369,6 +371,14 @@ public class AccountingEJB implements AccountingEJBRemote {
 		}
 		Iterator<RecurringPostingsDetailTO> iterator = parameters.getRecurringPostingsDetail().iterator();
 		try {
+			//eliminar los detalles registrados antes de insertar o update
+			padre=DAO.getrecurringPosting_by_key(parameters.getRcurcode());
+			Detalles=padre.getRecurringPostingsDetail();
+			Iterator<RecurringPostingsDetailTO> iterator2 =Detalles.iterator();
+			while (iterator2.hasNext()) {
+				RecurringPostingsDetailTO Detallex = (RecurringPostingsDetailTO) iterator2.next();
+				DAO.fin_recurringPostingDetail_mtto(Detallex,Common.MTTODELETE);
+			}
 		while (iterator.hasNext()) {
 			RecurringPostingsDetailTO Detalle = (RecurringPostingsDetailTO) iterator.next();
 			// Para articulos nuevos
@@ -390,7 +400,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTODELETE);
 			}
 			if (action == Common.MTTOUPDATE) {
-				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTOUPDATE);
+				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTOINSERT);
 			}
 		}
 		
