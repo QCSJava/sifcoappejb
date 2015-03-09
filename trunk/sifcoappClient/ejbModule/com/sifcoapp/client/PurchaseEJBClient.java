@@ -43,6 +43,25 @@ public class PurchaseEJBClient {
 		return _return;
 	}
 	
+	//purchaseQuantition
+	public List getPurchaseQuotation(PurchaseQuotationInTO param) throws Exception{
+		List _return;
+		_return= bean.getPurchaseQuotation(param);
+		return _return;
+	}
+	
+	public PurchaseQuotationTO getPurchaseQuotationByKey(int docentry) throws Exception{
+		PurchaseQuotationTO _return;
+		_return=bean.getPurchaseQuotationByKey(docentry);
+		return _return;
+	}
+	
+	public ResultOutTO inv_PurchaseQuotation_mtto(PurchaseQuotationTO parameters, int accion) throws Exception{
+		ResultOutTO _return;
+		_return=bean.inv_PurchaseQuotation_mtto(parameters, accion);
+		return _return;
+	}
+	
 	public List getPurchaseDetail(int docentry) throws Exception{
 		List _return;
 		_return= bean.getPurchaseDetail(docentry);
