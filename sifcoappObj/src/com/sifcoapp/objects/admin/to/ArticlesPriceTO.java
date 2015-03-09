@@ -16,7 +16,7 @@ public class ArticlesPriceTO extends CommonTO {
 	private String dscription;
 	private int pricelist;
 	private Double price;
-	private String ovrwritten;
+	private boolean ovrwritten;
 	private Double factor;
 	private String objtype;
 	private Double addprice1;
@@ -30,7 +30,7 @@ public class ArticlesPriceTO extends CommonTO {
 	}
 
 	public ArticlesPriceTO(String itemcode, int pricelist, Double price,
-			String ovrwritten, Double factor, String objtype, Double addprice1,
+			boolean ovrwritten, Double factor, String objtype, Double addprice1,
 			Double addprice2, String ovrwrite1, String ovrwrite2) {
 		super();
 		this.itemcode = itemcode;
@@ -69,11 +69,11 @@ public class ArticlesPriceTO extends CommonTO {
 		this.price = price;
 	}
 
-	public String getOvrwritten() {
+	public boolean getOvrwritten() {
 		return ovrwritten;
 	}
 
-	public void setOvrwritten(String ovrwritten) {
+	public void setOvrwritten(boolean ovrwritten) {
 		this.ovrwritten = ovrwritten;
 	}
 

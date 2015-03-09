@@ -952,7 +952,7 @@ public class AdminDAO extends CommonDAO {
 		this.setString(1, "_itemcode,", parameters.getItemcode());
 		this.setInt(2, "_pricelist,", parameters.getPricelist());
 		this.setDouble(3, "_price,", parameters.getPrice());
-		this.setString(4, "_ovrwritten,", parameters.getOvrwritten());
+		this.setBool(4, "_ovrwritten,", parameters.getOvrwritten());
 		this.setDouble(5, "_factor,", parameters.getFactor());
 		this.setString(6, "_objtype,", parameters.getObjtype());
 		this.setDouble(7, "_addprice1,", parameters.getAddprice1());
@@ -990,7 +990,7 @@ public class AdminDAO extends CommonDAO {
 					result.setItemcode(rowsetActual.getString(1));
 					result.setPricelist(rowsetActual.getInt(2));
 					result.setPrice(rowsetActual.getDouble(3));
-					result.setOvrwritten(rowsetActual.getString(4));
+					result.setOvrwritten(rowsetActual.getBoolean(4));
 					result.setFactor(rowsetActual.getDouble(5));
 					result.setObjtype(rowsetActual.getString(6));
 					result.setAddprice1(rowsetActual.getDouble(7));
@@ -1034,7 +1034,7 @@ public class AdminDAO extends CommonDAO {
 					result.setItemcode(rowsetActual.getString(1));
 					result.setPricelist(rowsetActual.getInt(2));
 					result.setPrice(rowsetActual.getDouble(3));
-					result.setOvrwritten(rowsetActual.getString(4));
+					result.setOvrwritten(rowsetActual.getBoolean(4));
 					result.setFactor(rowsetActual.getDouble(5));
 					result.setObjtype(rowsetActual.getString(6));
 					result.setAddprice1(rowsetActual.getDouble(7));

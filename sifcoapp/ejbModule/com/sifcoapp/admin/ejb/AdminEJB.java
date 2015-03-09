@@ -414,7 +414,7 @@ public class AdminEJB implements AdminEJBRemote {
 					newPrice.setFactor(parameters.getFactor());
 					newPrice.setPrice(baseprice.getPrice()
 							* parameters.getFactor());
-					newPrice.setOvrwritten("N");
+					newPrice.setOvrwritten(false);
 					// Valores por derfecto
 					newPrice.setAddprice1(0.0);
 					newPrice.setAddprice2(0.0);
@@ -452,7 +452,7 @@ public class AdminEJB implements AdminEJBRemote {
 								actualizado = true;
 
 								NowPrice.setFactor(parameters.getFactor());
-								if (NowPrice.getOvrwritten().equals("N")) {
+								if (!NowPrice.getOvrwritten()) {
 									NowPrice.setPrice(basePrice.getPrice()
 											* parameters.getFactor());
 								}
@@ -471,7 +471,7 @@ public class AdminEJB implements AdminEJBRemote {
 							newPrice.setFactor(parameters.getFactor());
 							newPrice.setPrice(basePrice.getPrice()
 									* parameters.getFactor());
-							newPrice.setOvrwritten("N");
+							newPrice.setOvrwritten(false);
 							// Valores por derfecto
 							newPrice.setAddprice1(0.0);
 							newPrice.setAddprice2(0.0);
