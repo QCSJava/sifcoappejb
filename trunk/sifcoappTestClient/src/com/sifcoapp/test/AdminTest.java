@@ -308,7 +308,7 @@ public class AdminTest {
 	public static void getArticlesByKey() {
 		ArticlesTO article = null;
 
-		String code = "001-021";
+		String code = "2780";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
@@ -460,32 +460,12 @@ public class AdminTest {
 		para.setBase_num(1);
 		para.setFactor(2.0);
 
-		// Agregar
-
-		// try {
-		// _result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
-		// } catch (Exception e) {
-		// TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-		// Actualizar
-
-		/*
-		 * try {
-		 * 
-		 * para = AdminEJBService.getPricesListByKey(18); para.setFactor(3.0);
-		 * _result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true); }
-		 * catch (Exception e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
-		// Borrar
+	
 
 		try {
 
-			 para = AdminEJBService.getPricesListByKey(2);
-			 para.setBase_num(1);
+			 para = AdminEJBService.getPricesListByKey(43);
+			 para.setBase_num(2);
 			_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
 		} catch (Exception e) { // TODO Auto-generated catch block
 			e.printStackTrace();
