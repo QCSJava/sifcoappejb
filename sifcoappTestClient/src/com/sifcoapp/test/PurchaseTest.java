@@ -125,7 +125,7 @@ public class PurchaseTest {
 		document1.setPrice(11.25);
 		//document1.setLinetotal(100.00);
 		prueba.add(document1);
-		parameters.setDocnum(485);
+		parameters.setDocnum(48);
 		parameters.setUsersign(1);
 		//parameters.setDocentry(26);
 		parameters.setCardcode("P");
@@ -144,6 +144,99 @@ public class PurchaseTest {
 	}
 	
 	
+	//############## pruebas de purchasequantition ########################
+	public static void getPurchaseQuotation() {
+
+		List lstPeriods = new Vector();
+		PurchaseQuotationInTO nuevo = new PurchaseQuotationInTO();
+		//nuevo.setSeries(8);
+		//nuevo.setDocnum(485);
+		//Date fecha= new Date();
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		try {
+			lstPeriods = Purchase.getPurchaseQuotation(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator<PurchaseQuotationTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			PurchaseQuotationTO periodo = (PurchaseQuotationTO) iterator.next();
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+		}
+	}
+	
+	public static void getPurchaseQuotationbykey() {
+
+		PurchaseQuotationTO periodo = new PurchaseQuotationTO();
+		List lstPeriods = new Vector();
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		try {
+			periodo = Purchase.getPurchaseQuotationByKey(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+			
+			lstPeriods = periodo.getPurchaseQuotationDetails();
+			Iterator<PurchaseQuotationDetailTO> iterator = lstPeriods.iterator();
+			while (iterator.hasNext()) {
+				PurchaseQuotationDetailTO periodo2 = (PurchaseQuotationDetailTO) iterator.next();
+				System.out.println(periodo2.getItemcode() + " - "
+						+ periodo2.getDscription() + " - "
+						+ periodo2.getAcctcode());
+			}	
+	}
+	public static void PurchaseQuotation_mtto() {
+
+		ResultOutTO _result=new ResultOutTO();
+		PurchaseQuotationTO parameters = new PurchaseQuotationTO();
+	
+		List prueba = new Vector();
+		PurchaseQuotationDetailTO document = new PurchaseQuotationDetailTO();
+		PurchaseQuotationDetailTO document1 = new PurchaseQuotationDetailTO();
+		
+		//document.setDocentry(1);
+		document.setLinenum(1);
+		document.setItemcode("ART-001");
+		document.setDscription("A");
+		document.setQuantity(10.25);
+		document.setPrice(11.25);
+		//document.setLinetotal(100.00);
+		prueba.add(document);
+		//document1.setDocentry(1);
+		document1.setLinenum(2);
+		document1.setItemcode("ART-001");
+		document1.setDscription("A");
+		document1.setQuantity(10.25);
+		document1.setPrice(11.25);
+		//document1.setLinetotal(100.00);
+		prueba.add(document1);
+		parameters.setDocnum(485);
+		parameters.setUsersign(1);
+		//parameters.setDocentry(26);
+		parameters.setCardcode("P");
+		//parameters.setDoctotal(15.5);
+		parameters.setPurchaseQuotationDetails(prueba);
+		try {
+			_result = Purchase.inv_PurchaseQuotation_mtto(parameters,1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error EJB " + e.getMessage());
+		}
+
+		System.out.println("luego de servicio");
+		System.out.println(_result.getCodigoError()+"---"+_result.getDocentry());
+
+	}
 	
 	
 	

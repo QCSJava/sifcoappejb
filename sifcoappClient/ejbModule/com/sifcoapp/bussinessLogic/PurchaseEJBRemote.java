@@ -17,6 +17,12 @@ public interface PurchaseEJBRemote {
 	
 	public ResultOutTO inv_Purchase_mtto(PurchaseTO parameters, int accion) throws Exception;
 	
+	public List getPurchaseQuotation(PurchaseQuotationInTO param) throws Exception;
+	
+	public PurchaseQuotationTO getPurchaseQuotationByKey(int docentry) throws Exception;
+	
+	public ResultOutTO inv_PurchaseQuotation_mtto(PurchaseQuotationTO parameters, int accion) throws Exception;
+	
 	public List getPurchaseDetail(int docentry) throws Exception;
 	
 	public List getSupplier(SupplierInTO param) throws Exception;

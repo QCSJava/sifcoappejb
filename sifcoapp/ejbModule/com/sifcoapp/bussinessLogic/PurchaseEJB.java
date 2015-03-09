@@ -121,6 +121,103 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 	}
 
+	// ####purchasequantition
+	public List getPurchaseQuotation(PurchaseQuotationInTO param) throws Exception {
+		// TODO Auto-generated method stub
+		List _return;
+		PurchaseQuotationDAO DAO = new PurchaseQuotationDAO();
+
+		try {
+			_return = DAO.getPurchaseQuotation(param);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
+
+	public PurchaseQuotationTO getPurchaseQuotationByKey(int docentry) throws Exception {
+		// TODO Auto-generated method stub
+		PurchaseQuotationTO _return = new PurchaseQuotationTO();
+		PurchaseQuotationDAO DAO = new PurchaseQuotationDAO();
+		try {
+			_return = DAO.getPurchaseQuotationByKey(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
+	public ResultOutTO inv_PurchaseQuotation_mtto(PurchaseQuotationTO parameters, int action)
+			throws Exception {
+		// TODO Auto-generated method stub
+		ResultOutTO _return = new ResultOutTO();
+		Double total = 0.0;
+		PurchaseQuotationDAO DAO = new PurchaseQuotationDAO();
+		DAO.setIstransaccional(true);
+		PurchaseQuotationDetailDAO goodDAO1 = new PurchaseQuotationDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
+		try {
+			Iterator<PurchaseQuotationDetailTO> iterator2 = parameters.getPurchaseQuotationDetails().iterator();
+			while (iterator2.hasNext()) {
+				PurchaseQuotationDetailTO articleDetalle = (PurchaseQuotationDetailTO) iterator2.next();
+				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
+																			// DATOS//
+																			// ESTATICOS//
+																			// ##########
+				articleDetalle.setOpenqty(articleDetalle.getQuantity());
+				articleDetalle.setPricebefdi(articleDetalle.getPrice());
+				articleDetalle.setPriceafvat(articleDetalle.getPrice());
+				articleDetalle.setFactor1(articleDetalle.getQuantity());
+				articleDetalle.setVatsum(articleDetalle.getPrice());
+				articleDetalle.setGrssprofit(articleDetalle.getPrice());
+				articleDetalle.setVatappld(articleDetalle.getPrice());
+				articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				articleDetalle.setGtotal(articleDetalle.getQuantity());
+				total = total + articleDetalle.getLinetotal();
+			}
+			parameters.setDoctotal(total);
+			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
+											// #######################
+			parameters.setNret(0.00);
+			parameters.setPaidsum(0.00);
+			parameters.setRounddif(0.00);
+			_return.setDocentry(DAO.inv_PurchaseQuotation_mtto(parameters, action));
+
+			Iterator<PurchaseQuotationDetailTO> iterator = parameters
+					.getPurchaseQuotationDetails().iterator();
+			while (iterator.hasNext()) {
+				PurchaseQuotationDetailTO articleDetalle = (PurchaseQuotationDetailTO) iterator
+						.next();
+				// Para articulos nuevos
+				articleDetalle.setDocentry(_return.getDocentry());
+				if (action == Common.MTTOINSERT) {
+					goodDAO1.inv_PurchaseQuotationDetail_mtto(articleDetalle,
+							Common.MTTOINSERT);
+				}
+				if (action == Common.MTTODELETE) {
+					goodDAO1.inv_PurchaseQuotationDetail_mtto(articleDetalle,
+							Common.MTTODELETE);
+				}
+			}
+			DAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados correctamente");
+		return _return;
+	}
+	
+	
 	public List getPurchaseDetail(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
