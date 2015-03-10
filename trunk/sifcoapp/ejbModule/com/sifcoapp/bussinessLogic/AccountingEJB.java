@@ -373,11 +373,14 @@ public class AccountingEJB implements AccountingEJBRemote {
 		try {
 			//eliminar los detalles registrados antes de insertar o update
 			padre=DAO.getrecurringPosting_by_key(parameters.getRcurcode());
+			
 			Detalles=padre.getRecurringPostingsDetail();
-			Iterator<RecurringPostingsDetailTO> iterator2 =Detalles.iterator();
-			while (iterator2.hasNext()) {
-				RecurringPostingsDetailTO Detallex = (RecurringPostingsDetailTO) iterator2.next();
-				DAO.fin_recurringPostingDetail_mtto(Detallex,Common.MTTODELETE);
+			if(Detalles!=null){
+				Iterator<RecurringPostingsDetailTO> iterator2 =Detalles.iterator();
+				while (iterator2.hasNext()) {
+					RecurringPostingsDetailTO Detallex = (RecurringPostingsDetailTO) iterator2.next();
+					DAO.fin_recurringPostingDetail_mtto(Detallex,Common.MTTODELETE);
+				}
 			}
 		while (iterator.hasNext()) {
 			RecurringPostingsDetailTO Detalle = (RecurringPostingsDetailTO) iterator.next();
