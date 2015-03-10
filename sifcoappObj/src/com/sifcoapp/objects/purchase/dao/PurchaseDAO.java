@@ -184,7 +184,7 @@ public class PurchaseDAO extends CommonDAO{
 	public int inv_Purchase_mtto(PurchaseTO parameters, int accion) throws Exception {
 		Double DATO=0.00; //////////######## DATO QUEMADO###############
 		List v_resp;
-		// this.seObject("{call sp_inv_gre0_goodsrecei(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		// this.seObject("{call sp_inv_gre0_goodsrei(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_purchase_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		if (parameters.getDocdate() == null){
 			this.setDate(8,"_docdate", parameters.getDocdate());
