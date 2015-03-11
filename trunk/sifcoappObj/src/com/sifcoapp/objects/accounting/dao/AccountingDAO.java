@@ -963,12 +963,13 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws Exception{
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,int _instance) throws Exception{
 		RecurringPostingsTO _return = new RecurringPostingsTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_recurringpostings_by_key(?)}");
+		this.setDbObject("{call sp_get_recurringpostings_by_key(?,?)}");
 		this.setString(1,"_rcurcode", _rcurcode);
+		this.setInt(2,"_instance",new Integer(_instance));
 		AccountingDAO DAO= new AccountingDAO();
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
@@ -1005,7 +1006,7 @@ public class AccountingDAO extends CommonDAO {
 					Diary.setUsersign(rowsetActual.getInt(23));
 					Diary.setUpdatedate(rowsetActual.getDate(24));
 					Diary.setUpdatetime(rowsetActual.getInt(25));
-					Diary.setRecurringPostingsDetail(DAO.getrecurringPostingDetail(rowsetActual.getString(1)));
+					Diary.setRecurringPostingsDetail(DAO.getrecurringPostingDetail(rowsetActual.getString(1),_instance));
 					
 					_return=Diary;
 				}
@@ -1054,12 +1055,13 @@ public class AccountingDAO extends CommonDAO {
 		
 	}
 	
-	public List getrecurringPostingDetail(String _rcurcode) throws Exception {
+	public List getrecurringPostingDetail(String _rcurcode,int _instance) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_recurringpostingsdetai(?)}");
+		this.setDbObject("{call sp_get_recurringpostingsdetai(?,?)}");
 		this.setString(1,"_rcurcode", _rcurcode);
+		this.setInt(2,"_instance",new Integer( _instance));
 		
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;

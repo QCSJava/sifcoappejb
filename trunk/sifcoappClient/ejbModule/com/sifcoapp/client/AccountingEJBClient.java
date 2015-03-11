@@ -171,10 +171,10 @@ public class AccountingEJBClient {
 		return _return;
 	}
 	
-	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws EJBException{
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,int _instance) throws EJBException{
 		RecurringPostingsTO _return = new RecurringPostingsTO();
 		
-		_return= bean.getrecurringPosting_by_key(_rcurcode);
+		_return= bean.getrecurringPosting_by_key(_rcurcode,_instance);
 	
 	return _return;
 	}
