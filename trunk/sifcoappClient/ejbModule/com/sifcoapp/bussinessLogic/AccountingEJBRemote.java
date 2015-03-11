@@ -58,5 +58,7 @@ public interface AccountingEJBRemote {
 	
 	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws EJBException;
 	
+	public List getrecurringPostingExecute() throws EJBException;
+	
 	
 }
