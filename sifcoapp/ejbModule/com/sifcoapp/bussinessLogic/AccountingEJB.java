@@ -371,17 +371,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 		}
 		Iterator<RecurringPostingsDetailTO> iterator = parameters.getRecurringPostingsDetail().iterator();
 		try {
-			//eliminar los detalles registrados antes de insertar o update
-			padre=DAO.getrecurringPosting_by_key(parameters.getRcurcode());
+			//eliminar los detalles registrados antes de un update
+			if(action==Common.MTTOUPDATE){
+			padre=DAO.getrecurringPosting_by_key(parameters.getRcurcode(),parameters.getInstance());
 			
 			Detalles=padre.getRecurringPostingsDetail();
-			if(Detalles!=null){
+			
 				Iterator<RecurringPostingsDetailTO> iterator2 =Detalles.iterator();
 				while (iterator2.hasNext()) {
 					RecurringPostingsDetailTO Detallex = (RecurringPostingsDetailTO) iterator2.next();
 					DAO.fin_recurringPostingDetail_mtto(Detallex,Common.MTTODELETE);
 				}
 			}
+			
 		while (iterator.hasNext()) {
 			RecurringPostingsDetailTO Detalle = (RecurringPostingsDetailTO) iterator.next();
 			// Para articulos nuevos
@@ -435,12 +437,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode) throws EJBException {
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,int _instance) throws EJBException {
 		// TODO Auto-generated method stub
 		RecurringPostingsTO _return= new RecurringPostingsTO();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
-			_return= DAO.getrecurringPosting_by_key(_rcurcode);
+			_return= DAO.getrecurringPosting_by_key(_rcurcode,_instance);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
