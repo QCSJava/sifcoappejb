@@ -448,6 +448,17 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	
+	public List getrecurringPostingExecute()throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			_return= DAO.getrecurringPostingExecute();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
 	
 }

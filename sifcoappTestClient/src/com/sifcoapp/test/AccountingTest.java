@@ -381,11 +381,11 @@ public class AccountingTest {
 	public static void getReccuring_by_key(){
 		RecurringPostingsTO consul2= new RecurringPostingsTO();
 		List consul= new Vector();
-		consul2= AccountingEJBService.getrecurringPosting_by_key("Prueba1");
-		Iterator<RecurringPostingsDetailTO> iterator = consul2.getRecurringPostingsDetail().iterator();
+		consul= AccountingEJBService.getrecurringPostingExecute();
+		Iterator<RecurringPostingsTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
-			RecurringPostingsDetailTO acc = (RecurringPostingsDetailTO) iterator.next();
-			System.out.println(acc.getRcurcode() + " - " + acc.getLineid());
+			RecurringPostingsTO acc = (RecurringPostingsTO) iterator.next();
+			System.out.println(acc.getRcurcode() + " - " + acc.getFrequency());
 			
 		}
 	}
