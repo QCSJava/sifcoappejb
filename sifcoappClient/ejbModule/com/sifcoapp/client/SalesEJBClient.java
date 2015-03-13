@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+
 import com.sifcoapp.bussinessLogic.SalesEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -72,4 +73,21 @@ public class SalesEJBClient {
 		return _return;
 	}
 	
+	public List getDelivery(DeliveryInTO param) throws Exception{
+		List _return;
+		_return= bean.getDelivery(param);
+		return _return;
+	}
+	
+	public DeliveryTO getDeliveryByKey(int docentry) throws Exception{
+		DeliveryTO _return;
+		_return=bean.getDeliveryByKey(docentry);
+		return _return;
+	}
+	
+	public ResultOutTO inv_Delivery_mtto(DeliveryTO parameters, int accion) throws Exception{
+		ResultOutTO _return;
+		_return=bean.inv_Delivery_mtto(parameters, accion);
+		return _return;
+	}
 }

@@ -369,10 +369,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 		if(parameters.getVolume()==null){
 			parameters.setVolume(zero);
 		}
-		Iterator<RecurringPostingsDetailTO> iterator = parameters.getRecurringPostingsDetail().iterator();
 		try {
-			//eliminar los detalles registrados antes de un update
-			if(action==Common.MTTOUPDATE){
+		//eliminar los detalles registrados antes de un update o en caso de ser delete la accion
+		if(action==Common.MTTOUPDATE || action==Common.MTTODELETE){
 			padre=DAO.getrecurringPosting_by_key(parameters.getRcurcode(),parameters.getInstance());
 			
 			Detalles=padre.getRecurringPostingsDetail();
@@ -383,7 +382,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 					DAO.fin_recurringPostingDetail_mtto(Detallex,Common.MTTODELETE);
 				}
 			}
-			
+		//verificar la accion para obtener los hijos e insertarlos en ambos casos (ya que se eliminan al principio si es un update)
+		if(action==Common.MTTOINSERT || action==Common.MTTOUPDATE){
+		Iterator<RecurringPostingsDetailTO> iterator = parameters.getRecurringPostingsDetail().iterator();
 		while (iterator.hasNext()) {
 			RecurringPostingsDetailTO Detalle = (RecurringPostingsDetailTO) iterator.next();
 			// Para articulos nuevos
@@ -401,16 +402,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 			if (action == Common.MTTOINSERT) {
 				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTOINSERT);
 			}
-			if (action == Common.MTTODELETE) {
-				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTODELETE);
-			}
 			if (action == Common.MTTOUPDATE) {
 				DAO.fin_recurringPostingDetail_mtto(Detalle,Common.MTTOINSERT);
 			}
 		}
-		
-			DAO.fin_recurringPosting_mtto(parameters, action);
-			DAO.forceCommit();
+		}
+		DAO.fin_recurringPosting_mtto(parameters, action);
+		DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();

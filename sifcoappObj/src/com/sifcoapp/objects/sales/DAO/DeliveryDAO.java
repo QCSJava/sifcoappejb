@@ -1,4 +1,4 @@
-package com.sifcoapp.objects.purchase.dao;
+package com.sifcoapp.objects.sales.DAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,25 +8,25 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.purchase.to.*;
+import com.sifcoapp.objects.sales.to.*;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class PurchaseDAO extends CommonDAO{
+public class DeliveryDAO extends CommonDAO{
 	
-	public PurchaseDAO() {
+	public DeliveryDAO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public PurchaseDAO(Connection _conn) {
+	public DeliveryDAO(Connection _conn) {
 		super(_conn);
 		// TODO Auto-generated constructor stub
 	}
-	public List getPurchase(PurchaseInTO param) throws Exception{
+	public List getDelivery(DeliveryInTO param) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_purchase(?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_delivery(?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -62,53 +62,53 @@ public class PurchaseDAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					PurchaseTO purchase = new PurchaseTO();
-					purchase.setDocentry(rowsetActual.getInt(1));
-					purchase.setDocnum(rowsetActual.getInt(2));
-					purchase.setDoctype(rowsetActual.getString(3));
-					purchase.setCanceled(rowsetActual.getString(4));
-					purchase.setDocstatus(rowsetActual.getString(5));
-					purchase.setObjtype(rowsetActual.getString(6));
-					purchase.setDocdate(rowsetActual.getDate(7));
-					purchase.setDocduedate(rowsetActual.getDate(8));
-					purchase.setCardcode(rowsetActual.getString(9));
-					purchase.setNumatcard(rowsetActual.getString(10));
-					purchase.setCardname(rowsetActual.getString(11));
-					purchase.setVatsum(rowsetActual.getString(12));
-					purchase.setDiscsum(rowsetActual.getDouble(13));
-					purchase.setDoctotal(rowsetActual.getDouble(14));
-					purchase.setRef1(rowsetActual.getString(15));
-					purchase.setRef2(rowsetActual.getString(16));
-					purchase.setComments(rowsetActual.getString(17));
-					purchase.setJrnlmemo(rowsetActual.getString(18));
-					purchase.setPaidtodate(rowsetActual.getDate(19));
-					purchase.setTransid(rowsetActual.getInt(20));
-					purchase.setReceiptnum(rowsetActual.getInt(21));
-					purchase.setGroupnum(rowsetActual.getInt(22));
-					purchase.setConfirmed(rowsetActual.getString(23));
-					purchase.setCreatetran(rowsetActual.getString(24));
-					purchase.setSeries(rowsetActual.getInt(25));
-					purchase.setTaxdate(rowsetActual.getDate(26));
-					purchase.setFiller(rowsetActual.getString(27));
-					purchase.setRounddif(rowsetActual.getDouble(28));
-					purchase.setRounding(rowsetActual.getString(29));
-					purchase.setCanceldate(rowsetActual.getDate(30));
-					purchase.setPeymethod(rowsetActual.getString(31));
-					purchase.setCtlaccount(rowsetActual.getString(32));
-					purchase.setBplname(rowsetActual.getString(33));
-					purchase.setVatregnum(rowsetActual.getString(34));
-					purchase.setPaidsum(rowsetActual.getDouble(35));
-					purchase.setTowhscode(rowsetActual.getString(36));
-					purchase.setNret(rowsetActual.getDouble(37));
-					purchase.setNamenp(rowsetActual.getString(38));
-					purchase.setQuedan(rowsetActual.getInt(39));
-					purchase.setFechreciva(rowsetActual.getDate(40));
-					purchase.setFquedan(rowsetActual.getDate(41));
-					purchase.setUsersign(rowsetActual.getInt(42));
-					purchase.setCreatedate(rowsetActual.getDate(43));
-					purchase.setCreatetime(rowsetActual.getInt(44));
+					DeliveryTO Delivery = new DeliveryTO();
+					Delivery.setDocentry(rowsetActual.getInt(1));
+					Delivery.setDocnum(rowsetActual.getInt(2));
+					Delivery.setDoctype(rowsetActual.getString(3));
+					Delivery.setCanceled(rowsetActual.getString(4));
+					Delivery.setDocstatus(rowsetActual.getString(5));
+					Delivery.setObjtype(rowsetActual.getString(6));
+					Delivery.setDocdate(rowsetActual.getDate(7));
+					Delivery.setDocduedate(rowsetActual.getDate(8));
+					Delivery.setCardcode(rowsetActual.getString(9));
+					Delivery.setNumatcard(rowsetActual.getString(10));
+					Delivery.setCardname(rowsetActual.getString(11));
+					Delivery.setVatsum(rowsetActual.getString(12));
+					Delivery.setDiscsum(rowsetActual.getDouble(13));
+					Delivery.setDoctotal(rowsetActual.getDouble(14));
+					Delivery.setRef1(rowsetActual.getString(15));
+					Delivery.setRef2(rowsetActual.getString(16));
+					Delivery.setComments(rowsetActual.getString(17));
+					Delivery.setJrnlmemo(rowsetActual.getString(18));
+					Delivery.setPaidtodate(rowsetActual.getDate(19));
+					Delivery.setTransid(rowsetActual.getInt(20));
+					Delivery.setReceiptnum(rowsetActual.getInt(21));
+					Delivery.setGroupnum(rowsetActual.getInt(22));
+					Delivery.setConfirmed(rowsetActual.getString(23));
+					Delivery.setCreatetran(rowsetActual.getString(24));
+					Delivery.setSeries(rowsetActual.getInt(25));
+					Delivery.setTaxdate(rowsetActual.getDate(26));
+					Delivery.setFiller(rowsetActual.getString(27));
+					Delivery.setRounddif(rowsetActual.getDouble(28));
+					Delivery.setRounding(rowsetActual.getString(29));
+					Delivery.setCanceldate(rowsetActual.getDate(30));
+					Delivery.setPeymethod(rowsetActual.getString(31));
+					Delivery.setCtlaccount(rowsetActual.getString(32));
+					Delivery.setBplname(rowsetActual.getString(33));
+					Delivery.setVatregnum(rowsetActual.getString(34));
+					Delivery.setPaidsum(rowsetActual.getDouble(35));
+					Delivery.setTowhscode(rowsetActual.getString(36));
+					Delivery.setNret(rowsetActual.getDouble(37));
+					Delivery.setNamenp(rowsetActual.getString(38));
+					Delivery.setQuedan(rowsetActual.getInt(39));
+					Delivery.setFechreciva(rowsetActual.getDate(40));
+					Delivery.setFquedan(rowsetActual.getDate(41));
+					Delivery.setUsersign(rowsetActual.getInt(42));
+					Delivery.setCreatedate(rowsetActual.getDate(43));
+					Delivery.setCreatetime(rowsetActual.getInt(44));
 
-					_return.add(purchase);
+					_return.add(Delivery);
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -119,67 +119,67 @@ public class PurchaseDAO extends CommonDAO{
 		return _return;
 	}
 	//Retorna elemento goodsreceipt con detalle por clave
-	public PurchaseTO getPurchaseByKey(int docentry) throws Exception {
-		PurchaseTO _return = new PurchaseTO();
+	public DeliveryTO getDeliveryByKey(int docentry) throws Exception {
+		DeliveryTO _return = new DeliveryTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_purchase_by_key(?)}");
+		this.setDbObject("{call sp_get_delivery_by_key(?)}");
 		this.setInt(1, "_docentry", new Integer(docentry));
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		PurchaseDetailDAO Detail = new PurchaseDetailDAO();
+		DeliveryDetailDAO Detail = new DeliveryDetailDAO();
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					PurchaseTO purchase= new PurchaseTO();
-					purchase.setDocentry(rowsetActual.getInt(1));
-					purchase.setDocnum(rowsetActual.getInt(2));
-					purchase.setDoctype(rowsetActual.getString(3));
-					purchase.setCanceled(rowsetActual.getString(4));
-					purchase.setDocstatus(rowsetActual.getString(5));
-					purchase.setObjtype(rowsetActual.getString(6));
-					purchase.setDocdate(rowsetActual.getDate(7));
-					purchase.setDocduedate(rowsetActual.getDate(8));
-					purchase.setCardcode(rowsetActual.getString(9));
-					purchase.setNumatcard(rowsetActual.getString(10));
-					purchase.setCardname(rowsetActual.getString(11));
-					purchase.setVatsum(rowsetActual.getString(12));
-					purchase.setDiscsum(rowsetActual.getDouble(13));
-					purchase.setDoctotal(rowsetActual.getDouble(14));
-					purchase.setRef1(rowsetActual.getString(15));
-					purchase.setRef2(rowsetActual.getString(16));
-					purchase.setComments(rowsetActual.getString(17));
-					purchase.setJrnlmemo(rowsetActual.getString(18));
-					purchase.setPaidtodate(rowsetActual.getDate(19));
-					purchase.setTransid(rowsetActual.getInt(20));
-					purchase.setReceiptnum(rowsetActual.getInt(21));
-					purchase.setGroupnum(rowsetActual.getInt(22));
-					purchase.setConfirmed(rowsetActual.getString(23));
-					purchase.setCreatetran(rowsetActual.getString(24));
-					purchase.setSeries(rowsetActual.getInt(25));
-					purchase.setTaxdate(rowsetActual.getDate(26));
-					purchase.setFiller(rowsetActual.getString(27));
-					purchase.setRounddif(rowsetActual.getDouble(28));
-					purchase.setRounding(rowsetActual.getString(29));
-					purchase.setCanceldate(rowsetActual.getDate(30));
-					purchase.setPeymethod(rowsetActual.getString(31));
-					purchase.setCtlaccount(rowsetActual.getString(32));
-					purchase.setBplname(rowsetActual.getString(33));
-					purchase.setVatregnum(rowsetActual.getString(34));
-					purchase.setPaidsum(rowsetActual.getDouble(35));
-					purchase.setTowhscode(rowsetActual.getString(36));
-					purchase.setNret(rowsetActual.getDouble(37));
-					purchase.setNamenp(rowsetActual.getString(38));
-					purchase.setQuedan(rowsetActual.getInt(39));
-					purchase.setFechreciva(rowsetActual.getDate(40));
-					purchase.setFquedan(rowsetActual.getDate(41));
-					purchase.setUsersign(rowsetActual.getInt(42));
-					purchase.setpurchaseDetails(Detail.getpurchaseDetail(rowsetActual.getInt(1)));
-					_return=purchase;
+					DeliveryTO Delivery= new DeliveryTO();
+					Delivery.setDocentry(rowsetActual.getInt(1));
+					Delivery.setDocnum(rowsetActual.getInt(2));
+					Delivery.setDoctype(rowsetActual.getString(3));
+					Delivery.setCanceled(rowsetActual.getString(4));
+					Delivery.setDocstatus(rowsetActual.getString(5));
+					Delivery.setObjtype(rowsetActual.getString(6));
+					Delivery.setDocdate(rowsetActual.getDate(7));
+					Delivery.setDocduedate(rowsetActual.getDate(8));
+					Delivery.setCardcode(rowsetActual.getString(9));
+					Delivery.setNumatcard(rowsetActual.getString(10));
+					Delivery.setCardname(rowsetActual.getString(11));
+					Delivery.setVatsum(rowsetActual.getString(12));
+					Delivery.setDiscsum(rowsetActual.getDouble(13));
+					Delivery.setDoctotal(rowsetActual.getDouble(14));
+					Delivery.setRef1(rowsetActual.getString(15));
+					Delivery.setRef2(rowsetActual.getString(16));
+					Delivery.setComments(rowsetActual.getString(17));
+					Delivery.setJrnlmemo(rowsetActual.getString(18));
+					Delivery.setPaidtodate(rowsetActual.getDate(19));
+					Delivery.setTransid(rowsetActual.getInt(20));
+					Delivery.setReceiptnum(rowsetActual.getInt(21));
+					Delivery.setGroupnum(rowsetActual.getInt(22));
+					Delivery.setConfirmed(rowsetActual.getString(23));
+					Delivery.setCreatetran(rowsetActual.getString(24));
+					Delivery.setSeries(rowsetActual.getInt(25));
+					Delivery.setTaxdate(rowsetActual.getDate(26));
+					Delivery.setFiller(rowsetActual.getString(27));
+					Delivery.setRounddif(rowsetActual.getDouble(28));
+					Delivery.setRounding(rowsetActual.getString(29));
+					Delivery.setCanceldate(rowsetActual.getDate(30));
+					Delivery.setPeymethod(rowsetActual.getString(31));
+					Delivery.setCtlaccount(rowsetActual.getString(32));
+					Delivery.setBplname(rowsetActual.getString(33));
+					Delivery.setVatregnum(rowsetActual.getString(34));
+					Delivery.setPaidsum(rowsetActual.getDouble(35));
+					Delivery.setTowhscode(rowsetActual.getString(36));
+					Delivery.setNret(rowsetActual.getDouble(37));
+					Delivery.setNamenp(rowsetActual.getString(38));
+					Delivery.setQuedan(rowsetActual.getInt(39));
+					Delivery.setFechreciva(rowsetActual.getDate(40));
+					Delivery.setFquedan(rowsetActual.getDate(41));
+					Delivery.setUsersign(rowsetActual.getInt(42));
+					Delivery.setDeliveryDetails(Detail.getDeliveryDetail(rowsetActual.getInt(1)));
+					_return=Delivery;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -190,11 +190,11 @@ public class PurchaseDAO extends CommonDAO{
 		return _return;
 	}
 	
-	public int inv_Purchase_mtto(PurchaseTO parameters, int accion) throws Exception {
+	public int inv_Delivery_mtto(DeliveryTO parameters, int accion) throws Exception {
 		Double DATO=0.00; //////////######## DATO QUEMADO###############
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsrei(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{? = call sp_purchase_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{? = call sp_delivery_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		if (parameters.getDocdate() == null){
 			this.setDate(8,"_docdate", parameters.getDocdate());
 		}else
