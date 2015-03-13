@@ -188,65 +188,68 @@ public class AdminEJB implements AdminEJBRemote {
 
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
-		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
-				.iterator();
-
+		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
+		List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
 		try {
-
-			List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
-			consult = adminDAO.getBranchArticles(parameters.getItemCode());
-			
-			while (iterator.hasNext()) {
-				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
-				// Para articulos nuevos
-				// ############################ VALORES QUEMADOS
-				// ###################################
-				branch.setOnhand(0.0);
-				branch.setOnhand1(0.0);
-				branch.setIscommited(0.0);
-				branch.setOnorder(0.0);
-				branch.setMinorder(0.0);
-				if (branch.getMinstock() == null) {
-					branch.setMinstock(0.0);
-				}
-				if (branch.getMaxstock() == null) {
-					branch.setMaxstock(0.0);
-				}
-				if (action == Common.MTTOINSERT && branch.isIsasociated()) {
-
-					adminDAO.cat_brancharticles_mtto(branch, action);
-
-				}
-				if (action == Common.MTTOUPDATE) {
-					if (branch.isIsasociated()) {
-						int update = 0;
-						int bandera=0;
-						Iterator<BranchArticlesTO> iterator2 = consult.iterator();
-						while (iterator2.hasNext()) {
-							BranchArticlesTO branch2 = (BranchArticlesTO) iterator2
-									.next();
-							bandera=1;
-							if (branch.getWhscode()
-									.equals(branch2.getWhscode())) {
-								adminDAO.cat_brancharticles_mtto(branch,
-										Common.MTTOUPDATE);
-								update = 1;
-							}
-						}
-						if (update == 0 && bandera==1) {
-							adminDAO.cat_brancharticles_mtto(branch,
-									Common.MTTOINSERT);
-						}
-
-					} else {
-						adminDAO.cat_brancharticles_mtto(branch,
-								Common.MTTODELETE);
+		
+				
+				while (iterator.hasNext()) {
+					AdminDAO adminDAO2 = new AdminDAO();
+					adminDAO2.setIstransaccional(true);
+					BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
+					consult.clear();
+					consult = adminDAO2.getBranchArticles(parameters.getItemCode());
+					// Para articulos nuevos
+					// ############################ VALORES QUEMADOS
+					// ###################################
+					branch.setOnhand(0.0);
+					branch.setOnhand1(0.0);
+					branch.setIscommited(0.0);
+					branch.setOnorder(0.0);
+					branch.setMinorder(0.0);
+					if (branch.getMinstock() == null) {
+						branch.setMinstock(0.0);
 					}
+					if (branch.getMaxstock() == null) {
+						branch.setMaxstock(0.0);
+					}
+					if (action == Common.MTTOINSERT && branch.isIsasociated()) {
+
+						adminDAO2.cat_brancharticles_mtto(branch, action);
+
+					}
+					if (action == Common.MTTOUPDATE) {
+						if (branch.isIsasociated()) {
+							int update = 0;
+							Iterator<BranchArticlesTO> iterator2 = consult.iterator();
+	
+							while (iterator2.hasNext()) {
+								BranchArticlesTO branch2 = (BranchArticlesTO) iterator2
+										.next();
+								if (branch2.getWhscode()
+										.equals(branch.getWhscode())) {
+									adminDAO2.cat_brancharticles_mtto(branch,
+											Common.MTTOUPDATE);
+									update = 1;
+								}
+							}
+							if (update == 0) {
+								adminDAO2.cat_brancharticles_mtto(branch,
+										Common.MTTOINSERT);
+							}
+
+						} else {
+							adminDAO2.cat_brancharticles_mtto(branch,
+									Common.MTTODELETE);
+						}
+					}
+					if (action == Common.MTTODELETE) {
+						adminDAO2.cat_brancharticles_mtto(branch, Common.MTTODELETE);
+					}
+					adminDAO2.forceCommit();
+					adminDAO2.forceCloseConnection();
 				}
-				if (action == Common.MTTODELETE) {
-					adminDAO.cat_brancharticles_mtto(branch, Common.MTTODELETE);
-				}
-			}
+			
 			// ############################ VALORES QUEMADOS
 			// ###################################
 			parameters.setNumInBuy(0.0);
