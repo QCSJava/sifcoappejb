@@ -236,4 +236,97 @@ public class SalesTest {
 		System.out.println(_result.getCodigoError()+"---"+_result.getDocentry());
 
 	}
+
+	public static void getDelivery() {
+
+		List lstPeriods = new Vector();
+		DeliveryInTO nuevo = new DeliveryInTO();
+		//nuevo.setSeries(8);
+		nuevo.setDocnum(485);
+		Date fecha= new Date();
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		try {
+			lstPeriods = sales.getDelivery(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator<DeliveryTO> iterator = lstPeriods.iterator();
+		while (iterator.hasNext()) {
+			DeliveryTO periodo = (DeliveryTO) iterator.next();
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+		}
+	}
+	
+	public static void getDeliverybykey() {
+
+		DeliveryTO periodo = new DeliveryTO();
+		List lstPeriods = new Vector();
+		//nuevo.setDocdate(fecha);
+		//nuevo.setSeries(42);
+		try {
+			periodo = sales.getDeliveryByKey(2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			System.out.println(periodo.getDocnum()+ " - "
+					+ periodo.getSeries() + " - "
+					+ periodo.getDocentry());
+			
+			lstPeriods = periodo.getDeliveryDetails();
+			Iterator<DeliveryDetailTO> iterator = lstPeriods.iterator();
+			while (iterator.hasNext()) {
+				DeliveryDetailTO periodo2 = (DeliveryDetailTO) iterator.next();
+				System.out.println(periodo2.getItemcode() + " - "
+						+ periodo2.getDscription() + " - "
+						+ periodo2.getAcctcode());
+			}	
+	}
+	public static void Delivery_mtto() {
+
+		ResultOutTO _result=new ResultOutTO();
+		DeliveryTO parameters = new DeliveryTO();
+	
+		List prueba = new Vector();
+		DeliveryDetailTO document = new DeliveryDetailTO();
+		DeliveryDetailTO document1 = new DeliveryDetailTO();
+		
+		//document.setDocentry(1);
+		document.setLinenum(1);
+		document.setItemcode("ART-001");
+		document.setDscription("A");
+		document.setQuantity(10.25);
+		document.setPrice(11.25);
+		//document.setLinetotal(100.00);
+		prueba.add(document);
+		//document1.setDocentry(1);
+		document1.setLinenum(2);
+		document1.setItemcode("ART-001");
+		document1.setDscription("A");
+		document1.setQuantity(10.25);
+		document1.setPrice(11.25);
+		//document1.setLinetotal(100.00);
+		prueba.add(document1);
+		parameters.setDocnum(48);
+		parameters.setUsersign(1);
+		//parameters.setDocentry(26);
+		parameters.setCardcode("P");
+		//parameters.setDoctotal(15.5);
+		parameters.setDeliveryDetails(prueba);
+		try {
+			_result = sales.inv_Delivery_mtto(parameters,1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error EJB " + e.getMessage());
+		}
+
+		System.out.println("luego de servicio");
+		System.out.println(_result.getCodigoError()+"---"+_result.getDocentry());
+
+	}
 }

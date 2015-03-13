@@ -27,4 +27,10 @@ public interface SalesEJBRemote {
 	public ResultOutTO inv_ClientCredi_mtto(ClientCrediTO parameters, int accion) throws Exception;
 	
 	public List getClientCrediDetail(int docentry) throws Exception;
+	
+	public List getDelivery(DeliveryInTO param) throws Exception;
+	
+	public DeliveryTO getDeliveryByKey(int docentry) throws Exception;
+	
+	public ResultOutTO inv_Delivery_mtto(DeliveryTO parameters, int accion) throws Exception;
 }

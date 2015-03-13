@@ -346,7 +346,8 @@ public class AccountingTest {
 		RecurringPostingsDetailTO detalle1= new RecurringPostingsDetailTO();
 		RecurringPostingsDetailTO detalle2= new RecurringPostingsDetailTO();
 		
-		nuevo.setRcurcode("Prueba1");
+		nuevo.setRcurcode("00000002");
+		nuevo.setInstance(1);
 		detalle1.setAcctdesc("probando");
 		detalle1.setLineid(1);
 		detalle1.setCredit(45.50);
@@ -355,9 +356,9 @@ public class AccountingTest {
 		detalle2.setCredit(45.50);
 		detail.add(detalle1);
 		detail.add(detalle2);
-		nuevo.setRecurringPostingsDetail(detail);
+		//nuevo.setRecurringPostingsDetail(detail);
 		
-		_result= AccountingEJBService.fin_recurringPosting_mtto(nuevo, Common.MTTOINSERT);
+		_result= AccountingEJBService.fin_recurringPosting_mtto(nuevo, Common.MTTODELETE);
 		System.out.println(_result.getMensaje()+" - "+ _result.getCodigoError());
 		
 	}
