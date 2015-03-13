@@ -220,10 +220,12 @@ public class AdminEJB implements AdminEJBRemote {
 				if (action == Common.MTTOUPDATE) {
 					if (branch.isIsasociated()) {
 						int update = 0;
+						int bandera=0;
 						Iterator<BranchArticlesTO> iterator2 = consult.iterator();
 						while (iterator2.hasNext()) {
 							BranchArticlesTO branch2 = (BranchArticlesTO) iterator2
 									.next();
+							bandera=1;
 							if (branch.getWhscode()
 									.equals(branch2.getWhscode())) {
 								adminDAO.cat_brancharticles_mtto(branch,
@@ -231,7 +233,7 @@ public class AdminEJB implements AdminEJBRemote {
 								update = 1;
 							}
 						}
-						if (update == 0) {
+						if (update == 0 && bandera==1) {
 							adminDAO.cat_brancharticles_mtto(branch,
 									Common.MTTOINSERT);
 						}
