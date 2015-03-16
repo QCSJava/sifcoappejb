@@ -214,8 +214,7 @@ public class AdminTest {
 
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO parameters = new ArticlesTO();
-		parameters.setItemCode("articulo00001");
-		parameters.setItemName("fdsdfsdf");
+		parameters.setItemCode("001-021");
 		// parameters.setUserSign(2);
 		parameters.setItemType("S");
 		// parameters.setNumInBuy(54.2);
@@ -230,14 +229,14 @@ public class AdminTest {
 		BranchArticlesTO branch1 = new BranchArticlesTO();
 		branch1.setIsasociated(true);
 		// branch1.setIscommited(100.2);
-		branch1.setItemcode("articulo00001");
+		branch1.setItemcode("001-021");
 		// branch1.setLocked("Y");
 
 		branch1.setWhscode("COD-2");
 		BranchArticlesTO branch2 = new BranchArticlesTO();
 		branch2.setIsasociated(true);
 		// branch1.setIscommited(100.2);
-		branch2.setItemcode("articulo00001");
+		branch2.setItemcode("001-021");
 		// branch1.setLocked("Y");
 		branch2.setIscommited(56.5);
 		branch2.setWhscode("COD-03");

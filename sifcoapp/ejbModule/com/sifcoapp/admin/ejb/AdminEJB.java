@@ -188,17 +188,18 @@ public class AdminEJB implements AdminEJBRemote {
 
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
+		AdminDAO adminDAO2 = new AdminDAO();
+		adminDAO2.setIstransaccional(true);
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
 		List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
+	
 		try {
-		
+			consult = adminDAO2.getBranchArticles(parameters.getItemCode());
 				
 				while (iterator.hasNext()) {
-					AdminDAO adminDAO2 = new AdminDAO();
-					adminDAO2.setIstransaccional(true);
+					
 					BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
-					consult.clear();
-					consult = adminDAO2.getBranchArticles(parameters.getItemCode());
+					
 					// Para articulos nuevos
 					// ############################ VALORES QUEMADOS
 					// ###################################
@@ -227,7 +228,7 @@ public class AdminEJB implements AdminEJBRemote {
 								BranchArticlesTO branch2 = (BranchArticlesTO) iterator2
 										.next();
 								if (branch2.getWhscode()
-										.equals(branch.getWhscode())) {
+										.equals(branch.getWhscode()) && branch2.isIsasociated()) {
 									adminDAO2.cat_brancharticles_mtto(branch,
 											Common.MTTOUPDATE);
 									update = 1;
@@ -246,8 +247,7 @@ public class AdminEJB implements AdminEJBRemote {
 					if (action == Common.MTTODELETE) {
 						adminDAO2.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 					}
-					adminDAO2.forceCommit();
-					adminDAO2.forceCloseConnection();
+					
 				}
 			
 			// ############################ VALORES QUEMADOS
@@ -266,7 +266,7 @@ public class AdminEJB implements AdminEJBRemote {
 			adminDAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
-
+			adminDAO2.forceCloseConnection();
 			adminDAO.forceCloseConnection();
 		}
 		_return.setCodigoError(0);
