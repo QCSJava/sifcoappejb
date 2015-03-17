@@ -20,6 +20,7 @@ import com.sifcoapp.objects.common.to.DBManager;
 import com.sifcoapp.objects.common.to.DetailParameter;
 import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
+import com.sifcoapp.objects.security.to.AdmProfileTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
@@ -343,5 +344,170 @@ public class UserDAO extends CommonDAO {
 			}
 		}
 		return _return;
+	}
+
+	/*mantenimiento de adm_profile*/
+	public int adm_profile_mtto(AdmProfileTO parameters, int action) throws Exception{
+		int v_resp = 0;
+		this.setDbObject("{call sp_adm_profile_mtto(?,?,?)}");
+		this.setString(1,"_doccode", parameters.getDoccode());
+		this.setInt(2,"_profilecode ", parameters.getProfilecode());
+		this.setInt(3,"_action", new Integer(action));
+		v_resp = this.runUpdate();
+		return v_resp;
+	}
+	
+	public List getAdmProfile()throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{?=call sp_get_adm_profile()}");
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					AdmProfileTO profile = new AdmProfileTO();
+					profile.setDoccode(rowsetActual.getString(1));
+					profile.setProfilecode(rowsetActual.getInt(2));
+
+					_return.add(profile);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;	
+	}
+	
+	public List getAdmProfile_by_key(int profilecode)throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{ call sp_get_adm_profile_by_key(?)}");
+		this.setInt(1,"_profilecode ",new Integer( profilecode));
+
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					AdmProfileTO profile = new AdmProfileTO();
+					profile.setDoccode(rowsetActual.getString(1));
+					profile.setProfilecode(rowsetActual.getInt(2));
+					_return.add(profile);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;	
+	}
+
+	
+	
+	
+	
+	/*mantenimiento de Usr1_profile*/
+	public int Usr1_profile_mtto(ProfileTO parameters, int action) throws Exception{
+		int v_resp = 0;
+		this.setDbObject("{call sp_adm_usr1_profile_mtto(?,?,?,?)}");
+		this.setInt(1,"_profilecode", parameters.getProfilecode());
+		this.setString(2,"_profilename ", parameters.getProfilename());
+		this.setString(3,"_active ", parameters.getActive());
+		this.setInt(4,"_action", new Integer(action));
+
+		v_resp = this.runUpdate();
+		return v_resp;
+	}
+	
+	public List getUsr1Profile()throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{?=call sp_get_adm_usr1_profile()}");
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ProfileTO profile = new ProfileTO();
+					profile.setProfilecode(rowsetActual.getInt(1));
+					profile.setProfilename(rowsetActual.getString(2));
+					profile.setActive(rowsetActual.getString(3));
+
+					_return.add(profile);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;	
+	}
+	
+	public ProfileTO getUsr1Profile_by_key(int profilecode)throws Exception {
+		ProfileTO _return = new ProfileTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_adm_usr1_profile_by_key(?)}");
+		this.setInt(1,"_profilecode ", new Integer(profilecode));
+
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ProfileTO profile = new ProfileTO();
+					profile.setProfilecode(rowsetActual.getInt(1));
+					profile.setProfilename(rowsetActual.getString(2));
+					profile.setActive(rowsetActual.getString(3));
+
+					_return=profile;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;	
 	}
 }

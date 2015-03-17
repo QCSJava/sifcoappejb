@@ -14,7 +14,7 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 @Stateless
 public class CatalogEJB implements CatalogEJBRemote {
 
-	
+	private Double zero=0.00;
 
 	public CatalogEJB() {
 		// TODO Auto-generated constructor stub
@@ -26,12 +26,34 @@ public class CatalogEJB implements CatalogEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
 		DAO.setIstransaccional(true);
-		parameters.setBalance(0.00);
-		parameters.setChecksbal(0.00);
-		parameters.setCreditline(0.00);
-		parameters.setDebtline(0.00);
+		if(parameters.getBalancesys()==null){
+			parameters.setBalancesys(zero);
+		}
+		if(parameters.getBalance()==null){
+			parameters.setBalance(zero);
+		}
+		if(parameters.getChecksbal()==null){
+			parameters.setChecksbal(zero);
+		}
+		if(parameters.getCreditline()==null){
+			parameters.setCreditline(zero);
+		}
+		if(parameters.getDebtline()==null){
+			parameters.setDebtline(zero);
+		}
+		if(parameters.getDiscount()==null){
 		parameters.setDiscount(0.00);
-		parameters.setOrdersbal(0.00);
+		}
+		if(parameters.getDnotesbal()==null){
+			parameters.setDnotesbal(zero);
+		}
+		if(parameters.getOrderbalsy()==null){
+			parameters.setOrderbalsy(zero);
+		}
+		if(parameters.getOrdersbal()==null){
+			parameters.setOrdersbal(zero);
+		}
+		
 		try {
 			DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
 			DAO.forceCommit();

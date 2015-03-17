@@ -59,7 +59,7 @@ public class BusinesspartnerTest {
 		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
 	 List lstPeriods3 = null;
 		BusinesspartnerInTO nuevo = new BusinesspartnerInTO();
-		nuevo.setCardcode("cod");
+		nuevo.setCardcode("000001");
 		
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
@@ -88,8 +88,8 @@ public class BusinesspartnerTest {
 	public static void businesspartner_mtto(){
 		ResultOutTO resp=null;
 		BusinesspartnerTO bus= new BusinesspartnerTO();
-		bus.setCardcode("prueba6");
-		bus.setCardname("cardaneeeeee");
+		bus.setCardcode("000001");
+		bus.setCardname("cardname");
 		bus.setGroupcode("none");
 		
 		try {
