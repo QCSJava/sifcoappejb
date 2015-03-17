@@ -1,11 +1,16 @@
 package com.sifcoapp.client;
 
 import java.util.List;
+import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
+import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.security.to.AdmProfileTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
+import com.sifcoapp.objects.security.to.ProfileTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
 import com.sifcoapp.objects.security.to.UserTO;
@@ -107,6 +112,60 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 
 		_return = bean.getProfile();
 
+		return _return;
+	}
+
+	public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)
+			throws EJBException {
+		// TODO Auto-generated method stub
+		ResultOutTO _return =  new ResultOutTO();
+
+		_return = bean.adm_profile_mtto(parameters, action);
+
+		return _return;
+	}
+
+	public List getAdmProfile() throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = null;
+
+		_return = bean.getAdmProfile();
+
+		return _return;
+	}
+
+	public List getAdmProfile_by_key(int profilecode)
+			throws EJBException {
+		// TODO Auto-generated method stub
+		List _return= new Vector();
+		_return= bean.getAdmProfile_by_key(profilecode);
+		return _return;
+	}
+	
+	public ResultOutTO Usr1_profile_mtto(ProfileTO parameters, int action)
+			throws EJBException {
+		// TODO Auto-generated method stub
+		ResultOutTO _return = new  ResultOutTO();
+
+		_return = bean.Usr1_profile_mtto(parameters, action);
+
+		return _return;
+	}
+
+	public List getUsr1Profile() throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = null;
+
+		_return = bean.getUsr1Profile();
+
+		return _return;
+	}
+
+	public ProfileTO getUsr1Profile_by_key(int profilecode)
+			throws EJBException {
+		// TODO Auto-generated method stub
+		ProfileTO _return= new ProfileTO();
+		_return= bean.getUsr1Profile_by_key(profilecode);
 		return _return;
 	}
 

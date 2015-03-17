@@ -10,13 +10,17 @@ import java.util.Vector;
 
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.security.dao.UserDAO;
+import com.sifcoapp.objects.security.to.AdmProfileTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
+import com.sifcoapp.objects.security.to.ProfileTO;
 import com.sifcoapp.objects.security.to.UserAppInTO;
 import com.sifcoapp.objects.security.to.UserAppOutTO;
 import com.sifcoapp.objects.security.to.UserTO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 
 /**
  * Session Bean implementation class SecurityEJB
@@ -146,5 +150,114 @@ public class SecurityEJB implements SecurityEJBRemote {
 
 		return _return;
 	}
+	
+public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)throws EJBException{
+	ResultOutTO _return = new ResultOutTO();
+	int resul;
+	UserDAO userdao = new UserDAO();
+	userdao.setIstransaccional(true);
+	try {
+		resul = userdao.adm_profile_mtto(parameters, action);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		userdao.rollBackConnection();
+		throw (EJBException) new EJBException(e);
+	} finally {
 
+		userdao.forceCloseConnection();
+	}
+	_return.setCodigoError(0);
+	_return.setMensaje("Datos Ingresados Correctamente");
+	return _return;
+}
+	
+	public List getAdmProfile()throws EJBException{
+		List _return = null;
+
+		UserDAO userdao = new UserDAO();
+		try {
+			_return = userdao.getAdmProfile();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+	
+	public List getAdmProfile_by_key(int profilecode)throws EJBException{
+		List ProfileOut = new Vector();
+		UserDAO usrDAO = new UserDAO();
+		usrDAO.setIstransaccional(true);
+
+		try {
+			ProfileOut = usrDAO.getAdmProfile_by_key(profilecode);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			usrDAO.forceCloseConnection();
+		}
+
+		return ProfileOut;
+	}
+	
+	
+	
+	
+	
+	public ResultOutTO Usr1_profile_mtto(ProfileTO parameters, int action)throws EJBException{
+		ResultOutTO _return = new ResultOutTO();
+		int resul=0;
+		UserDAO userdao = new UserDAO();
+		userdao.setIstransaccional(true);
+		try {
+			resul = userdao.Usr1_profile_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			userdao.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			userdao.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Ingresados Correctamente");
+		return _return;
+	}
+		
+		public List getUsr1Profile()throws EJBException{
+			List _return = null;
+
+			UserDAO userdao = new UserDAO();
+			try {
+				_return = userdao.getUsr1Profile();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw (EJBException) new EJBException(e);
+			}
+
+			return _return;
+		}
+		
+		public ProfileTO getUsr1Profile_by_key(int profilecode)throws EJBException{
+			ProfileTO ProfileOut = new ProfileTO();
+			UserDAO usrDAO = new UserDAO();
+			usrDAO.setIstransaccional(true);
+
+			try {
+				ProfileOut = usrDAO.getUsr1Profile_by_key(profilecode);
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw (EJBException) new EJBException(e);
+			} finally {
+
+				usrDAO.forceCloseConnection();
+			}
+
+			return ProfileOut;
+		}
 }

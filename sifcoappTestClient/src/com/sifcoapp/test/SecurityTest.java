@@ -7,6 +7,8 @@ import java.util.Vector;
 
 import com.sifcoapp.client.SecurityEJBClient;
 import com.sifcoapp.objects.catalogos.Common;
+import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.security.to.AdmProfileTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sifcoapp.objects.security.to.ProfileInTO;
 import com.sifcoapp.objects.security.to.ProfileOutTO;
@@ -239,4 +241,88 @@ public class SecurityTest {
 				+ " - " + user.getUserdate());
 
 	}
+	
+	
+	public static void user1_profile_mtto() throws Exception {
+
+		ResultOutTO _result= new ResultOutTO();
+		ProfileTO parameters = new ProfileTO();
+
+		// parameters.setUsersign();
+		parameters.setActive("Y");
+		parameters.setProfilecode(5);
+		parameters.setProfilename("administrador");
+
+		// Agregar
+
+		_result = SecurityEJBService.Usr1_profile_mtto(parameters,
+				3);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result.getCodigoError()+"-- "+_result.getMensaje());
+
+	}
+	public static void getUser1Profile() throws Exception {
+		//ProfileTO user = new ProfileTO();
+		ProfileTO user2 = new ProfileTO();
+		List resul= new Vector();
+		String name = "jccc";
+		String code = "art-001";
+
+		//resul = SecurityEJBService.getUsr1Profile();
+		user2=SecurityEJBService.getUsr1Profile_by_key(1);
+		System.out.println(user2.getActive() + " - " + user2.getProfilecode());
+
+		//System.out.println(user.getNickname() + " - " + user.getUsername()
+			//	+ " - " + user.getUserdate());
+		/*Iterator<ProfileTO> iterator = resul.iterator();
+		while (iterator.hasNext()) {
+			ProfileTO user = (ProfileTO) iterator.next();
+			System.out.println(user.getActive() + " - " + user.getProfilecode());
+		}*/
+
+	}
+	
+	
+	public static void adm_profile_mtto() throws Exception {
+
+		ResultOutTO _result= new ResultOutTO();
+		AdmProfileTO parameters = new AdmProfileTO();
+
+		// parameters.setUsersign();
+	
+		parameters.setProfilecode(2);
+		parameters.setDoccode("30");
+
+		// Agregar
+
+		_result = SecurityEJBService.adm_profile_mtto(parameters,
+				3);
+
+		System.out.println("luego de servicio");
+		System.out.println(_result.getCodigoError()+"-- "+_result.getMensaje());
+
+	}
+	
+	public static void getadmProfile() throws Exception {
+		//ProfileTO user = new ProfileTO();
+		ProfileTO user2 = new ProfileTO();
+		List resul= new Vector();
+		String name = "jccc";
+		String code = "art-001";
+
+		//resul = SecurityEJBService.getUsr1Profile();
+		resul=SecurityEJBService.getAdmProfile_by_key(1);
+		System.out.println(user2.getActive() + " - " + user2.getProfilecode());
+
+		//System.out.println(user.getNickname() + " - " + user.getUsername()
+			//	+ " - " + user.getUserdate());
+		Iterator<AdmProfileTO> iterator = resul.iterator();
+		while (iterator.hasNext()) {
+			AdmProfileTO user = (AdmProfileTO) iterator.next();
+			System.out.println(user.getDoccode() + " - " + user.getProfilecode());
+		}
+
+	}
+	
 }

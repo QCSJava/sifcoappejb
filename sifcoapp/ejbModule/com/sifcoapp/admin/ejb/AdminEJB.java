@@ -31,7 +31,7 @@ import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
  */
 @Stateless
 public class AdminEJB implements AdminEJBRemote {
-
+	Double zero=0.00;
 	/**
 	 * Default constructor.
 	 */
@@ -185,7 +185,6 @@ public class AdminEJB implements AdminEJBRemote {
 	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action)
 			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
-
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
 		AdminDAO adminDAO2 = new AdminDAO();
@@ -203,16 +202,26 @@ public class AdminEJB implements AdminEJBRemote {
 					// Para articulos nuevos
 					// ############################ VALORES QUEMADOS
 					// ###################################
-					branch.setOnhand(0.0);
-					branch.setOnhand1(0.0);
-					branch.setIscommited(0.0);
-					branch.setOnorder(0.0);
-					branch.setMinorder(0.0);
+					if(branch.getOnhand()==null){
+						branch.setOnhand(zero);
+					}
+					if(branch.getOnhand1()==null){
+						branch.setOnhand1(zero);
+					}
+					if(branch.getIscommited()==null){
+						branch.setIscommited(zero);
+					}
+					if(branch.getOnorder()==null){
+						branch.setOnorder(zero);
+					}
+					if(branch.getMinorder()==null){
+						branch.setMinorder(zero);
+					}
 					if (branch.getMinstock() == null) {
-						branch.setMinstock(0.0);
+						branch.setMinstock(zero);
 					}
 					if (branch.getMaxstock() == null) {
-						branch.setMaxstock(0.0);
+						branch.setMaxstock(zero);
 					}
 					if (action == Common.MTTOINSERT && branch.isIsasociated()) {
 
@@ -252,12 +261,24 @@ public class AdminEJB implements AdminEJBRemote {
 			
 			// ############################ VALORES QUEMADOS
 			// ###################################
-			parameters.setNumInBuy(0.0);
-			parameters.setSalPackUn(0.0);
-			parameters.setPurPackUn(0.0);
-			parameters.setAvgPrice(0.0);
-			parameters.setOnHand(0.0);
-			parameters.setNumInSale(0.0);
+			if(parameters.getNumInBuy() == null){
+				parameters.setNumInBuy(zero);
+			}
+			if(parameters.getSalPackUn()==null){
+				parameters.setSalPackUn(zero);	
+			}
+			if(parameters.getAvgPrice()==null){
+				parameters.setAvgPrice(zero);
+			}
+			if(parameters.getNumInSale()==null){
+				parameters.setNumInSale(zero);
+			}
+			if(parameters.getPurPackUn()==null){
+				parameters.setPurPackUn(zero);
+			}
+			if(parameters.getOnHand()==null){
+				parameters.setOnHand(zero);
+				}
 
 			adminDAO.cat_articles_mtto(parameters, action);
 			adminDAO.forceCommit();
@@ -421,8 +442,8 @@ public class AdminEJB implements AdminEJBRemote {
 							* parameters.getFactor());
 					newPrice.setOvrwritten(false);
 					// Valores por derfecto
-					newPrice.setAddprice1(0.0);
-					newPrice.setAddprice2(0.0);
+					newPrice.setAddprice1(zero);
+					newPrice.setAddprice2(zero);
 
 					adminDAO3.cat_art1_articlesprice_mtto(newPrice, action);
 
@@ -478,8 +499,8 @@ public class AdminEJB implements AdminEJBRemote {
 									* parameters.getFactor());
 							newPrice.setOvrwritten(false);
 							// Valores por derfecto
-							newPrice.setAddprice1(0.0);
-							newPrice.setAddprice2(0.0);
+							newPrice.setAddprice1(zero);
+							newPrice.setAddprice2(zero);
 
 							adminDAO3.cat_art1_articlesprice_mtto(newPrice,
 									Common.MTTOINSERT);

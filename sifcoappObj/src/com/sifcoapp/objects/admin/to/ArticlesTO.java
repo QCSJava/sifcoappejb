@@ -25,18 +25,18 @@ public class ArticlesTO extends CommonTO {
 	private String assetItem;
 	private String cardCode;
 	private String buyUnitMsr;
-	private double numInBuy;
+	private Double numInBuy;
 	private String salUnitMsr;
-	private double salPackUn;
+	private Double salPackUn;
 	private String suppCatNum;
-	private double purPackUn;
-	private double avgPrice;
-	private double onHand;
+	private Double purPackUn;
+	private Double avgPrice;
+	private Double onHand;
 	private String validFor;
 	private Date validFrom;
 	private Date validTo;
 	private String invntryUom;
-	private double numInSale;
+	private Double numInSale;
 	private String vatgourpsa;
 	private String dfltWH;
 	private String wtliable;
@@ -57,7 +57,7 @@ public class ArticlesTO extends CommonTO {
 	private List branchArticles;
 	private List Articleprices;
 	private List vatgourpsaList;
-	private double price;
+	private Double price;
 
 	public ArticlesTO() {
 		super();
@@ -68,10 +68,10 @@ public class ArticlesTO extends CommonTO {
 			String itmsIsGrpCod, String vatLiable, String codeBars,
 			String prchseItem, String sellItem, String invntItem,
 			String assetItem, String cardCode, String buyUnitMsr,
-			double numInBuy, String salUnitMsr, double salPackUn,
-			String suppCatNum, double purPackUn, double avgPrice,
-			double onHand, String validFor, Date validFrom, Date validTo,
-			String invntryUom, double numInSale, String vatgourpsa,
+			Double numInBuy, String salUnitMsr, Double salPackUn,
+			String suppCatNum, Double purPackUn, Double avgPrice,
+			Double onHand, String validFor, Date validFrom, Date validTo,
+			String invntryUom, Double numInSale, String vatgourpsa,
 			String dfltWH, String wtliable, String sww, String validComm,
 			int userSign, String qrygroup1, String qrygroup2, String qrygroup3,
 			String qrygroup4, String qrygroup5, String qrygroup6,
@@ -220,11 +220,11 @@ public class ArticlesTO extends CommonTO {
 		this.buyUnitMsr = buyUnitMsr;
 	}
 
-	public double getNumInBuy() {
+	public Double getNumInBuy() {
 		return numInBuy;
 	}
 
-	public void setNumInBuy(double numInBuy) {
+	public void setNumInBuy(Double numInBuy) {
 		this.numInBuy = numInBuy;
 	}
 
@@ -236,11 +236,11 @@ public class ArticlesTO extends CommonTO {
 		this.salUnitMsr = salUnitMsr;
 	}
 
-	public double getSalPackUn() {
+	public Double getSalPackUn() {
 		return salPackUn;
 	}
 
-	public void setSalPackUn(double salPackUn) {
+	public void setSalPackUn(Double salPackUn) {
 		this.salPackUn = salPackUn;
 	}
 
@@ -252,27 +252,27 @@ public class ArticlesTO extends CommonTO {
 		this.suppCatNum = suppCatNum;
 	}
 
-	public double getPurPackUn() {
+	public Double getPurPackUn() {
 		return purPackUn;
 	}
 
-	public void setPurPackUn(double purPackUn) {
+	public void setPurPackUn(Double purPackUn) {
 		this.purPackUn = purPackUn;
 	}
 
-	public double getAvgPrice() {
+	public Double getAvgPrice() {
 		return avgPrice;
 	}
 
-	public void setAvgPrice(double avgPrice) {
+	public void setAvgPrice(Double avgPrice) {
 		this.avgPrice = avgPrice;
 	}
 
-	public double getOnHand() {
+	public Double getOnHand() {
 		return onHand;
 	}
 
-	public void setOnHand(double onHand) {
+	public void setOnHand(Double onHand) {
 		this.onHand = onHand;
 	}
 
@@ -308,11 +308,11 @@ public class ArticlesTO extends CommonTO {
 		this.invntryUom = invntryUom;
 	}
 
-	public double getNumInSale() {
+	public Double getNumInSale() {
 		return numInSale;
 	}
 
-	public void setNumInSale(double numInSale) {
+	public void setNumInSale(Double numInSale) {
 		this.numInSale = numInSale;
 	}
 
@@ -468,7 +468,7 @@ public class ArticlesTO extends CommonTO {
 		this.vatgourpsaList = vatgourpsaList;
 	}
 
-	public double getPrice(int selectedListPrice ) {
+	public Double getPrice(int selectedListPrice ) {
 		Iterator<ArticlesPriceTO> iterator = this.getArticleprices().iterator();
 		this.price = -1.0;
 
