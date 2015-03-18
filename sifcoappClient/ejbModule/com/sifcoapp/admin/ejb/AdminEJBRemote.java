@@ -17,6 +17,7 @@ import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
+import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Remote
@@ -66,5 +67,10 @@ public interface AdminEJBRemote {
 	public PricesListTO getPricesListByKey(int listnum) throws EJBException;
 	
 	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters, int action) throws EJBException;
-
+	
+	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,int accion)throws EJBException;
+	
+	public WarehouseJournalTO getWarehouseJournalByKey(int transseq) throws EJBException;
+	
+	
 }

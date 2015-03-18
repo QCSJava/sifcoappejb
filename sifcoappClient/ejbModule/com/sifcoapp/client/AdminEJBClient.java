@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import com.sifcoapp.admin.ejb.AdminEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
+import com.sifcoapp.objects.admin.to.ArticlesPriceTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
@@ -16,6 +17,7 @@ import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
+import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class AdminEJBClient {
@@ -184,5 +186,15 @@ public class AdminEJBClient {
 
 		return _return;
 	}
-
+	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,int accion)throws EJBException{
+		ResultOutTO _return = new ResultOutTO();
+		_return= bean.adm_warehousejournal_mtto(param, accion);
+		return _return;
+	}
+	
+	public WarehouseJournalTO getWarehouseJournalByKey(int transseq) throws EJBException{
+		WarehouseJournalTO _return = new WarehouseJournalTO();
+		_return=bean.getWarehouseJournalByKey(transseq);
+		return _return;
+	}
 }
