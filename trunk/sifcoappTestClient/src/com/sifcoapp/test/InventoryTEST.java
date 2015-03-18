@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.InventoryEJBClient;
+import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.to.*;
 
@@ -426,4 +427,39 @@ public class InventoryTEST {
 		}
 	}
 
+	public static void adm_inventoryLog_mtto(){
+		InventoryLogTO nuevo = new InventoryLogTO();
+		ResultOutTO retorno;
+		nuevo.setCardname("00001");
+		nuevo.setBase_ref("baseref");
+		Date fecha= new Date();
+		//nuevo.setDocdate(fecha);
+		nuevo.setDoctotal(55.25);
+		retorno=Inventory.adm_inventorylog_mtto(nuevo,Common.MTTOINSERT);
+		System.out.println(retorno.getMensaje());
+
+	}
+	
+	public static void getInventory_by_key() {
+
+		List lstPeriods = new Vector();
+		InventoryLogTO nuevo = new InventoryLogTO();
+
+		// nuevo.setDocdate(fecha);
+		// nuevo.setSeries(42);
+		try {
+			nuevo = Inventory.getInventoryLogByKey(6);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TransfersTO periodo = (TransfersTO) lstPeriods.get(0);
+		System.out.println(nuevo.getBase_ref() + " - " 
+				+ " - " + nuevo.getDocentry() + "-");
+		/*
+		 * while (iterator.hasNext()) { TransfersTO periodo = (TransfersTO)
+		 * iterator.next(); System.out.println(periodo.getDocnum()+ " - " +
+		 * periodo.getSeries() + " - " + periodo.getDocentry()); }
+		 */
+	}
 }

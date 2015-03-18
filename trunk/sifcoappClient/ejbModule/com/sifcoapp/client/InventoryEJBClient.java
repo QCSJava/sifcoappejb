@@ -3,6 +3,7 @@ package com.sifcoapp.client;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -126,4 +127,15 @@ public class InventoryEJBClient {
 		return lstVector;
 	}
 
+	public ResultOutTO adm_inventorylog_mtto(InventoryLogTO parameters,int accion)throws EJBException{
+		ResultOutTO _return= new ResultOutTO();
+		_return=bean.adm_inventorylog_mtto(parameters, accion);
+		return _return;
+	}
+	
+	public InventoryLogTO getInventoryLogByKey(int messageid) throws EJBException{
+		InventoryLogTO _return= new InventoryLogTO();
+		_return=bean.getInventoryLogByKey(messageid);
+		return _return;
+	}
 }
