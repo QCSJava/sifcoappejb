@@ -99,14 +99,22 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 		return _return;
 	}
 
-	public UserTO getUserByNickname(String nickname) throws Exception {
+	public UserTO getUserByNickname(String nickname) throws EJBException {
 		// TODO Auto-generated method stub
 		UserTO _return= new UserTO();
 		_return= bean.getUserByNickname(nickname);
 		return _return;
 	}
 
-	public List getProfile() throws Exception {
+	public List getProfile() throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = null;
+
+		_return = bean.getProfile();
+
+		return _return;
+	}
+	public List getProfile(String _profile) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = null;
 

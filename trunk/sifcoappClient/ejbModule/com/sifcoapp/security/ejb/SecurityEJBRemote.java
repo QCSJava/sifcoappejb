@@ -24,9 +24,11 @@ public interface SecurityEJBRemote {
 
 	public List getUser() throws EJBException;
 	
-	public UserTO getUserByNickname(String nickname) throws Exception;
+	public UserTO getUserByNickname(String nickname) throws EJBException;
 
-	public List getProfile() throws Exception;
+	public List getProfile() throws EJBException;
+	
+	public List getProfile(String _profile) throws EJBException;
 	
 	public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)throws EJBException;
 	
