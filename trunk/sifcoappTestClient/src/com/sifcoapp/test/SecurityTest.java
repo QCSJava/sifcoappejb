@@ -82,7 +82,7 @@ public class SecurityTest {
 		ProfileInTO profileInTO = new ProfileInTO();
 		ProfileOutTO profileOutTO = new ProfileOutTO();
 
-		profileOutTO = SecurityEJBService.GetUserProfile(usr);
+		profileOutTO = SecurityEJBService.GetUserProfile_Mtto(usr);
 
 		System.out.println(profileOutTO.getDesc_perfil());
 		while (true) {
@@ -98,7 +98,7 @@ public class SecurityTest {
 						.next();
 
 				System.out
-						.println("->" + profileDetOutTO1.getDesc_perfil_det());
+						.println("->" + profileDetOutTO1.getDesc_perfil_det()+profileDetOutTO1.getStatus());
 				if (profileDetOutTO1.getNodeDetail() != null) {
 
 					// ProfileDetOutTO
@@ -219,7 +219,7 @@ public class SecurityTest {
 		String name = null;
 		String code = "art-001";
 
-		resp = SecurityEJBService.getProfile();
+		resp = SecurityEJBService.getProfile(name);
 
 		Iterator<ProfileTO> iterator = resp.iterator();
 		while (iterator.hasNext()) {

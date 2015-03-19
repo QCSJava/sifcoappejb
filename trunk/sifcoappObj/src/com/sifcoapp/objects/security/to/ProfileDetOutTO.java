@@ -12,6 +12,7 @@ public class ProfileDetOutTO implements java.io.Serializable {
 	private String url_perfil_det;
 	private int parent_id;
 	private String perfilOrder;
+	private String status;
 	private List nodeDetail;
 
 	public int getId_perfil_det() {
@@ -61,5 +62,14 @@ public class ProfileDetOutTO implements java.io.Serializable {
 	public void setNodeDetail(List nodeDetail) {
 		this.nodeDetail = nodeDetail;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 
 }

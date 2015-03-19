@@ -180,7 +180,7 @@ public class UserDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{?=call sp_get_profile(?)}");
+		this.setDbObject("{call sp_get_profile(?)}");
 		this.setString(1, "_profile",profile);
 		lstResultSet = this.runQuery();
 
@@ -285,6 +285,72 @@ public class UserDAO extends CommonDAO {
 					profileDet.setParent_id(rowsetActual.getInt(3));
 					profileDet.setUrl_perfil_det(rowsetActual.getString(5));
 
+					_values.put(profileDet.getPerfilOrder(), profileDet);
+				}
+
+				ProfileDetOutTO profileDetTmp = null;
+				Integer _position = null;
+				List lstDetProfile = new Vector();
+
+				String[] claves = (String[]) _values.keySet().toArray(
+						new String[0]);
+				java.util.Arrays.sort(claves);
+
+				// partimos de los nodos sin hijos
+				for (String clave : claves) {
+					profileDetTmp = (ProfileDetOutTO) _values.get(clave);
+
+					if (profileDetTmp.getParent_id() == 0) {
+
+						this.filterParent(profileDetTmp, _values,
+								profileDetTmp.getId_perfil_det());
+						_return.add(profileDetTmp);
+					}
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+	public List getUsrProfileDetail_Mtto(Integer _profileCode) throws Exception {
+
+		List _return = new Vector();
+		List lstResultSet = null;
+		TablesCatalogTO _returnTO = new TablesCatalogTO();
+
+		System.out.println("Desde DAO");
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_usr_profile_mtto(?)}");
+		this.setInt(1, "_profilecode", _profileCode);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+		ArrayList arr;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		Hashtable _values = new Hashtable();
+
+		// Iterator<CachedRowSetImpl> iterator = lstResultSet.iterator();
+
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+
+					ProfileDetOutTO profileDet = new ProfileDetOutTO();
+					profileDet.setId_perfil_det(rowsetActual.getInt(1));
+					profileDet.setPerfilOrder(rowsetActual.getString(2));
+					profileDet.setDesc_perfil_det(rowsetActual.getString(4));
+					profileDet.setParent_id(rowsetActual.getInt(3));
+					profileDet.setUrl_perfil_det(rowsetActual.getString(5));
+					profileDet.setStatus(rowsetActual.getString(7));
 					_values.put(profileDet.getPerfilOrder(), profileDet);
 				}
 
