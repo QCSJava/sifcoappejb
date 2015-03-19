@@ -80,6 +80,14 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 
 		return profileOutTO;
 	}
+	public ProfileOutTO GetUserProfile_Mtto(UserAppInTO usr) {
+		// TODO Auto-generated method stub
+		ProfileOutTO profileOutTO = new ProfileOutTO();
+
+		profileOutTO = bean.GetUserProfile_Mtto(usr);
+
+		return profileOutTO;
+	}
 
 	public int cat_users_mtto(UserTO parameters, int action) {
 		// TODO Auto-generated method stub
@@ -114,6 +122,7 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 
 		return _return;
 	}
+	
 	public List getProfile(String _profile) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = null;

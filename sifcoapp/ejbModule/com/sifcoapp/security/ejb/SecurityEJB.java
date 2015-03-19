@@ -87,6 +87,26 @@ public class SecurityEJB implements SecurityEJBRemote {
 
 		return usrProfileOut;
 	}
+	public ProfileOutTO GetUserProfile_Mtto(UserAppInTO usr) {
+		ProfileOutTO usrProfileOut = new ProfileOutTO();
+		UserDAO usrDAO = new UserDAO();
+		usrDAO.setIstransaccional(true);
+
+		try {
+			usrProfileOut = usrDAO.getUsrProfileHeader(usr.getIdUserApp());
+
+			usrProfileOut.setProfile_det(usrDAO
+					.getUsrProfileDetail_Mtto(usrProfileOut.getId_perfil()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			usrDAO.forceCloseConnection();
+		}
+
+		return usrProfileOut;
+	}
 
 	public int cat_users_mtto(UserTO parameters, int action) {
 		// TODO Auto-generated method stub
@@ -150,6 +170,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 
 		return _return;
 	}
+	
 	public List getProfile(String _profile) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = null;
@@ -165,7 +186,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		return _return;
 	}
 	
-public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)throws EJBException{
+	public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)throws EJBException{
 	ResultOutTO _return = new ResultOutTO();
 	int resul;
 	UserDAO userdao = new UserDAO();
@@ -218,10 +239,6 @@ public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)throws E
 		return ProfileOut;
 	}
 	
-	
-	
-	
-	
 	public ResultOutTO Usr1_profile_mtto(ProfileTO parameters, int action)throws EJBException{
 		ResultOutTO _return = new ResultOutTO();
 		int resul=0;
@@ -242,7 +259,7 @@ public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)throws E
 		return _return;
 	}
 		
-		public List getUsr1Profile()throws EJBException{
+	public List getUsr1Profile()throws EJBException{
 			List _return = null;
 
 			UserDAO userdao = new UserDAO();
@@ -251,12 +268,16 @@ public ResultOutTO adm_profile_mtto(AdmProfileTO parameters, int action)throws E
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				throw (EJBException) new EJBException(e);
+			}finally {
+
+				userdao.forceCloseConnection();
 			}
+
 
 			return _return;
 		}
 		
-		public ProfileTO getUsr1Profile_by_key(int profilecode)throws EJBException{
+	public ProfileTO getUsr1Profile_by_key(int profilecode)throws EJBException{
 			ProfileTO ProfileOut = new ProfileTO();
 			UserDAO usrDAO = new UserDAO();
 			usrDAO.setIstransaccional(true);

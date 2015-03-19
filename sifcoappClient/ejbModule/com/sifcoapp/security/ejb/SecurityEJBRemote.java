@@ -18,6 +18,8 @@ public interface SecurityEJBRemote {
 	public UserAppOutTO UserValidate(UserAppInTO usr) throws EJBException;
 
 	public ProfileOutTO GetUserProfile(UserAppInTO usr) throws EJBException;
+	
+	public ProfileOutTO GetUserProfile_Mtto(UserAppInTO usr) throws EJBException;
 
 	public int cat_users_mtto(UserTO parameters, int action)
 			throws EJBException;
