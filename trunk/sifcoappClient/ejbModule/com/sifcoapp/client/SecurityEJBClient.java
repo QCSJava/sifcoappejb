@@ -118,7 +118,7 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 		// TODO Auto-generated method stub
 		List _return = null;
 
-		_return = bean.getProfile();
+		_return = bean.getProfile(_profile);
 
 		return _return;
 	}
