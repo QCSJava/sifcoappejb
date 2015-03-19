@@ -175,7 +175,40 @@ public class UserDAO extends CommonDAO {
 		return _return;
 
 	}
+	public List getProfile(String profile) throws Exception{
+		List _return= new Vector();
+		List lstResultSet = null;
 
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{?=call sp_get_profile(?)}");
+		this.setString(1, "_profile",profile);
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ProfileTO profile1 = new ProfileTO();
+					profile1.setProfilecode(rowsetActual.getInt(1));
+					profile1.setProfilename(rowsetActual.getString(2));
+					profile1.setActive(rowsetActual.getString(3));
+					_return.add(profile1);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 	public List getProfile() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -199,6 +232,7 @@ public class UserDAO extends CommonDAO {
 					ProfileTO profile = new ProfileTO();
 					profile.setProfilecode(rowsetActual.getInt(1));
 					profile.setProfilename(rowsetActual.getString(2));
+					profile.setActive(rowsetActual.getString(3));
 					_return.add(profile);
 				}
 				rowsetActual.close();

@@ -123,7 +123,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 		return _return;
 	}
 
-	public UserTO getUserByNickname(String nickname) throws Exception {
+	public UserTO getUserByNickname(String nickname) throws EJBException {
 		// TODO Auto-generated method stub
 		UserTO _return = new UserTO();
 		UserDAO userdao = new UserDAO();
@@ -136,13 +136,27 @@ public class SecurityEJB implements SecurityEJBRemote {
 		return _return;
 	}
 
-	public List getProfile() throws Exception {
+	public List getProfile() throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = null;
 
 		UserDAO userdao = new UserDAO();
 		try {
 			_return = userdao.getProfile();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+	public List getProfile(String _profile) throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = null;
+
+		UserDAO userdao = new UserDAO();
+		try {
+			_return = userdao.getProfile(_profile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
