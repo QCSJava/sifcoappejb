@@ -87,25 +87,25 @@ public class SecurityEJB implements SecurityEJBRemote {
 
 		return usrProfileOut;
 	}
-	public ProfileOutTO GetUserProfile_Mtto(UserAppInTO usr) {
-		ProfileOutTO usrProfileOut = new ProfileOutTO();
-		UserDAO usrDAO = new UserDAO();
-		usrDAO.setIstransaccional(true);
+	public List GetUserProfile_Mtto(int id_perfil) {
+		
+			List usrProfileOut = new Vector();
+			UserDAO usrDAO = new UserDAO();
+			usrDAO.setIstransaccional(true);
 
-		try {
-			usrProfileOut = usrDAO.getUsrProfileHeader(usr.getIdUserApp());
+			try {
 
-			usrProfileOut.setProfile_det(usrDAO
-					.getUsrProfileDetail_Mtto(usrProfileOut.getId_perfil()));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		} finally {
+				usrProfileOut=usrDAO.getUsrProfileDetail_Mtto(id_perfil);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw (EJBException) new EJBException(e);
+			} finally {
 
-			usrDAO.forceCloseConnection();
-		}
+				usrDAO.forceCloseConnection();
+			}
 
-		return usrProfileOut;
+			return usrProfileOut;
+		
 	}
 
 	public int cat_users_mtto(UserTO parameters, int action) {

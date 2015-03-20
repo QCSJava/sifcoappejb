@@ -80,15 +80,15 @@ public class SecurityTest {
 		System.out.println("desc" + usrRes.getUsrprofile().getDesc_perfil());
 
 		ProfileInTO profileInTO = new ProfileInTO();
-		ProfileOutTO profileOutTO = new ProfileOutTO();
+		List profileOutTO = new Vector();
 
-		profileOutTO = SecurityEJBService.GetUserProfile_Mtto(usr);
+		profileOutTO = SecurityEJBService.GetUserProfile_Mtto(1);
 
-		System.out.println(profileOutTO.getDesc_perfil());
+		//System.out.println(profileOutTO.getDesc_perfil());
 		while (true) {
 			ProfileDetOutTO profileDetOutTO = new ProfileDetOutTO();
 			List profileDetOutTOLst = new Vector();
-			profileDetOutTOLst = profileOutTO.getProfile_det();
+			profileDetOutTOLst = profileOutTO;
 			// System.out.println(profileDetOutTO.getDesc_perfil_det());
 
 			Iterator<ProfileDetOutTO> iterator = profileDetOutTOLst.iterator();
