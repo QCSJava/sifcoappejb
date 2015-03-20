@@ -72,5 +72,5 @@ public interface AdminEJBRemote {
 	
 	public WarehouseJournalTO getWarehouseJournalByKey(int transseq) throws EJBException;
 	
-	
+	public List findCatQS(String nameCatalog) throws Exception;
 }
