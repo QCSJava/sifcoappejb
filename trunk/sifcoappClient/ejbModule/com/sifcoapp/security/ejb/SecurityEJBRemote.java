@@ -19,7 +19,7 @@ public interface SecurityEJBRemote {
 
 	public ProfileOutTO GetUserProfile(UserAppInTO usr) throws EJBException;
 	
-	public ProfileOutTO GetUserProfile_Mtto(UserAppInTO usr) throws EJBException;
+	public List GetUserProfile_Mtto(int id_perfil) throws EJBException;
 
 	public int cat_users_mtto(UserTO parameters, int action)
 			throws EJBException;
