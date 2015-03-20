@@ -197,4 +197,16 @@ public class AdminEJBClient {
 		_return=bean.getWarehouseJournalByKey(transseq);
 		return _return;
 	}
+	/*
+	 * busqueda de catalogos por query string
+	 * Rutilio Iraheta
+	 * Marzo 2015
+	 * */
+	public List findCatQS(String nameCatalog) throws Exception {
+		List catlgLst = null;
+
+		catlgLst = bean.findCatQS(nameCatalog);
+
+		return catlgLst;
+	}
 }
