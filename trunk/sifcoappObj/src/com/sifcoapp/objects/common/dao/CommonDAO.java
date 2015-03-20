@@ -4,6 +4,7 @@ import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -455,6 +456,126 @@ public class CommonDAO {
 
 	}
 
+	/*
+	 * Ejecuta un query string directamente a la base de datos sin sp de por
+	 * medio Rutilio Iraheta Marzo 2015
+	 */
+	public List runQueryPrepared() throws Exception {
+
+		// Primero creamos el prepareStatement
+
+		PreparedStatement statementToExecute = null;
+		boolean v_haveResultsets = false;
+		ResultSet rsData = null;
+		CachedRowSet crsData = null;
+		List rsDataList = new Vector();
+
+		if (this.getTypeReturn() == null) {
+			this.setTypeReturn(Common.TYPERETURN_INT);
+		}
+
+		try {
+			statementToExecute = this.getConn().prepareStatement(
+					this.getDbObject());
+
+			// asignamos parametros
+
+			Enumeration enParameters = this.inParameters.keys();
+			DetailParameter dtParameterTmp = null;
+			Integer v_position = null;
+			// Recorremos hash con parametros previamente seteados
+			while (enParameters.hasMoreElements()) {
+
+				v_position = (Integer) enParameters.nextElement();
+
+				dtParameterTmp = (DetailParameter) this.inParameters
+						.get(v_position);
+
+				System.out.println("detail: position " + v_position);
+				System.out.println("detail: getColName "
+						+ dtParameterTmp.getColName());
+				System.out.println("detail: getColValue "
+						+ dtParameterTmp.getColValue());
+				System.out.println("detail: getColType ");
+				System.out.println(dtParameterTmp.getColType());
+
+				if (dtParameterTmp.getColType().equalsIgnoreCase(
+						Common.TYPESTRING)) {
+					statementToExecute.setString(v_position.intValue(),
+							(String) dtParameterTmp.getColValue());
+				}
+
+				if (dtParameterTmp.getColType()
+						.equalsIgnoreCase(Common.TYPEINT)) {
+					statementToExecute
+							.setInt(v_position.intValue(),
+									((Integer) dtParameterTmp.getColValue())
+											.intValue());
+				}
+
+				if (dtParameterTmp.getColType().equalsIgnoreCase(
+						Common.TYPELONG)) {
+					statementToExecute.setLong(v_position.intValue(),
+							((Long) dtParameterTmp.getColValue()).longValue());
+				}
+
+				if (dtParameterTmp.getColType().equalsIgnoreCase(
+						Common.TYPEFLOAT)) {
+					statementToExecute
+							.setFloat(v_position.intValue(),
+									((Float) dtParameterTmp.getColValue())
+											.floatValue());
+				}
+
+				if (dtParameterTmp.getColType().equalsIgnoreCase(
+						Common.TYPEDOUBLE)) {
+					statementToExecute.setDouble(v_position.intValue(),
+							((Double) dtParameterTmp.getColValue())
+									.doubleValue());
+				}
+
+				if (dtParameterTmp.getColType().equalsIgnoreCase(
+						Common.TYPEDATE)) {
+					statementToExecute.setDate(v_position.intValue(),
+							(Date) dtParameterTmp.getColValue());
+				}
+
+			}
+
+			rsData = statementToExecute.executeQuery();
+			// System.out.println("resultado");
+			// System.out.println(statementToExecute.getInt(1));
+
+			if (rsData != null) {
+				System.out.println("encontró datos");
+				rsData.clearWarnings();
+				crsData = new CachedRowSetImpl();
+				crsData.populate(rsData);
+				rsDataList.add(crsData);
+				// closeToDB (rsData);
+				rsData = null;
+				crsData = null;
+			}
+
+			// Cerramos la conexion
+			if (statementToExecute != null) {
+				statementToExecute.close();
+			}
+
+			this.closeConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new Exception(e);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception(ex);
+		} finally {
+
+		}
+		return rsDataList;
+
+	}
 	private void getConnectionDB() {
 		if (conn == null) {
 			try {
