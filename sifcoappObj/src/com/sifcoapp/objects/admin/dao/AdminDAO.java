@@ -1297,4 +1297,56 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 	
+	/*
+	 * busqueda de catalogos por query string
+	 * Rutilio Iraheta
+	 * Marzo 2015
+	 * */
+	public List findCatQS(String nameCatalog) throws Exception {
+		List lstResult = new Vector();
+		List lstResultSet = null;
+
+		System.out.println("Desde DAO");
+		this.setDbObject("SELECT c.catcode, c.tablecode, c.catvalue, "
+				+ "c.catvalue2,c.catvalue3,c.catstatus, c.usersign "
+				+ "FROM cat_tab1_catalogos c,cat_tab0_tables t  "
+				+ "where c.tablecode=t.tablecode  and t.tablename=?");
+		// this.setString(1, "return");
+		this.setString(1, "IN_CAT_NAME", nameCatalog);
+
+		lstResultSet = this.runQueryPrepared();
+		System.out.println("return psg");
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					/*
+					 * System.out.println(rowsetActual.getString(1));
+					 * System.out.println(rowsetActual.getString(2));
+					 * System.out.println(rowsetActual.getString(3));
+					 */
+
+					lstResult.add(new CatalogTO(rowsetActual.getString(1),
+							rowsetActual.getInt(2), rowsetActual.getString(3),
+							rowsetActual.getString(4), rowsetActual
+									.getString(5), rowsetActual.getString(6),
+							rowsetActual.getInt(7)));
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return lstResult;
+	}
 }
