@@ -45,13 +45,13 @@ public class BankTest {
 		}
 	}
 
-	public static void geCheck() {
+	public static void getCheck() {
 
 		CheckForPaymentTO lstPeriods = new CheckForPaymentTO();
 		CheckForPaymentInTO lstPeriods2 = new CheckForPaymentInTO();
 		List lstPeriods3 = null;
 		CheckForPaymentInTO nuevo = new CheckForPaymentInTO();
-		nuevo.setCheckkey(1);
+		//nuevo.setCheckkey(1);
 
 		try {
 			lstPeriods3 = catalog.get_cfp0_checkforpayment(nuevo);
@@ -68,7 +68,25 @@ public class BankTest {
 		}
 	}
 
-	public static void businesspartner_mtto() {
+	public static void getCheckByKey() {
+		CheckForPaymentTO lstPeriods3 =  new CheckForPaymentTO();
+		CheckForPaymentInTO nuevo = new CheckForPaymentInTO();
+		nuevo.setCheckkey(1);
+
+		try {
+			lstPeriods3 = catalog.get_cfp0_checkforpaymentByKey(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+			System.out.println(lstPeriods3.getCheckkey() + "  "
+					+ lstPeriods3.getDetails() + " - " + lstPeriods3.getAcctnum()
+					+ " - " + lstPeriods3.getAddress());
+
+	}
+	
+	public static void check_mtto() {
 		ResultOutTO resp = null;
 		CheckForPaymentTO bus = new CheckForPaymentTO();
 		bus.setAcctnum("000001");
