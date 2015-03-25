@@ -173,7 +173,7 @@ public class CheckForPaymentDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_ges_cfp0_checkforpayment_mtto(?)}");
+		this.setDbObject("{call sp_get_checkforpayment_by_key(?)}");
 		this.setInt(1, "_checkkey", parameters);
 
 		lstResultSet = this.runQuery();
