@@ -251,7 +251,7 @@ public class AdminDAO extends CommonDAO {
 
 		int v_resp = 0;
 
-		this.setDbObject("{call sp_upd_enterprise33(?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_upd_enterprise(?,?,?,?,?,?,?,?,?,?)}");
 
 		this.setString(1, "_name", parameters.getCompnyName());
 		this.setString(2, "_addr", parameters.getCompnyAddr());
