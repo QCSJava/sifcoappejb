@@ -754,5 +754,21 @@ public class AdminEJB implements AdminEJBRemote {
 		}
 
 		return _return;
+	}
+
+	public List findCatQS(String nameCatalog) throws EJBException{
+		// TODO Auto-generated method stub
+		List catlgLst = null;
+
+		AdminDAO adminDAO = new AdminDAO();
+
+		try {
+			catlgLst = adminDAO.findCatQS(nameCatalog);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return catlgLst;
 	}	
 }

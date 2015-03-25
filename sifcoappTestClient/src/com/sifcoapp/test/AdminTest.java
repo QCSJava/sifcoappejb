@@ -567,4 +567,25 @@ public class AdminTest {
 			System.out.println(det.getLayerid()+"---"+det.getBalance());
 		}
 	}
+
+	public static void findCatalogQS() {
+
+		List catlgLst = null;
+
+		try {
+			catlgLst = AdminEJBService.findCatQS("paises");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("luego de servicio mod   ");
+
+		Iterator<CatalogTO> iterator = catlgLst.iterator();
+		while (iterator.hasNext()) {
+			// System.out.println(iterator.next());
+			CatalogTO catalogTO = (CatalogTO) iterator.next();
+			System.out.println("--->" + catalogTO.getCatcode() + "-"
+					+ catalogTO.getCatvalue() + "-" + catalogTO.getCatvalue2());
+		}
+	}
 }
