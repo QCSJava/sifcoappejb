@@ -27,12 +27,30 @@ public class CheckForPaymentDAO extends CommonDAO {
 		this.setInt(2, "_checknum,", new Integer(parameters.getChecknum()));
 		this.setString(3, "_banknum,", parameters.getBanknum());
 		this.setString(4, "_bankname,", parameters.getBankname());
-		this.setDate(5, "_checkdate,", parameters.getCheckdate());
+		
+		//this.setDate(5, "_checkdate,", parameters.getCheckdate());		
+		if (parameters.getCheckdate() == null){
+			this.setDate(5, "_docdate", parameters.getCheckdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getCheckdate().getTime());
+			this.setDate(5, "_docdate", fecha);
+		}
+		
 		this.setString(6, "_dpstacct,", parameters.getDpstacct());
 		this.setString(7, "_acctnum,", parameters.getAcctnum());
 		this.setString(8, "_details,", parameters.getDetails());
 		this.setString(9, "_transref,", parameters.getTransref());
-		this.setDate(10, "_pmntdate,", parameters.getPmntdate());
+		
+		//this.setDate(10, "_pmntdate,", parameters.getPmntdate());
+		if (parameters.getPmntdate() == null){
+			this.setDate(10, "_docdate", parameters.getPmntdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getPmntdate().getTime());
+			this.setDate(10, "_docdate", fecha);
+		}
+		
 		this.setInt(11, "_pmntnum,", new Integer(parameters.getPmntnum()));
 		this.setDouble(12, "_checksum,", new Double(parameters.getChecksum()));
 		this.setString(13, "_trnsfrable,", parameters.getTrnsfrable());
@@ -50,7 +68,16 @@ public class CheckForPaymentDAO extends CommonDAO {
 		this.setString(25, "_createjdt,", parameters.getCreatejdt());
 		this.setDouble(26, "_vattotal,", new Double(parameters.getVattotal()));
 		this.setString(27, "_vatcalcult,", parameters.getVatcalcult());
-		this.setDate(28, "_taxdate,", parameters.getTaxdate());
+		
+		//this.setDate(28, "_taxdate,", parameters.getTaxdate());
+		if (parameters.getTaxdate() == null){
+			this.setDate(28, "_docdate", parameters.getTaxdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameters.getTaxdate().getTime());
+			this.setDate(28, "_docdate", fecha);
+		}
+		
 		this.setInt(29, "_printedby,", new Integer(parameters.getPrintedby()));
 		this.setString(30, "_objtype,", parameters.getObjtype());
 		this.setString(31, "_countrycod,", parameters.getCountrycod());
@@ -76,12 +103,26 @@ public class CheckForPaymentDAO extends CommonDAO {
 		this.setInt(2, "_checknum,", new Integer(parameters.getChecknum()));
 		this.setString(3, "_banknum,", parameters.getBanknum());
 		this.setString(4, "_bankname,", parameters.getBankname());
-		this.setDate(5, "_checkdate,", parameters.getCheckdate());
+		//this.setDate(5, "_checkdate,", parameters.getCheckdate());		
+				if (parameters.getCheckdate() == null){
+					this.setDate(5, "_docdate", parameters.getCheckdate());
+				}else
+				{
+					java.sql.Date fecha= new java.sql.Date(parameters.getCheckdate().getTime());
+					this.setDate(5, "_docdate", fecha);
+				}
 		this.setString(6, "_dpstacct,", parameters.getDpstacct());
 		this.setString(7, "_acctnum,", parameters.getAcctnum());
 		this.setString(8, "_details,", parameters.getDetails());
 		this.setString(9, "_transref,", parameters.getTransref());
-		this.setDate(10, "_pmntdate,", parameters.getPmntdate());
+		//this.setDate(10, "_pmntdate,", parameters.getPmntdate());
+				if (parameters.getPmntdate() == null){
+					this.setDate(10, "_docdate", parameters.getPmntdate());
+				}else
+				{
+					java.sql.Date fecha= new java.sql.Date(parameters.getPmntdate().getTime());
+					this.setDate(10, "_docdate", fecha);
+				}
 		this.setInt(11, "_pmntnum,", new Integer(parameters.getPmntnum()));
 		this.setDouble(12, "_checksum,", new Double(parameters.getChecksum()));
 		this.setString(13, "_trnsfrable,", parameters.getTrnsfrable());
@@ -99,7 +140,14 @@ public class CheckForPaymentDAO extends CommonDAO {
 		this.setString(25, "_createjdt,", parameters.getCreatejdt());
 		this.setDouble(26, "_vattotal,", new Double(parameters.getVattotal()));
 		this.setString(27, "_vatcalcult,", parameters.getVatcalcult());
-		this.setDate(28, "_taxdate,", parameters.getTaxdate());
+		//this.setDate(28, "_taxdate,", parameters.getTaxdate());
+				if (parameters.getTaxdate() == null){
+					this.setDate(28, "_docdate", parameters.getTaxdate());
+				}else
+				{
+					java.sql.Date fecha= new java.sql.Date(parameters.getTaxdate().getTime());
+					this.setDate(28, "_docdate", fecha);
+				}
 		this.setInt(29, "_printedby,", new Integer(parameters.getPrintedby()));
 		this.setString(30, "_objtype,", parameters.getObjtype());
 		this.setString(31, "_countrycod,", parameters.getCountrycod());
