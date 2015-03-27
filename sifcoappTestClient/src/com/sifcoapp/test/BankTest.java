@@ -51,7 +51,7 @@ public class BankTest {
 		CheckForPaymentInTO lstPeriods2 = new CheckForPaymentInTO();
 		List lstPeriods3 = null;
 		CheckForPaymentInTO nuevo = new CheckForPaymentInTO();
-		//nuevo.setCheckkey(1);
+		nuevo.setCheckkey(1);
 
 		try {
 			lstPeriods3 = catalog.get_cfp0_checkforpayment(nuevo);
@@ -95,11 +95,14 @@ public class BankTest {
 
 		try {
 			resp = catalog.ges_cfp0_checkforpayment_mtto(bus, 1);
+			System.out.println(resp.getDocentry());
+			System.out.println(resp.getCodigoError());
+			System.out.println(resp.getMensaje());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(resp.getMensaje());
+		
 
 	}
 
