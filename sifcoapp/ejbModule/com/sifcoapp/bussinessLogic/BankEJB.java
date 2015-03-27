@@ -42,7 +42,7 @@ public class BankEJB implements BankEJBRemote {
 		
 
 		try {
-			DAO.ges_cfp0_checkforpayment_mtto(parameters, action);
+			_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(parameters, action));
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
