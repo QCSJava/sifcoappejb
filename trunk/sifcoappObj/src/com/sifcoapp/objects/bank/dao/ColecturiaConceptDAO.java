@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
 import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
 import com.sifcoapp.objects.bank.to.ColecturiaInTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
@@ -55,7 +56,7 @@ public class ColecturiaConceptDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_ges_colecturiconcept()}");
+		this.setDbObject("{?=call sp_get_ges_colecturiaconcept()}");
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
@@ -69,7 +70,7 @@ public class ColecturiaConceptDAO extends CommonDAO {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
-					ColecturiaDetailTO colecturia = new ColecturiaDetailTO();
+					ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
 					colecturia.setLinenum(rowsetActual.getInt(1));
 					colecturia.setLinestatus(rowsetActual.getString(2));
 					colecturia.setObjtype(rowsetActual.getString(3));
