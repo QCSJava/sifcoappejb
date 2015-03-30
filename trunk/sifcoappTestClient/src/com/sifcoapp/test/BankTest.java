@@ -9,6 +9,9 @@ import com.sifcoapp.client.BankEJBClient;
 import com.sifcoapp.client.CatalogEJBClient;
 import com.sifcoapp.objects.bank.to.CheckForPaymentInTO;
 import com.sifcoapp.objects.bank.to.CheckForPaymentTO;
+import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaInTO;
+import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -48,10 +51,9 @@ public class BankTest {
 	public static void getCheck() {
 
 		CheckForPaymentTO lstPeriods = new CheckForPaymentTO();
-		CheckForPaymentInTO lstPeriods2 = new CheckForPaymentInTO();
 		List lstPeriods3 = null;
 		CheckForPaymentInTO nuevo = new CheckForPaymentInTO();
-		nuevo.setCheckkey(1);
+		nuevo.setCheckkey(20);
 
 		try {
 			lstPeriods3 = catalog.get_cfp0_checkforpayment(nuevo);
@@ -69,7 +71,7 @@ public class BankTest {
 	}
 
 	public static void getCheckByKey() {
-		CheckForPaymentTO lstPeriods3 =  new CheckForPaymentTO();
+		CheckForPaymentTO lstPeriods3 = new CheckForPaymentTO();
 		CheckForPaymentInTO nuevo = new CheckForPaymentInTO();
 		nuevo.setCheckkey(1);
 
@@ -80,21 +82,22 @@ public class BankTest {
 			e.printStackTrace();
 		}
 
-			System.out.println(lstPeriods3.getCheckkey() + "  "
-					+ lstPeriods3.getDetails() + " - " + lstPeriods3.getAcctnum()
-					+ " - " + lstPeriods3.getAddress());
+		System.out.println(lstPeriods3.getCheckkey() + "  "
+				+ lstPeriods3.getDetails() + " - " + lstPeriods3.getAcctnum()
+				+ " - " + lstPeriods3.getAddress());
 
 	}
-	
+
 	public static void check_mtto() {
 		ResultOutTO resp = null;
 		CheckForPaymentTO bus = new CheckForPaymentTO();
+		bus.setCheckkey(1);
 		bus.setAcctnum("000001");
 		bus.setBankname("Banck JC");
 		bus.setChecknum(5454);
 
 		try {
-			resp = catalog.ges_cfp0_checkforpayment_mtto(bus, 1);
+			resp = catalog.ges_cfp0_checkforpayment_mtto(bus, 2);
 			System.out.println(resp.getDocentry());
 			System.out.println(resp.getCodigoError());
 			System.out.println(resp.getMensaje());
@@ -102,8 +105,84 @@ public class BankTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	}
 
+	public static void colecturia_mtto() {
+		ResultOutTO resp = null;
+		ColecturiaTO bus = new ColecturiaTO();
+		bus.setDocentry(1);
+		bus.setCardcode("000001");
+		bus.setCardname("Prueba");
+		bus.setDoctotal(10.1);
+		;
+
+		try {
+			resp = catalog.ges_ges_col0_colecturia_mtto(bus, 2);
+			System.out.println(resp.getDocentry());
+			System.out.println(resp.getCodigoError());
+			System.out.println(resp.getMensaje());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void getColecturia() {
+
+		ColecturiaTO lstPeriods = new ColecturiaTO();
+		ColecturiaInTO nuevo = new ColecturiaInTO();
+		List lstPeriods3 = null;
+		//nuevo.setDocentry(1);
+
+		try {
+			lstPeriods3 = catalog.get_ges_colecturia(nuevo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator<ColecturiaTO> iterator = lstPeriods3.iterator();
+		while (iterator.hasNext()) {
+			ColecturiaTO periodo = (ColecturiaTO) iterator.next();
+			System.out.println(periodo.getCardcode() + "  "
+					+ periodo.getDocnum() + " - " + periodo.getDoctotal()
+					+ " - " + periodo.getDocentry());
+		}
+	}
+
+	public static void getColecturiaByKey() {
+		ColecturiaTO lstPeriods3 = new ColecturiaTO();
+
+		try {
+			lstPeriods3 = catalog.get_ges_colecturiaByKey(2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println(lstPeriods3.getCardcode() + "  "
+				+ lstPeriods3.getDocnum() + " - " + lstPeriods3.getDoctotal()
+				+ " - " + lstPeriods3.getDocentry());
+
+	}
+	
+	public static void getColecturiaConcept() {
+		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
+		List lstPeriods3 = null;
+		//nuevo.setDocentry(1);
+
+		try {
+			lstPeriods3 = catalog.get_ges_colecturiaConcept();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator<ColecturiaTO> iterator = lstPeriods3.iterator();
+		while (iterator.hasNext()) {
+			ColecturiaTO periodo = (ColecturiaTO) iterator.next();
+			System.out.println(periodo.getCardcode() + "  "
+					+ periodo.getDocnum() + " - " + periodo.getDoctotal()
+					+ " - " + periodo.getDocentry());
+		}
 	}
 
 }

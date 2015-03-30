@@ -11,6 +11,9 @@ import com.sifcoapp.bussinessLogic.CatalogEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.bank.to.CheckForPaymentInTO;
 import com.sifcoapp.objects.bank.to.CheckForPaymentTO;
+import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaInTO;
+import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -55,6 +58,38 @@ public class BankEJBClient {
 		// TODO Auto-generated method stub
 		CheckForPaymentTO lstPeriods = new CheckForPaymentTO();
 		lstPeriods = bean.get_cfp0_checkforpaymentByKey(parameters);
+		return lstPeriods;
+	}
+
+	public ResultOutTO ges_ges_col0_colecturia_mtto(ColecturiaTO parameters,
+			int action) throws Exception {
+
+		ResultOutTO _return;
+
+		_return = bean.ges_ges_col0_colecturia_mtto(parameters, action);
+
+		return _return;
+	}
+
+	public List get_ges_colecturia(ColecturiaInTO parameters) throws Exception {
+		List lstPeriods = new Vector();
+		lstPeriods = bean.get_ges_colecturia(parameters);
+		return lstPeriods;
+	}
+
+	public ColecturiaTO get_ges_colecturiaByKey(int parameters)
+			throws Exception {
+		// TODO Auto-generated method stub
+		ColecturiaTO lstPeriods = new ColecturiaTO();
+		lstPeriods = bean.get_ges_colecturiaByKey(parameters);
+		return lstPeriods;
+	}
+	
+	public List get_ges_colecturiaConcept()
+			throws Exception {
+		// TODO Auto-generated method stub
+		List lstPeriods = new Vector();
+		lstPeriods = bean.get_ges_colecturiaConcept();
 		return lstPeriods;
 	}
 

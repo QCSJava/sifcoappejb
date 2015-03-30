@@ -9,6 +9,7 @@ import com.sifcoapp.objects.bank.to.ColecturiaInTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
+import com.sifcoapp.objects.purchase.dao.PurchaseDetailDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class ColecturiaDAO extends CommonDAO {
@@ -17,11 +18,11 @@ public class ColecturiaDAO extends CommonDAO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int ges_cfp0_checkforpayment_mtto(ColecturiaTO parameters, int action)
+	public int ges_ges_col0_colecturia_mtto(ColecturiaTO parameters, int action)
 			throws Exception {
-		int v_resp = 0;
+		List v_resp;
 		// s.setDbObject("{call sp_ges_col0_colecturia_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_ges_col0_colecturia_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_ges_col0_colecturia_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setInt(1, "_docentry", new Integer(parameters.getDocentry()));
 		this.setInt(2, "_transtype", new Integer(parameters.getTranstype()));
 		this.setInt(3, "_docnum", new Integer(parameters.getDocnum()));
@@ -51,17 +52,17 @@ public class ColecturiaDAO extends CommonDAO {
 		this.setDouble(13, "_doctotal", new Double(parameters.getDoctotal()));
 		// this.setDate(14,"_taxdate", parameters.getTaxdate());
 		if (parameters.getTaxdate() == null) {
-			this.setDate(13, "_taxdate", parameters.getTaxdate());
+			this.setDate(14, "_taxdate", parameters.getTaxdate());
 		} else {
 			java.sql.Date fecha = new java.sql.Date(parameters.getTaxdate()
 					.getTime());
-			this.setDate(13, "_taxdate", fecha);
+			this.setDate(14, "_taxdate", fecha);
 		}
 		this.setString(15, "_ref1", parameters.getRef1());
 		this.setString(16, "_ref2", parameters.getRef2());
 		this.setInt(17, "_usersign ", new Integer(parameters.getUsersign()));
 		this.setInt(18, "_action", new Integer(action));
-		v_resp = this.runUpdate();
+		v_resp = this.runQuery();
 		return this.getInt();
 	}
 
@@ -71,7 +72,7 @@ public class ColecturiaDAO extends CommonDAO {
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		// s.setDbObject("{call sp_get_ges_colecturia(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_get_ges_colecturia(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_ges_colecturia(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setInt(1, "_docentry", new Integer(parameters.getDocentry()));
 		this.setInt(2, "_transtype", new Integer(parameters.getTranstype()));
 		this.setInt(3, "_docnum", new Integer(parameters.getDocnum()));
@@ -101,11 +102,11 @@ public class ColecturiaDAO extends CommonDAO {
 		this.setDouble(13, "_doctotal", new Double(parameters.getDoctotal()));
 		// this.setDate(14,"_taxdate", parameters.getTaxdate());
 		if (parameters.getTaxdate() == null) {
-			this.setDate(13, "_taxdate", parameters.getTaxdate());
+			this.setDate(14, "_taxdate", parameters.getTaxdate());
 		} else {
 			java.sql.Date fecha = new java.sql.Date(parameters.getTaxdate()
 					.getTime());
-			this.setDate(13, "_taxdate", fecha);
+			this.setDate(14, "_taxdate", fecha);
 		}
 		this.setString(15, "_ref1", parameters.getRef1());
 		this.setString(16, "_ref2", parameters.getRef2());
@@ -158,7 +159,7 @@ public class ColecturiaDAO extends CommonDAO {
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_ges_colecturia_by_key(?)}");
-		this.setInt(1, "_checkkey", parameters);
+		this.setInt(1, "_docentry", parameters);
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
@@ -167,7 +168,7 @@ public class ColecturiaDAO extends CommonDAO {
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-
+		ColecturiaDetailDAO Detail = new ColecturiaDetailDAO();
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
@@ -190,7 +191,7 @@ public class ColecturiaDAO extends CommonDAO {
 					colecturia.setRef1(rowsetActual.getString(15));
 					colecturia.setRef2(rowsetActual.getString(16));
 					colecturia.setUsersign(rowsetActual.getInt(17));
-
+					colecturia.setColecturiaDetail(Detail.get_ges_colecturiaDetailByKey(rowsetActual.getInt(1)));
 					_return = colecturia;
 				}
 				rowsetActual.close();

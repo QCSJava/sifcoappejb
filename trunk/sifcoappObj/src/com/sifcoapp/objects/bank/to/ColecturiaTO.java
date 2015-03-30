@@ -3,6 +3,7 @@ package com.sifcoapp.objects.bank.to;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 import java.util.Date;
+import java.util.List;
 
 public class ColecturiaTO extends CommonTO {
 
@@ -27,8 +28,10 @@ public class ColecturiaTO extends CommonTO {
 	private String ref1;
 	private String ref2;
 	private int usersign;
+	private List ColecturiaDetail;
 
 	public ColecturiaTO() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -36,7 +39,7 @@ public class ColecturiaTO extends CommonTO {
 			int receiptnum, String printed, Date docdate, Date docduedate,
 			String cardcode, String cardname, String comments, String jrnlmemo,
 			int series, Double doctotal, Date taxdate, String ref1,
-			String ref2, int usersign) {
+			String ref2, int usersign, List colecturiaDetail) {
 		super();
 		this.docentry = docentry;
 		this.transtype = transtype;
@@ -55,6 +58,7 @@ public class ColecturiaTO extends CommonTO {
 		this.ref1 = ref1;
 		this.ref2 = ref2;
 		this.usersign = usersign;
+		ColecturiaDetail = colecturiaDetail;
 	}
 
 	public int getDocentry() {
@@ -192,4 +196,13 @@ public class ColecturiaTO extends CommonTO {
 	public void setUsersign(int usersign) {
 		this.usersign = usersign;
 	}
+
+	public List getColecturiaDetail() {
+		return ColecturiaDetail;
+	}
+
+	public void setColecturiaDetail(List colecturiaDetail) {
+		ColecturiaDetail = colecturiaDetail;
+	}
+
 }
