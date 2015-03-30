@@ -10,6 +10,7 @@ import com.sifcoapp.client.CatalogEJBClient;
 import com.sifcoapp.objects.bank.to.CheckForPaymentInTO;
 import com.sifcoapp.objects.bank.to.CheckForPaymentTO;
 import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
 import com.sifcoapp.objects.bank.to.ColecturiaInTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
@@ -153,7 +154,7 @@ public class BankTest {
 		ColecturiaTO lstPeriods3 = new ColecturiaTO();
 
 		try {
-			lstPeriods3 = catalog.get_ges_colecturiaByKey(2);
+			lstPeriods3 = catalog.get_ges_colecturiaByKey(1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,7 +163,15 @@ public class BankTest {
 		System.out.println(lstPeriods3.getCardcode() + "  "
 				+ lstPeriods3.getDocnum() + " - " + lstPeriods3.getDoctotal()
 				+ " - " + lstPeriods3.getDocentry());
-
+		
+		Iterator<ColecturiaDetailTO> iterator = lstPeriods3.getColecturiaDetail().iterator();
+		while (iterator.hasNext()) {
+			ColecturiaDetailTO periodo = (ColecturiaDetailTO) iterator.next();
+			System.out.println(periodo.getAcctcode() + "  "
+					+ periodo.getLinenum() + " - " + periodo.getObjtype()
+					+ " - " + periodo.getDscription());
+		}
+		
 	}
 	
 	public static void getColecturiaConcept() {
@@ -176,12 +185,12 @@ public class BankTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Iterator<ColecturiaTO> iterator = lstPeriods3.iterator();
+		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
-			ColecturiaTO periodo = (ColecturiaTO) iterator.next();
-			System.out.println(periodo.getCardcode() + "  "
-					+ periodo.getDocnum() + " - " + periodo.getDoctotal()
-					+ " - " + periodo.getDocentry());
+			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
+			System.out.println(periodo.getAcctcode() + "  "
+					+ periodo.getLinenum() + " - " + periodo.getObjtype()
+					+ " - " + periodo.getDscription());
 		}
 	}
 
