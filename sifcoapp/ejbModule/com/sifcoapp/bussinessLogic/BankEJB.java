@@ -129,6 +129,13 @@ public class BankEJB implements BankEJBRemote {
 			while (iterator.hasNext()) {
 				ColecturiaDetailTO detail = (ColecturiaDetailTO) iterator
 						.next();
+				
+				if (detail.getPaidsum() == null) {
+					detail.setPaidsum(zero);
+				}
+				if (detail.getVatsum() == null) {
+					detail.setVatsum(zero);
+				}
 				// Para articulos nuevos
 				detail.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
