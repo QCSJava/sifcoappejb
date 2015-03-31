@@ -115,10 +115,21 @@ public class BankTest {
 		bus.setCardcode("000001");
 		bus.setCardname("Prueba");
 		bus.setDoctotal(10.1);
-		;
-
+		
+		ColecturiaDetailTO detalle = new ColecturiaDetailTO();
+		
+		List prueba = new Vector();
+		
+		detalle.setLinenum(1);
+		detalle.setAcctcode("23434");
+		detalle.setDscription("asdafsdf");
+		
+		prueba.add(detalle);
+		
+		bus.setColecturiaDetail(prueba);
+		
 		try {
-			resp = catalog.ges_ges_col0_colecturia_mtto(bus, 2);
+			resp = catalog.ges_ges_col0_colecturia_mtto(bus, 1);
 			System.out.println(resp.getDocentry());
 			System.out.println(resp.getCodigoError());
 			System.out.println(resp.getMensaje());

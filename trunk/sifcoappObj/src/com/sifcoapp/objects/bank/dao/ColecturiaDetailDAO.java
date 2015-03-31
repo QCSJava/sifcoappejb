@@ -27,7 +27,7 @@ public class ColecturiaDetailDAO extends CommonDAO {
 			ColecturiaDetailTO parameters, int action) throws Exception {
 		List v_resp;
 		// s.setDbObject("{call sp_ges_col0_colecturiadetail_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_ges_col0_colecturiadetail_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_ges_col1_colecturiadetail_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setInt(1, "_docentry,", parameters.getDocentry());
 		this.setInt(2, "_linenum,", parameters.getLinenum());
 		this.setString(3, "_linestatus,", parameters.getLinestatus());
@@ -47,6 +47,7 @@ public class ColecturiaDetailDAO extends CommonDAO {
 		this.setString(17, "_value1,", parameters.getValue1());
 		this.setString(18, "_value2,", parameters.getValue2());
 		this.setString(19, "_value3,", parameters.getValue3());
+		this.setInt(20, "_action", new Integer(action));
 		v_resp = this.runQuery();
 		return this.getInt();
 	}
