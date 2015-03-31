@@ -115,6 +115,7 @@ public class BankEJB implements BankEJBRemote {
 		ColecturiaDAO DAO = new ColecturiaDAO();
 		ColecturiaDetailDAO DAO1 = new ColecturiaDetailDAO(DAO.getConn());
 		DAO.setIstransaccional(true);
+		DAO1.setIstransaccional(true);
 
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
