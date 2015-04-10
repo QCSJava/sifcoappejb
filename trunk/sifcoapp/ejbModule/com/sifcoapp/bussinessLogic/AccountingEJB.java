@@ -33,6 +33,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 	Double zero=0.00;
 	/**
 	 * Default constructor.
+	 * 
 	 */
 	public AccountingEJB() {
 		// TODO Auto-generated constructor stub
