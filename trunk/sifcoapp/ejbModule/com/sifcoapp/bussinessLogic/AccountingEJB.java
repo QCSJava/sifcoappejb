@@ -515,12 +515,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			for (Object object : parameters) {
 				node = (AccountTO) object;
-				if (!node.getFathernum().equals(null)) {
+				if (!(node.getLevels()==1)) {
 					account = DAO.getAccountByKey(node.getAcctcode());
-					if (!account.equals(null)) {
-						int i = DAO.cat_acc0_ACCOUNT_mtto(node, 2);
+					if (!account.getAcctcode().isEmpty()) {
+						int i = DAO.cat_acc0_ACCOUNT_mtto(node,Common.MTTOUPDATE);
 					} else {
-						int i = DAO.cat_acc0_ACCOUNT_mtto(node, 1);
+						int i = DAO.cat_acc0_ACCOUNT_mtto(node,Common.MTTOINSERT);
 					}
 
 				}
