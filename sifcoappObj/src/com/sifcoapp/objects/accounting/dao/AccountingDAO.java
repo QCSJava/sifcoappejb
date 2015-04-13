@@ -358,6 +358,22 @@ public class AccountingDAO extends CommonDAO {
 
 	// ##################### MANTEMINIENTO DE LA TABLA ACCOUNT
 	// ############################
+	public int account_mtto_new(AccountTO parameters) throws Exception{
+		
+		int v_resp = 0;
+		// this.setDbObject("{call sp_cat_acc_period(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_acc_account_updtre(?,?,?,?,?)}");
+	
+		this.setDouble(1,"_endtotal",0.0);
+		this.setInt(2,"_levels", parameters.getLevels());
+		this.setInt(3,"_grpline", parameters.getGrpline());
+		this.setString(4,"_fathernum", parameters.getFathernum());
+		this.setInt(5,"_groupmask", parameters.getGroupmask());
+		
+		v_resp= this.runUpdate();
+		return v_resp;
+		
+	}
 	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
 			throws Exception {
 

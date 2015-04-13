@@ -128,6 +128,7 @@ public class AccountingEJBClient {
 		return _result;
 		
 	}
+
 	// ######## JOURNALENTRYS ########
 	
 	public List getJournalEntry(JournalEntryInTO parameters)

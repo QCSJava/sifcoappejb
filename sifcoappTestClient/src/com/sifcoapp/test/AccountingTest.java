@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
+
+//import sun.awt.shell.Win32ShellFolder2.SystemIcon;
 import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
 import com.sifcoapp.client.AccountingEJBClient;
@@ -170,12 +173,12 @@ public class AccountingTest {
 		parameters.setF_duedate(fecha);
 		// Agregar
 
-		 //_result = AccountingEJBService.cat_accAssignment_mtto(parameters,
-		 //Common.MTTOINSERT);
+		// _result = AccountingEJBService.cat_accAssignment_mtto(parameters,
+		// Common.MTTOINSERT);
 
 		// Actualizar
 
-		//parameters.setUsersign(1);
+		// parameters.setUsersign(1);
 		_result = AccountingEJBService.cat_accAssignment_mtto(parameters,
 				Common.MTTOINSERT);
 
@@ -218,8 +221,8 @@ public class AccountingTest {
 		List lstPeriods = new Vector();
 		// 558,7954
 		try {
-			lstPeriods = AccountingEJBService
-					.getAccountByFilter(null, "ingresos", "Y");
+			lstPeriods = AccountingEJBService.getAccountByFilter(null,
+					"ingresos", "Y");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -252,55 +255,93 @@ public class AccountingTest {
 		acc.setCurrtotal(42.5);
 		acc.setEndtotal(56.2);
 
-		_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 3);
+		_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 1);
 
 		System.out.println(_return);
 
 	}
 
-	
-	//###############  PRUEBAS DE JOURNALENTRYS  ##################################
-	
-	public static void journal_matto() throws Exception{
+	public static void saveTreeAccount() throws EJBException {
+
+		AccountTO node = new AccountTO();
+		AccountTO account = new AccountTO();
+
+		account.setAcctcode("1");
+		account.setAcctname("FINANCIACIÓN BÁSICA");
+		account.setCurrtotal(0.000000);
+		account.setEndtotal(0.000000);
+		account.setBudget("Y");
+		account.setFrozen("n");
+		account.setPostable("N");
+		account.setLevels(1);
+
+		node.setAcctcode("1.1");
+		node.setAcctname("otro");
+		node.setCurrtotal(0.000000);
+		node.setEndtotal(0.000000);
+		node.setBudget("Y");
+		node.setFrozen("n");
+		node.setPostable("N");
+		node.setLevels(2);
+		node.setFathernum("1");
+		
+		 System.out.println(account.getAcctname());
+		 System.out.println(node.getAcctname());
+		List parameters = new Vector();
+		parameters.add(account);
+		parameters.add(node);
+		
+		
 		ResultOutTO _result= new ResultOutTO();
+		_result= AccountingEJBService.saveTreeAccount(parameters);
+		
+	}
+
+	// ############### PRUEBAS DE JOURNALENTRYS
+	// ##################################
+
+	public static void journal_matto() throws Exception {
+		ResultOutTO _result = new ResultOutTO();
 		List detail = new Vector();
 		JournalEntryTO nuevo = new JournalEntryTO();
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
-		
+
 		nuevo.setBatchnum(1);
 		art1.setLine_id(1);
 		detail.add(art1);
 		art2.setLine_id(2);
 		detail.add(art2);
 		nuevo.setJournalentryList(detail);
-		
-		_result= AccountingEJBService.journalEntry_mtto(nuevo,Common.MTTOINSERT);
-		
+
+		_result = AccountingEJBService.journalEntry_mtto(nuevo,
+				Common.MTTOINSERT);
+
 		System.out.println(_result.getMensaje());
 	}
-	
-	public static void getjournalEntry(){
+
+	public static void getjournalEntry() {
 		JournalEntryInTO nuevo = new JournalEntryInTO();
-		List consul= new Vector();
-		//nuevo.setTransid(1);
-		//nuevo.setBtfstatus("Y");
-		
-		consul= AccountingEJBService.getJournalEntry(nuevo);
+		List consul = new Vector();
+		// nuevo.setTransid(1);
+		// nuevo.setBtfstatus("Y");
+
+		consul = AccountingEJBService.getJournalEntry(nuevo);
 		Iterator<JournalEntryTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			JournalEntryTO acc = (JournalEntryTO) iterator.next();
 			System.out.println(acc.getTransid() + " - " + acc.getBtfstatus());
 		}
-		
+
 	}
-	public static void getjournalentry_by_key(){
-		List consul= new Vector();
-		JournalEntryTO result= new JournalEntryTO();
-		int trans=14;
-		result= AccountingEJBService.getJournalEntryByKey(trans);
-		System.out.println(result.getBtfstatus()+result.getTransid());
-		consul= result.getJournalentryList();
+
+	public static void getjournalentry_by_key() {
+		List consul = new Vector();
+		JournalEntryTO result = new JournalEntryTO();
+		int trans = 14;
+		result = AccountingEJBService.getJournalEntryByKey(trans);
+		System.out.println(result.getBtfstatus() + result.getTransid());
+		consul = result.getJournalentryList();
 		Iterator<JournalEntryLinesTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
@@ -308,44 +349,46 @@ public class AccountingTest {
 		}
 	}
 
-	//################pruebas budget###############################
-	public static void budget_mtto() throws Exception{
-		ResultOutTO _result= new ResultOutTO();
+	// ################pruebas budget###############################
+	public static void budget_mtto() throws Exception {
+		ResultOutTO _result = new ResultOutTO();
 		List detail = new Vector();
 		BudgetTO nuevo = new BudgetTO();
 		Date fecha = new Date();
 		nuevo.setFinancyear(fecha);
 		nuevo.setAcctcode("1255");
 		nuevo.setBgdcode(1);
-		
-		_result= AccountingEJBService.cat_budget_mtto(nuevo, Common.MTTOINSERT);
-		
+
+		_result = AccountingEJBService
+				.cat_budget_mtto(nuevo, Common.MTTOINSERT);
+
 		System.out.println(_result.getMensaje());
 	}
-	public static void getBudget(){
-		
-		List consul= new Vector();
-		//Date fecha = new Date();
-		//nuevo.setTransid(1);
-		//nuevo.setBtfstatus("Y");
-		
-		consul= AccountingEJBService.getBudget(2015);
+
+	public static void getBudget() {
+
+		List consul = new Vector();
+		// Date fecha = new Date();
+		// nuevo.setTransid(1);
+		// nuevo.setBtfstatus("Y");
+
+		consul = AccountingEJBService.getBudget(2015);
 		Iterator<BudgetTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			BudgetTO acc = (BudgetTO) iterator.next();
-			System.out.println(acc.getAbsid()+" - "+acc.getAcctcode());
+			System.out.println(acc.getAbsid() + " - " + acc.getAcctcode());
 		}
-		
+
 	}
 
-	//#################### pruebas de recurringposting #####################
-	public static void recurring_mtto() throws Exception{
-		ResultOutTO _result= new ResultOutTO();
+	// #################### pruebas de recurringposting #####################
+	public static void recurring_mtto() throws Exception {
+		ResultOutTO _result = new ResultOutTO();
 		List detail = new Vector();
 		RecurringPostingsTO nuevo = new RecurringPostingsTO();
-		RecurringPostingsDetailTO detalle1= new RecurringPostingsDetailTO();
-		RecurringPostingsDetailTO detalle2= new RecurringPostingsDetailTO();
-		
+		RecurringPostingsDetailTO detalle1 = new RecurringPostingsDetailTO();
+		RecurringPostingsDetailTO detalle2 = new RecurringPostingsDetailTO();
+
 		nuevo.setRcurcode("00000002");
 		nuevo.setInstance(1);
 		detalle1.setAcctdesc("probando");
@@ -356,38 +399,45 @@ public class AccountingTest {
 		detalle2.setCredit(45.50);
 		detail.add(detalle1);
 		detail.add(detalle2);
-		//nuevo.setRecurringPostingsDetail(detail);
-		
-		_result= AccountingEJBService.fin_recurringPosting_mtto(nuevo, Common.MTTODELETE);
-		System.out.println(_result.getMensaje()+" - "+ _result.getCodigoError());
-		
+		// nuevo.setRecurringPostingsDetail(detail);
+
+		_result = AccountingEJBService.fin_recurringPosting_mtto(nuevo,
+				Common.MTTODELETE);
+		System.out.println(_result.getMensaje() + " - "
+				+ _result.getCodigoError());
+
 	}
-	public static void getRecurring(){
+
+	public static void getRecurring() {
 		RecurringPostingsInTO nuevo = new RecurringPostingsInTO();
-		List consul= new Vector();
-		RecurringPostingsTO consul2= new RecurringPostingsTO();
-		//nuevo.setTransid(1);
-		//nuevo.setBtfstatus("Y");
+		List consul = new Vector();
+		RecurringPostingsTO consul2 = new RecurringPostingsTO();
+		// nuevo.setTransid(1);
+		// nuevo.setBtfstatus("Y");
 		nuevo.setRcurdesc("n");
-		consul= AccountingEJBService.getrecurringPosting(nuevo);
+		consul = AccountingEJBService.getrecurringPosting(nuevo);
 		Iterator<RecurringPostingsTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			RecurringPostingsTO acc = (RecurringPostingsTO) iterator.next();
 			System.out.println(acc.getRcurcode() + " - " + acc.getRcurdesc());
-			
+
 		}
-		
+
 	}
-	
-	public static void getReccuring_by_key(){
-		RecurringPostingsTO consul2= new RecurringPostingsTO();
-		List consul= new Vector();
-		consul2= AccountingEJBService.getrecurringPosting_by_key("00000001",0);
-		//Iterator<RecurringPostingsTO> iterator = consul2.iterator();
-		//while (iterator.hasNext()) {
-			//RecurringPostingsTO acc = (RecurringPostingsTO) iterator.next();
-			System.out.println(consul2.getRcurcode() + " - " + consul2.getFrequency());
-			
-		//}
+
+	public static void getReccuring_by_key() {
+		RecurringPostingsTO consul2 = new RecurringPostingsTO();
+		List consul = new Vector();
+		consul2 = AccountingEJBService
+				.getrecurringPosting_by_key("00000001", 0);
+		// Iterator<RecurringPostingsTO> iterator = consul2.iterator();
+		// while (iterator.hasNext()) {
+		// RecurringPostingsTO acc = (RecurringPostingsTO) iterator.next();
+		System.out.println(consul2.getRcurcode() + " - "
+				+ consul2.getFrequency());
+
+		// }
 	}
+	// pruebas de insercion de cuentas
+
 }
