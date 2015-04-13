@@ -38,6 +38,8 @@ public interface AccountingEJBRemote {
 	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)throws EJBException;
 	
 	public List getTreeAccount()throws EJBException;
+    
+	public ResultOutTO saveTreeAccount(List parameters)throws EJBException;
 	
 //////###### journal entry####/////////////////////////////
 	public List getJournalEntry(JournalEntryInTO parameters) throws EJBException;

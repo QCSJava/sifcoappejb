@@ -120,7 +120,14 @@ public class AccountingEJBClient {
 		account = bean.getTreeAccount();
 		return account;
 	}
-
+	public ResultOutTO saveTreeAccount(List parameters) throws EJBException {
+		ResultOutTO _result = new ResultOutTO();
+		
+		_result = bean.saveTreeAccount(parameters);
+		
+		return _result;
+		
+	}
 	// ######## JOURNALENTRYS ########
 	
 	public List getJournalEntry(JournalEntryInTO parameters)
