@@ -506,7 +506,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		// Double total = 0.0;
+
 		AccountingDAO DAO = new AccountingDAO();
 		DAO.setIstransaccional(true);
 		AccountTO node = new AccountTO();
@@ -517,8 +517,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				node = (AccountTO) object;
 				if (!(node.getLevels()==1)) {
 					account = DAO.getAccountByKey(node.getAcctcode());
-					if (!account.getAcctcode().isEmpty()) {
-						int i = DAO.cat_acc0_ACCOUNT_mtto(node,Common.MTTOUPDATE);
+					if (account.getAcctcode()!=null) {
+						int i = DAO.account_mtto_new(node);
 					} else {
 						int i = DAO.cat_acc0_ACCOUNT_mtto(node,Common.MTTOINSERT);
 					}
