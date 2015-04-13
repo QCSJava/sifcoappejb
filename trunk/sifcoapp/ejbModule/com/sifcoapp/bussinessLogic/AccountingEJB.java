@@ -509,25 +509,28 @@ public class AccountingEJB implements AccountingEJBRemote {
 		AccountingDAO DAO = new AccountingDAO();
 		DAO.setIstransaccional(true);
 		AccountTO node = new AccountTO();
-		AccountTO account= new AccountTO();
+		AccountTO account = new AccountTO();
 		try {
 
 			for (Object object : parameters) {
 				node = (AccountTO) object;
-               if(!node.getFathernum().equals(null)){
-            	 account=DAO.getAccountByKey(node.getAcctcode());
-            	  
-            	 
-               }
-            	   
+				if (!node.getFathernum().equals(null)) {
+					account = DAO.getAccountByKey(node.getAcctcode());
+					if (!account.equals(null)) {
+						int i = DAO.cat_acc0_ACCOUNT_mtto(node, 2);
+					} else {
+						int i = DAO.cat_acc0_ACCOUNT_mtto(node, 1);
+					}
+
+				}
+
 			}
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO: handle exception
-			_return.setCodigoError(1);
-			_return.setMensaje("Error al guardar datos");
 			DAO.rollBackConnection();
-		}finally {
+			throw (EJBException) new EJBException(e);
+		} finally {
 
 			DAO.forceCloseConnection();
 		}
