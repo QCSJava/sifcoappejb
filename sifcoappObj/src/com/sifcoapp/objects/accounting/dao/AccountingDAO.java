@@ -31,7 +31,7 @@ public class AccountingDAO extends CommonDAO {
 	/*
 	 * Mantenimiento de periodos contables
 	 */
-	
+
 	public int cat_accPeriod_mtto(AccPeriodTO parameters, int action)
 			throws Exception {
 
@@ -92,20 +92,22 @@ public class AccountingDAO extends CommonDAO {
 					account.setEndtotal(rowsetActual.getDouble(4));
 					account.setFinanse(rowsetActual.getString(5));
 					account.setBudget(rowsetActual.getString(6));
-					account.setPostable(rowsetActual.getString(7));
-					account.setLevels(rowsetActual.getInt(8));
-					account.setGrpline(rowsetActual.getInt(9));
-					account.setFathernum(rowsetActual.getString(10));
-					account.setGroupmask(rowsetActual.getInt(11));
-					account.setIntrmatch(rowsetActual.getInt(12));
-					account.setActtype(rowsetActual.getString(13));
-					account.setProtected1(rowsetActual.getString(14));
-					account.setCreatedate(rowsetActual.getDate(15));
-					account.setUpdatedate(rowsetActual.getDate(16));
-					account.setUsersign(rowsetActual.getInt(17));
-					account.setObjtype(rowsetActual.getString(18));
-					account.setValidfor(rowsetActual.getString(19));
+					account.setFrozen(rowsetActual.getString(7));
+					account.setPostable(rowsetActual.getString(8));
+					account.setFixed(rowsetActual.getString(9));
+					account.setLevels(rowsetActual.getInt(10));
+					account.setGrpline(rowsetActual.getInt(11));
+					account.setFathernum(rowsetActual.getString(12));
+					account.setGroupmask(rowsetActual.getInt(13));
+					account.setActtype(rowsetActual.getString(14));
+					account.setProtected1(rowsetActual.getString(15));
+					account.setObjtype(rowsetActual.getString(16));
+					account.setValidfor(rowsetActual.getString(17));
+					account.setFrozenfor(rowsetActual.getString(18));
+					account.setCounter(rowsetActual.getInt(19));
 					account.setFormatcode(rowsetActual.getString(20));
+					account.setCreatedate(rowsetActual.getDate(21));
+					account.setUsersing(rowsetActual.getInt(22));
 
 					_values.put(account.getAcctcode(), account);
 					// _return.add(account);
@@ -114,7 +116,8 @@ public class AccountingDAO extends CommonDAO {
 				String _position = null;
 				List lstDetProfile = new Vector();
 
-				String[] claves = (String[]) _values.keySet().toArray(new String[0]);
+				String[] claves = (String[]) _values.keySet().toArray(
+						new String[0]);
 				java.util.Arrays.sort(claves);
 
 				// partimos de los nodos sin hijos
@@ -122,7 +125,8 @@ public class AccountingDAO extends CommonDAO {
 					profileDetTmp = (AccountTO) _values.get(clave);
 					if (profileDetTmp.getFathernum() == null) {
 						profileDetTmp.setCurrtotal(0.00);
-						this.filterParent(profileDetTmp, _values,profileDetTmp.getAcctcode());
+						this.filterParent(profileDetTmp, _values,
+								profileDetTmp.getAcctcode());
 						_return.add(profileDetTmp);
 					}
 				}
@@ -138,13 +142,13 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	private void filterParent(AccountTO parent, Hashtable _allvalues,String parentFilter) {
+	private void filterParent(AccountTO parent, Hashtable _allvalues,
+			String parentFilter) {
 
 		// Enumeration enParameters = _allvalues.keys();
 		AccountTO profileDetTmp = null;
 		String _position = null;
 		List lstDetProfile = new Vector();
-		
 
 		// partimos de los nodos sin hijos
 
@@ -158,20 +162,20 @@ public class AccountingDAO extends CommonDAO {
 			String padre = profileDetTmp.getFathernum();
 
 			if (padre != null && padre.equals(parentFilter)) {
-				
-				
 
-				this.filterParent(profileDetTmp, _allvalues,profileDetTmp.getAcctcode());
+				this.filterParent(profileDetTmp, _allvalues,
+						profileDetTmp.getAcctcode());
 
 				lstDetProfile.add(profileDetTmp);
-				
-				parent.setCurrtotal(parent.getCurrtotal()+ profileDetTmp.getCurrtotal());
+
+				parent.setCurrtotal(parent.getCurrtotal()
+						+ profileDetTmp.getCurrtotal());
 
 			}
 
 		}
 
-		parent.setNodedetail(lstDetProfile);
+		parent.setChild(lstDetProfile);
 
 	}
 
@@ -203,20 +207,21 @@ public class AccountingDAO extends CommonDAO {
 					account.setEndtotal(rowsetActual.getDouble(4));
 					account.setFinanse(rowsetActual.getString(5));
 					account.setBudget(rowsetActual.getString(6));
-					account.setPostable(rowsetActual.getString(7));
-					account.setLevels(rowsetActual.getInt(8));
-					account.setGrpline(rowsetActual.getInt(9));
-					account.setFathernum(rowsetActual.getString(10));
-					account.setGroupmask(rowsetActual.getInt(11));
-					account.setIntrmatch(rowsetActual.getInt(12));
-					account.setActtype(rowsetActual.getString(13));
-					account.setProtected1(rowsetActual.getString(14));
-					account.setCreatedate(rowsetActual.getDate(15));
-					account.setUpdatedate(rowsetActual.getDate(16));
-					account.setUsersign(rowsetActual.getInt(17));
-					account.setObjtype(rowsetActual.getString(18));
-					account.setValidfor(rowsetActual.getString(19));
+					account.setFrozen(rowsetActual.getString(7));
+					account.setPostable(rowsetActual.getString(8));
+					account.setFixed(rowsetActual.getString(9));
+					account.setLevels(rowsetActual.getInt(10));
+					account.setGrpline(rowsetActual.getInt(11));
+					account.setFathernum(rowsetActual.getString(12));
+					account.setGroupmask(rowsetActual.getInt(13));
+					account.setActtype(rowsetActual.getString(14));
+					account.setProtected1(rowsetActual.getString(15));
+					account.setObjtype(rowsetActual.getString(16));
+					account.setValidfor(rowsetActual.getString(17));
+					account.setFrozenfor(rowsetActual.getString(18));
+					account.setCounter(rowsetActual.getInt(19));
 					account.setFormatcode(rowsetActual.getString(20));
+					account.setCreatedate(rowsetActual.getDate(21));
 
 					_return.add(account);
 				}
@@ -266,20 +271,22 @@ public class AccountingDAO extends CommonDAO {
 					account.setEndtotal(rowsetActual.getDouble(4));
 					account.setFinanse(rowsetActual.getString(5));
 					account.setBudget(rowsetActual.getString(6));
-					account.setPostable(rowsetActual.getString(7));
-					account.setLevels(rowsetActual.getInt(8));
-					account.setGrpline(rowsetActual.getInt(9));
-					account.setFathernum(rowsetActual.getString(10));
-					account.setGroupmask(rowsetActual.getInt(11));
-					account.setIntrmatch(rowsetActual.getInt(12));
-					account.setActtype(rowsetActual.getString(13));
-					account.setProtected1(rowsetActual.getString(14));
-					account.setCreatedate(rowsetActual.getDate(15));
-					account.setUpdatedate(rowsetActual.getDate(16));
-					account.setUsersign(rowsetActual.getInt(17));
-					account.setObjtype(rowsetActual.getString(18));
-					account.setValidfor(rowsetActual.getString(19));
+					account.setFrozen(rowsetActual.getString(7));
+					account.setPostable(rowsetActual.getString(8));
+					account.setFixed(rowsetActual.getString(9));
+					account.setLevels(rowsetActual.getInt(10));
+					account.setGrpline(rowsetActual.getInt(11));
+					account.setFathernum(rowsetActual.getString(12));
+					account.setGroupmask(rowsetActual.getInt(13));
+					account.setActtype(rowsetActual.getString(14));
+					account.setProtected1(rowsetActual.getString(15));
+					account.setObjtype(rowsetActual.getString(16));
+					account.setValidfor(rowsetActual.getString(17));
+					account.setFrozenfor(rowsetActual.getString(18));
+					account.setCounter(rowsetActual.getInt(19));
 					account.setFormatcode(rowsetActual.getString(20));
+					account.setCreatedate(rowsetActual.getDate(21));
+					account.setUsersing(rowsetActual.getInt(22));
 
 					_return.add(account);
 				}
@@ -322,20 +329,22 @@ public class AccountingDAO extends CommonDAO {
 					account.setEndtotal(rowsetActual.getDouble(4));
 					account.setFinanse(rowsetActual.getString(5));
 					account.setBudget(rowsetActual.getString(6));
-					account.setPostable(rowsetActual.getString(7));
-					account.setLevels(rowsetActual.getInt(8));
-					account.setGrpline(rowsetActual.getInt(9));
-					account.setFathernum(rowsetActual.getString(10));
-					account.setGroupmask(rowsetActual.getInt(11));
-					account.setIntrmatch(rowsetActual.getInt(12));
-					account.setActtype(rowsetActual.getString(13));
-					account.setProtected1(rowsetActual.getString(14));
-					account.setCreatedate(rowsetActual.getDate(15));
-					account.setUpdatedate(rowsetActual.getDate(16));
-					account.setUsersign(rowsetActual.getInt(17));
-					account.setObjtype(rowsetActual.getString(18));
-					account.setValidfor(rowsetActual.getString(19));
+					account.setFrozen(rowsetActual.getString(7));
+					account.setPostable(rowsetActual.getString(8));
+					account.setFixed(rowsetActual.getString(9));
+					account.setLevels(rowsetActual.getInt(10));
+					account.setGrpline(rowsetActual.getInt(11));
+					account.setFathernum(rowsetActual.getString(12));
+					account.setGroupmask(rowsetActual.getInt(13));
+					account.setActtype(rowsetActual.getString(14));
+					account.setProtected1(rowsetActual.getString(15));
+					account.setObjtype(rowsetActual.getString(16));
+					account.setValidfor(rowsetActual.getString(17));
+					account.setFrozenfor(rowsetActual.getString(18));
+					account.setCounter(rowsetActual.getInt(19));
 					account.setFormatcode(rowsetActual.getString(20));
+					account.setCreatedate(rowsetActual.getDate(21));
+                    account.setUsersing(rowsetActual.getInt(22));
 					_return = account;
 				}
 				rowsetActual.close();
@@ -354,26 +363,30 @@ public class AccountingDAO extends CommonDAO {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_period(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_acc0_account_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setString(1, "_acctcode", parameters.getAcctcode());
-		this.setString(2, "_acctname", parameters.getAcctname());
-		this.setDouble(3, "_currtotal", new Double(parameters.getCurrtotal()));
-		this.setDouble(4, "_endtotal", new Double(parameters.getEndtotal()));
-		this.setString(5, "_finanse", parameters.getFinanse());
-		this.setString(6, "_budget", parameters.getBudget());
-		this.setString(7, "_postable", parameters.getPostable());
-		this.setInt(8, "_levels", new Integer(parameters.getLevels()));
-		this.setInt(9, "_grpline", new Integer(parameters.getGrpline()));
-		this.setString(10, "_fathernum", parameters.getFathernum());
-		this.setInt(11, "_groupmask", new Integer(parameters.getGroupmask()));
-		this.setInt(12, "_intrmatch", new Integer(parameters.getIntrmatch()));
-		this.setString(13, "_acttype", parameters.getActtype());
-		this.setString(14, "_protected", parameters.getProtected1());
-		this.setInt(15, "_usersign", new Integer(parameters.getUsersign()));
-		this.setString(16, "_objtype", parameters.getObjtype());
-		this.setString(17, "_validfor", parameters.getValidfor());
-		this.setString(18, "_formatcode", parameters.getFormatcode());
-		this.setInt(19, "_action", new Integer(action));
+		this.setDbObject("{call sp_acc0_account_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setString(1,"_acctcode", parameters.getAcctcode());
+		this.setString(2,"_acctname", parameters.getAcctname());
+		this.setDouble(3,"_currtotal", parameters.getCurrtotal());
+		this.setDouble(4,"_endtotal", parameters.getEndtotal());
+		this.setString(5,"_finanse", parameters.getFinanse());
+		this.setString(6,"_budget", parameters.getBudget());
+		this.setString(7,"_frozen", parameters.getFrozen());
+		this.setString(8,"_postable", parameters.getPostable());
+		this.setString(9,"_fixed", parameters.getFixed());
+		this.setInt(10,"_levels", parameters.getLevels());
+		this.setInt(11,"_grpline", parameters.getGrpline());
+		this.setString(12,"_fathernum", parameters.getFathernum());
+		this.setInt(13,"_groupmask", parameters.getGroupmask());
+		this.setString(14,"_acttype", parameters.getActtype());
+		this.setString(15,"_protected", parameters.getProtected1());
+		this.setString(16,"_objtype", parameters.getObjtype());
+		this.setString(17,"_validfor", parameters.getValidfor());
+		this.setString(18,"_frozenfor", parameters.getFrozenfor());
+		this.setInt(19,"_counter", parameters.getCounter());
+		this.setString(20,"_formatcode", parameters.getFormatcode());
+		this.setDate(21,"_createdate", parameters.getCreatedate());
+		this.setInt(22,"_usersig",parameters.getUsersing());
+		this.setInt(23,"_action", action);
 
 		v_resp = this.runUpdate();
 
@@ -425,109 +438,106 @@ public class AccountingDAO extends CommonDAO {
 
 	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
 			throws Exception {
-		Date financyear=null;
-		Date f_refdate=null;
-		Date t_refdate=null;
-		Date f_duedate=null;
-		Date t_duedate=null;
-		Date f_taxdate=null;
-		Date t_taxdate=null;
+		Date financyear = null;
+		Date f_refdate = null;
+		Date t_refdate = null;
+		Date f_duedate = null;
+		Date t_duedate = null;
+		Date f_taxdate = null;
+		Date t_taxdate = null;
 		int v_resp = 0;
 		this.setDbObject("{call sp_cat_acc_assignment_mtto(?,?)}");
-		if (parameters.getFinancyear() != null){
-			financyear=new java.sql.Date(parameters.getFinancyear().getTime());
+		if (parameters.getFinancyear() != null) {
+			financyear = new java.sql.Date(parameters.getFinancyear().getTime());
 		}
-		if (parameters.getF_refdate() != null){
-			f_refdate=new java.sql.Date(parameters.getF_refdate().getTime());
+		if (parameters.getF_refdate() != null) {
+			f_refdate = new java.sql.Date(parameters.getF_refdate().getTime());
 		}
-		if (parameters.getT_refdate() != null){
-			t_refdate=new java.sql.Date(parameters.getT_refdate().getTime());
+		if (parameters.getT_refdate() != null) {
+			t_refdate = new java.sql.Date(parameters.getT_refdate().getTime());
 		}
-		if (parameters.getF_duedate() != null){
-			f_duedate=new java.sql.Date(parameters.getF_duedate().getTime());
+		if (parameters.getF_duedate() != null) {
+			f_duedate = new java.sql.Date(parameters.getF_duedate().getTime());
 		}
-		if (parameters.getT_duedate()!= null){
-			t_duedate=new java.sql.Date(parameters.getT_duedate().getTime());
+		if (parameters.getT_duedate() != null) {
+			t_duedate = new java.sql.Date(parameters.getT_duedate().getTime());
 		}
-		if (parameters.getF_taxdate() != null){
-			f_taxdate=new java.sql.Date(parameters.getF_taxdate() .getTime());
+		if (parameters.getF_taxdate() != null) {
+			f_taxdate = new java.sql.Date(parameters.getF_taxdate().getTime());
 		}
-		if (parameters.getT_taxdate() != null){
-			t_taxdate=new java.sql.Date(parameters.getT_taxdate().getTime());
+		if (parameters.getT_taxdate() != null) {
+			t_taxdate = new java.sql.Date(parameters.getT_taxdate().getTime());
 		}
-		
 
 		Object[] param = { parameters.getAbsentry(), parameters.getPeriodcat(),
-				financyear, parameters.getYear(),
-				parameters.getPeriodname(), parameters.getSubtype(),
-				parameters.getPeriodnum(), f_refdate,
-				t_refdate, f_duedate,
-				t_duedate, f_taxdate,
-				t_taxdate, parameters.getLinkact_1(),
-				parameters.getLinkact_2(), parameters.getLinkact_3(),
-				parameters.getLinkact_4(), parameters.getLinkact_5(),
-				parameters.getLinkact_6(), parameters.getLinkact_8(),
-				parameters.getLinkact_9(), parameters.getLinkact_10(),
-				parameters.getLinkact_11(), parameters.getLinkact_12(),
-				parameters.getLinkact_13(), parameters.getLinkact_14(),
-				parameters.getLinkact_15(), parameters.getLinkact_16(),
-				parameters.getLinkact_17(), parameters.getLinkact_18(),
-				parameters.getDfltincom(), parameters.getExmptincom(),
-				parameters.getDfltexpn(), parameters.getForgnincm(),
-				parameters.getEcincome(), parameters.getForgnexpn(),
-				parameters.getDfltratedi(), parameters.getDecresglac(),
-				parameters.getLinkact_27(), parameters.getDftstockob(),
-				parameters.getLinkact_19(), parameters.getLinkact_20(),
-				parameters.getLinkact_21(), parameters.getLinkact_22(),
-				parameters.getLinkact_23(), parameters.getLinkact_24(),
-				parameters.getLinkact_25(), parameters.getLinkact_26(),
-				parameters.getIncresglac(), parameters.getRturnngact(),
-				parameters.getCogm_act(), parameters.getAloccstact(),
-				parameters.getVariancact(), parameters.getPricdifact(),
-				parameters.getCdownpymnt(), parameters.getVdownpymnt(),
-				parameters.getCboercvble(), parameters.getCboeonclct(),
-				parameters.getCboepresnt(), parameters.getCboediscnt(),
-				parameters.getCunpaidboe(), parameters.getVboepayble(),
-				parameters.getVasstboepy(), parameters.getCopendebts(),
-				parameters.getVopendebts(), parameters.getPurchseact(),
-				parameters.getPareturnac(), parameters.getPaoffsetac(),
-				parameters.getLinkact_28(), parameters.getExdiffact(),
-				parameters.getBalanceact(), parameters.getBnkchgact(),
-				parameters.getLinkact_29(), parameters.getLinkact_30(),
-				parameters.getIncmacct(), parameters.getExpnacct(),
-				parameters.getVatrevact(), parameters.getExpclract(),
-				parameters.getExpofstact(), parameters.getCostrevact(),
-				parameters.getRepomoact(), parameters.getWipvaracct(),
-				parameters.getSalevatoff(), parameters.getPurcvatoff(),
-				parameters.getDpmsalact(), parameters.getDpmpuract(),
-				parameters.getExpvaract(), parameters.getCostoffact(),
-				parameters.getEcexepnses(), parameters.getStockact(),
-				parameters.getDflinprcss(), parameters.getDfltincstm(),
-				parameters.getDfltprofit(), parameters.getDfltloss(),
-				parameters.getVassets(), parameters.getStockrvact(),
-				parameters.getStkrvofact(), parameters.getWipacct(),
-				parameters.getDfltcard(), parameters.getShpdgdsact(),
-				parameters.getGlrvoffact(), parameters.getOverpayap(),
-				parameters.getUndrpayap(), parameters.getOverpayar(),
-				parameters.getUndrpayar(), parameters.getArcmact(),
-				parameters.getArcmexpact(), parameters.getArcmfrnact(),
-				parameters.getArcmeuact(), parameters.getApcmact(),
-				parameters.getApcmfrnact(), parameters.getApcmeuact(),
-				parameters.getNegstckact(), parameters.getStkintnact(),
-				parameters.getGlgainxdif(), parameters.getGllossxdif(),
-				parameters.getAmountdiff(), parameters.getSlfinvincm(),
-				parameters.getSlfinvexpn(), parameters.getOnholdact(),
-				parameters.getPlaact(), parameters.getIcclract(),
-				parameters.getOcclract(), parameters.getPurbalact(),
-				parameters.getWhicenact(), parameters.getWhocenact(),
-				parameters.getSaldpmint(), parameters.getPurdpmint(),
-				parameters.getExrateondt(), parameters.getEurecvact(),
-				parameters.getEupayact(), parameters.getWipoffset(),
-				parameters.getStockoffst(), parameters.getDunintrst(),
-				parameters.getDunfee(), parameters.getTdsinterst(),
-				parameters.getTdscharges(), parameters.getUsersign(),
-				parameters.getPdfltwt(), parameters.getSdfltwt(),
-				parameters.isShandlewt(), parameters.isPhandlewt() };
+				financyear, parameters.getYear(), parameters.getPeriodname(),
+				parameters.getSubtype(), parameters.getPeriodnum(), f_refdate,
+				t_refdate, f_duedate, t_duedate, f_taxdate, t_taxdate,
+				parameters.getLinkact_1(), parameters.getLinkact_2(),
+				parameters.getLinkact_3(), parameters.getLinkact_4(),
+				parameters.getLinkact_5(), parameters.getLinkact_6(),
+				parameters.getLinkact_8(), parameters.getLinkact_9(),
+				parameters.getLinkact_10(), parameters.getLinkact_11(),
+				parameters.getLinkact_12(), parameters.getLinkact_13(),
+				parameters.getLinkact_14(), parameters.getLinkact_15(),
+				parameters.getLinkact_16(), parameters.getLinkact_17(),
+				parameters.getLinkact_18(), parameters.getDfltincom(),
+				parameters.getExmptincom(), parameters.getDfltexpn(),
+				parameters.getForgnincm(), parameters.getEcincome(),
+				parameters.getForgnexpn(), parameters.getDfltratedi(),
+				parameters.getDecresglac(), parameters.getLinkact_27(),
+				parameters.getDftstockob(), parameters.getLinkact_19(),
+				parameters.getLinkact_20(), parameters.getLinkact_21(),
+				parameters.getLinkact_22(), parameters.getLinkact_23(),
+				parameters.getLinkact_24(), parameters.getLinkact_25(),
+				parameters.getLinkact_26(), parameters.getIncresglac(),
+				parameters.getRturnngact(), parameters.getCogm_act(),
+				parameters.getAloccstact(), parameters.getVariancact(),
+				parameters.getPricdifact(), parameters.getCdownpymnt(),
+				parameters.getVdownpymnt(), parameters.getCboercvble(),
+				parameters.getCboeonclct(), parameters.getCboepresnt(),
+				parameters.getCboediscnt(), parameters.getCunpaidboe(),
+				parameters.getVboepayble(), parameters.getVasstboepy(),
+				parameters.getCopendebts(), parameters.getVopendebts(),
+				parameters.getPurchseact(), parameters.getPareturnac(),
+				parameters.getPaoffsetac(), parameters.getLinkact_28(),
+				parameters.getExdiffact(), parameters.getBalanceact(),
+				parameters.getBnkchgact(), parameters.getLinkact_29(),
+				parameters.getLinkact_30(), parameters.getIncmacct(),
+				parameters.getExpnacct(), parameters.getVatrevact(),
+				parameters.getExpclract(), parameters.getExpofstact(),
+				parameters.getCostrevact(), parameters.getRepomoact(),
+				parameters.getWipvaracct(), parameters.getSalevatoff(),
+				parameters.getPurcvatoff(), parameters.getDpmsalact(),
+				parameters.getDpmpuract(), parameters.getExpvaract(),
+				parameters.getCostoffact(), parameters.getEcexepnses(),
+				parameters.getStockact(), parameters.getDflinprcss(),
+				parameters.getDfltincstm(), parameters.getDfltprofit(),
+				parameters.getDfltloss(), parameters.getVassets(),
+				parameters.getStockrvact(), parameters.getStkrvofact(),
+				parameters.getWipacct(), parameters.getDfltcard(),
+				parameters.getShpdgdsact(), parameters.getGlrvoffact(),
+				parameters.getOverpayap(), parameters.getUndrpayap(),
+				parameters.getOverpayar(), parameters.getUndrpayar(),
+				parameters.getArcmact(), parameters.getArcmexpact(),
+				parameters.getArcmfrnact(), parameters.getArcmeuact(),
+				parameters.getApcmact(), parameters.getApcmfrnact(),
+				parameters.getApcmeuact(), parameters.getNegstckact(),
+				parameters.getStkintnact(), parameters.getGlgainxdif(),
+				parameters.getGllossxdif(), parameters.getAmountdiff(),
+				parameters.getSlfinvincm(), parameters.getSlfinvexpn(),
+				parameters.getOnholdact(), parameters.getPlaact(),
+				parameters.getIcclract(), parameters.getOcclract(),
+				parameters.getPurbalact(), parameters.getWhicenact(),
+				parameters.getWhocenact(), parameters.getSaldpmint(),
+				parameters.getPurdpmint(), parameters.getExrateondt(),
+				parameters.getEurecvact(), parameters.getEupayact(),
+				parameters.getWipoffset(), parameters.getStockoffst(),
+				parameters.getDunintrst(), parameters.getDunfee(),
+				parameters.getTdsinterst(), parameters.getTdscharges(),
+				parameters.getUsersign(), parameters.getPdfltwt(),
+				parameters.getSdfltwt(), parameters.isShandlewt(),
+				parameters.isPhandlewt() };
 
 		Array aArray = null;
 		try {
@@ -718,42 +728,51 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	//############## MANTENIMIENTO DE LA TABLA BUDGET######################
-	public int cat_budget_mtto(BudgetTO parameters, int action) throws Exception{
+	// ############## MANTENIMIENTO DE LA TABLA BUDGET######################
+	public int cat_budget_mtto(BudgetTO parameters, int action)
+			throws Exception {
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_peri(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_cat_budget_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setInt(1,"_absid", new Integer(parameters.getAbsid()));
-		this.setString(2,"_acctcode ",  parameters.getAcctcode());
-		this.setInt(3,"_bgdcode ", new Integer(parameters.getBgdcode()));
-		this.setString(4,"_fathercode ", parameters.getFathercode());
-		this.setDouble(5,"_fthrprcnt ",new Double( parameters.getFthrprcnt()));
-		this.setDouble(6,"_debltotal ", new Double(parameters.getDebltotal()));
-		this.setDouble(7,"_credltotal ",new Double( parameters.getCredltotal()));
-		this.setDouble(8,"_debrltotal ",new Double( parameters.getDebrltotal()));
-		this.setDouble(9,"_crdrltotal ",new Double( parameters.getCrdrltotal()));
-		this.setDouble(10,"_ftridrlsum ",new Double( parameters.getFtridrlsum()));
-		this.setDouble(11,"_ftridrssum ",new Double( parameters.getFtridrssum()));
-		this.setDouble(12,"_ftrodrlsum ",new Double( parameters.getFtrodrlsum()));
-		this.setDouble(13,"_ftrocrlsum ",new Double( parameters.getFtrocrlsum()));
-		java.sql.Date fecha = new java.sql.Date(parameters.getFinancyear().getTime());
-		this.setDate(14,"_financyear ", fecha);
-		this.setInt(15,"_usersign ", new Integer(parameters.getUsersign()));
-		this.setInt(16,"_action ", new Integer(action));
-		
+		this.setInt(1, "_absid", new Integer(parameters.getAbsid()));
+		this.setString(2, "_acctcode ", parameters.getAcctcode());
+		this.setInt(3, "_bgdcode ", new Integer(parameters.getBgdcode()));
+		this.setString(4, "_fathercode ", parameters.getFathercode());
+		this.setDouble(5, "_fthrprcnt ", new Double(parameters.getFthrprcnt()));
+		this.setDouble(6, "_debltotal ", new Double(parameters.getDebltotal()));
+		this.setDouble(7, "_credltotal ",
+				new Double(parameters.getCredltotal()));
+		this.setDouble(8, "_debrltotal ",
+				new Double(parameters.getDebrltotal()));
+		this.setDouble(9, "_crdrltotal ",
+				new Double(parameters.getCrdrltotal()));
+		this.setDouble(10, "_ftridrlsum ",
+				new Double(parameters.getFtridrlsum()));
+		this.setDouble(11, "_ftridrssum ",
+				new Double(parameters.getFtridrssum()));
+		this.setDouble(12, "_ftrodrlsum ",
+				new Double(parameters.getFtrodrlsum()));
+		this.setDouble(13, "_ftrocrlsum ",
+				new Double(parameters.getFtrocrlsum()));
+		java.sql.Date fecha = new java.sql.Date(parameters.getFinancyear()
+				.getTime());
+		this.setDate(14, "_financyear ", fecha);
+		this.setInt(15, "_usersign ", new Integer(parameters.getUsersign()));
+		this.setInt(16, "_action ", new Integer(action));
+
 		v_resp = this.runUpdate();
-		
+
 		return v_resp;
-		
+
 	}
-	
-	public List getBudget(int _bgdcode) throws Exception{
+
+	public List getBudget(int _bgdcode) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{ call sp_get_budget(?)}");
-		this.setInt(1,"_bgdcode",new Integer(_bgdcode));
+		this.setInt(1, "_bgdcode", new Integer(_bgdcode));
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
@@ -792,15 +811,17 @@ public class AccountingDAO extends CommonDAO {
 				String _position = null;
 				List lstDetProfile = new Vector();
 
-				String[] claves = (String[]) _values.keySet().toArray(new String[0]);
+				String[] claves = (String[]) _values.keySet().toArray(
+						new String[0]);
 				java.util.Arrays.sort(claves);
 
 				// partimos de los nodos sin hijos
 				for (String clave : claves) {
 					profileDetTmp = (BudgetTO) _values.get(clave);
-					if (profileDetTmp.getFathercode()== null) {
+					if (profileDetTmp.getFathercode() == null) {
 						profileDetTmp.setCurrtotal(0.00);
-						this.filterParentBudget(profileDetTmp, _values,profileDetTmp.getAcctcode());
+						this.filterParentBudget(profileDetTmp, _values,
+								profileDetTmp.getAcctcode());
 						_return.add(profileDetTmp);
 					}
 				}
@@ -812,14 +833,14 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	private void filterParentBudget(BudgetTO parent, Hashtable _allvalues,String parentFilter) {
 
+	private void filterParentBudget(BudgetTO parent, Hashtable _allvalues,
+			String parentFilter) {
 
 		// Enumeration enParameters = _allvalues.keys();
 		BudgetTO profileDetTmp = null;
 		String _position = null;
 		List lstDetProfile = new Vector();
-		
 
 		// partimos de los nodos sin hijos
 
@@ -832,15 +853,15 @@ public class AccountingDAO extends CommonDAO {
 
 			String padre = profileDetTmp.getFathercode();
 
-			if (padre!=null && padre.equals(parentFilter)) {
-				
-				
+			if (padre != null && padre.equals(parentFilter)) {
 
-				this.filterParentBudget(profileDetTmp, _allvalues,profileDetTmp.getAcctcode());
+				this.filterParentBudget(profileDetTmp, _allvalues,
+						profileDetTmp.getAcctcode());
 
 				lstDetProfile.add(profileDetTmp);
-				
-				parent.setCurrtotal(parent.getCurrtotal()+ profileDetTmp.getCurrtotal());
+
+				parent.setCurrtotal(parent.getCurrtotal()
+						+ profileDetTmp.getCurrtotal());
 
 			}
 
@@ -850,72 +871,75 @@ public class AccountingDAO extends CommonDAO {
 
 	}
 
-	//################ MANTENIMIENTO DE LA TABLA RecurringPostings ###########################
-	
-	public int fin_recurringPosting_mtto(RecurringPostingsTO parameters, int action) throws Exception{
+	// ################ MANTENIMIENTO DE LA TABLA RecurringPostings
+	// ###########################
+
+	public int fin_recurringPosting_mtto(RecurringPostingsTO parameters,
+			int action) throws Exception {
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_peri(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_fin_rep0_recurringpostings_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setString(1,"_rcurcode", parameters.getRcurcode());
-		this.setString(2,"_rcurdesc ", parameters.getRcurdesc());
-		this.setString(3,"_frequency ", parameters.getFrequency());
-		this.setInt(4,"_remind ", new Integer(parameters.getRemind()));
-		if (parameters.getLastposted() == null){
-			this.setDate(5,"_lastposted ", parameters.getLastposted());
-		}else
-		{
-			java.sql.Date fecha= new java.sql.Date(parameters.getLastposted().getTime());
-			this.setDate(5,"_lastposted ",fecha);
+		this.setString(1, "_rcurcode", parameters.getRcurcode());
+		this.setString(2, "_rcurdesc ", parameters.getRcurdesc());
+		this.setString(3, "_frequency ", parameters.getFrequency());
+		this.setInt(4, "_remind ", new Integer(parameters.getRemind()));
+		if (parameters.getLastposted() == null) {
+			this.setDate(5, "_lastposted ", parameters.getLastposted());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getLastposted()
+					.getTime());
+			this.setDate(5, "_lastposted ", fecha);
 		}
-		if (parameters.getNextdeu() == null){
-			this.setDate(6,"_nextdeu ", parameters.getNextdeu());
-		}else
-		{
-			java.sql.Date fecha= new java.sql.Date(parameters.getNextdeu().getTime());
-			this.setDate(6,"_nextdeu ", fecha);
+		if (parameters.getNextdeu() == null) {
+			this.setDate(6, "_nextdeu ", parameters.getNextdeu());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getNextdeu()
+					.getTime());
+			this.setDate(6, "_nextdeu ", fecha);
 		}
-		this.setInt(7,"_entrycount ", new Integer(parameters.getEntrycount()));
-		this.setDouble(8,"_volume ",new Double( parameters.getVolume()));
-		this.setString(9,"_volcurr ", parameters.getVolcurr());
-		this.setDouble(10,"_financvol ",new Double( parameters.getFinancvol()));
-		this.setString(11,"_ref1 ", parameters.getRef1());
-		this.setString(12,"_ref2 ", parameters.getRef2());
-		this.setString(13,"_transcode ", parameters.getTranscode());
-		this.setString(14,"_memo ", parameters.getMemo());
-		this.setString(15,"_limitrtrns ", parameters.getLimitrtrns());
-		this.setInt(16,"_returns ", new Integer(parameters.getReturns()));
-		if (parameters.getLimitdate() == null){
-			this.setDate(17,"_limitdate ", parameters.getLimitdate());
-		}else
-		{
-			java.sql.Date fecha= new java.sql.Date(parameters.getLimitdate().getTime());
-			this.setDate(17,"_limitdate ",fecha);
+		this.setInt(7, "_entrycount ", new Integer(parameters.getEntrycount()));
+		this.setDouble(8, "_volume ", new Double(parameters.getVolume()));
+		this.setString(9, "_volcurr ", parameters.getVolcurr());
+		this.setDouble(10, "_financvol ", new Double(parameters.getFinancvol()));
+		this.setString(11, "_ref1 ", parameters.getRef1());
+		this.setString(12, "_ref2 ", parameters.getRef2());
+		this.setString(13, "_transcode ", parameters.getTranscode());
+		this.setString(14, "_memo ", parameters.getMemo());
+		this.setString(15, "_limitrtrns ", parameters.getLimitrtrns());
+		this.setInt(16, "_returns ", new Integer(parameters.getReturns()));
+		if (parameters.getLimitdate() == null) {
+			this.setDate(17, "_limitdate ", parameters.getLimitdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getLimitdate()
+					.getTime());
+			this.setDate(17, "_limitdate ", fecha);
 		}
-		this.setInt(18,"_instance ", new Integer(parameters.getInstance()));
-		this.setString(19,"_autovat ", parameters.getAutovat());
-		this.setString(20,"_managewtax ", parameters.getManagewtax());
-		this.setString(21,"_ref3 ", parameters.getRef3());
-		this.setString(22,"_deferedtax ", parameters.getDeferedtax());
-		this.setInt(23,"_usersign ", new Integer(parameters.getUsersign()));
-		this.setInt(24,"_action ", new Integer(action));
+		this.setInt(18, "_instance ", new Integer(parameters.getInstance()));
+		this.setString(19, "_autovat ", parameters.getAutovat());
+		this.setString(20, "_managewtax ", parameters.getManagewtax());
+		this.setString(21, "_ref3 ", parameters.getRef3());
+		this.setString(22, "_deferedtax ", parameters.getDeferedtax());
+		this.setInt(23, "_usersign ", new Integer(parameters.getUsersign()));
+		this.setInt(24, "_action ", new Integer(action));
 		v_resp = this.runUpdate();
-		
+
 		return v_resp;
-		
+
 	}
 
-	public List getrecurringPosting(RecurringPostingsInTO parameters) throws Exception {
+	public List getrecurringPosting(RecurringPostingsInTO parameters)
+			throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_recurringpostings(?,?,?,?,?,?)}");
-		this.setString(1,"_rcurcode", parameters.getRcurcode());
-		this.setString(2,"_rcurdesc ", parameters.getRcurdesc());
-		this.setString(3,"_ref1 ", parameters.getRef1());
-		this.setString(4,"_ref2 ", parameters.getRef2());
-		this.setString(5,"_ref3 ", parameters.getRef3());
-		this.setString(6,"_memo ", parameters.getMemo());
-		
+		this.setString(1, "_rcurcode", parameters.getRcurcode());
+		this.setString(2, "_rcurdesc ", parameters.getRcurdesc());
+		this.setString(3, "_ref1 ", parameters.getRef1());
+		this.setString(4, "_ref2 ", parameters.getRef2());
+		this.setString(5, "_ref3 ", parameters.getRef3());
+		this.setString(6, "_memo ", parameters.getMemo());
+
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		ListIterator liRowset = null;
@@ -963,14 +987,15 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,int _instance) throws Exception{
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,
+			int _instance) throws Exception {
 		RecurringPostingsTO _return = new RecurringPostingsTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_recurringpostings_by_key(?,?)}");
-		this.setString(1,"_rcurcode", _rcurcode);
-		this.setInt(2,"_instance",new Integer(_instance));
-		AccountingDAO DAO= new AccountingDAO();
+		this.setString(1, "_rcurcode", _rcurcode);
+		this.setInt(2, "_instance", new Integer(_instance));
+		AccountingDAO DAO = new AccountingDAO();
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		ListIterator liRowset = null;
@@ -1006,9 +1031,11 @@ public class AccountingDAO extends CommonDAO {
 					Diary.setUsersign(rowsetActual.getInt(23));
 					Diary.setUpdatedate(rowsetActual.getDate(24));
 					Diary.setUpdatetime(rowsetActual.getInt(25));
-					Diary.setRecurringPostingsDetail(DAO.getrecurringPostingDetail(rowsetActual.getString(1),_instance));
-					
-					_return=Diary;
+					Diary.setRecurringPostingsDetail(DAO
+							.getrecurringPostingDetail(
+									rowsetActual.getString(1), _instance));
+
+					_return = Diary;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -1017,52 +1044,55 @@ public class AccountingDAO extends CommonDAO {
 			}
 		}
 		return _return;
-		
+
 	}
-	
-	public int fin_recurringPostingDetail_mtto(RecurringPostingsDetailTO parameters, int action) throws Exception{
+
+	public int fin_recurringPostingDetail_mtto(
+			RecurringPostingsDetailTO parameters, int action) throws Exception {
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_perwwwwwwwwwwwwwwwwwwwwwi(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_fin_rep1_recurringpostingsdetai_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setString(1,"_rcurcode", parameters.getRcurcode());
-		this.setInt(2,"_lineid ",new Integer(parameters.getLineid()));
-		this.setString(3,"_acctcode ", parameters.getAcctcode());
-		this.setString(4,"_acctdesc ", parameters.getAcctdesc());
-		this.setDouble(5,"_debit ",new Double(parameters.getDebit()));
-		this.setDouble(6,"_credit ",new Double(parameters.getCredit()));
-		this.setString(7,"_currency ", parameters.getCurrency());
-		this.setInt(8,"_instance ",new Integer( parameters.getInstance()));
-		this.setString(9,"_vatgroup ", parameters.getVatgroup());
-		this.setString(10,"_vatline ", parameters.getVatline());
-		this.setString(11,"_ctrlacct ", parameters.getCtrlacct());
-		this.setString(12,"_ocrcode ", parameters.getOcrcode());
-		this.setInt(13,"_taxtype ",new Integer( parameters.getTaxtype()));
-		this.setString(14,"_taxpostacc ", parameters.getTaxpostacc());
-		this.setString(15,"_taxcode ", parameters.getTaxcode());
-		this.setString(16,"_ocrcode1 ", parameters.getOcrcode1());
-		this.setString(17,"_ocrcode2 ", parameters.getOcrcode2());
-		this.setString(18,"_ocrcode3 ", parameters.getOcrcode3());
-		this.setString(19,"_ocrcode4 ", parameters.getOcrcode4());
-		this.setString(20,"_wtliable ", parameters.getWtliable());
-		this.setString(21,"_wtaxline ", parameters.getWtaxline());
-		this.setDouble(22,"_grossvalue ",new Double(parameters.getGrossvalue()));
-		this.setInt(23,"_bplid ",new Integer( parameters.getBplid()));
-		this.setInt(24,"_action ",new Integer( action));
+		this.setString(1, "_rcurcode", parameters.getRcurcode());
+		this.setInt(2, "_lineid ", new Integer(parameters.getLineid()));
+		this.setString(3, "_acctcode ", parameters.getAcctcode());
+		this.setString(4, "_acctdesc ", parameters.getAcctdesc());
+		this.setDouble(5, "_debit ", new Double(parameters.getDebit()));
+		this.setDouble(6, "_credit ", new Double(parameters.getCredit()));
+		this.setString(7, "_currency ", parameters.getCurrency());
+		this.setInt(8, "_instance ", new Integer(parameters.getInstance()));
+		this.setString(9, "_vatgroup ", parameters.getVatgroup());
+		this.setString(10, "_vatline ", parameters.getVatline());
+		this.setString(11, "_ctrlacct ", parameters.getCtrlacct());
+		this.setString(12, "_ocrcode ", parameters.getOcrcode());
+		this.setInt(13, "_taxtype ", new Integer(parameters.getTaxtype()));
+		this.setString(14, "_taxpostacc ", parameters.getTaxpostacc());
+		this.setString(15, "_taxcode ", parameters.getTaxcode());
+		this.setString(16, "_ocrcode1 ", parameters.getOcrcode1());
+		this.setString(17, "_ocrcode2 ", parameters.getOcrcode2());
+		this.setString(18, "_ocrcode3 ", parameters.getOcrcode3());
+		this.setString(19, "_ocrcode4 ", parameters.getOcrcode4());
+		this.setString(20, "_wtliable ", parameters.getWtliable());
+		this.setString(21, "_wtaxline ", parameters.getWtaxline());
+		this.setDouble(22, "_grossvalue ",
+				new Double(parameters.getGrossvalue()));
+		this.setInt(23, "_bplid ", new Integer(parameters.getBplid()));
+		this.setInt(24, "_action ", new Integer(action));
 
 		v_resp = this.runUpdate();
-		
+
 		return v_resp;
-		
+
 	}
-	
-	public List getrecurringPostingDetail(String _rcurcode,int _instance) throws Exception {
+
+	public List getrecurringPostingDetail(String _rcurcode, int _instance)
+			throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_recurringpostingsdetai(?,?)}");
-		this.setString(1,"_rcurcode", _rcurcode);
-		this.setInt(2,"_instance",new Integer( _instance));
-		
+		this.setString(1, "_rcurcode", _rcurcode);
+		this.setInt(2, "_instance", new Integer(_instance));
+
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		ListIterator liRowset = null;
@@ -1096,7 +1126,7 @@ public class AccountingDAO extends CommonDAO {
 					Diary.setWtaxline(rowsetActual.getString(21));
 					Diary.setGrossvalue(rowsetActual.getDouble(22));
 					Diary.setBplid(rowsetActual.getInt(23));
-					
+
 					_return.add(Diary);
 				}
 				rowsetActual.close();
@@ -1107,13 +1137,13 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
+
 	public List getrecurringPostingExecute() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{? = call sp_get_recurringpostings_execute()}");
-		
+
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		ListIterator liRowset = null;
