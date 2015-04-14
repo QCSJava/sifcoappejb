@@ -264,6 +264,7 @@ public class AccountingTest {
 	public static void saveTreeAccount() throws EJBException {
 
 		AccountTO node = new AccountTO();
+		AccountTO node1 = new AccountTO();
 		AccountTO account = new AccountTO();
 
 		account.setAcctcode("1");
@@ -276,7 +277,7 @@ public class AccountingTest {
 		account.setLevels(1);
 
 		node.setAcctcode("1.1");
-		node.setAcctname("otro");
+		node.setAcctname("gffgfgfgfgfgfgfgfgfgfggffh");
 		node.setCurrtotal(0.000000);
 		node.setEndtotal(0.000000);
 		node.setBudget("Y");
@@ -285,11 +286,22 @@ public class AccountingTest {
 		node.setLevels(2);
 		node.setFathernum("1");
 		
+		node1.setAcctcode("1.1.1");
+		node1.setAcctname("jjsgjgggggggggggggfsjdf");
+		node1.setCurrtotal(0.000000);
+		node1.setEndtotal(0.000000);
+		node1.setBudget("Y");
+		node1.setFrozen("n");
+		node1.setPostable("N");
+		node1.setLevels(3);
+		node1.setFathernum("1.1");
+		
 		 System.out.println(account.getAcctname());
 		 System.out.println(node.getAcctname());
 		List parameters = new Vector();
 		parameters.add(account);
 		parameters.add(node);
+		parameters.add(node1);
 		
 		
 		ResultOutTO _result= new ResultOutTO();

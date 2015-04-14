@@ -344,7 +344,7 @@ public class AccountingDAO extends CommonDAO {
 					account.setCounter(rowsetActual.getInt(19));
 					account.setFormatcode(rowsetActual.getString(20));
 					account.setCreatedate(rowsetActual.getDate(21));
-                    account.setUsersing(rowsetActual.getInt(22));
+					account.setUsersing(rowsetActual.getInt(22));
 					_return = account;
 				}
 				rowsetActual.close();
@@ -358,51 +358,53 @@ public class AccountingDAO extends CommonDAO {
 
 	// ##################### MANTEMINIENTO DE LA TABLA ACCOUNT
 	// ############################
-	public int account_mtto_new(AccountTO parameters) throws Exception{
-		
+	public int account_mtto_new(AccountTO parameters) throws Exception {
+
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_period(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_acc_account_updtre(?,?,?,?,?)}");
-	
-		this.setDouble(1,"_endtotal",0.0);
-		this.setInt(2,"_levels", parameters.getLevels());
-		this.setInt(3,"_grpline", parameters.getGrpline());
-		this.setString(4,"_fathernum", parameters.getFathernum());
-		this.setInt(5,"_groupmask", parameters.getGroupmask());
-		
-		v_resp= this.runUpdate();
+		this.setDbObject("{call sp_acc_account_updtre(?,?,?,?,?,?)}");
+
+		this.setString(1, "_acctcode", parameters.getAcctcode());
+		this.setString(2, "_acctname", parameters.getAcctname());
+		this.setInt(3, "_levels", parameters.getLevels());
+		this.setInt(4, "_grpline", parameters.getGrpline());
+		this.setString(5, "_fathernum", parameters.getFathernum());
+		this.setInt(6, "_groupmask", parameters.getGroupmask());
+
+		v_resp = this.runUpdate();
 		return v_resp;
-		
+
 	}
+
 	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
 			throws Exception {
 
 		int v_resp = 0;
 		// this.setDbObject("{call sp_cat_acc_period(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_acc0_account_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setString(1,"_acctcode", parameters.getAcctcode());
-		this.setString(2,"_acctname", parameters.getAcctname());
-		this.setDouble(3,"_currtotal", parameters.getCurrtotal());
-		this.setDouble(4,"_endtotal", parameters.getEndtotal());
-		this.setString(5,"_finanse", parameters.getFinanse());
-		this.setString(6,"_budget", parameters.getBudget());
-		this.setString(7,"_frozen", parameters.getFrozen());
-		this.setString(8,"_postable", parameters.getPostable());
-		this.setString(9,"_fixed", parameters.getFixed());
-		this.setInt(10,"_levels", parameters.getLevels());
-		this.setInt(11,"_grpline", parameters.getGrpline());
-		this.setString(12,"_fathernum", parameters.getFathernum());
-		this.setInt(13,"_groupmask", parameters.getGroupmask());
-		this.setString(14,"_acttype", parameters.getActtype());
-		this.setString(15,"_protected", parameters.getProtected1());
-		this.setString(16,"_objtype", parameters.getObjtype());
-		this.setString(17,"_validfor", parameters.getValidfor());
-		this.setString(18,"_frozenfor", parameters.getFrozenfor());
-		this.setInt(19,"_counter", parameters.getCounter());
-		this.setString(20,"_formatcode", parameters.getFormatcode());
-		this.setDate(21,"_createdate", parameters.getCreatedate());
-		this.setInt(22,"_usersig",parameters.getUsersing());
-		this.setInt(23,"_action", action);
+		this.setString(1, "_acctcode", parameters.getAcctcode());
+		this.setString(2, "_acctname", parameters.getAcctname());
+		this.setDouble(3, "_currtotal", parameters.getCurrtotal());
+		this.setDouble(4, "_endtotal", parameters.getEndtotal());
+		this.setString(5, "_finanse", parameters.getFinanse());
+		this.setString(6, "_budget", parameters.getBudget());
+		this.setString(7, "_frozen", parameters.getFrozen());
+		this.setString(8, "_postable", parameters.getPostable());
+		this.setString(9, "_fixed", parameters.getFixed());
+		this.setInt(10, "_levels", parameters.getLevels());
+		this.setInt(11, "_grpline", parameters.getGrpline());
+		this.setString(12, "_fathernum", parameters.getFathernum());
+		this.setInt(13, "_groupmask", parameters.getGroupmask());
+		this.setString(14, "_acttype", parameters.getActtype());
+		this.setString(15, "_protected", parameters.getProtected1());
+		this.setString(16, "_objtype", parameters.getObjtype());
+		this.setString(17, "_validfor", parameters.getValidfor());
+		this.setString(18, "_frozenfor", parameters.getFrozenfor());
+		this.setInt(19, "_counter", parameters.getCounter());
+		this.setString(20, "_formatcode", parameters.getFormatcode());
+		this.setDate(21, "_createdate", parameters.getCreatedate());
+		this.setInt(22, "_usersig", parameters.getUsersing());
+		this.setInt(23, "_action", action);
 
 		v_resp = this.runUpdate();
 
