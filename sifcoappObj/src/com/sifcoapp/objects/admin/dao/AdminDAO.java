@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
+
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesPriceTO;
@@ -138,6 +140,7 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 
 	}
+
 	public List findCatalogByKey_List(String catcode, int tablecode)
 			throws Exception {
 
@@ -369,7 +372,7 @@ public class AdminDAO extends CommonDAO {
 		this.setString(27, "_sww", parameters.getSww());
 		this.setString(28, "_validcomm", parameters.getValidComm());
 		this.setInt(29, "_usersign", new Integer(parameters.getUserSign()));
-		this.setString(30,"_vatgourpsa,", parameters.getVatgourpsa());
+		this.setString(30, "_vatgourpsa,", parameters.getVatgourpsa());
 		this.setInt(31, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
@@ -452,7 +455,7 @@ public class AdminDAO extends CommonDAO {
 	public ArticlesTO getArticlesByKey(String itemcode) throws Exception {
 		ArticlesTO _return = new ArticlesTO();
 		List lstResultSet = null;
-		int tablecode=10;
+		int tablecode = 10;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_articles_by_key(?)}");
@@ -504,7 +507,8 @@ public class AdminDAO extends CommonDAO {
 					article.setVatgourpsa(rowsetActual.getString(30));
 					article.setBranchArticles(getBranchArticles(itemcode));
 					article.setArticleprices(getArticlePrices(itemcode));
-					article.setVatgourpsaList(findCatalogByKey_List(article.getVatgourpsa(), tablecode));
+					article.setVatgourpsaList(findCatalogByKey_List(
+							article.getVatgourpsa(), tablecode));
 					_return = article;
 
 				}
@@ -833,6 +837,84 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 
+	   
+	
+	// consulta de inventario de productos por venta
+    /* public List getinventoryArticles(ArticlesInTO parameters)throws EJBException{
+    	 ArticlesTO _return = new ArticlesTO();
+ 		List lstResultSet = null;
+ 		int tablecode = 10;
+ 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+ 		// this.setDbObject("{call sp_get_articles(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+ 		this.setDbObject("{call sp_get_articles_by_key(?)}");
+ 		//this.setString(1, "_itemcode", itemcode);
+
+ 		lstResultSet = this.runQuery();
+
+ 		CachedRowSetImpl rowsetActual;
+
+ 		System.out.println("return psg");
+
+ 		ListIterator liRowset = null;
+ 		liRowset = lstResultSet.listIterator();
+
+ 		while (liRowset.hasNext()) {
+ 			rowsetActual = (CachedRowSetImpl) liRowset.next();
+ 			try {
+ 				while (rowsetActual.next()) {
+ 					ArticlesTO article = new ArticlesTO();
+ 					article.setItemCode(rowsetActual.getString(1));
+ 					article.setItemName(rowsetActual.getString(2));
+ 					article.setItemType(rowsetActual.getString(3));
+ 					article.setItmsIsGrpCod(rowsetActual.getString(4));
+ 					article.setVatLiable(rowsetActual.getString(5));
+ 					article.setCodeBars(rowsetActual.getString(6));
+ 					article.setPrchseItem(rowsetActual.getString(7));
+ 					article.setSellItem(rowsetActual.getString(8));
+ 					article.setInvntItem(rowsetActual.getString(9));
+ 					article.setAssetItem(rowsetActual.getString(10));
+ 					article.setCardCode(rowsetActual.getString(11));
+ 					article.setBuyUnitMsr(rowsetActual.getString(12));
+ 					article.setNumInBuy(rowsetActual.getDouble(13));
+ 					article.setSalUnitMsr(rowsetActual.getString(14));
+ 					article.setSalPackUn(rowsetActual.getDouble(15));
+ 					article.setSuppCatNum(rowsetActual.getString(16));
+ 					article.setPurPackUn(rowsetActual.getDouble(17));
+ 					article.setAvgPrice(rowsetActual.getDouble(18));
+ 					article.setOnHand(rowsetActual.getDouble(19));
+ 					article.setValidFor(rowsetActual.getString(20));
+ 					article.setValidFrom(rowsetActual.getDate(21));
+ 					article.setValidTo(rowsetActual.getDate(22));
+ 					article.setInvntryUom(rowsetActual.getString(23));
+ 					article.setNumInSale(rowsetActual.getDouble(24));
+ 					article.setDfltWH(rowsetActual.getString(25));
+ 					article.setWtliable(rowsetActual.getString(26));
+ 					article.setSww(rowsetActual.getString(27));
+ 					article.setValidComm(rowsetActual.getString(28));
+ 					article.setUserSign(rowsetActual.getInt(29));
+ 					article.setVatgourpsa(rowsetActual.getString(30));
+ 					article.setBranchArticles(getBranchArticles(itemcode));
+ 					article.setArticleprices(getArticlePrices(itemcode));
+ 					article.setVatgourpsaList(findCatalogByKey_List(
+ 							article.getVatgourpsa(), tablecode));
+ 					_return = article;
+
+ 				}
+ 				rowsetActual.close();
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 		}
+ 		return _return;	 
+ 	}*/
+    	 
+    	 
+    	 
+    	 
+    	 
+    	 
+     
 	/* Manejo de listas de precios */
 	public int cat_prl0_priceslist_mtto(PricesListTO parameters, int action)
 			throws Exception {
@@ -1072,82 +1154,89 @@ public class AdminDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	
-	/*Mantenimiento de la tabla warehouse y su detalle*/
-	public int adm_warehousejournal_mtto(WarehouseJournalTO parameters,int accion)throws Exception {
-		
+	/* Mantenimiento de la tabla warehouse y su detalle */
+	public int adm_warehousejournal_mtto(WarehouseJournalTO parameters,
+			int accion) throws Exception {
+
 		List v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissues_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_adm_warehousejournal_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setInt(2,"_transseq",new Integer( parameters.getTransseq()));
-		this.setInt(3,"_transtype ",new Integer( parameters.getTranstype()));
-		this.setInt(4,"_createdby ",new Integer( parameters.getCreatedby()));
-		this.setString(5,"_base_ref ", parameters.getBase_ref());
-		this.setInt(6,"_doclinenum ", new Integer(parameters.getDoclinenum()));
-		this.setString(7,"_itemcode ", parameters.getItemcode());
-		this.setDouble(8,"_inqty ", new Double(parameters.getInqty()));
-		this.setDouble(9,"_outqty ", new Double(parameters.getOutqty()));
-		this.setDouble(10,"_price ", new Double(parameters.getPrice()));
-		this.setString(11,"_trnsfract ", parameters.getTrnsfract());
-		this.setString(12,"_pricedifac ", parameters.getPricedifac());
-		this.setString(13,"_varianceac ", parameters.getVarianceac());
-		this.setString(14,"_returnact ", parameters.getReturnact());
-		this.setString(15,"_clearact ", parameters.getClearact());
-		this.setString(16,"_costact ", parameters.getCostact());
-		this.setString(17,"_wipact ", parameters.getWipact());
-		this.setDouble(18,"_openstock ", new Double(parameters.getOpenstock()));
-		this.setDouble(19,"_pricediff ", new Double(parameters.getPricediff()));
-		this.setString(20,"_invntact ", parameters.getInvntact());
-		this.setInt(21,"_sublinenum ", new Integer(parameters.getSublinenum()));
-		this.setInt(22,"_appobjline ", new Integer(parameters.getAppobjline()));
-		this.setDouble(23,"_expenses ", new Double(parameters.getExpenses()));
-		this.setDouble(24,"_openexp ", new Double(parameters.getOpenexp()));
-		this.setDouble(25,"_allocation ", new Double(parameters.getAllocation()));
-		this.setDouble(26,"_openalloc ", new Double(parameters.getOpenalloc()));
-		this.setDouble(27,"_expalloc ", new Double(parameters.getExpalloc()));
-		this.setDouble(28,"_oexpalloc ", new Double(parameters.getOexpalloc()));
-		this.setDouble(29,"_openpdiff ", new Double(parameters.getOpenpdiff()));
-		this.setDouble(30,"_neginvadjs ", new Double(parameters.getNeginvadjs()));
-		this.setDouble(31,"_openneginv ", new Double(parameters.getOpenneginv()));
-		this.setString(32,"_negstckact ", parameters.getNegstckact());
-		this.setDouble(33,"_btransval ", new Double(parameters.getBtransval()));
-		this.setDouble(34,"_varval ", new Double(parameters.getVarval()));
-		this.setDouble(35,"_bexpval ", new Double(parameters.getBexpval()));
-		this.setDouble(36,"_cogsval ", new Double(parameters.getCogsval()));
-		this.setDouble(37,"_bnegaval ", new Double(parameters.getBnegaval()));
-		this.setString(38,"_ioffincacc ", parameters.getIoffincacc());
-		this.setDouble(39,"_ioffincval ", new Double(parameters.getIoffincval()));
-		this.setString(40,"_doffdecacc ", parameters.getDoffdecacc());
-		this.setDouble(41,"_doffdecval ", new Double(parameters.getDoffdecval()));
-		this.setString(42,"_decacc ", parameters.getDecacc());
-		this.setDouble(43,"_decval ", new Double(parameters.getDecval()));
-		this.setDouble(44,"_wipval ", new Double(parameters.getWipval()));
-		this.setString(45,"_wipvaracc ", parameters.getWipvaracc());
-		this.setDouble(46,"_wipvarval ", new Double(parameters.getWipvarval()));
-		this.setString(47,"_incact ", parameters.getIncact());
-		this.setDouble(48,"_incval ", new Double(parameters.getIncval()));
-		this.setString(49,"_expcacc ", parameters.getExpcacc());
-		this.setInt(50,"_messageid ", new Integer(parameters.getMessageid()));
-		this.setInt(51,"_loctype ", new Integer(parameters.getLoctype()));
-		this.setString(52,"_loccode ", parameters.getLoccode());
-		this.setString(53,"_poststatus ", parameters.getPoststatus());
-		this.setDouble(54,"_sumstock ", new Double(parameters.getSumstock()));
-		this.setDouble(55,"_openqty ", new Double(parameters.getOpenqty()));
-		this.setString(56,"_paoffacc ", parameters.getPaoffacc());
-		this.setDouble(57,"_paoffval ", new Double(parameters.getPaoffval()));
-		this.setDouble(58,"_openpaoff ", new Double(parameters.getOpenpaoff()));
-		this.setString(59,"_paacc ", parameters.getPaacc());
-		this.setDouble(60,"_paval ", new Double(parameters.getPaval()));
-		this.setDouble(61,"_openpa ", new Double(parameters.getOpenpa()));
+		this.setInt(2, "_transseq", new Integer(parameters.getTransseq()));
+		this.setInt(3, "_transtype ", new Integer(parameters.getTranstype()));
+		this.setInt(4, "_createdby ", new Integer(parameters.getCreatedby()));
+		this.setString(5, "_base_ref ", parameters.getBase_ref());
+		this.setInt(6, "_doclinenum ", new Integer(parameters.getDoclinenum()));
+		this.setString(7, "_itemcode ", parameters.getItemcode());
+		this.setDouble(8, "_inqty ", new Double(parameters.getInqty()));
+		this.setDouble(9, "_outqty ", new Double(parameters.getOutqty()));
+		this.setDouble(10, "_price ", new Double(parameters.getPrice()));
+		this.setString(11, "_trnsfract ", parameters.getTrnsfract());
+		this.setString(12, "_pricedifac ", parameters.getPricedifac());
+		this.setString(13, "_varianceac ", parameters.getVarianceac());
+		this.setString(14, "_returnact ", parameters.getReturnact());
+		this.setString(15, "_clearact ", parameters.getClearact());
+		this.setString(16, "_costact ", parameters.getCostact());
+		this.setString(17, "_wipact ", parameters.getWipact());
+		this.setDouble(18, "_openstock ", new Double(parameters.getOpenstock()));
+		this.setDouble(19, "_pricediff ", new Double(parameters.getPricediff()));
+		this.setString(20, "_invntact ", parameters.getInvntact());
+		this.setInt(21, "_sublinenum ", new Integer(parameters.getSublinenum()));
+		this.setInt(22, "_appobjline ", new Integer(parameters.getAppobjline()));
+		this.setDouble(23, "_expenses ", new Double(parameters.getExpenses()));
+		this.setDouble(24, "_openexp ", new Double(parameters.getOpenexp()));
+		this.setDouble(25, "_allocation ",
+				new Double(parameters.getAllocation()));
+		this.setDouble(26, "_openalloc ", new Double(parameters.getOpenalloc()));
+		this.setDouble(27, "_expalloc ", new Double(parameters.getExpalloc()));
+		this.setDouble(28, "_oexpalloc ", new Double(parameters.getOexpalloc()));
+		this.setDouble(29, "_openpdiff ", new Double(parameters.getOpenpdiff()));
+		this.setDouble(30, "_neginvadjs ",
+				new Double(parameters.getNeginvadjs()));
+		this.setDouble(31, "_openneginv ",
+				new Double(parameters.getOpenneginv()));
+		this.setString(32, "_negstckact ", parameters.getNegstckact());
+		this.setDouble(33, "_btransval ", new Double(parameters.getBtransval()));
+		this.setDouble(34, "_varval ", new Double(parameters.getVarval()));
+		this.setDouble(35, "_bexpval ", new Double(parameters.getBexpval()));
+		this.setDouble(36, "_cogsval ", new Double(parameters.getCogsval()));
+		this.setDouble(37, "_bnegaval ", new Double(parameters.getBnegaval()));
+		this.setString(38, "_ioffincacc ", parameters.getIoffincacc());
+		this.setDouble(39, "_ioffincval ",
+				new Double(parameters.getIoffincval()));
+		this.setString(40, "_doffdecacc ", parameters.getDoffdecacc());
+		this.setDouble(41, "_doffdecval ",
+				new Double(parameters.getDoffdecval()));
+		this.setString(42, "_decacc ", parameters.getDecacc());
+		this.setDouble(43, "_decval ", new Double(parameters.getDecval()));
+		this.setDouble(44, "_wipval ", new Double(parameters.getWipval()));
+		this.setString(45, "_wipvaracc ", parameters.getWipvaracc());
+		this.setDouble(46, "_wipvarval ", new Double(parameters.getWipvarval()));
+		this.setString(47, "_incact ", parameters.getIncact());
+		this.setDouble(48, "_incval ", new Double(parameters.getIncval()));
+		this.setString(49, "_expcacc ", parameters.getExpcacc());
+		this.setInt(50, "_messageid ", new Integer(parameters.getMessageid()));
+		this.setInt(51, "_loctype ", new Integer(parameters.getLoctype()));
+		this.setString(52, "_loccode ", parameters.getLoccode());
+		this.setString(53, "_poststatus ", parameters.getPoststatus());
+		this.setDouble(54, "_sumstock ", new Double(parameters.getSumstock()));
+		this.setDouble(55, "_openqty ", new Double(parameters.getOpenqty()));
+		this.setString(56, "_paoffacc ", parameters.getPaoffacc());
+		this.setDouble(57, "_paoffval ", new Double(parameters.getPaoffval()));
+		this.setDouble(58, "_openpaoff ", new Double(parameters.getOpenpaoff()));
+		this.setString(59, "_paacc ", parameters.getPaacc());
+		this.setDouble(60, "_paval ", new Double(parameters.getPaval()));
+		this.setDouble(61, "_openpa ", new Double(parameters.getOpenpa()));
 
 		this.setInt(62, "_action", new Integer(accion));
 		v_resp = this.runQuery();
-		//System.out.println(this.getInt());
-		
+		// System.out.println(this.getInt());
+
 		return this.getInt();
-		
+
 	}
-	public WarehouseJournalTO getWarehouseJournalByKey(int transseq) throws Exception {
+
+	public WarehouseJournalTO getWarehouseJournalByKey(int transseq)
+			throws Exception {
 		WarehouseJournalTO _return = new WarehouseJournalTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -1225,8 +1314,9 @@ public class AdminDAO extends CommonDAO {
 					warehouse.setPaval(rowsetActual.getDouble(59));
 					warehouse.setOpenpa(rowsetActual.getDouble(60));
 
-					warehouse.setDetailWarehouse(Detail.getwarehousejournalDetail(rowsetActual.getInt(1)));
-					_return=warehouse;
+					warehouse.setDetailWarehouse(Detail
+							.getwarehousejournalDetail(rowsetActual.getInt(1)));
+					_return = warehouse;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -1236,30 +1326,29 @@ public class AdminDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
-	
-	
-	public int adm_warehousejournalDetail_mtto(WarehouseJournalDetailTO parameters,int accion)throws Exception {
+
+	public int adm_warehousejournalDetail_mtto(
+			WarehouseJournalDetailTO parameters, int accion) throws Exception {
 		int v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissues_mtto     (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_adm_warehousejournallayer_mtto(?,?,?,?,?,?,?,?,?)}");
-		this.setInt(1,"_transseq",new Integer(parameters.getTransseq()));
-		this.setInt(2,"_layerid", new Integer(parameters.getLayerid()));
-		this.setDouble(3,"_calcprice", new Double(parameters.getCalcprice()));
-		this.setDouble(4,"_balance", new Double(parameters.getBalance()));
-		this.setDouble(5,"_transvalue", new Double(parameters.getTransvalue()));
-		this.setDouble(6,"_layerinqty", new Double(parameters.getLayerinqty()));
-		this.setDouble(7,"_layeroutq", new Double(parameters.getLayeroutq()));
-		this.setDouble(8,"_revaltotal", new Double(parameters.getRevaltotal()));
+		this.setInt(1, "_transseq", new Integer(parameters.getTransseq()));
+		this.setInt(2, "_layerid", new Integer(parameters.getLayerid()));
+		this.setDouble(3, "_calcprice", new Double(parameters.getCalcprice()));
+		this.setDouble(4, "_balance", new Double(parameters.getBalance()));
+		this.setDouble(5, "_transvalue", new Double(parameters.getTransvalue()));
+		this.setDouble(6, "_layerinqty", new Double(parameters.getLayerinqty()));
+		this.setDouble(7, "_layeroutq", new Double(parameters.getLayeroutq()));
+		this.setDouble(8, "_revaltotal", new Double(parameters.getRevaltotal()));
 
 		this.setInt(9, "_action", new Integer(accion));
 		v_resp = this.runUpdate();
-		//System.out.println(this.getInt());
-		
+		// System.out.println(this.getInt());
+
 		return v_resp;
-		
+
 	}
-	
+
 	public List getwarehousejournalDetail(int transseq) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -1296,12 +1385,10 @@ public class AdminDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
+
 	/*
-	 * busqueda de catalogos por query string
-	 * Rutilio Iraheta
-	 * Marzo 2015
-	 * */
+	 * busqueda de catalogos por query string Rutilio Iraheta Marzo 2015
+	 */
 	public List findCatQS(String nameCatalog) throws Exception {
 		List lstResult = new Vector();
 		List lstResultSet = null;

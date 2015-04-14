@@ -514,13 +514,18 @@ public class AccountingEJB implements AccountingEJBRemote {
 		try {
 
 			for (Object object : parameters) {
+				AccountingDAO DAO1 = new AccountingDAO(DAO.getConn());
+				DAO1.setIstransaccional(true);
 				node = (AccountTO) object;
 				if (!(node.getLevels()==1)) {
-					account = DAO.getAccountByKey(node.getAcctcode());
+					account = DAO1.getAccountByKey(node.getAcctcode());
 					if (account.getAcctcode()!=null) {
-						int i = DAO.account_mtto_new(node);
+						
+						int i = DAO1.account_mtto_new(node);
 					} else {
-						int i = DAO.cat_acc0_ACCOUNT_mtto(node,Common.MTTOINSERT);
+						node.setCurrtotal(zero);
+						node.setEndtotal(zero);
+						int i = DAO1.cat_acc0_ACCOUNT_mtto(node,Common.MTTOINSERT);
 					}
 
 				}
