@@ -99,8 +99,9 @@ public class SalesTest {
 						+ periodo2.getAcctcode());
 			}	
 	}
+	
+	
 	public static void Sales_mtto() {
-
 		ResultOutTO _result=new ResultOutTO();
 		SalesTO parameters = new SalesTO();
 	
@@ -108,27 +109,27 @@ public class SalesTest {
 		SalesDetailTO document = new SalesDetailTO();
 		SalesDetailTO document1 = new SalesDetailTO();
 		
-		//document.setDocentry(1);
+		
 		document.setLinenum(1);
-		document.setItemcode("ART-001");
+		document.setItemcode("000-180-09-15");
 		document.setDscription("A");
 		document.setQuantity(10.25);
 		document.setPrice(11.25);
-		//document.setLinetotal(100.00);
+		document1.setWhscode("COD2");;
 		prueba.add(document);
-		//document1.setDocentry(1);
+		
 		document1.setLinenum(2);
-		document1.setItemcode("ART-001");
+		document1.setItemcode("000-180-09-15");
 		document1.setDscription("A");
 		document1.setQuantity(10.25);
 		document1.setPrice(11.25);
-		//document1.setLinetotal(100.00);
+		document1.setWhscode("COD2");;
 		prueba.add(document1);
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
-		//parameters.setDocentry(26);
+		
 		parameters.setCardcode("P");
-		//parameters.setDoctotal(15.5);
+		
 		parameters.setSalesDetails(prueba);
 		try {
 			
@@ -142,7 +143,6 @@ public class SalesTest {
 		System.out.println(_result.getCodigoError()+"---"+_result.getDocentry());
 
 	}
-	
 	
 	public static void getClientCredi() {
 

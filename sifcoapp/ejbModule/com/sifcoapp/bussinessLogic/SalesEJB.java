@@ -16,6 +16,7 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.DAO.*;
 import com.sifcoapp.objects.sales.to.*;
 import com.sun.org.apache.regexp.internal.RESyntaxException;
+import com.sun.xml.ws.server.sei.EndpointResponseMessageBuilder.Bare;
 
 /**
  * Session Bean implementation class SalesEJB
@@ -60,40 +61,30 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int action)
 			throws Exception {
-
 		// TODO Auto-generated method stub
-
 		ResultOutTO _return = new ResultOutTO();
-		// Double total = 0.0;
+		// VALIDACIONES
+		_return = validateSale(parameters);
+		System.out.println(_return.getMensaje());
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
 		goodDAO1.setIstransaccional(true);
+
 		try {
 			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
 					.iterator();
 			while (iterator2.hasNext()) {
 				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
-				// articleDetalle.setLinetotal(articleDetalle.getQuantity()*
-				// articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
-																			// DATOS//
-																			// ESTATICOS//
-																			// ##########
+
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				// articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				// articleDetalle.setPriceafvat(articleDetalle.getPrice());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				// articleDetalle.setVatsum(articleDetalle.getPrice());
-				// articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				// articleDetalle.setVatappld(articleDetalle.getPrice());
-				// articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
-				// articleDetalle.setGtotal(articleDetalle.getQuantity());
-				// total = total + articleDetalle.getLinetotal();
 			}
-			// parameters.setDoctotal(total);
-			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
-											// #######################
+			parameters.setDiscsum(0.00);
 			parameters.setNret(0.00);
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
@@ -352,25 +343,102 @@ public class SalesEJB implements SalesEJBRemote {
 	}
 
 	private ResultOutTO validateSale(SalesTO parameters) throws EJBException {
-
-		boolean validquantity = false;
+		// Variables
+		boolean valid = true;
 		ResultOutTO _return = new ResultOutTO();
 		Double stocks;
 		List branch = new Vector();
-		ArticlesTO _result = new ArticlesTO();
+		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO DAO1 = new AdminDAO();
-		DAO1.setIstransaccional(true);
 		String code;
+		double Quantity;
+
 		// validaciones antes de guardar la venta
+
 		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
 				.iterator();
+
 		// recorre el detalle de la venta por articulo
 		while (iterator1.hasNext()) {
 
-			validquantity = false;
-			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
-			code = articleDetalle.getItemcode();
-			stocks = articleDetalle.getQuantity();
+			// Consultar información actualizada desde la base
+			SalesDetailTO salesDetail = (SalesDetailTO) iterator1.next();
+			code = salesDetail.getItemcode();
+			try {
+				DBArticle = DAO1.getinventaryArticlesByKey(code);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getValidFor().equals('Y')) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(salesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo " + salesDetail.getItemcode()
+						+ " " + salesDetail.getDscription()
+						+ " No esta activo. linea :" + salesDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo venta
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getSellItem().equals('Y')) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(salesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo " + salesDetail.getItemcode()
+						+ " " + salesDetail.getDscription()
+						+ " No es un articulo de venta. linea :"
+						+ salesDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				if (branch1.getWhscode().equals(salesDetail.getWhscode())) {
+					if (branch1.getLocked().equals('f')) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(salesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ salesDetail.getItemcode()
+						+ " "
+						+ salesDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ salesDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validaciones de Existencia
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			stocks = salesDetail.getQuantity();
 			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
 					.iterator();
 			// recorre de nuevo el detalle comparando el primer elemento con los
@@ -382,185 +450,33 @@ public class SalesEJB implements SalesEJBRemote {
 					// suma los elementos encontrados del mismo codigo
 					stocks += articleDetalle2.getQuantity();
 				}
-
 			}
 
-			try {
-				_result = DAO1.getinventaryArticlesByKey(code);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			branch = _result.getBranchArticles();
-			double Quantity = 0.0;
+			branch = DBArticle.getBranchArticles();
+			Quantity = 0.0;
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				if (branch1.getWhscode().equals(articleDetalle.getWhscode())) {
-					if (articleDetalle.getQuantity() <= stocks) {
-						validquantity = true;
-					} else {
-						_return.setLinenum(articleDetalle.getLinenum());
-						_return.setCodigoError(1);
-						_return.setMensaje("El articulo "
-								+ articleDetalle.getItemcode()
-								+ " "
-								+ articleDetalle.getDscription()
-								+ " Reace en un Inventario Negativo en la linea :"
-								+ articleDetalle.getLinenum());
+				if (branch1.getWhscode().equals(salesDetail.getWhscode())) {
+					if (salesDetail.getQuantity() <= stocks) {
+						valid = true;
 					}
+				}
+
+				if (!valid) {
+					_return.setLinenum(salesDetail.getLinenum());
+					_return.setCodigoError(1);
+					_return.setMensaje("El articulo "
+							+ salesDetail.getItemcode() + " "
+							+ salesDetail.getDscription()
+							+ " Reace en un Inventario Negativo. linea :"
+							+ salesDetail.getLinenum());
+					return _return;
 				}
 			}
 		}
-		if (validquantity) {
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");
-			return _return;
-		}
+
 		return _return;
 	}
 
-	private ResultOutTO branch_articles_Active(SalesTO parameters)
-			throws EJBException {
-		boolean validquantity = false;
-		ResultOutTO _return = new ResultOutTO();
-		List branch = new Vector();
-		ArticlesTO _result = new ArticlesTO();
-		AdminDAO DAO1 = new AdminDAO();
-		DAO1.setIstransaccional(true);
-		String code;
-		// validaciones antes de guardar la venta
-		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
-				.iterator();
-		// recorre el detalle de la venta por articulo
-		while (iterator1.hasNext()) {
-
-			validquantity = false;
-			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
-			code = articleDetalle.getItemcode();
-			try {
-				_result = DAO1.getinventaryArticlesByKey(code);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// se asigna lista de articulos por almacen
-			branch = _result.getBranchArticles();
-			// recorre la lista por almacen verificando si esta activo el
-			// articulo
-			for (Object object : branch) {
-				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				if (branch1.getWhscode().equals(articleDetalle.getWhscode())) {
-					if (branch1.getLocked().equals("f")) {
-						validquantity = true;
-					} else {
-						_return.setLinenum(articleDetalle.getLinenum());
-						_return.setCodigoError(1);
-						_return.setMensaje("El articulo "
-								+ articleDetalle.getItemcode() + " "
-								+ articleDetalle.getDscription()
-								+ " no esta activo para el almacen cod :"
-								+ articleDetalle.getWhscode() + "en la linea :"
-								+ articleDetalle.getLinenum());
-					}
-				}
-			}
-		}
-		if (validquantity) {
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos correctamente ingresados");
-			return _return;
-		}
-		return _return;
-	}
-
-	private ResultOutTO branch_Active(SalesTO parameters) throws EJBException {
-		boolean validquantity = false;
-		ResultOutTO _return = new ResultOutTO();
-		BranchTO _result = new BranchTO();
-		AdminDAO DAO1 = new AdminDAO();
-		DAO1.setIstransaccional(true);
-		String code;
-		// validaciones antes de guardar la venta
-		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
-				.iterator();
-		// recorre el detalle de la venta por articulo
-		while (iterator1.hasNext()) {
-
-			validquantity = false;
-			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
-			code = articleDetalle.getWhscode();
-			try {
-				_result = DAO1.getBranchByKey(code);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (_result.isLocked()) {
-
-				_return.setLinenum(articleDetalle.getLinenum());
-				_return.setCodigoError(1);
-				_return.setMensaje("para articulo "
-						+ articleDetalle.getItemcode() + " "
-						+ articleDetalle.getDscription() + " el almacen cod :"
-						+ articleDetalle.getWhscode()
-						+ "se encuentra inactivo en la linea :"
-						+ articleDetalle.getLinenum());
-			} else {
-				validquantity = true;
-			}
-
-		}
-		if (validquantity) {
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos correctamente ingresados");
-			return _return;
-		}
-		return _return;
-
-	}
-
-	private ResultOutTO if_article_sale(SalesTO parameters) throws EJBException {
-
-		boolean validquantity = false;
-		ResultOutTO _return = new ResultOutTO();
-		ArticlesTO _result = new ArticlesTO();
-		AdminDAO DAO1 = new AdminDAO();
-		DAO1.setIstransaccional(true);
-		String code;
-		// validaciones antes de guardar la venta
-		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
-				.iterator();
-		// recorre el detalle de la venta por articulo
-		while (iterator1.hasNext()) {
-			validquantity = false;
-			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
-			code = articleDetalle.getItemcode();
-			try {
-				_result = DAO1.getArticlesByKey(code);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (_result.getSellItem().equals("N")) {
-
-				_return.setLinenum(articleDetalle.getLinenum());
-				_return.setCodigoError(1);
-				_return.setMensaje("El articulo "
-						+ articleDetalle.getItemcode() + " "
-						+ articleDetalle.getDscription()
-						+ " no es articulo de venta");
-
-			} else {
-				validquantity = true;
-			}
-
-		}
-		if (validquantity) {
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos correctamente ingresados");
-			return _return;
-		}
-		return _return;
-	}
-
+	
 }
