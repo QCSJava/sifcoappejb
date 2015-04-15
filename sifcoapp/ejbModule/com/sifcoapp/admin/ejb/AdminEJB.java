@@ -347,7 +347,7 @@ public class AdminEJB implements AdminEJBRemote {
 
 		return _return;
 	}
-
+  
 	/*
 	 * Mantenimiento de almacenes
 	 */

@@ -2,10 +2,14 @@ package com.sifcoapp.bussinessLogic;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.ArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.DAO.*;
@@ -54,9 +58,11 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int action)
 			throws Exception {
+		
 		// TODO Auto-generated method stub
-		ResultOutTO _return = new ResultOutTO();
-		//Double total = 0.0;
+
+		ResultOutTO _return= new ResultOutTO();
+		// Double total = 0.0;
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
@@ -66,23 +72,24 @@ public class SalesEJB implements SalesEJBRemote {
 					.iterator();
 			while (iterator2.hasNext()) {
 				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
-				//articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
+				// articleDetalle.setLinetotal(articleDetalle.getQuantity()*
+				// articleDetalle.getPrice());
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
 																			// DATOS//
 																			// ESTATICOS//
 																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				//articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				//articleDetalle.setPriceafvat(articleDetalle.getPrice());
+				// articleDetalle.setPricebefdi(articleDetalle.getPrice());
+				// articleDetalle.setPriceafvat(articleDetalle.getPrice());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				//articleDetalle.setVatsum(articleDetalle.getPrice());
-				//articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				//articleDetalle.setVatappld(articleDetalle.getPrice());
-				//articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
-				//articleDetalle.setGtotal(articleDetalle.getQuantity());
-				//total = total + articleDetalle.getLinetotal();
+				// articleDetalle.setVatsum(articleDetalle.getPrice());
+				// articleDetalle.setGrssprofit(articleDetalle.getPrice());
+				// articleDetalle.setVatappld(articleDetalle.getPrice());
+				// articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				// articleDetalle.setGtotal(articleDetalle.getQuantity());
+				// total = total + articleDetalle.getLinetotal();
 			}
-			//parameters.setDoctotal(total);
+			// parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
 											// #######################
 			parameters.setNret(0.00);
@@ -114,9 +121,8 @@ public class SalesEJB implements SalesEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
-		return _return;
+		
+return _return;
 	}
 
 	public List getSalesDetail(int docentry) throws Exception {
@@ -165,7 +171,7 @@ public class SalesEJB implements SalesEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		//Double total = 0.0;
+		// Double total = 0.0;
 		ClientCrediDAO DAO = new ClientCrediDAO();
 		DAO.setIstransaccional(true);
 		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO(DAO.getConn());
@@ -176,23 +182,24 @@ public class SalesEJB implements SalesEJBRemote {
 			while (iterator2.hasNext()) {
 				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator2
 						.next();
-				//articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
+				// articleDetalle.setLinetotal(articleDetalle.getQuantity()*
+				// articleDetalle.getPrice());
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
 																			// DATOS//
 																			// ESTATICOS//
 																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				//articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				//articleDetalle.setPriceafvat(articleDetalle.getPrice());
+				// articleDetalle.setPricebefdi(articleDetalle.getPrice());
+				// articleDetalle.setPriceafvat(articleDetalle.getPrice());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				//articleDetalle.setVatsum(articleDetalle.getPrice());
-				//articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				//articleDetalle.setVatappld(articleDetalle.getPrice());
-				//articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
-				//articleDetalle.setGtotal(articleDetalle.getQuantity());
-				//total = total + articleDetalle.getLinetotal();
+				// articleDetalle.setVatsum(articleDetalle.getPrice());
+				// articleDetalle.setGrssprofit(articleDetalle.getPrice());
+				// articleDetalle.setVatappld(articleDetalle.getPrice());
+				// articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				// articleDetalle.setGtotal(articleDetalle.getQuantity());
+				// total = total + articleDetalle.getLinetotal();
 			}
-			//parameters.setDoctotal(total);
+			// parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
 											// #######################
 			parameters.setNret(0.00);
@@ -276,7 +283,7 @@ public class SalesEJB implements SalesEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		//Double total = 0.0;
+		// Double total = 0.0;
 		DeliveryDAO DAO = new DeliveryDAO();
 		DAO.setIstransaccional(true);
 		DeliveryDetailDAO goodDAO1 = new DeliveryDetailDAO(DAO.getConn());
@@ -287,23 +294,24 @@ public class SalesEJB implements SalesEJBRemote {
 			while (iterator2.hasNext()) {
 				DeliveryDetailTO articleDetalle = (DeliveryDetailTO) iterator2
 						.next();
-				//articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
+				// articleDetalle.setLinetotal(articleDetalle.getQuantity()*
+				// articleDetalle.getPrice());
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
 																			// DATOS//
 																			// ESTATICOS//
 																			// ##########
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				//articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				//articleDetalle.setPriceafvat(articleDetalle.getPrice());
+				// articleDetalle.setPricebefdi(articleDetalle.getPrice());
+				// articleDetalle.setPriceafvat(articleDetalle.getPrice());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				//articleDetalle.setVatsum(articleDetalle.getPrice());
-				//articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				//articleDetalle.setVatappld(articleDetalle.getPrice());
-				//articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
-				//articleDetalle.setGtotal(articleDetalle.getQuantity());
-				//total = total + articleDetalle.getLinetotal();
+				// articleDetalle.setVatsum(articleDetalle.getPrice());
+				// articleDetalle.setGrssprofit(articleDetalle.getPrice());
+				// articleDetalle.setVatappld(articleDetalle.getPrice());
+				// articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
+				// articleDetalle.setGtotal(articleDetalle.getQuantity());
+				// total = total + articleDetalle.getLinetotal();
 			}
-			//parameters.setDoctotal(total);
+			// parameters.setDoctotal(total);
 			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
 											// #######################
 			parameters.setNret(0.00);
@@ -340,4 +348,68 @@ public class SalesEJB implements SalesEJBRemote {
 		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
+    
+	private ResultOutTO validateSale(SalesTO parameters)throws EJBException{
+		
+		boolean validquantity = false;
+		ResultOutTO _return = new ResultOutTO();
+		Double stocks;
+		List branch = new Vector();
+		ArticlesTO _result = new ArticlesTO();
+		AdminDAO DAO1 = new AdminDAO();
+		DAO1.setIstransaccional(true);
+		String code;
+		// validaciones antes de guardar la venta
+		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
+				.iterator();
+		// recorre el detalle de la venta por articulo
+		while (iterator1.hasNext()) {
+			
+			validquantity = false;
+			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
+			code = articleDetalle.getItemcode();
+			stocks = articleDetalle.getQuantity();
+			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
+					.iterator();
+			// recorre de nuevo el detalle comparando el primer elemento con los
+			// demas
+			while (iterator2.hasNext()) {
+				SalesDetailTO articleDetalle2 = (SalesDetailTO) iterator1
+						.next();
+				if (code.equals(articleDetalle2.getItemcode())) {
+					// suma los elementos encontrados del mismo codigo
+					stocks += articleDetalle2.getQuantity();
+				}
+
+			}
+
+			try {
+				_result = DAO1.getinventaryArticlesByKey(code);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			branch = _result.getBranchArticles();
+			double Quantity = 0.0;
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				if (branch1.getWhscode().equals(articleDetalle.getWhscode())) {
+					if (articleDetalle.getQuantity() <= stocks) {
+						validquantity = true;
+					}else{
+						_return.setLinenum(articleDetalle.getLinenum());
+						_return.setCodigoError(1);
+						_return.setMensaje("El articulo " +articleDetalle.getItemcode()+" "+articleDetalle.getDscription()+ " Reace en un Inventario Negativo en la linea :" + articleDetalle.getLinenum() );
+					}
+				}
+			}
+		}
+		if(validquantity){
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados correctamente");
+		return _return;
+		}
+		return _return;	
+	}
 }
+
