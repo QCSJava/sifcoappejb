@@ -10,10 +10,12 @@ import javax.ejb.Stateless;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.DAO.*;
 import com.sifcoapp.objects.sales.to.*;
+import com.sun.org.apache.regexp.internal.RESyntaxException;
 
 /**
  * Session Bean implementation class SalesEJB
@@ -58,10 +60,10 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int action)
 			throws Exception {
-		
+
 		// TODO Auto-generated method stub
 
-		ResultOutTO _return= new ResultOutTO();
+		ResultOutTO _return = new ResultOutTO();
 		// Double total = 0.0;
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
@@ -121,8 +123,8 @@ public class SalesEJB implements SalesEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
-		
-return _return;
+
+		return _return;
 	}
 
 	public List getSalesDetail(int docentry) throws Exception {
@@ -348,9 +350,9 @@ return _return;
 		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
-    
-	private ResultOutTO validateSale(SalesTO parameters)throws EJBException{
-		
+
+	private ResultOutTO validateSale(SalesTO parameters) throws EJBException {
+
 		boolean validquantity = false;
 		ResultOutTO _return = new ResultOutTO();
 		Double stocks;
@@ -364,7 +366,7 @@ return _return;
 				.iterator();
 		// recorre el detalle de la venta por articulo
 		while (iterator1.hasNext()) {
-			
+
 			validquantity = false;
 			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
 			code = articleDetalle.getItemcode();
@@ -396,20 +398,169 @@ return _return;
 				if (branch1.getWhscode().equals(articleDetalle.getWhscode())) {
 					if (articleDetalle.getQuantity() <= stocks) {
 						validquantity = true;
-					}else{
+					} else {
 						_return.setLinenum(articleDetalle.getLinenum());
 						_return.setCodigoError(1);
-						_return.setMensaje("El articulo " +articleDetalle.getItemcode()+" "+articleDetalle.getDscription()+ " Reace en un Inventario Negativo en la linea :" + articleDetalle.getLinenum() );
+						_return.setMensaje("El articulo "
+								+ articleDetalle.getItemcode()
+								+ " "
+								+ articleDetalle.getDscription()
+								+ " Reace en un Inventario Negativo en la linea :"
+								+ articleDetalle.getLinenum());
 					}
 				}
 			}
 		}
-		if(validquantity){
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
-		return _return;
+		if (validquantity) {
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos guardados correctamente");
+			return _return;
 		}
-		return _return;	
+		return _return;
 	}
-}
 
+	private ResultOutTO branch_articles_Active(SalesTO parameters)
+			throws EJBException {
+		boolean validquantity = false;
+		ResultOutTO _return = new ResultOutTO();
+		List branch = new Vector();
+		ArticlesTO _result = new ArticlesTO();
+		AdminDAO DAO1 = new AdminDAO();
+		DAO1.setIstransaccional(true);
+		String code;
+		// validaciones antes de guardar la venta
+		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
+				.iterator();
+		// recorre el detalle de la venta por articulo
+		while (iterator1.hasNext()) {
+
+			validquantity = false;
+			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
+			code = articleDetalle.getItemcode();
+			try {
+				_result = DAO1.getinventaryArticlesByKey(code);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// se asigna lista de articulos por almacen
+			branch = _result.getBranchArticles();
+			// recorre la lista por almacen verificando si esta activo el
+			// articulo
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				if (branch1.getWhscode().equals(articleDetalle.getWhscode())) {
+					if (branch1.getLocked().equals("f")) {
+						validquantity = true;
+					} else {
+						_return.setLinenum(articleDetalle.getLinenum());
+						_return.setCodigoError(1);
+						_return.setMensaje("El articulo "
+								+ articleDetalle.getItemcode() + " "
+								+ articleDetalle.getDscription()
+								+ " no esta activo para el almacen cod :"
+								+ articleDetalle.getWhscode() + "en la linea :"
+								+ articleDetalle.getLinenum());
+					}
+				}
+			}
+		}
+		if (validquantity) {
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos correctamente ingresados");
+			return _return;
+		}
+		return _return;
+	}
+
+	private ResultOutTO branch_Active(SalesTO parameters) throws EJBException {
+		boolean validquantity = false;
+		ResultOutTO _return = new ResultOutTO();
+		BranchTO _result = new BranchTO();
+		AdminDAO DAO1 = new AdminDAO();
+		DAO1.setIstransaccional(true);
+		String code;
+		// validaciones antes de guardar la venta
+		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
+				.iterator();
+		// recorre el detalle de la venta por articulo
+		while (iterator1.hasNext()) {
+
+			validquantity = false;
+			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
+			code = articleDetalle.getWhscode();
+			try {
+				_result = DAO1.getBranchByKey(code);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (_result.isLocked()) {
+
+				_return.setLinenum(articleDetalle.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("para articulo "
+						+ articleDetalle.getItemcode() + " "
+						+ articleDetalle.getDscription() + " el almacen cod :"
+						+ articleDetalle.getWhscode()
+						+ "se encuentra inactivo en la linea :"
+						+ articleDetalle.getLinenum());
+			} else {
+				validquantity = true;
+			}
+
+		}
+		if (validquantity) {
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos correctamente ingresados");
+			return _return;
+		}
+		return _return;
+
+	}
+
+	private ResultOutTO if_article_sale(SalesTO parameters) throws EJBException {
+
+		boolean validquantity = false;
+		ResultOutTO _return = new ResultOutTO();
+		ArticlesTO _result = new ArticlesTO();
+		AdminDAO DAO1 = new AdminDAO();
+		DAO1.setIstransaccional(true);
+		String code;
+		// validaciones antes de guardar la venta
+		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
+				.iterator();
+		// recorre el detalle de la venta por articulo
+		while (iterator1.hasNext()) {
+			validquantity = false;
+			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1.next();
+			code = articleDetalle.getItemcode();
+			try {
+				_result = DAO1.getArticlesByKey(code);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (_result.getSellItem().equals("N")) {
+
+				_return.setLinenum(articleDetalle.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ articleDetalle.getItemcode() + " "
+						+ articleDetalle.getDscription()
+						+ " no es articulo de venta");
+
+			} else {
+				validquantity = true;
+			}
+
+		}
+		if (validquantity) {
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos correctamente ingresados");
+			return _return;
+		}
+		return _return;
+	}
+
+}

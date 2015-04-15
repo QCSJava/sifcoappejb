@@ -837,10 +837,9 @@ public class AdminDAO extends CommonDAO {
 		return _return;
 	}
 
-	   
-	
 	// consulta de inventario de productos por venta
-	public ArticlesTO getinventaryArticlesByKey(String itemcode) throws Exception {
+	public ArticlesTO getinventaryArticlesByKey(String itemcode)
+			throws Exception {
 		ArticlesTO _return = new ArticlesTO();
 		List lstResultSet = null;
 		int tablecode = 10;
@@ -893,7 +892,8 @@ public class AdminDAO extends CommonDAO {
 					article.setValidComm(rowsetActual.getString(28));
 					article.setUserSign(rowsetActual.getInt(29));
 					article.setVatgourpsa(rowsetActual.getString(30));
-/*articulos por almacen */article.setBranchArticles(getBranchArticles(itemcode));
+					/* articulos por almacen */article
+							.setBranchArticles(getBranchArticles(itemcode));
 					article.setArticleprices(getArticlePrices(itemcode));
 					article.setVatgourpsaList(findCatalogByKey_List(
 							article.getVatgourpsa(), tablecode));
@@ -908,7 +908,7 @@ public class AdminDAO extends CommonDAO {
 		}
 		return _return;
 	}
-  
+
 	/* Manejo de listas de precios */
 	public int cat_prl0_priceslist_mtto(PricesListTO parameters, int action)
 			throws Exception {
