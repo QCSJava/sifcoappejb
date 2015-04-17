@@ -145,9 +145,12 @@ public class BankTest {
 
 		ResultOutTO resp = null;
 		ColecturiaConceptTO detalle = new ColecturiaConceptTO();
-		detalle.setLinenum(1);
+		detalle.setLinenum(3);
 		detalle.setAcctcode("23434");
 		detalle.setDscription("asdafsdf");
+		detalle.setPaidsum(0.00000);
+		detalle.setVatsum(0.00000);
+		
 		try {
 			resp = catalog.ges_ges_col2_colecturiaConcepts_mtto(detalle, 1);
 
