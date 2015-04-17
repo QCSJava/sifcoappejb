@@ -207,7 +207,19 @@ public class BankEJB implements BankEJBRemote {
 					// TODO Auto-generated catch block
 					throw (EJBException) new EJBException(e);
 				}
-
 				return _return;
+	}
+	
+	public int ges_ges_col2_colecturiaConcepts_mtto(ColecturiaDetailTO parameters, int action)throws EJBException{
+		int _return ;
+		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
+		try {
+			_return = DAO.ges_ges_col2_colecturiaConcepts_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
 	}
 }
