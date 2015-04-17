@@ -6,6 +6,8 @@ import java.util.Vector;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
+import net.bootsfaces.render.R;
+
 import com.sifcoapp.bussinessLogic.BankEJBRemote;
 import com.sifcoapp.bussinessLogic.CatalogEJBRemote;
 import com.sifcoapp.clientutility.ClientUtility;
@@ -93,10 +95,12 @@ public class BankEJBClient {
 		lstPeriods = bean.get_ges_colecturiaConcept();
 		return lstPeriods;
 	}
-	public int ges_ges_col2_colecturiaConcepts_mtto(ColecturiaDetailTO parameters, int action)throws Exception{
+	public ResultOutTO ges_ges_col2_colecturiaConcepts_mtto(ColecturiaConceptTO parameters, int action)throws Exception{
 		// TODO Auto-generated method stub
-				int _return;
-				_return= bean.ges_ges_col2_colecturiaConcepts_mtto(parameters, action);
+				ResultOutTO _return= new ResultOutTO();
+				
+				_return=bean.ges_ges_col2_colecturiaConcepts_mtto(parameters, action);
+				
 				return _return;
 	}
 

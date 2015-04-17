@@ -38,7 +38,7 @@ public interface BankEJBRemote {
 
 	public List get_ges_colecturiaConcept() throws EJBException;
 
-	public int ges_ges_col2_colecturiaConcepts_mtto(
-			ColecturiaDetailTO parameters, int action) throws EJBException;
+	public ResultOutTO ges_ges_col2_colecturiaConcepts_mtto(
+			ColecturiaConceptTO parameters, int action) throws EJBException;
 
 }
