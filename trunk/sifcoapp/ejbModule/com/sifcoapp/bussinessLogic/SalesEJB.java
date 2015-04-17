@@ -7,6 +7,8 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import org.glassfish.jersey.gf.ejb.internal.EjbExceptionMapper;
+
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
@@ -80,10 +82,10 @@ public class SalesEJB implements SalesEJBRemote {
 		// VALIDACIONES
 
 		try {
-			Iterator<ClientCrediDetailTO> iterator2 = parameters
+			Iterator<SalesDetailTO> iterator2 = parameters
 					.getSalesDetails().iterator();
 			while (iterator2.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator2
+				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2
 						.next();
 
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
@@ -96,10 +98,10 @@ public class SalesEJB implements SalesEJBRemote {
 			parameters.setRounddif(0.00);
 			_return.setDocentry(DAO.inv_Sales_mtto(parameters, action));
 
-			Iterator<ClientCrediDetailTO> iterator = parameters
+			Iterator<SalesDetailTO> iterator = parameters
 					.getSalesDetails().iterator();
 			while (iterator.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator
+				SalesDetailTO articleDetalle = (SalesDetailTO) iterator
 						.next();
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
@@ -208,6 +210,7 @@ public class SalesEJB implements SalesEJBRemote {
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
+					
 					goodDAO1.inv_ClientCrediDetail_mtto(articleDetalle,
 							Common.MTTOINSERT);
 				}
@@ -357,14 +360,14 @@ public class SalesEJB implements SalesEJBRemote {
 
 		// validaciones antes de guardar la venta
 
-		Iterator<ClientCrediDetailTO> iterator1 = parameters.getSalesDetails()
+		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
 				.iterator();
 
 		// recorre el detalle de la venta por articulo
 		while (iterator1.hasNext()) {
 			AdminEJB EJB = new AdminEJB();
 			// Consultar información actualizada desde la base
-			ClientCrediDetailTO salesDetail = (ClientCrediDetailTO) iterator1
+			SalesDetailTO salesDetail = (SalesDetailTO) iterator1
 					.next();
 			code = salesDetail.getItemcode();
 
@@ -469,12 +472,12 @@ public class SalesEJB implements SalesEJBRemote {
 			valid = false;
 
 			stocks = 0.000;
-			Iterator<ClientCrediDetailTO> iterator2 = parameters
+			Iterator<SalesDetailTO> iterator2 = parameters
 					.getSalesDetails().iterator();
 			// recorre de nuevo el detalle comparando el primer elemento con los
 			// demas
 			while (iterator2.hasNext()) {
-				ClientCrediDetailTO articleDetalle2 = (ClientCrediDetailTO) iterator2
+				SalesDetailTO articleDetalle2 = (SalesDetailTO) iterator2
 						.next();
 				if (code.equals(articleDetalle2.getItemcode())) {
 					// suma los elementos encontrados del mismo codigo
@@ -637,4 +640,130 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 
 	}
+  
+    public ResultOutTO Validateinv_Delivery(DeliveryTO parameters)throws EJBException{
+    	System.out.println("llego al validateinv_Delivery ");
+		boolean valid = false;
+		ResultOutTO _return = new ResultOutTO();
+		List branch = new Vector();
+		ArticlesTO DBArticle = new ArticlesTO();
+		String code;
+		// validaciones
+
+		Iterator<DeliveryDetailTO> iterator1 = parameters.getDeliveryDetails()
+				.iterator();
+
+		// recorre el ClientCrediDetail
+		while (iterator1.hasNext()) {
+			AdminEJB EJB = new AdminEJB();
+			// Consultar información actualizada desde la base
+			DeliveryDetailTO DeliveryDetail = (DeliveryDetailTO) iterator1
+					.next();
+			code = DeliveryDetail.getItemcode();
+
+			DBArticle = EJB.getArticlesByKey(code);
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo existe
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle != null) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ DeliveryDetail.getItemcode() + " "
+						+ DeliveryDetail.getDscription()
+
+						+ " no existe,informar al administrador. linea :"
+						+ DeliveryDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle.getValidFor() != null
+					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ DeliveryDetail.getItemcode() + " "
+						+ DeliveryDetail.getDscription()
+
+						+ " No esta activo. linea :"
+						+ DeliveryDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo venta
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getSellItem() != null
+					&& DBArticle.getSellItem().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ DeliveryDetail.getItemcode() + " "
+						+ DeliveryDetail.getDscription()
+						+ " No es un articulo de venta. linea :"
+						+ DeliveryDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(DeliveryDetail.getWhscode());
+				if (branch1.getWhscode().equals(DeliveryDetail.getWhscode())) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ DeliveryDetail.getItemcode()
+						+ " "
+						+ DeliveryDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ DeliveryDetail.getLinenum());
+				return _return;
+			}
+
+		}
+		_return.setCodigoError(0);
+
+		return _return;
+	
+    }
 }

@@ -229,27 +229,47 @@ public class SalesTest {
 		ClientCrediDetailTO document = new ClientCrediDetailTO();
 		ClientCrediDetailTO document1 = new ClientCrediDetailTO();
 
-		// document.setDocentry(1);
 		document.setLinenum(1);
-		document.setItemcode("ART-001");
+		document.setItemcode("000-180-09-15");
 		document.setDscription("A");
 		document.setQuantity(10.25);
 		document.setPrice(11.25);
-		// document.setLinetotal(100.00);
+		document.setWhscode("COD-2");
+		document.setLinetotal(100.00);
+		document.setDiscprcnt(0.00000);
+		document.setLinetotal(0.0000);
+		document.setPricebefdi(0.00000);
+		document.setPriceafvat(0.0000);
+		document.setStockpricestockprice(0.00000);
+		document.setVatappld(0.000000);
+		document.setVatsum(0.0000);
+		document.setGrssprofit(0.000000);
+		document.setGtotal(0.000000);
+
 		prueba.add(document);
-		// document1.setDocentry(1);
+
 		document1.setLinenum(2);
-		document1.setItemcode("ART-001");
+		document1.setItemcode("000-180-09-15");
 		document1.setDscription("A");
 		document1.setQuantity(10.25);
 		document1.setPrice(11.25);
-		// document1.setLinetotal(100.00);
+		document1.setWhscode("COD-2");
+		document1.setLinetotal(100.00);
+		document1.setDiscprcnt(0.00000);
+		document1.setPricebefdi(0.00000);
+		document1.setPriceafvat(0.0000);
+		document1.setStockpricestockprice(0.00000);
+		document1.setVatappld(0.000000);
+		document1.setVatsum(0.0000);
+		document1.setGrssprofit(0.000000);
+		document1.setGtotal(0.000000);
+
 		prueba.add(document1);
+
 		parameters.setDocnum(485);
 		parameters.setUsersign(1);
-		// parameters.setDocentry(26);
 		parameters.setCardcode("P");
-		// parameters.setDoctotal(15.5);
+		parameters.setDoctotal(15.5);
 		parameters.setclientDetails(prueba);
 		try {
 			_result = sales.inv_ClientCredi_mtto(parameters, 1);
@@ -323,9 +343,10 @@ public class SalesTest {
 		DeliveryDetailTO document = new DeliveryDetailTO();
 		DeliveryDetailTO document1 = new DeliveryDetailTO();
 
-		// document.setDocentry(1);
+		
 		document.setLinenum(1);
-		document.setItemcode("ART-001");
+		document.setItemcode("000-180-09-15");
+		document1.setWhscode("COD-2");
 		document.setDscription("A");
 		document.setQuantity(10.25);
 		document.setPrice(11.25);
@@ -340,11 +361,13 @@ public class SalesTest {
 		document.setStockpricestockprice(0.00);
 		document.setVatappld(0.00);
 		document.setVatsum(0.00);
-		// document.setLinetotal(100.00);
+		document.setLinetotal(100.00);
+		
 		prueba.add(document);
-		// document1.setDocentry(1);
+		
 		document1.setLinenum(2);
-		document1.setItemcode("ART-001");
+		document1.setItemcode("000-180-09-15");
+		document1.setWhscode("COD-2");
 		document1.setDscription("A");
 		document1.setQuantity(10.25);
 		document1.setPrice(11.25);
@@ -359,8 +382,9 @@ public class SalesTest {
 		document1.setStockpricestockprice(0.00);
 		document1.setVatappld(0.00);
 		document1.setVatsum(0.00);
-		// document1.setLinetotal(100.00);
+
 		prueba.add(document1);
+
 		parameters.setDocnum(48);
 		parameters.setUsersign(1);
 		parameters.setDiscsum(0.00);
@@ -368,10 +392,8 @@ public class SalesTest {
 		parameters.setNret(0.00);
 		parameters.setPaidsum(0.00);
 		parameters.setRounddif(0.00);
-
-		// parameters.setDocentry(26);
 		parameters.setCardcode("P");
-		// parameters.setDoctotal(15.5);
+		parameters.setDoctotal(15.5);
 		parameters.setDeliveryDetails(prueba);
 		try {
 			_result = sales.inv_Delivery_mtto(parameters, 1);

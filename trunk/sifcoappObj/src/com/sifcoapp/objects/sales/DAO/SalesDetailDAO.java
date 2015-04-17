@@ -85,7 +85,7 @@ public class SalesDetailDAO extends CommonDAO{
 			return _return;
 		}
 
-		public int inv_SalesDetail_mtto(ClientCrediDetailTO articleDetalle, int action) throws Exception{
+		public int inv_SalesDetail_mtto(SalesDetailTO articleDetalle, int action) throws Exception{
 			
 			int v_resp = 0;
 			
