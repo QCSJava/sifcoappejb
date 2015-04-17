@@ -57,6 +57,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 	}
 
 	public List getAccount(int type) throws EJBException {
+		
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
@@ -65,7 +66,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-
+		
 		return _return;
 	}
 
