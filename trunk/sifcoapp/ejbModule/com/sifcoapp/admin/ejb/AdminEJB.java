@@ -33,7 +33,8 @@ import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
  */
 @Stateless
 public class AdminEJB implements AdminEJBRemote {
-	Double zero=0.00;
+	Double zero = 0.00;
+
 	/**
 	 * Default constructor.
 	 */
@@ -191,96 +192,100 @@ public class AdminEJB implements AdminEJBRemote {
 		adminDAO.setIstransaccional(true);
 		AdminDAO adminDAO2 = new AdminDAO();
 		adminDAO2.setIstransaccional(true);
-		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles().iterator();
+		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
+				.iterator();
 		List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
-	
+
 		try {
 			consult = adminDAO2.getBranchArticles(parameters.getItemCode());
-				
-				while (iterator.hasNext()) {
-					
-					BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
-					
-					// Para articulos nuevos
-					// ############################ VALORES QUEMADOS
-					// ###################################
-					if(branch.getOnhand()==null){
-						branch.setOnhand(zero);
-					}
-					if(branch.getOnhand1()==null){
-						branch.setOnhand1(zero);
-					}
-					if(branch.getIscommited()==null){
-						branch.setIscommited(zero);
-					}
-					if(branch.getOnorder()==null){
-						branch.setOnorder(zero);
-					}
-					if(branch.getMinorder()==null){
-						branch.setMinorder(zero);
-					}
-					if (branch.getMinstock() == null) {
-						branch.setMinstock(zero);
-					}
-					if (branch.getMaxstock() == null) {
-						branch.setMaxstock(zero);
-					}
-					if (action == Common.MTTOINSERT && branch.isIsasociated()) {
 
-						adminDAO2.cat_brancharticles_mtto(branch, action);
+			while (iterator.hasNext()) {
 
-					}
-					if (action == Common.MTTOUPDATE) {
-						if (branch.isIsasociated()) {
-							int update = 0;
-							Iterator<BranchArticlesTO> iterator2 = consult.iterator();
-	
-							while (iterator2.hasNext()) {
-								BranchArticlesTO branch2 = (BranchArticlesTO) iterator2
-										.next();
-								if (branch2.getWhscode()
-										.equals(branch.getWhscode()) && branch2.isIsasociated()) {
-									adminDAO2.cat_brancharticles_mtto(branch,
-											Common.MTTOUPDATE);
-									update = 1;
-								}
-							}
-							if (update == 0) {
-								adminDAO2.cat_brancharticles_mtto(branch,
-										Common.MTTOINSERT);
-							}
+				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
 
-						} else {
-							adminDAO2.cat_brancharticles_mtto(branch,
-									Common.MTTODELETE);
-						}
-					}
-					if (action == Common.MTTODELETE) {
-						adminDAO2.cat_brancharticles_mtto(branch, Common.MTTODELETE);
-					}
-					
+				// Para articulos nuevos
+				// ############################ VALORES QUEMADOS
+				// ###################################
+				if (branch.getOnhand() == null) {
+					branch.setOnhand(zero);
 				}
-			
+				if (branch.getOnhand1() == null) {
+					branch.setOnhand1(zero);
+				}
+				if (branch.getIscommited() == null) {
+					branch.setIscommited(zero);
+				}
+				if (branch.getOnorder() == null) {
+					branch.setOnorder(zero);
+				}
+				if (branch.getMinorder() == null) {
+					branch.setMinorder(zero);
+				}
+				if (branch.getMinstock() == null) {
+					branch.setMinstock(zero);
+				}
+				if (branch.getMaxstock() == null) {
+					branch.setMaxstock(zero);
+				}
+				if (action == Common.MTTOINSERT && branch.isIsasociated()) {
+
+					adminDAO2.cat_brancharticles_mtto(branch, action);
+
+				}
+				if (action == Common.MTTOUPDATE) {
+					if (branch.isIsasociated()) {
+						int update = 0;
+						Iterator<BranchArticlesTO> iterator2 = consult
+								.iterator();
+
+						while (iterator2.hasNext()) {
+							BranchArticlesTO branch2 = (BranchArticlesTO) iterator2
+									.next();
+							if (branch2.getWhscode()
+									.equals(branch.getWhscode())
+									&& branch2.isIsasociated()) {
+								adminDAO2.cat_brancharticles_mtto(branch,
+										Common.MTTOUPDATE);
+								update = 1;
+							}
+						}
+						if (update == 0) {
+							adminDAO2.cat_brancharticles_mtto(branch,
+									Common.MTTOINSERT);
+						}
+
+					} else {
+						adminDAO2.cat_brancharticles_mtto(branch,
+								Common.MTTODELETE);
+					}
+				}
+				if (action == Common.MTTODELETE) {
+					adminDAO2
+							.cat_brancharticles_mtto(branch, Common.MTTODELETE);
+				}
+
+			}
+
 			// ############################ VALORES QUEMADOS
 			// ###################################
-			if(parameters.getNumInBuy() == null){
+			if (parameters.getNumInBuy() == null) {
 				parameters.setNumInBuy(zero);
 			}
-			if(parameters.getSalPackUn()==null){
-				parameters.setSalPackUn(zero);	
+			if (parameters.getSalPackUn() == null) {
+				parameters.setSalPackUn(zero);
 			}
-			if(parameters.getAvgPrice()==null){
+			if (parameters.getAvgPrice() == null) {
 				parameters.setAvgPrice(zero);
 			}
-			if(parameters.getNumInSale()==null){
+			if (parameters.getNumInSale() == null) {
 				parameters.setNumInSale(zero);
 			}
-			if(parameters.getPurPackUn()==null){
+			if (parameters.getPurPackUn() == null) {
 				parameters.setPurPackUn(zero);
 			}
-			if(parameters.getOnHand()==null){
+			if (parameters.getOnHand() == null) {
 				parameters.setOnHand(zero);
-				}
+			}
 
 			adminDAO.cat_articles_mtto(parameters, action);
 			adminDAO.forceCommit();
@@ -300,17 +305,7 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de alamacenes de Articulos
 	 */
-	/*
-	 * public int cat_brancharticles_mtto(BranchArticlesTO parameters, int
-	 * action) {
-	 * 
-	 * int _return;
-	 * 
-	 * AdminDAO adminDAO = new AdminDAO(); _return =
-	 * adminDAO.cat_brancharticles_mtto(parameters, action);
-	 * 
-	 * return _return; }
-	 */
+	
 
 	public List getArticles(ArticlesInTO parameters) throws EJBException {
 
@@ -340,14 +335,13 @@ public class AdminEJB implements AdminEJBRemote {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
+		} finally {
+			// adminDAO.forceCommit();
+			adminDAO.forceCloseConnection();
 		}
-
-		// adminDAO.forceCommit();
-		adminDAO.forceCloseConnection();
-
 		return _return;
 	}
-  
+
 	/*
 	 * Mantenimiento de almacenes
 	 */
@@ -592,139 +586,140 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,int accion)throws EJBException {
-		ResultOutTO _return= new ResultOutTO();
+	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,
+			int accion) throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
 		AdminDAO adminDAO = new AdminDAO();
 		AdminDAO adminDAO1 = new AdminDAO();
 		adminDAO.setIstransaccional(true);
 		adminDAO1.setIstransaccional(true);
 		int clave;
-		int layerid=0;
-		if(param.getAllocation()==null){
+		int layerid = 0;
+		if (param.getAllocation() == null) {
 			param.setAllocation(zero);
 		}
-		if(param.getBexpval()==null){
+		if (param.getBexpval() == null) {
 			param.setBexpval(zero);
 		}
-		if(param.getBnegaval()==null){
+		if (param.getBnegaval() == null) {
 			param.setBnegaval(zero);
 		}
-		if(param.getBtransval()==null){
+		if (param.getBtransval() == null) {
 			param.setBtransval(zero);
 		}
-		if(param.getCogsval()==null){
+		if (param.getCogsval() == null) {
 			param.setCogsval(zero);
 		}
-		if(param.getDecval()==null){
+		if (param.getDecval() == null) {
 			param.setDecval(zero);
 		}
-		if(param.getDoffdecval()==null){
+		if (param.getDoffdecval() == null) {
 			param.setDoffdecval(zero);
 		}
-		if(param.getExpalloc()==null){
+		if (param.getExpalloc() == null) {
 			param.setExpalloc(zero);
 		}
-		if(param.getExpenses()==null){
+		if (param.getExpenses() == null) {
 			param.setExpenses(zero);
 		}
-		if(param.getIncval()==null){
+		if (param.getIncval() == null) {
 			param.setIncval(zero);
 		}
-		if(param.getInqty()==null){
+		if (param.getInqty() == null) {
 			param.setInqty(zero);
 		}
-		if(param.getIoffincval()==null){
+		if (param.getIoffincval() == null) {
 			param.setIoffincval(zero);
 		}
-		if(param.getNeginvadjs()==null){
+		if (param.getNeginvadjs() == null) {
 			param.setNeginvadjs(zero);
 		}
-		if(param.getOexpalloc()==null){
+		if (param.getOexpalloc() == null) {
 			param.setOexpalloc(zero);
 		}
-		if(param.getOpenalloc()==null){
+		if (param.getOpenalloc() == null) {
 			param.setOpenalloc(zero);
 		}
-		if(param.getOpenexp()==null){
+		if (param.getOpenexp() == null) {
 			param.setOpenexp(zero);
 		}
-		if(param.getOpenneginv()==null){
+		if (param.getOpenneginv() == null) {
 			param.setOpenneginv(zero);
 		}
-		if(param.getOpenpa()==null){
+		if (param.getOpenpa() == null) {
 			param.setOpenpa(zero);
 		}
-		if(param.getOpenpaoff()==null){
+		if (param.getOpenpaoff() == null) {
 			param.setOpenpaoff(zero);
 		}
-		if(param.getOpenpdiff()==null){
+		if (param.getOpenpdiff() == null) {
 			param.setOpenpdiff(zero);
 		}
-		if(param.getOpenqty()==null){
+		if (param.getOpenqty() == null) {
 			param.setOpenqty(zero);
 		}
-		if(param.getOpenstock()==null){
+		if (param.getOpenstock() == null) {
 			param.setOpenstock(zero);
 		}
-		if(param.getOutqty()==null){
+		if (param.getOutqty() == null) {
 			param.setOutqty(zero);
 		}
-		if(param.getPaoffval()==null){
+		if (param.getPaoffval() == null) {
 			param.setPaoffval(zero);
 		}
-		if(param.getPaval()==null){
+		if (param.getPaval() == null) {
 			param.setPaval(zero);
 		}
-		if(param.getPrice()==null){
+		if (param.getPrice() == null) {
 			param.setPrice(zero);
 		}
-		if(param.getPricediff()==null){
+		if (param.getPricediff() == null) {
 			param.setPricediff(zero);
 		}
-		if(param.getSumstock()==null){
+		if (param.getSumstock() == null) {
 			param.setSumstock(zero);
 		}
-		if(param.getVarval()==null){
+		if (param.getVarval() == null) {
 			param.setVarval(zero);
 		}
-		if(param.getWipval()==null){
+		if (param.getWipval() == null) {
 			param.setWipval(zero);
 		}
-		if(param.getWipvarval()==null){
+		if (param.getWipvarval() == null) {
 			param.setWipvarval(zero);
 		}
-		try{
-			clave=adminDAO.adm_warehousejournal_mtto(param, accion);
-		Iterator<WarehouseJournalDetailTO> iterator = param.getDetailWarehouse().iterator();
-		while(iterator.hasNext()){
-			WarehouseJournalDetailTO nuevo= iterator.next();
-			if(nuevo.getBalance()==null){
-				nuevo.setBalance(zero);
+		try {
+			clave = adminDAO.adm_warehousejournal_mtto(param, accion);
+			Iterator<WarehouseJournalDetailTO> iterator = param
+					.getDetailWarehouse().iterator();
+			while (iterator.hasNext()) {
+				WarehouseJournalDetailTO nuevo = iterator.next();
+				if (nuevo.getBalance() == null) {
+					nuevo.setBalance(zero);
+				}
+				if (nuevo.getCalcprice() == null) {
+					nuevo.setCalcprice(zero);
+				}
+				if (nuevo.getLayerinqty() == null) {
+					nuevo.setLayerinqty(zero);
+				}
+				if (nuevo.getLayeroutq() == null) {
+					nuevo.setLayeroutq(zero);
+				}
+				if (nuevo.getRevaltotal() == null) {
+					nuevo.setRevaltotal(zero);
+				}
+				if (nuevo.getTransvalue() == null) {
+					nuevo.setTransvalue(zero);
+				}
+				layerid = layerid + 1;
+				nuevo.setTransseq(clave);
+				nuevo.setLayerid(layerid);
+				adminDAO1.adm_warehousejournalDetail_mtto(nuevo, accion);
 			}
-			if(nuevo.getCalcprice()==null){
-				nuevo.setCalcprice(zero);
-			}
-			if(nuevo.getLayerinqty()==null){
-				nuevo.setLayerinqty(zero);
-			}
-			if(nuevo.getLayeroutq()==null){
-				nuevo.setLayeroutq(zero);
-			}
-			if(nuevo.getRevaltotal()==null){
-				nuevo.setRevaltotal(zero);
-			}
-			if(nuevo.getTransvalue()==null){
-				nuevo.setTransvalue(zero);
-			}
-			layerid=layerid+1;
-			nuevo.setTransseq(clave);
-			nuevo.setLayerid(layerid);
-			adminDAO1.adm_warehousejournalDetail_mtto(nuevo, accion);
-		 }
-		adminDAO.forceCommit();
-		adminDAO1.forceCommit();
-		}	
-		catch (Exception e) {
+			adminDAO.forceCommit();
+			adminDAO1.forceCommit();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			adminDAO.rollBackConnection();
 			adminDAO1.rollBackConnection();
@@ -738,8 +733,9 @@ public class AdminEJB implements AdminEJBRemote {
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
 	}
-	
-	public WarehouseJournalTO getWarehouseJournalByKey(int transseq) throws EJBException{
+
+	public WarehouseJournalTO getWarehouseJournalByKey(int transseq)
+			throws EJBException {
 		WarehouseJournalTO _return = null;
 
 		AdminDAO adminDAO = new AdminDAO();
@@ -756,7 +752,7 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public List findCatQS(String nameCatalog) throws EJBException{
+	public List findCatQS(String nameCatalog) throws EJBException {
 		// TODO Auto-generated method stub
 		List catlgLst = null;
 
@@ -770,5 +766,5 @@ public class AdminEJB implements AdminEJBRemote {
 		}
 
 		return catlgLst;
-	}	
+	}
 }

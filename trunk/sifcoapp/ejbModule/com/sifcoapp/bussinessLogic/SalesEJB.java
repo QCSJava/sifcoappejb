@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
@@ -61,18 +62,22 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int action)
 			throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("llego al salesejb");
 		ResultOutTO _return = new ResultOutTO();
-		// VALIDACIONES
 		_return = validateSale(parameters);
-		System.out.println(_return.getMensaje());
+		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {
 			return _return;
 		}
+
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
 		goodDAO1.setIstransaccional(true);
+
+		// TODO Auto-generated method stub
+
+		// VALIDACIONES
 
 		try {
 			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
@@ -342,14 +347,16 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	private ResultOutTO validateSale(SalesTO parameters) throws EJBException {
+	public ResultOutTO validateSale(SalesTO parameters) throws EJBException {
 		// Variables
-		boolean valid = true;
+		System.out.println("llego al validateSAle ");
+		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
+
 		Double stocks;
 		List branch = new Vector();
 		ArticlesTO DBArticle = new ArticlesTO();
-		AdminDAO DAO1 = new AdminDAO();
+
 		String code;
 		double Quantity;
 
@@ -360,21 +367,18 @@ public class SalesEJB implements SalesEJBRemote {
 
 		// recorre el detalle de la venta por articulo
 		while (iterator1.hasNext()) {
-
+			AdminEJB EJB = new AdminEJB();
 			// Consultar información actualizada desde la base
 			SalesDetailTO salesDetail = (SalesDetailTO) iterator1.next();
 			code = salesDetail.getItemcode();
-			try {
-				DBArticle = DAO1.getinventaryArticlesByKey(code);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+
+			DBArticle = EJB.getArticlesByKey(code);
 
 			// ------------------------------------------------------------------------------------------------------------
-			// Validación articulo activo
+			// Validación articulo existe
 			// ------------------------------------------------------------------------------------------------------------
 			valid = false;
-			if (DBArticle.getValidFor().equals('Y')) {
+			if (DBArticle != null) {
 				valid = true;
 			}
 
@@ -383,15 +387,42 @@ public class SalesEJB implements SalesEJBRemote {
 				_return.setCodigoError(1);
 				_return.setMensaje("El articulo " + salesDetail.getItemcode()
 						+ " " + salesDetail.getDscription()
-						+ " No esta activo. linea :" + salesDetail.getLinenum());
+
+						+ " no existe,informar al administrador. linea :"
+						+ salesDetail.getLinenum());
+				System.out.println(valid);
 				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle.getValidFor() != null
+					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(salesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo " + salesDetail.getItemcode()
+						+ " " + salesDetail.getDscription()
+
+						+ " No esta activo. linea :" + salesDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
 			}
 
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación articulo venta
 			// ------------------------------------------------------------------------------------------------------------
 			valid = false;
-			if (DBArticle.getSellItem().equals('Y')) {
+			if (DBArticle.getSellItem() != null
+					&& DBArticle.getSellItem().toUpperCase().equals("Y")) {
 				valid = true;
 			}
 
@@ -414,8 +445,11 @@ public class SalesEJB implements SalesEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(salesDetail.getWhscode());
 				if (branch1.getWhscode().equals(salesDetail.getWhscode())) {
-					if (branch1.getLocked().equals('f')) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
 					}
 				}
@@ -438,17 +472,17 @@ public class SalesEJB implements SalesEJBRemote {
 			// ------------------------------------------------------------------------------------------------------------
 			valid = false;
 
-			stocks = salesDetail.getQuantity();
+			stocks = 0.000;
 			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
 					.iterator();
 			// recorre de nuevo el detalle comparando el primer elemento con los
 			// demas
 			while (iterator2.hasNext()) {
-				SalesDetailTO articleDetalle2 = (SalesDetailTO) iterator1
+				SalesDetailTO articleDetalle2 = (SalesDetailTO) iterator2
 						.next();
 				if (code.equals(articleDetalle2.getItemcode())) {
 					// suma los elementos encontrados del mismo codigo
-					stocks += articleDetalle2.getQuantity();
+					stocks = stocks + articleDetalle2.getQuantity();
 				}
 			}
 
@@ -457,26 +491,34 @@ public class SalesEJB implements SalesEJBRemote {
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				if (branch1.getWhscode().equals(salesDetail.getWhscode())) {
-					if (salesDetail.getQuantity() <= stocks) {
+					System.out.println("sumatoria" + stocks + "base"
+							+ branch1.getOnhand());
+					if (stocks <= branch1.getOnhand()) {
 						valid = true;
 					}
 				}
 
-				if (!valid) {
-					_return.setLinenum(salesDetail.getLinenum());
-					_return.setCodigoError(1);
-					_return.setMensaje("El articulo "
-							+ salesDetail.getItemcode() + " "
-							+ salesDetail.getDscription()
-							+ " Reace en un Inventario Negativo. linea :"
-							+ salesDetail.getLinenum());
-					return _return;
-				}
+			}
+			if (!valid) {
+				_return.setLinenum(salesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo " + salesDetail.getItemcode()
+						+ " " + salesDetail.getDscription()
+						+ " Reace en un Inventario Negativo. linea :"
+						+ salesDetail.getLinenum());
+				return _return;
 			}
 		}
+		_return.setCodigoError(0);
 
 		return _return;
 	}
 
-	
+	public ResultOutTO validateClientCredi(ClientCrediTO parameters)throws EJBException{
+		
+		
+		
+		return null;
+		
+	}
 }
