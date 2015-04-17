@@ -12,6 +12,7 @@ import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.bank.to.CheckForPaymentInTO;
 import com.sifcoapp.objects.bank.to.CheckForPaymentTO;
 import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
 import com.sifcoapp.objects.bank.to.ColecturiaInTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
@@ -91,6 +92,12 @@ public class BankEJBClient {
 		List lstPeriods = new Vector();
 		lstPeriods = bean.get_ges_colecturiaConcept();
 		return lstPeriods;
+	}
+	public int ges_ges_col2_colecturiaConcepts_mtto(ColecturiaDetailTO parameters, int action)throws Exception{
+		// TODO Auto-generated method stub
+				int _return;
+				_return= bean.ges_ges_col2_colecturiaConcepts_mtto(parameters, action);
+				return _return;
 	}
 
 }

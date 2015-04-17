@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import com.sifcoapp.objects.bank.to.CheckForPaymentInTO;
 import com.sifcoapp.objects.bank.to.CheckForPaymentTO;
 import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
 import com.sifcoapp.objects.bank.to.ColecturiaInTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
@@ -34,8 +35,10 @@ public interface BankEJBRemote {
 
 	public ColecturiaTO get_ges_colecturiaByKey(int parameters)
 			throws EJBException;
-	
-	public List get_ges_colecturiaConcept()
-			throws EJBException;
+
+	public List get_ges_colecturiaConcept() throws EJBException;
+
+	public int ges_ges_col2_colecturiaConcepts_mtto(
+			ColecturiaDetailTO parameters, int action) throws EJBException;
 
 }
