@@ -35,4 +35,6 @@ public interface SalesEJBRemote {
 
 	public ResultOutTO inv_Delivery_mtto(DeliveryTO parameters, int accion)
 			throws Exception;
+
+	/*public ResultOutTO validateSale(SalesTO parameters) throws Exception;*/
 }

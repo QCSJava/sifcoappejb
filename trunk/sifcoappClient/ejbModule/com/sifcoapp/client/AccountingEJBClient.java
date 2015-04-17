@@ -82,7 +82,7 @@ public class AccountingEJBClient {
 	public List getAccount(int type) throws Exception {
 		// TODO Auto-generated method stub
 		List acc = new Vector();
-
+		
 		acc = bean.getAccount(type);
 
 		return acc;

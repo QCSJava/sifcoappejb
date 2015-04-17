@@ -39,9 +39,18 @@ public class SalesEJBClient {
 	
 	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int accion) throws Exception{
 		ResultOutTO _return;
+		System.out.println("llego al client ");
 		_return=bean.inv_Sales_mtto(parameters, accion);
+		
 		return _return;
 	}
+	/*public ResultOutTO validateSale(SalesTO parameters)throws Exception{
+		ResultOutTO _return;
+		System.out.println("llego al client validate");
+		_return=bean.validateSale(parameters);
+		
+		return _return;
+	}*/
 	
 	public List getSalesDetail(int docentry) throws Exception{
 		List _return;
