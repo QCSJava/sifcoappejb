@@ -115,28 +115,51 @@ public class BankTest {
 		bus.setCardcode("000001");
 		bus.setCardname("Prueba");
 		bus.setDoctotal(10.1);
-		
+
 		ColecturiaDetailTO detalle = new ColecturiaDetailTO();
-		
+
 		List prueba = new Vector();
-		
+
 		detalle.setLinenum(1);
 		detalle.setAcctcode("23434");
 		detalle.setDscription("asdafsdf");
-		
+
 		prueba.add(detalle);
-		
+
 		bus.setColecturiaDetail(prueba);
-		
+
 		try {
 			resp = catalog.ges_ges_col0_colecturia_mtto(bus, 1);
-			System.out.println(resp.getDocentry());
-			System.out.println(resp.getCodigoError());
-			System.out.println(resp.getMensaje());
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		System.out.println(resp.getDocentry());
+		System.out.println(resp.getCodigoError());
+		System.out.println(resp.getMensaje());
+	}
+
+	public static void colecturiaConcept_mtto() {
+
+		ResultOutTO resp = null;
+		ColecturiaConceptTO detalle = new ColecturiaConceptTO();
+		detalle.setLinenum(1);
+		detalle.setAcctcode("23434");
+		detalle.setDscription("asdafsdf");
+		try {
+			resp = catalog.ges_ges_col2_colecturiaConcepts_mtto(detalle, 1);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println(resp.getDocentry());
+		System.out.println(resp.getCodigoError());
+		System.out.println(resp.getMensaje());
+
 	}
 
 	public static void getColecturia() {
@@ -144,7 +167,7 @@ public class BankTest {
 		ColecturiaTO lstPeriods = new ColecturiaTO();
 		ColecturiaInTO nuevo = new ColecturiaInTO();
 		List lstPeriods3 = null;
-		//nuevo.setDocentry(1);
+		// nuevo.setDocentry(1);
 
 		try {
 			lstPeriods3 = catalog.get_ges_colecturia(nuevo);
@@ -174,21 +197,22 @@ public class BankTest {
 		System.out.println(lstPeriods3.getCardcode() + "  "
 				+ lstPeriods3.getDocnum() + " - " + lstPeriods3.getDoctotal()
 				+ " - " + lstPeriods3.getDocentry());
-		
-		Iterator<ColecturiaDetailTO> iterator = lstPeriods3.getColecturiaDetail().iterator();
+
+		Iterator<ColecturiaDetailTO> iterator = lstPeriods3
+				.getColecturiaDetail().iterator();
 		while (iterator.hasNext()) {
 			ColecturiaDetailTO periodo = (ColecturiaDetailTO) iterator.next();
 			System.out.println(periodo.getAcctcode() + "  "
 					+ periodo.getLinenum() + " - " + periodo.getObjtype()
 					+ " - " + periodo.getDscription());
 		}
-		
+
 	}
-	
+
 	public static void getColecturiaConcept() {
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods3 = null;
-		//nuevo.setDocentry(1);
+		// nuevo.setDocentry(1);
 
 		try {
 			lstPeriods3 = catalog.get_ges_colecturiaConcept();

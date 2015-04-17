@@ -210,16 +210,18 @@ public class BankEJB implements BankEJBRemote {
 				return _return;
 	}
 	
-	public int ges_ges_col2_colecturiaConcepts_mtto(ColecturiaDetailTO parameters, int action)throws EJBException{
-		int _return ;
+	public ResultOutTO ges_ges_col2_colecturiaConcepts_mtto(ColecturiaConceptTO parameters, int action)throws EJBException{
+		ResultOutTO _return = new ResultOutTO();
 		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
 		try {
-			_return = DAO.ges_ges_col2_colecturiaConcepts_mtto(parameters, action);
+			_return.setDocentry(DAO.ges_ges_col2_colecturiaConcepts_mtto(parameters, action)); 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
 
+		_return.setCodigoError(0);
+		_return.setMensaje("datos almacenados correctamente");
 		return _return;
 	}
 }
