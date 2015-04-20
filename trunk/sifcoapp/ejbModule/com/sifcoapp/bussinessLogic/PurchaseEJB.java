@@ -62,7 +62,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
 		System.out.println("llego al salesejb");
-
 		_return = validate_inv_Purchase_mtto(parameters);
 		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {
@@ -79,26 +78,15 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			while (iterator2.hasNext()) {
 				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator2
 						.next();
-				// articleDetalle.setLinetotal(articleDetalle.getQuantity()*
-				// articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
-																			// DATOS//
-																			// ESTATICOS//
-																			// ##########
+
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				// articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				// articleDetalle.setPriceafvat(articleDetalle.getPrice());
+
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				// articleDetalle.setVatsum(articleDetalle.getPrice());
-				// articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				// articleDetalle.setVatappld(articleDetalle.getPrice());
-				// articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
-				// articleDetalle.setGtotal(articleDetalle.getQuantity());
-				// total = total + articleDetalle.getLinetotal();
+
 			}
-			// parameters.setDoctotal(total);
-			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
-											// #######################
+
+			parameters.setDiscsum(0.00);
 			parameters.setNret(0.00);
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
@@ -168,7 +156,13 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 	public ResultOutTO inv_PurchaseQuotation_mtto(
 			PurchaseQuotationTO parameters, int action) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println("llego al salesejb");
 		ResultOutTO _return = new ResultOutTO();
+		_return = validate_inv_PurchaseQuotation_mtto(parameters);
+		System.out.println(_return.getCodigoError());
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
 		Double total = 0.0;
 		PurchaseQuotationDAO DAO = new PurchaseQuotationDAO();
 		DAO.setIstransaccional(true);
@@ -181,26 +175,13 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			while (iterator2.hasNext()) {
 				PurchaseQuotationDetailTO articleDetalle = (PurchaseQuotationDetailTO) iterator2
 						.next();
-				// articleDetalle.setLinetotal(articleDetalle.getQuantity()*
-				// articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
-																			// DATOS//
-																			// ESTATICOS//
-																			// ##########
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				// articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				// articleDetalle.setPriceafvat(articleDetalle.getPrice());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				// articleDetalle.setVatsum(articleDetalle.getPrice());
-				// articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				// articleDetalle.setVatappld(articleDetalle.getPrice());
-				// articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
-				// articleDetalle.setGtotal(articleDetalle.getQuantity());
-				// total = total + articleDetalle.getLinetotal();
+
 			}
-			// parameters.setDoctotal(total);
-			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
-											// #######################
+
+			parameters.setDiscsum(0.00);
 			parameters.setNret(0.00);
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
@@ -473,14 +454,142 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			}
 
 			if (!valid) {
-				_return.setLinenum(DeliveryDetail.getLinenum());
+				_return.setLinenum(PurchaseDetail.getLinenum());
 				_return.setCodigoError(1);
 				_return.setMensaje("El articulo "
-						+ DeliveryDetail.getItemcode()
+						+ PurchaseDetail.getItemcode()
 						+ " "
-						+ DeliveryDetail.getDscription()
+						+ PurchaseDetail.getDscription()
 						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
-						+ DeliveryDetail.getLinenum());
+						+ PurchaseDetail.getLinenum());
+				return _return;
+			}
+
+		}
+		_return.setCodigoError(0);
+
+		return _return;
+
+	}
+
+	public ResultOutTO validate_inv_PurchaseQuotation_mtto(
+			PurchaseQuotationTO parameters) throws Exception {
+		System.out.println("llego al validateinv_Delivery ");
+		boolean valid = false;
+		ResultOutTO _return = new ResultOutTO();
+		List branch = new Vector();
+		ArticlesTO DBArticle = new ArticlesTO();
+		String code;
+		// validaciones
+
+		Iterator<PurchaseQuotationDetailTO> iterator1 = parameters
+				.getPurchaseQuotationDetails().iterator();
+
+		// recorre el ClientCrediDetail
+		while (iterator1.hasNext()) {
+			AdminEJB EJB = new AdminEJB();
+			// Consultar información actualizada desde la base
+			PurchaseQuotationDetailTO PurchaseQuotationDetail = (PurchaseQuotationDetailTO) iterator1
+					.next();
+			code = PurchaseQuotationDetail.getItemcode();
+
+			DBArticle = EJB.getArticlesByKey(code);
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo existe
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle != null) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseQuotationDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseQuotationDetail.getItemcode() + " "
+						+ PurchaseQuotationDetail.getDscription()
+
+						+ " no existe,informar al administrador. linea :"
+						+ PurchaseQuotationDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle.getValidFor() != null
+					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseQuotationDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseQuotationDetail.getItemcode() + " "
+						+ PurchaseQuotationDetail.getDscription()
+
+						+ " No esta activo. linea :"
+						+ PurchaseQuotationDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo venta
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getSellItem() != null
+					&& DBArticle.getSellItem().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseQuotationDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseQuotationDetail.getItemcode() + " "
+						+ PurchaseQuotationDetail.getDscription()
+						+ " No es un articulo de venta. linea :"
+						+ PurchaseQuotationDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(PurchaseQuotationDetail.getWhscode());
+				if (branch1.getWhscode().equals(
+						PurchaseQuotationDetail.getWhscode())) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseQuotationDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseQuotationDetail.getItemcode()
+						+ " "
+						+ PurchaseQuotationDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ PurchaseQuotationDetail.getLinenum());
 				return _return;
 			}
 
