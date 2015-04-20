@@ -3,6 +3,7 @@ package com.sifcoapp.client;
 import java.util.List;
 import java.util.Vector;
 
+import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -30,8 +31,8 @@ public class CatalogEJBClient {
 		}
 	}
 
-	public ResultOutTO cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
-			int accion) throws Exception {
+	public ResultOutTO cat_bpa_businesspartner_mtto(
+			BusinesspartnerTO parameters, int accion) throws Exception {
 
 		ResultOutTO _return;
 
@@ -53,6 +54,15 @@ public class CatalogEJBClient {
 		BusinesspartnerTO lstPeriods = new BusinesspartnerTO();
 		lstPeriods = bean.get_businesspartnerBykey(parameters);
 		return lstPeriods;
+	}
+
+	public ResultOutTO validate_businesspartnerBykey(String parameters)
+			throws Exception {
+		
+		ResultOutTO _return = new ResultOutTO();
+		_return = bean.validate_businesspartnerBykey(parameters);
+		return _return;
+
 	}
 
 }

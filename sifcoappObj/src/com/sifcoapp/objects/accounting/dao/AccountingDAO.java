@@ -454,14 +454,15 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public AccPeriodTO validate_exist_accperiod() throws Exception {
+	public AccPeriodTO validate_exist_accperiod(Date parameters) throws Exception {
 		AccPeriodTO _return = new AccPeriodTO();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 
-		this.setDbObject("{? = call sp_validate_exist_accperiod()}");
-
+		this.setDbObject("{ call sp_validate_exist_accperiod(?)}");
+		this.setDate(1, "_docdate", parameters);
+		
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;

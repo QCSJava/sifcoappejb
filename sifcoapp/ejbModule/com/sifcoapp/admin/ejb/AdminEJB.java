@@ -305,7 +305,6 @@ public class AdminEJB implements AdminEJBRemote {
 	/*
 	 * Mantenimiento de alamacenes de Articulos
 	 */
-	
 
 	public List getArticles(ArticlesInTO parameters) throws EJBException {
 
@@ -767,6 +766,34 @@ public class AdminEJB implements AdminEJBRemote {
 
 		return catlgLst;
 	}
-    
-	
+
+	public ResultOutTO validate_branchActiv(String whscode) throws EJBException {
+
+		// TODO Auto-generated method stub
+		ResultOutTO _return = new ResultOutTO();
+		BranchTO _branch = null;
+
+		AdminDAO adminDAO = new AdminDAO();
+		try {
+			_branch = adminDAO.getBranchByKey(whscode);
+			if (_branch.equals(null)) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No se encontro Ningun Almacen con Este codigo ");
+				return _return;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		if (_branch.isLocked()) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Almacen se encuentra Bloqueado");
+			return _return;
+		}
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Almacen Activo");
+		return _return;
+
+	}
 }

@@ -60,6 +60,15 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
+	public ResultOutTO validate_exist_accperiod(Date parameters) throws Exception {
+
+		ResultOutTO _return = new ResultOutTO();
+
+		_return = bean.validate_exist_accperiod( parameters);
+
+		return _return;
+	}
+
 	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -82,17 +91,19 @@ public class AccountingEJBClient {
 	public List getAccount(int type) throws Exception {
 		// TODO Auto-generated method stub
 		List acc = new Vector();
-		
+
 		acc = bean.getAccount(type);
 
 		return acc;
 	}
 
-	public List getAccountByFilter(String acctcode, String acctname)throws Exception {
+	public List getAccountByFilter(String acctcode, String acctname)
+			throws Exception {
 		return getAccountByFilter(acctcode, acctname, null);
 	}
-	public List getAccountByFilter(String acctcode, String acctname, String postable)
-			throws Exception {
+
+	public List getAccountByFilter(String acctcode, String acctname,
+			String postable) throws Exception {
 		// TODO Auto-generated method stub
 		List account = new Vector();
 		account = bean.getAccountByFilter(acctcode, acctname, postable);
@@ -120,76 +131,82 @@ public class AccountingEJBClient {
 		account = bean.getTreeAccount();
 		return account;
 	}
+
 	public ResultOutTO saveTreeAccount(List parameters) throws EJBException {
 		ResultOutTO _result = new ResultOutTO();
-		
+
 		_result = bean.saveTreeAccount(parameters);
-		
+
 		return _result;
-		
+
 	}
 
 	// ######## JOURNALENTRYS ########
-	
+
 	public List getJournalEntry(JournalEntryInTO parameters)
 			throws EJBException {
-		List _return= new Vector();
-			_return= bean.getJournalEntry(parameters);
+		List _return = new Vector();
+		_return = bean.getJournalEntry(parameters);
 		return _return;
 	}
 
 	public JournalEntryTO getJournalEntryByKey(int transid) throws EJBException {
 		JournalEntryTO _return = new JournalEntryTO();
-		
-			_return= bean.getJournalEntryByKey(transid);
-		
+
+		_return = bean.getJournalEntryByKey(transid);
+
 		return _return;
 	}
 
-	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) throws EJBException {
+	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action)
+			throws EJBException {
 		ResultOutTO _return;
-		_return= bean.journalEntry_mtto(parameters, action);
+		_return = bean.journalEntry_mtto(parameters, action);
 		return _return;
 	}
 
 	/* MANTENIMIENTO DE TABLA BUDGET */
-	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action)throws EJBException{
+	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action)
+			throws EJBException {
 		ResultOutTO _return;
-		_return=bean.cat_budget_mtto(parameters, action);
+		_return = bean.cat_budget_mtto(parameters, action);
 		return _return;
 
 	}
-	
-	public List getBudget(int _bgdcode){
-		List _return= new Vector();
-		_return= bean.getBudget(_bgdcode);
+
+	public List getBudget(int _bgdcode) {
+		List _return = new Vector();
+		_return = bean.getBudget(_bgdcode);
 		return _return;
 	}
-	
-	/*MANTENIMIENTO DE TABLA RECURRINGPOSTING */
-	public ResultOutTO fin_recurringPosting_mtto(RecurringPostingsTO parameters, int action) throws EJBException{
+
+	/* MANTENIMIENTO DE TABLA RECURRINGPOSTING */
+	public ResultOutTO fin_recurringPosting_mtto(
+			RecurringPostingsTO parameters, int action) throws EJBException {
 		ResultOutTO _return;
-		_return=bean.fin_recurringPosting_mtto(parameters, action);
+		_return = bean.fin_recurringPosting_mtto(parameters, action);
 		return _return;
 	}
-	
-	public List getrecurringPosting(RecurringPostingsInTO parameters) throws EJBException{
+
+	public List getrecurringPosting(RecurringPostingsInTO parameters)
+			throws EJBException {
 		List _return = new Vector();
-		_return= bean.getrecurringPosting(parameters);
+		_return = bean.getrecurringPosting(parameters);
 		return _return;
 	}
-	
-	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,int _instance) throws EJBException{
+
+	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,
+			int _instance) throws EJBException {
 		RecurringPostingsTO _return = new RecurringPostingsTO();
-		
-		_return= bean.getrecurringPosting_by_key(_rcurcode,_instance);
-	
-	return _return;
+
+		_return = bean.getrecurringPosting_by_key(_rcurcode, _instance);
+
+		return _return;
 	}
-	
-	public List getrecurringPostingExecute() throws EJBException{
+
+	public List getrecurringPostingExecute() throws EJBException {
 		List _return = new Vector();
-		_return= bean.getrecurringPostingExecute();
+		_return = bean.getrecurringPostingExecute();
 		return _return;
 	}
 }

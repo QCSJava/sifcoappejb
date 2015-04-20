@@ -59,18 +59,23 @@ public interface AdminEJBRemote {
 
 	/* Mantenimeinto de listas de precios */
 
-	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters, int action, Boolean UdpDetail)
-			throws EJBException;
+	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters,
+			int action, Boolean UdpDetail) throws EJBException;
 
 	public List getPricesList(PricesListInTO parameters) throws EJBException;
 
 	public PricesListTO getPricesListByKey(int listnum) throws EJBException;
-	
-	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters, int action) throws EJBException;
-	
-	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,int accion)throws EJBException;
-	
-	public WarehouseJournalTO getWarehouseJournalByKey(int transseq) throws EJBException;
-	
+
+	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters,
+			int action) throws EJBException;
+
+	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,
+			int accion) throws EJBException;
+
+	public WarehouseJournalTO getWarehouseJournalByKey(int transseq)
+			throws EJBException;
+
 	public List findCatQS(String nameCatalog) throws Exception;
+
+	public ResultOutTO validate_branchActiv(String whscode) throws EJBException;
 }

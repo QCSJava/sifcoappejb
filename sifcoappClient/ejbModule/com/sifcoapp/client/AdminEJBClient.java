@@ -163,7 +163,8 @@ public class AdminEJBClient {
 
 	/* Listas de precios */
 
-	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters, int action, Boolean UdpDetail) {
+	public ResultOutTO cat_prl0_priceslist_mtto(PricesListTO parameters,
+			int action, Boolean UdpDetail) {
 		ResultOutTO _return;
 
 		_return = bean.cat_prl0_priceslist_mtto(parameters, action, UdpDetail);
@@ -186,27 +187,38 @@ public class AdminEJBClient {
 
 		return _return;
 	}
-	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,int accion)throws EJBException{
+
+	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,
+			int accion) throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
-		_return= bean.adm_warehousejournal_mtto(param, accion);
+		_return = bean.adm_warehousejournal_mtto(param, accion);
 		return _return;
 	}
-	
-	public WarehouseJournalTO getWarehouseJournalByKey(int transseq) throws EJBException{
+
+	public WarehouseJournalTO getWarehouseJournalByKey(int transseq)
+			throws EJBException {
 		WarehouseJournalTO _return = new WarehouseJournalTO();
-		_return=bean.getWarehouseJournalByKey(transseq);
+		_return = bean.getWarehouseJournalByKey(transseq);
 		return _return;
 	}
+
 	/*
-	 * busqueda de catalogos por query string
-	 * Rutilio Iraheta
-	 * Marzo 2015
-	 * */
+	 * busqueda de catalogos por query string Rutilio Iraheta Marzo 2015
+	 */
 	public List findCatQS(String nameCatalog) throws Exception {
 		List catlgLst = null;
 
 		catlgLst = bean.findCatQS(nameCatalog);
 
 		return catlgLst;
+	}
+
+	public ResultOutTO validate_branchActiv(String whscode) throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+
+		_return = bean.validate_branchActiv(whscode);
+
+		return _return;
+
 	}
 }

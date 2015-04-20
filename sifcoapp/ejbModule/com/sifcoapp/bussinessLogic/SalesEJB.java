@@ -82,11 +82,11 @@ public class SalesEJB implements SalesEJBRemote {
 		// VALIDACIONES
 
 		try {
-			Iterator<SalesDetailTO> iterator2 = parameters
-					.getSalesDetails().iterator();
+			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
+					.iterator();
+
 			while (iterator2.hasNext()) {
-				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2
-						.next();
+				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
 
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
@@ -98,11 +98,10 @@ public class SalesEJB implements SalesEJBRemote {
 			parameters.setRounddif(0.00);
 			_return.setDocentry(DAO.inv_Sales_mtto(parameters, action));
 
-			Iterator<SalesDetailTO> iterator = parameters
-					.getSalesDetails().iterator();
+			Iterator<SalesDetailTO> iterator = parameters.getSalesDetails()
+					.iterator();
 			while (iterator.hasNext()) {
-				SalesDetailTO articleDetalle = (SalesDetailTO) iterator
-						.next();
+				SalesDetailTO articleDetalle = (SalesDetailTO) iterator.next();
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
@@ -210,7 +209,7 @@ public class SalesEJB implements SalesEJBRemote {
 				// Para articulos nuevos
 				articleDetalle.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
-					
+
 					goodDAO1.inv_ClientCrediDetail_mtto(articleDetalle,
 							Common.MTTOINSERT);
 				}
@@ -350,6 +349,8 @@ public class SalesEJB implements SalesEJBRemote {
 		System.out.println("llego al validateSAle ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+		CatalogEJB Businesspartner = new CatalogEJB();
 
 		Double stocks;
 		List branch = new Vector();
@@ -363,12 +364,30 @@ public class SalesEJB implements SalesEJBRemote {
 		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
 				.iterator();
 
+		// validaciones del documento
+
+		// fecha de vencimiento
+
+		_return = acc.validate_exist_accperiod(parameters.getDocdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
+		// validacion del socio de negocio
+
+		_return = Businesspartner.validate_businesspartnerBykey(parameters
+				.getCardcode());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
 		// recorre el detalle de la venta por articulo
 		while (iterator1.hasNext()) {
 			AdminEJB EJB = new AdminEJB();
 			// Consultar información actualizada desde la base
-			SalesDetailTO salesDetail = (SalesDetailTO) iterator1
-					.next();
+			SalesDetailTO salesDetail = (SalesDetailTO) iterator1.next();
 			code = salesDetail.getItemcode();
 
 			DBArticle = EJB.getArticlesByKey(code);
@@ -438,6 +457,18 @@ public class SalesEJB implements SalesEJBRemote {
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación almacen bloqueado
 			// ------------------------------------------------------------------------------------------------------------
+			
+			_return = EJB.validate_branchActiv(salesDetail.getWhscode());
+					
+			if (_return.getCodigoError() != 0) {
+				_return.setCodigoError(1);
+				_return.setMensaje("El Almacen no esta activo");
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado para articulos
+			// ------------------------------------------------------------------------------------------------------------
 			valid = false;
 
 			branch = DBArticle.getBranchArticles();
@@ -472,8 +503,8 @@ public class SalesEJB implements SalesEJBRemote {
 			valid = false;
 
 			stocks = 0.000;
-			Iterator<SalesDetailTO> iterator2 = parameters
-					.getSalesDetails().iterator();
+			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
+					.iterator();
 			// recorre de nuevo el detalle comparando el primer elemento con los
 			// demas
 			while (iterator2.hasNext()) {
@@ -640,9 +671,10 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 
 	}
-  
-    public ResultOutTO Validateinv_Delivery(DeliveryTO parameters)throws EJBException{
-    	System.out.println("llego al validateinv_Delivery ");
+
+	public ResultOutTO Validateinv_Delivery(DeliveryTO parameters)
+			throws EJBException {
+		System.out.println("llego al validateinv_Delivery ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		List branch = new Vector();
@@ -764,6 +796,6 @@ public class SalesEJB implements SalesEJBRemote {
 		_return.setCodigoError(0);
 
 		return _return;
-	
-    }
+
+	}
 }
