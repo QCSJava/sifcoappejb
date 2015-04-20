@@ -3,10 +3,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
+
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sun.rowset.CachedRowSetImpl;
 public class BusinesspartnerDAO extends CommonDAO{
 	
@@ -352,4 +354,6 @@ public class BusinesspartnerDAO extends CommonDAO{
 		}
 		return _return;
 	}
+    
+	
 }

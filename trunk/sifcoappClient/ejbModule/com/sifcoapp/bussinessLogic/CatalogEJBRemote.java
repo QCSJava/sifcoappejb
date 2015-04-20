@@ -11,11 +11,15 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Remote
 public interface CatalogEJBRemote {
-	public ResultOutTO cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters,
-			int accion)throws Exception;
+	public ResultOutTO cat_bpa_businesspartner_mtto(
+			BusinesspartnerTO parameters, int accion) throws Exception;
 
-	public List get_businesspartner(BusinesspartnerInTO parameters)throws EJBException;
+	public List get_businesspartner(BusinesspartnerInTO parameters)
+			throws EJBException;
 
-	public BusinesspartnerTO get_businesspartnerBykey(String parameters)throws EJBException;
+	public BusinesspartnerTO get_businesspartnerBykey(String parameters)
+			throws EJBException;
 
+	public ResultOutTO validate_businesspartnerBykey(String parameters)
+			throws EJBException;
 }

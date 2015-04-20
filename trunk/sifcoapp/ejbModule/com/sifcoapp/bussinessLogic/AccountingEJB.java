@@ -55,12 +55,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		return _return;
 	}
-	public ResultOutTO validate_exist_accperiod() throws EJBException{
+	public ResultOutTO validate_exist_accperiod(Date parameters) throws EJBException{
 		ResultOutTO _return= new ResultOutTO();
       AccountingDAO acc = new AccountingDAO();
       AccPeriodTO period= new AccPeriodTO();
       try {
-		period= acc.validate_exist_accperiod();
+		period= acc.validate_exist_accperiod(parameters);
 	   
       } catch (Exception e) {
 		// TODO Auto-generated catch block

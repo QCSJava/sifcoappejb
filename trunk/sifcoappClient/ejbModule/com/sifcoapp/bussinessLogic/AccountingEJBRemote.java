@@ -62,6 +62,6 @@ public interface AccountingEJBRemote {
 	
 	public List getrecurringPostingExecute() throws EJBException;
 	
-	public ResultOutTO validate_exist_accperiod()throws EJBException;
+	public ResultOutTO validate_exist_accperiod(Date parameters)throws EJBException;
 	
 }
