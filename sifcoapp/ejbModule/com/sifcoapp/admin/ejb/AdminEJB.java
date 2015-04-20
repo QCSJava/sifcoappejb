@@ -767,4 +767,6 @@ public class AdminEJB implements AdminEJBRemote {
 
 		return catlgLst;
 	}
+    
+	
 }

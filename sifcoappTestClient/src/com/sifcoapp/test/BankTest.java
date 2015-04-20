@@ -145,14 +145,14 @@ public class BankTest {
 
 		ResultOutTO resp = null;
 		ColecturiaConceptTO detalle = new ColecturiaConceptTO();
-		detalle.setLinenum(3);
+		detalle.setLinenum(1);
 		detalle.setAcctcode("23434");
-		detalle.setDscription("asdafsdf");
+		detalle.setDscription("jjjjjjjj");
 		detalle.setPaidsum(0.00000);
 		detalle.setVatsum(0.00000);
 		
 		try {
-			resp = catalog.ges_ges_col2_colecturiaConcepts_mtto(detalle, 1);
+			resp = catalog.ges_ges_col2_colecturiaConcepts_mtto(detalle, 2);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -454,6 +454,52 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
+	public AccPeriodTO validate_exist_accperiod() throws Exception {
+		AccPeriodTO _return = new AccPeriodTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+
+		this.setDbObject("{? = call sp_validate_exist_accperiod()}");
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					AccPeriodTO period = new AccPeriodTO();
+					period.setAbsentry(rowsetActual.getInt(1));
+					period.setAcccode(rowsetActual.getString(2));
+					period.setAccname(rowsetActual.getString(3));
+					period.setF_refdate(rowsetActual.getDate(4));
+					period.setT_refdate(rowsetActual.getDate(5));
+					period.setF_duedate(rowsetActual.getDate(6));
+					period.setT_duedate(rowsetActual.getDate(7));
+					period.setF_taxdate(rowsetActual.getDate(8));
+					period.setT_taxdate(rowsetActual.getDate(9));
+					period.setPeriodstat(rowsetActual.getInt(10));
+					period.setUsersign(rowsetActual.getInt(11));
+
+					_return = period;
+
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+
 	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
 			throws Exception {
 		Date financyear = null;
@@ -1208,4 +1254,5 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
+
 }

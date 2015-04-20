@@ -55,6 +55,30 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		return _return;
 	}
+	public ResultOutTO validate_exist_accperiod() throws EJBException{
+		ResultOutTO _return= new ResultOutTO();
+      AccountingDAO acc = new AccountingDAO();
+      AccPeriodTO period= new AccPeriodTO();
+      try {
+		period= acc.validate_exist_accperiod();
+	   
+      } catch (Exception e) {
+		// TODO Auto-generated catch block
+		_return.setCodigoError(1);
+		_return.setMensaje("no se encontro periodo contable");
+    	  e.printStackTrace();
+	}
+		if(period.getPeriodstat()==1){
+			_return.setCodigoError(0);
+			_return.setMensaje("periodo contable activo ");
+		}else{
+			_return.setCodigoError(1);
+			_return.setMensaje("periodo contable inactivo");
+		}
+		
+		return _return;
+	}
+	
 
 	public List getAccount(int type) throws EJBException {
 		
