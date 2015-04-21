@@ -79,7 +79,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 	
-
 	public List getAccount(int type) throws EJBException {
 		
 		List _return = new Vector();

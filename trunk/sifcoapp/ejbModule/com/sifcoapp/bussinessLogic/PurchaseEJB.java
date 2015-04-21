@@ -472,18 +472,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				return _return;
 			}
 
-			// ------------------------------------------------------------------------------------------------------------
-			// Validación almacen bloqueado
-			// ------------------------------------------------------------------------------------------------------------
-
-			_return = EJB.validate_branchActiv(PurchaseDetail.getWhscode());
-
-			if (_return.getCodigoError() != 0) {
-				_return.setCodigoError(1);
-				_return.setMensaje("El Almacen no esta activo");
-				_return.setLinenum(PurchaseDetail.getLinenum());
-				return _return;
-			}
+			
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación almacen bloqueado para articulo
 			// ------------------------------------------------------------------------------------------------------------
@@ -649,19 +638,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				return _return;
 			}
 
-			// ------------------------------------------------------------------------------------------------------------
-			// Validación almacen bloqueado
-			// ------------------------------------------------------------------------------------------------------------
-
-			_return = EJB.validate_branchActiv(PurchaseQuotationDetail
-					.getWhscode());
-
-			if (_return.getCodigoError() != 0) {
-				_return.setCodigoError(1);
-				_return.setMensaje("El Almacen no esta activo");
-				_return.setLinenum(PurchaseQuotationDetail.getLinenum());
-				return _return;
-			}
+			
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación almacen bloqueado para articulo
 			// ------------------------------------------------------------------------------------------------------------
@@ -703,7 +680,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	public ResultOutTO validate_inv_supplier_mtto(SupplierTO parameters)
 			throws Exception {
-		System.out.println("llego al validate purchase_quotation_mtto ");
+		System.out.println("llego al validate inv_supplier_mtto ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
