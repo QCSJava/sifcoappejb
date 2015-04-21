@@ -7,17 +7,22 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import com.sifcoapp.admin.ejb.AdminEJB;
+import com.sifcoapp.objects.admin.to.ArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.*;
 import com.sifcoapp.objects.inventory.to.*;
+import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
 
 /**
  * Session Bean implementation class InventoryEJB
  */
 @Stateless
 public class InventoryEJB implements InventoryEJBRemote {
-	Double zero= 0.00;
+	Double zero = 0.00;
+
 	/**
 	 * Default constructor.
 	 */
@@ -257,17 +262,20 @@ public class InventoryEJB implements InventoryEJBRemote {
 	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int action)
 			throws EJBException {
 		// TODO Auto-generated method stub
-		double total=0.0;
+		double total = 0.0;
 		ResultOutTO _return = new ResultOutTO();
 		TransfersDAO Trans = new TransfersDAO();
 		Trans.setIstransaccional(true);
 		TransfersDetailDAO TransDAO = new TransfersDetailDAO(Trans.getConn());
 		TransDAO.setIstransaccional(true);
 		try {
-			Iterator<TransfersDetailTO> iterator2 = parameters.getTransfersDetail().iterator();
+			Iterator<TransfersDetailTO> iterator2 = parameters
+					.getTransfersDetail().iterator();
 			while (iterator2.hasNext()) {
-				TransfersDetailTO articleDetalle = (TransfersDetailTO) iterator2.next();
-				articleDetalle.setLinetotal(articleDetalle.getQuantity()* articleDetalle.getPrice());
+				TransfersDetailTO articleDetalle = (TransfersDetailTO) iterator2
+						.next();
+				articleDetalle.setLinetotal(articleDetalle.getQuantity()
+						* articleDetalle.getPrice());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
 				total = total + articleDetalle.getLinetotal();
 			}
@@ -319,34 +327,35 @@ public class InventoryEJB implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO adm_inventorylog_mtto(InventoryLogTO parameters,int accion)throws EJBException{
-		ResultOutTO _return= new ResultOutTO();
+	public ResultOutTO adm_inventorylog_mtto(InventoryLogTO parameters,
+			int accion) throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
 		InventoryLogDAO DAO = new InventoryLogDAO();
 		DAO.setIstransaccional(true);
-		if(parameters.getDoctotal()==null){
+		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
 		}
-		if(parameters.getEffectqty()==null){
+		if (parameters.getEffectqty() == null) {
 			parameters.setEffectqty(zero);
 		}
-		if(parameters.getExpenseslc()==null){
+		if (parameters.getExpenseslc() == null) {
 			parameters.setExpenseslc(zero);
 		}
-		if(parameters.getPrice()==null){
+		if (parameters.getPrice() == null) {
 			parameters.setPrice(zero);
 		}
-		if(parameters.getPricerate()==null){
+		if (parameters.getPricerate() == null) {
 			parameters.setPricerate(zero);
 		}
-		if(parameters.getQuantity()==null){
+		if (parameters.getQuantity() == null) {
 			parameters.setQuantity(zero);
 		}
-		if(parameters.getTotallc()==null){
+		if (parameters.getTotallc() == null) {
 			parameters.setTotallc(zero);
 		}
-		
-		try{
-			if(accion==Common.MTTOINSERT){
+
+		try {
+			if (accion == Common.MTTOINSERT) {
 				DAO.adm_inventorylog_mtto(parameters, accion);
 				DAO.forceCommit();
 			}
@@ -357,18 +366,19 @@ public class InventoryEJB implements InventoryEJBRemote {
 		} finally {
 
 			DAO.forceCloseConnection();
-	}
-	_return.setCodigoError(0);
-	_return.setMensaje("Datos guardados con exito");
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
 		return _return;
 	}
-	
-	public InventoryLogTO getInventoryLogByKey(int messageid) throws EJBException{
-		InventoryLogTO _return= new InventoryLogTO();
+
+	public InventoryLogTO getInventoryLogByKey(int messageid)
+			throws EJBException {
+		InventoryLogTO _return = new InventoryLogTO();
 		InventoryLogDAO DAO = new InventoryLogDAO();
-		try{
-			_return=DAO.getInventoryLogByKey(messageid);
-		}catch (Exception e) {
+		try {
+			_return = DAO.getInventoryLogByKey(messageid);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
@@ -376,6 +386,472 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
+		return _return;
+	}
+
+	public ResultOutTO valid_goodsissues_mtto(GoodsissuesTO parameters)
+			throws EJBException {
+		System.out.println("llego al valid_goodsissues_mtto ");
+		boolean valid = false;
+		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+		CatalogEJB Businesspartner = new CatalogEJB();
+		AdminEJB EJB1 = new AdminEJB();
+		List branch = new Vector();
+		ArticlesTO DBArticle = new ArticlesTO();
+		String code;
+		// ------------------------------------------------------------------------------------------------------------
+		// validaciones
+		// ------------------------------------------------------------------------------------------------------------
+
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+
+			return _return;
+		}
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación de fecha de periodo contable
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = acc.validate_exist_accperiod(parameters.getDocdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
+
+		Iterator<GoodsIssuesDetailTO> iterator1 = parameters
+				.getGoodIssuesDetail().iterator();
+
+		// recorre el ClientCrediDetail
+		while (iterator1.hasNext()) {
+			AdminEJB EJB = new AdminEJB();
+			// Consultar información actualizada desde la base
+			GoodsIssuesDetailTO GoodsIssuesDetail = (GoodsIssuesDetailTO) iterator1
+					.next();
+			code = GoodsIssuesDetail.getItemcode();
+
+			DBArticle = EJB.getArticlesByKey(code);
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo existe
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle != null) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsIssuesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsIssuesDetail.getItemcode() + " "
+						+ GoodsIssuesDetail.getDscription()
+
+						+ " no existe,informar al administrador. linea :"
+						+ GoodsIssuesDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle.getValidFor() != null
+					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsIssuesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsIssuesDetail.getItemcode() + " "
+						+ GoodsIssuesDetail.getDscription()
+
+						+ " No esta activo. linea :"
+						+ GoodsIssuesDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo de compra
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getInvntItem() != null
+					&& DBArticle.getInvntItem().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsIssuesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsIssuesDetail.getItemcode() + " "
+						+ GoodsIssuesDetail.getDscription()
+						+ " No es un articulo de venta. linea :"
+						+ GoodsIssuesDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado para articulo
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(GoodsIssuesDetail.getWhscode());
+				if (branch1.getWhscode().equals(GoodsIssuesDetail.getWhscode())) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsIssuesDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsIssuesDetail.getItemcode()
+						+ " "
+						+ GoodsIssuesDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ GoodsIssuesDetail.getLinenum());
+				return _return;
+			}
+
+		}
+		_return.setCodigoError(0);
+
+		return _return;
+
+	}
+
+	public ResultOutTO valid_goodsReceipt_mtto(GoodsreceiptTO parameters)
+			throws EJBException {
+		System.out.println("llego al valid_goodsissues_mtto ");
+		boolean valid = false;
+		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+		CatalogEJB Businesspartner = new CatalogEJB();
+		AdminEJB EJB1 = new AdminEJB();
+		List branch = new Vector();
+		ArticlesTO DBArticle = new ArticlesTO();
+		String code;
+		// ------------------------------------------------------------------------------------------------------------
+		// validaciones
+		// ------------------------------------------------------------------------------------------------------------
+
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+
+			return _return;
+		}
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación de fecha de periodo contable
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = acc.validate_exist_accperiod(parameters.getDocdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
+
+		Iterator<GoodsReceiptDetailTO> iterator1 = parameters
+				.getGoodReceiptDetail().iterator();
+
+		// recorre el ClientCrediDetail
+		while (iterator1.hasNext()) {
+			AdminEJB EJB = new AdminEJB();
+			// Consultar información actualizada desde la base
+			GoodsReceiptDetailTO GoodsReceiptDetail = (GoodsReceiptDetailTO) iterator1
+					.next();
+			code = GoodsReceiptDetail.getItemcode();
+
+			DBArticle = EJB.getArticlesByKey(code);
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo existe
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle != null) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsReceiptDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsReceiptDetail.getItemcode() + " "
+						+ GoodsReceiptDetail.getDscription()
+
+						+ " no existe,informar al administrador. linea :"
+						+ GoodsReceiptDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle.getValidFor() != null
+					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsReceiptDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsReceiptDetail.getItemcode() + " "
+						+ GoodsReceiptDetail.getDscription()
+
+						+ " No esta activo. linea :"
+						+ GoodsReceiptDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo de compra
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getInvntItem() != null
+					&& DBArticle.getInvntItem().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsReceiptDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsReceiptDetail.getItemcode() + " "
+						+ GoodsReceiptDetail.getDscription()
+						+ " No es un articulo de venta. linea :"
+						+ GoodsReceiptDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado para articulo
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(GoodsReceiptDetail.getWhscode());
+				if (branch1.getWhscode()
+						.equals(GoodsReceiptDetail.getWhscode())) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(GoodsReceiptDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ GoodsReceiptDetail.getItemcode()
+						+ " "
+						+ GoodsReceiptDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ GoodsReceiptDetail.getLinenum());
+				return _return;
+			}
+
+		}
+		_return.setCodigoError(0);
+
+		return _return;
+
+	}
+
+	public ResultOutTO inv_transfers_mtto(TransfersTO parameters)
+			throws EJBException {
+		System.out.println("llego al valid_goodsissues_mtto ");
+		boolean valid = false;
+		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+		CatalogEJB Businesspartner = new CatalogEJB();
+		AdminEJB EJB1 = new AdminEJB();
+		List branch = new Vector();
+		ArticlesTO DBArticle = new ArticlesTO();
+		String code;
+		// ------------------------------------------------------------------------------------------------------------
+		// validaciones
+		// ------------------------------------------------------------------------------------------------------------
+
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+
+			return _return;
+		}
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación de fecha de periodo contable
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = acc.validate_exist_accperiod(parameters.getDocdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
+
+		Iterator<TransfersDetailTO> iterator1 = parameters
+				.getTransfersDetail().iterator();
+
+		// recorre el ClientCrediDetail
+		while (iterator1.hasNext()) {
+			AdminEJB EJB = new AdminEJB();
+			// Consultar información actualizada desde la base
+			TransfersDetailTO TransfersDetail = (TransfersDetailTO) iterator1
+					.next();
+			code = TransfersDetail.getItemcode();
+
+			DBArticle = EJB.getArticlesByKey(code);
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo existe
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle != null) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(TransfersDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ TransfersDetail.getItemcode() + " "
+						+ TransfersDetail.getDscription()
+
+						+ " no existe,informar al administrador. linea :"
+						+ TransfersDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle.getValidFor() != null
+					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(TransfersDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ TransfersDetail.getItemcode() + " "
+						+ TransfersDetail.getDscription()
+
+						+ " No esta activo. linea :"
+						+ TransfersDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo de compra
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getInvntItem() != null
+					&& DBArticle.getInvntItem().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(TransfersDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ TransfersDetail.getItemcode() + " "
+						+ TransfersDetail.getDscription()
+						+ " No es un articulo de venta. linea :"
+						+ TransfersDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado para articulo
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(TransfersDetail.getWhscode());
+				if (branch1.getWhscode()
+						.equals(TransfersDetail.getWhscode())) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(TransfersDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ TransfersDetail.getItemcode()
+						+ " "
+						+ TransfersDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ TransfersDetail.getLinenum());
+				return _return;
+			}
+
+		}
+		_return.setCodigoError(0);
+
 		return _return;
 	}
 }
