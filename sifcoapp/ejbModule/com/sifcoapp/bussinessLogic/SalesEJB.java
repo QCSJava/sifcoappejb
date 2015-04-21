@@ -351,7 +351,7 @@ public class SalesEJB implements SalesEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
 		CatalogEJB Businesspartner = new CatalogEJB();
-
+		AdminEJB EJB1 = new AdminEJB();
 		Double stocks;
 		List branch = new Vector();
 		ArticlesTO DBArticle = new ArticlesTO();
@@ -361,12 +361,24 @@ public class SalesEJB implements SalesEJBRemote {
 
 		// validaciones antes de guardar la venta
 
-		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
-				.iterator();
-
 		// validaciones del documento
 
-		// fecha de vencimiento
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+
+			return _return;
+		}
+
+		// ------------------------------------------------------------------------------------------------------------
+		// fecha de contabilizacion valida
+		// ------------------------------------------------------------------------------------------------------------
 
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
@@ -374,16 +386,20 @@ public class SalesEJB implements SalesEJBRemote {
 			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
 			return _return;
 		}
-		// validacion del socio de negocio
+		// ------------------------------------------------------------------------------------------------------------
+		// socio de negocio activo
+		// ------------------------------------------------------------------------------------------------------------
 
 		_return = Businesspartner.validate_businesspartnerBykey(parameters
 				.getCardcode());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
-			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			_return.setMensaje("el socio de negocio no esta activo para esta transaccion");
 			return _return;
 		}
 		// recorre el detalle de la venta por articulo
+		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
+				.iterator();
 		while (iterator1.hasNext()) {
 			AdminEJB EJB = new AdminEJB();
 			// Consultar información actualizada desde la base
@@ -451,18 +467,6 @@ public class SalesEJB implements SalesEJBRemote {
 						+ " " + salesDetail.getDscription()
 						+ " No es un articulo de venta. linea :"
 						+ salesDetail.getLinenum());
-				return _return;
-			}
-
-			// ------------------------------------------------------------------------------------------------------------
-			// Validación almacen bloqueado
-			// ------------------------------------------------------------------------------------------------------------
-			
-			_return = EJB.validate_branchActiv(salesDetail.getWhscode());
-					
-			if (_return.getCodigoError() != 0) {
-				_return.setCodigoError(1);
-				_return.setMensaje("El Almacen no esta activo");
 				return _return;
 			}
 
@@ -550,15 +554,51 @@ public class SalesEJB implements SalesEJBRemote {
 		System.out.println("llego al validateClientCredi ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+		CatalogEJB Businesspartner = new CatalogEJB();
+		AdminEJB EJB1 = new AdminEJB();
 		List branch = new Vector();
 		ArticlesTO DBArticle = new ArticlesTO();
 		String code;
+
 		// validaciones
 
+		// validaciones del documento
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+			return _return;
+		}
+
+		// ------------------------------------------------------------------------------------------------------------
+		// periodo contable activo
+		// ------------------------------------------------------------------------------------------------------------
+		_return = acc.validate_exist_accperiod(parameters.getDocdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
+		// ------------------------------------------------------------------------------------------------------------
+		// validacion de socio de negocio
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = Businesspartner.validate_businesspartnerBykey(parameters
+				.getCardcode());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("el socio de negocio no esta activo para esta transaccion");
+			return _return;
+		}
+		// recorre el ClientCrediDetail
 		Iterator<ClientCrediDetailTO> iterator1 = parameters.getclientDetails()
 				.iterator();
-
-		// recorre el ClientCrediDetail
 		while (iterator1.hasNext()) {
 			AdminEJB EJB = new AdminEJB();
 			// Consultar información actualizada desde la base
@@ -677,15 +717,51 @@ public class SalesEJB implements SalesEJBRemote {
 		System.out.println("llego al validateinv_Delivery ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+		CatalogEJB Businesspartner = new CatalogEJB();
+		AdminEJB EJB1 = new AdminEJB();
 		List branch = new Vector();
 		ArticlesTO DBArticle = new ArticlesTO();
 		String code;
 		// validaciones
+		// validaciones del documento
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
 
+		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+			return _return;
+		}
+
+		// ------------------------------------------------------------------------------------------------------------
+		// periodo contable activo
+		// ------------------------------------------------------------------------------------------------------------
+		_return = acc.validate_exist_accperiod(parameters.getDocdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
+		// ------------------------------------------------------------------------------------------------------------
+		// validacion de socio de negocio
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = Businesspartner.validate_businesspartnerBykey(parameters
+				.getCardcode());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("el socio de negocio no esta activo para esta transaccion");
+			return _return;
+		}
+		
+		// recorre el ClientCrediDetail
 		Iterator<DeliveryDetailTO> iterator1 = parameters.getDeliveryDetails()
 				.iterator();
 
-		// recorre el ClientCrediDetail
 		while (iterator1.hasNext()) {
 			AdminEJB EJB = new AdminEJB();
 			// Consultar información actualizada desde la base
@@ -760,9 +836,21 @@ public class SalesEJB implements SalesEJBRemote {
 						+ DeliveryDetail.getLinenum());
 				return _return;
 			}
-
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación almacen bloqueado
+			// ------------------------------------------------------------------------------------------------------------
+
+			_return = EJB.validate_branchActiv(DeliveryDetail.getWhscode());
+
+			if (_return.getCodigoError() != 0) {
+				_return.setCodigoError(1);
+				_return.setMensaje("El Almacen no esta activo");
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado para el articulo
 			// ------------------------------------------------------------------------------------------------------------
 			valid = false;
 
