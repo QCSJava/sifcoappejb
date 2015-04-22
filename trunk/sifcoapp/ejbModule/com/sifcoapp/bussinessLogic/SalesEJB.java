@@ -366,7 +366,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
-
+        
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {

@@ -141,9 +141,14 @@ public class SalesTest {
 		document1.setGrssprofit(0.000000);
 		document1.setGtotal(0.000000);
 		prueba.add(document1);
-
+		java.util.Date utilDate = new java.util.Date(); //fecha actual
+		  long lnMilisegundos = utilDate.getTime();
+		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+		  
+		parameters.setTowhscode("COD-2");
+		parameters.setDocdate(sqlDate);
 		parameters.setUsersign(1);
-		parameters.setCardcode("P");
+		parameters.setCardcode("000000001");
 		parameters.setDoctotal(20.35588);
 		parameters.setDiscsum(0.00000);
 		parameters.setNret(0.00000);
