@@ -363,7 +363,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
 
+			return _return;
+		}
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {
@@ -375,7 +380,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación de fecha de periodo contable
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getDocdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra fecha del documento ");
 
+			return _return;
+		}
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -385,6 +395,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación del socio de negocio
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getCardcode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
+
+			return _return;
+		}
 		_return = Businesspartner.validate_businesspartnerBykey(parameters
 				.getCardcode());
 		if (_return.getCodigoError() != 0) {
@@ -529,7 +545,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
 
+			return _return;
+		}
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {
@@ -541,7 +562,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación de fecha de periodo contable
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getDocdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra fecha");
 
+			return _return;
+		}
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -551,6 +577,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación del socio de negocio
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getCardcode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de socio vacio");
+
+			return _return;
+		}
 		_return = Businesspartner.validate_businesspartnerBykey(parameters
 				.getCardcode());
 		if (_return.getCodigoError() != 0) {
@@ -696,7 +728,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
 
+			return _return;
+		}
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {
@@ -708,7 +745,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación de fecha de periodo contable
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getDocdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra fecha");
 
+			return _return;
+		}
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -718,6 +760,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación del socio de negocio
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getCardcode()== null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de socio de negocio null");
+
+			return _return;
+		}
 		_return = Businesspartner.validate_businesspartnerBykey(parameters
 				.getCardcode());
 		if (_return.getCodigoError() != 0) {

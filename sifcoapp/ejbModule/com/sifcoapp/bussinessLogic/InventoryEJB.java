@@ -407,7 +407,12 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
 
+			return _return;
+		}
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {
@@ -419,7 +424,12 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación de fecha de periodo contable
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getDocdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra fecha del documento ");
 
+			return _return;
+		}
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -562,7 +572,12 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
 
+			return _return;
+		}
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {
@@ -574,7 +589,12 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación de fecha de periodo contable
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getDocdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No se encuentra fecha del documento");
 
+			return _return;
+		}
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -700,7 +720,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	}
 
-	public ResultOutTO inv_transfers_mtto(TransfersTO parameters)
+	public ResultOutTO valida_inv_transfers_mtto(TransfersTO parameters)
 			throws EJBException {
 		System.out.println("llego al valid_goodsissues_mtto ");
 		boolean valid = false;
@@ -718,7 +738,12 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
 
+			return _return;
+		}
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {
@@ -730,7 +755,12 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación de fecha de periodo contable
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra fecha del documento ");
 
+			return _return;
+		}
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -738,8 +768,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 			return _return;
 		}
 
-		Iterator<TransfersDetailTO> iterator1 = parameters
-				.getTransfersDetail().iterator();
+		Iterator<TransfersDetailTO> iterator1 = parameters.getTransfersDetail()
+				.iterator();
 
 		// recorre el ClientCrediDetail
 		while (iterator1.hasNext()) {
@@ -828,8 +858,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				System.out.println(branch1.getWhscode());
 				System.out.println(TransfersDetail.getWhscode());
-				if (branch1.getWhscode()
-						.equals(TransfersDetail.getWhscode())) {
+				if (branch1.getWhscode().equals(TransfersDetail.getWhscode())) {
 					if (branch1.getWhscode() != null
 							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
