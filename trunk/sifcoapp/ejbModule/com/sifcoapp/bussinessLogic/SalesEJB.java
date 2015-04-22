@@ -366,7 +366,12 @@ public class SalesEJB implements SalesEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
-        
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
+
+			return _return;
+		}
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
 
 		if (_return.getCodigoError() != 0) {
@@ -379,7 +384,12 @@ public class SalesEJB implements SalesEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// fecha de contabilizacion valida
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getDocdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra fecha del documento ");
 
+			return _return;
+		}
 		_return = acc.validate_exist_accperiod(parameters.getDocdate());
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -389,7 +399,12 @@ public class SalesEJB implements SalesEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// socio de negocio activo
 		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getCardcode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
 
+			return _return;
+		}
 		_return = Businesspartner.validate_businesspartnerBykey(parameters
 				.getCardcode());
 		if (_return.getCodigoError() != 0) {
@@ -757,7 +772,7 @@ public class SalesEJB implements SalesEJBRemote {
 			_return.setMensaje("el socio de negocio no esta activo para esta transaccion");
 			return _return;
 		}
-		
+
 		// recorre el ClientCrediDetail
 		Iterator<DeliveryDetailTO> iterator1 = parameters.getDeliveryDetails()
 				.iterator();
