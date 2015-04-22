@@ -43,6 +43,11 @@ public class InventoryEJB implements InventoryEJBRemote {
 			throws EJBException {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+		_return = valid_goodsissues_mtto(parameters);
+		System.out.println(_return.getCodigoError());
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
 		Double total = 0.0;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		DAO.setIstransaccional(true);
@@ -98,6 +103,11 @@ public class InventoryEJB implements InventoryEJBRemote {
 			int action) throws EJBException {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+		_return = valid_goodsReceipt_mtto(parameters);
+		System.out.println(_return.getCodigoError());
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
 		Double total = zero;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		DAO.setIstransaccional(true);
@@ -264,6 +274,11 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// TODO Auto-generated method stub
 		double total = 0.0;
 		ResultOutTO _return = new ResultOutTO();
+		_return = valida_inv_transfers_mtto(parameters);
+		System.out.println(_return.getCodigoError());
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
 		TransfersDAO Trans = new TransfersDAO();
 		Trans.setIstransaccional(true);
 		TransfersDetailDAO TransDAO = new TransfersDetailDAO(Trans.getConn());

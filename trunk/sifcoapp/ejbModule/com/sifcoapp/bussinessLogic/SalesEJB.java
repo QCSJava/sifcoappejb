@@ -278,7 +278,11 @@ public class SalesEJB implements SalesEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		// Double total = 0.0;
+		_return = Validateinv_Delivery(parameters);
+		System.out.println(_return.getCodigoError());
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
 		DeliveryDAO DAO = new DeliveryDAO();
 		DAO.setIstransaccional(true);
 		DeliveryDetailDAO goodDAO1 = new DeliveryDetailDAO(DAO.getConn());
@@ -289,26 +293,15 @@ public class SalesEJB implements SalesEJBRemote {
 			while (iterator2.hasNext()) {
 				DeliveryDetailTO articleDetalle = (DeliveryDetailTO) iterator2
 						.next();
-				// articleDetalle.setLinetotal(articleDetalle.getQuantity()*
-				// articleDetalle.getPrice());
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); // ############//
-																			// DATOS//
-																			// ESTATICOS//
-																			// ##########
+
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				// articleDetalle.setPricebefdi(articleDetalle.getPrice());
-				// articleDetalle.setPriceafvat(articleDetalle.getPrice());
+
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				// articleDetalle.setVatsum(articleDetalle.getPrice());
-				// articleDetalle.setGrssprofit(articleDetalle.getPrice());
-				// articleDetalle.setVatappld(articleDetalle.getPrice());
-				// articleDetalle.setStockpricestockprice(articleDetalle.getPrice());
-				// articleDetalle.setGtotal(articleDetalle.getQuantity());
-				// total = total + articleDetalle.getLinetotal();
+
 			}
-			// parameters.setDoctotal(total);
-			parameters.setDiscsum(0.00); // /////////############ DATOS QUEMADOS
-											// #######################
+
+			parameters.setDiscsum(0.00);
 			parameters.setNret(0.00);
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
