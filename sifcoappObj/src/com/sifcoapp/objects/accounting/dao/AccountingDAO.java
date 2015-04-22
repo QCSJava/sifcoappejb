@@ -460,7 +460,7 @@ public class AccountingDAO extends CommonDAO {
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 
-		this.setDbObject("{ call sp_validate_exist_accperiod(?)}");
+		this.setDbObject("{ call sp_get_valid_accperiod(?)}");
 		this.setDate(1, "_docdate", parameters);
 		
 		lstResultSet = this.runQuery();

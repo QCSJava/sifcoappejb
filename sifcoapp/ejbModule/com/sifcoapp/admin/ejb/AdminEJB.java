@@ -781,10 +781,12 @@ public class AdminEJB implements AdminEJBRemote {
 				_return.setMensaje("No se encontro Ningun Almacen con Este codigo ");
 				return _return;
 			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		
 		if (_branch.isLocked()) {
 			_return.setCodigoError(1);
 			_return.setMensaje("Almacen se encuentra Bloqueado");
