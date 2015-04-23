@@ -71,48 +71,15 @@ public class SalesEJB implements SalesEJBRemote {
 		if (_return.getCodigoError() != 0) {
 			return _return;
 		}
-
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
-		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
-		goodDAO1.setIstransaccional(true);
-
-		// TODO Auto-generated method stub
-
-		// VALIDACIONES
-
 		try {
-			Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
-					.iterator();
+			
+			// --------------------------------------------------------------------------------------------------------
+			// guardar venta
+			// --------------------------------------------------------------------------------------------------------
+			_return = saveSales(DAO, parameters, action);
 
-			while (iterator2.hasNext()) {
-				SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
-
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
-				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				articleDetalle.setFactor1(articleDetalle.getQuantity());
-			}
-			parameters.setDiscsum(0.00);
-			parameters.setNret(0.00);
-			parameters.setPaidsum(0.00);
-			parameters.setRounddif(0.00);
-			_return.setDocentry(DAO.inv_Sales_mtto(parameters, action));
-
-			Iterator<SalesDetailTO> iterator = parameters.getSalesDetails()
-					.iterator();
-			while (iterator.hasNext()) {
-				SalesDetailTO articleDetalle = (SalesDetailTO) iterator.next();
-				// Para articulos nuevos
-				articleDetalle.setDocentry(_return.getDocentry());
-				if (action == Common.MTTOINSERT) {
-					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
-							Common.MTTOINSERT);
-				}
-				if (action == Common.MTTODELETE) {
-					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
-							Common.MTTODELETE);
-				}
-			}
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -891,6 +858,67 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 		_return.setCodigoError(0);
 
+		return _return;
+
+	}
+
+	public ResultOutTO saveSales(SalesDAO DAO, SalesTO parameters, int action)
+			throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+		
+		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
+
+		// TODO Auto-generated method stub
+
+		Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
+				.iterator();
+
+		while (iterator2.hasNext()) {
+			SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
+			articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
+			articleDetalle.setOpenqty(articleDetalle.getQuantity());
+			articleDetalle.setFactor1(articleDetalle.getQuantity());
+		}
+		parameters.setDiscsum(0.00);
+		parameters.setNret(0.00);
+		parameters.setPaidsum(0.00);
+		parameters.setRounddif(0.00);
+		try {
+			_return.setDocentry(DAO.inv_Sales_mtto(parameters, action));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Iterator<SalesDetailTO> iterator = parameters.getSalesDetails()
+				.iterator();
+		while (iterator.hasNext()) {
+			SalesDetailTO articleDetalle = (SalesDetailTO) iterator.next();
+			// Para articulos nuevos
+			articleDetalle.setDocentry(_return.getDocentry());
+			if (action == Common.MTTOINSERT) {
+				try {
+					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
+							Common.MTTOINSERT);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			if (action == Common.MTTODELETE) {
+				try {
+					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
+							Common.MTTODELETE);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+		_return.setCodigoError(0);
 		return _return;
 
 	}

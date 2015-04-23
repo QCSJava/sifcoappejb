@@ -25,7 +25,9 @@ import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
 import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sun.rowset.CachedRowSetImpl;
@@ -1358,5 +1360,77 @@ public class AdminDAO extends CommonDAO {
 
 		return lstResult;
 	}
-     
-   }
+
+	public ResultOutTO Update_inventory_articles(GoodsReceiptDetailTO Article)
+			throws EJBException {
+		
+		List brachArticles = new Vector();
+		ResultOutTO _return = new ResultOutTO();
+		BranchArticlesTO brachArt = new BranchArticlesTO();
+		ArticlesTO Article2 = new ArticlesTO();
+
+		try {
+			brachArticles = getBranchArticles(Article.getItemcode());
+			Article2 = getArticlesByKey(Article.getItemcode());
+			double AvgPrice;
+			double total;
+			double total_quantity;
+			double quantity;
+			List lstResultSet = null;
+			// nueva cantidad de
+			// articulos------------------------------------------------------
+			total_quantity = Article2.getOnHand() + Article.getQuantity();
+			// monto
+			// total----------------------------------------------------------------------
+			total = (Article2.getAvgPrice() * Article2.getOnHand())
+					+ (Article.getLinetotal());
+			// nuevo
+			// precio---------------------------------------------------------------------
+			AvgPrice = total / total_quantity;
+
+			// ------------------------------------------------------------------------------------------------------------------------
+			// Actualizacion de monto de articulos por alamacen
+			// ------------------------------------------------------------------------------------------------------------------------
+
+			Iterator<BranchArticlesTO> iterator = brachArticles.iterator();
+			while (iterator.hasNext()) {
+				BranchArticlesTO branch2 = (BranchArticlesTO) iterator.next();
+				if (branch2.getWhscode().equals(Article.getWhscode())
+						&& branch2.getItemcode().equals(Article.getItemcode())) {
+					quantity = branch2.getOnhand() + Article.getQuantity();
+
+					this.setDbObject("UPDATE cat_art1_brancharticles SET  onhand=? WHERE itemcode=? And whscode=?");
+					this.setDouble(1, "_onhand", quantity);
+					this.setString(2, "_itemcode", Article.getItemcode());
+					this.setString(3, "whscode", Article.getWhscode());
+
+					lstResultSet = this.runQueryPrepared();
+
+				}
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------------------
+			// Actualizacion de monto y precio de articulos en la tabla
+			// articulos
+			// ------------------------------------------------------------------------------------------------------------------------
+
+			this.setDbObject("UPDATE cat_art0_articles"
+					+ "SET  avgprice=?, onhand=? WHERE itemcode=?");
+
+			this.setDouble(1, "_avgprice", AvgPrice);
+			this.setString(2, "_onhand", total_quantity);
+			this.setString(3, "_itemcode", Article.getItemcode());
+
+			lstResultSet = this.runQueryPrepared();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos actualizados correctamente");
+		return _return;
+
+	}
+}
