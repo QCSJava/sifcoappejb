@@ -454,7 +454,8 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public AccPeriodTO validate_exist_accperiod(Date parameters) throws Exception {
+	public AccPeriodTO validate_exist_accperiod(Date parameters)
+			throws Exception {
 		AccPeriodTO _return = new AccPeriodTO();
 		List lstResultSet = null;
 
@@ -462,7 +463,7 @@ public class AccountingDAO extends CommonDAO {
 
 		this.setDbObject("{ call sp_get_valid_accperiod(?)}");
 		this.setDate(1, "_docdate", parameters);
-		
+
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
@@ -1256,4 +1257,25 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
+	public ResultOutTO update_currtotal_accout(AccountTO Account, int acction)
+			throws Exception {
+		ResultOutTO _return = new ResultOutTO();
+		AccountTO account1 = new AccountTO();
+		double saldo;
+		account1 = getAccountByKey(Account.getAcctcode());
+		// 1 para suma 2 para restar
+		if (acction == 1) {
+			saldo = Account.getCurrtotal() + account1.getCurrtotal();
+			account1.setCurrtotal(saldo);
+			int i = cat_acc0_ACCOUNT_mtto(account1, 2);
+
+		} else {
+			saldo = account1.getCurrtotal() - Account.getCurrtotal();
+
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("cuenta actualizada correctamente");
+		return null;
+
+	}
 }

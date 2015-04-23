@@ -9,6 +9,7 @@ import java.util.Vector;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class JournalEntryLinesDAO extends CommonDAO{
@@ -190,4 +191,6 @@ public class JournalEntryLinesDAO extends CommonDAO{
 		v_resp = this.runUpdate();
 		return v_resp;
 	}
+    
+	
 }
