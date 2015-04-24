@@ -1361,33 +1361,42 @@ public class AdminDAO extends CommonDAO {
 		return lstResult;
 	}
 
-	public ResultOutTO Update_inventory_articles(GoodsReceiptDetailTO Article)
+	public ResultOutTO Update_inventory_articles(ArticlesInTO Article)
 			throws EJBException {
-		
+
 		List brachArticles = new Vector();
 		ResultOutTO _return = new ResultOutTO();
 		BranchArticlesTO brachArt = new BranchArticlesTO();
 		ArticlesTO Article2 = new ArticlesTO();
 
 		try {
-			brachArticles = getBranchArticles(Article.getItemcode());
-			Article2 = getArticlesByKey(Article.getItemcode());
-			double AvgPrice;
+			brachArticles = getBranchArticles(Article.getItemCode());
+			Article2 = getArticlesByKey(Article.getItemCode());
+			double AvgPrice = 0;
 			double total;
-			double total_quantity;
+			double total_quantity = 0;
 			double quantity;
 			List lstResultSet = null;
-			// nueva cantidad de
-			// articulos------------------------------------------------------
-			total_quantity = Article2.getOnHand() + Article.getQuantity();
-			// monto
-			// total----------------------------------------------------------------------
-			total = (Article2.getAvgPrice() * Article2.getOnHand())
-					+ (Article.getLinetotal());
-			// nuevo
-			// precio---------------------------------------------------------------------
-			AvgPrice = total / total_quantity;
 
+			if (Article.getObjtype().equals("30")
+					|| Article.getObjtype().equals("11")
+					|| Article.getObjtype().equals("20")) {
+				// nueva cantidad de
+				// articulos------------------------------------------------------
+				total_quantity = Article2.getOnHand() + Article.getOnHand();
+				// monto
+				// total----------------------------------------------------------------------
+				total = (Article2.getAvgPrice() * Article2.getOnHand())
+						+ (Article.getOnHand() * Article.getAvgPrice());
+				// nuevo
+				// precio---------------------------------------------------------------------
+				AvgPrice = total / total_quantity;
+			} else {
+				// nueva cantidad de
+				// articulos------------------------------------------------------
+				total_quantity = Article2.getOnHand() - Article.getOnHand();
+
+			}
 			// ------------------------------------------------------------------------------------------------------------------------
 			// Actualizacion de monto de articulos por alamacen
 			// ------------------------------------------------------------------------------------------------------------------------
@@ -1395,14 +1404,20 @@ public class AdminDAO extends CommonDAO {
 			Iterator<BranchArticlesTO> iterator = brachArticles.iterator();
 			while (iterator.hasNext()) {
 				BranchArticlesTO branch2 = (BranchArticlesTO) iterator.next();
-				if (branch2.getWhscode().equals(Article.getWhscode())
-						&& branch2.getItemcode().equals(Article.getItemcode())) {
-					quantity = branch2.getOnhand() + Article.getQuantity();
+				if (branch2.getWhscode().equals(Article.getSww())
+						&& branch2.getItemcode().equals(Article.getItemCode())) {
+					if (Article.getObjtype().equals("30")
+							|| Article.getObjtype().equals("11")
+							|| Article.getObjtype().equals("20")) {
+						quantity = branch2.getOnhand() + Article.getOnHand();
+					} else {
+						quantity = branch2.getOnhand() - Article.getOnHand();
+					}
 
 					this.setDbObject("UPDATE cat_art1_brancharticles SET  onhand=? WHERE itemcode=? And whscode=?");
 					this.setDouble(1, "_onhand", quantity);
-					this.setString(2, "_itemcode", Article.getItemcode());
-					this.setString(3, "whscode", Article.getWhscode());
+					this.setString(2, "_itemcode", Article.getItemCode());
+					this.setString(3, "whscode", Article.getSww());
 
 					lstResultSet = this.runQueryPrepared();
 
@@ -1414,13 +1429,17 @@ public class AdminDAO extends CommonDAO {
 			// Actualizacion de monto y precio de articulos en la tabla
 			// articulos
 			// ------------------------------------------------------------------------------------------------------------------------
-
+		
+			if (!Article.getObjtype().equals("30")|| !Article.getObjtype().equals("11")|| !Article.getObjtype().equals("20")){
+				AvgPrice=Article2.getAvgPrice();
+			}
+			
 			this.setDbObject("UPDATE cat_art0_articles"
 					+ "SET  avgprice=?, onhand=? WHERE itemcode=?");
 
 			this.setDouble(1, "_avgprice", AvgPrice);
 			this.setString(2, "_onhand", total_quantity);
-			this.setString(3, "_itemcode", Article.getItemcode());
+			this.setString(3, "_itemcode", Article.getItemCode());
 
 			lstResultSet = this.runQueryPrepared();
 

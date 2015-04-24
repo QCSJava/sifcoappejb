@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
@@ -116,6 +117,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		Double total = zero;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		DAO.setIstransaccional(true);
+		_return=save_GoodsReceipt(parameters, action, DAO);
 		try {
 
 			DAO.forceCommit();
@@ -890,15 +892,24 @@ public class InventoryEJB implements InventoryEJBRemote {
 	Iterator<GoodsReceiptDetailTO> iterator2 = parameters
 				.getGoodReceiptDetail().iterator();
 		while (iterator2.hasNext()) {
+			
 			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2
 					.next();
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()
 					* articleDetalle.getPrice());
 			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total = total + articleDetalle.getLinetotal();
+			//-----------------------------------------------------------------------------------
+			//
+			//-----------------------------------------------------------------------------------
+			ArticlesInTO Article=new ArticlesInTO();
+			Article.setOnHand(articleDetalle.getQuantity());
+			Article.setItemCode(articleDetalle.getItemcode());
+			Article.setSww(articleDetalle.getWhscode());
+			Article.setObjtype(articleDetalle.getObjtype());
 			
 			
-			_return1  =DAO1.Update_inventory_articles(articleDetalle);
+			_return1  =DAO1.Update_inventory_articles(Article);
 		}
 		parameters.setDoctotal(total);
 		try {
