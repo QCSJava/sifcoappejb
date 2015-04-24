@@ -284,11 +284,18 @@ public class AccountingEJB implements AccountingEJBRemote {
 			while (iterator.hasNext()) {
 				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
 						.next();
+				AccountTO account =new AccountTO();
+				//asigna el valor de la cuenta
 				if (Detalle.getDebit() == null) {
 					Detalle.setDebit(zero);
+				}else{
+					account.setCurrtotal(Detalle.getDebit());
 				}
+				//asigna el valor de la cuenta 
 				if (Detalle.getCredit() == null) {
 					Detalle.setCredit(zero);
+				}else{
+					account.setCurrtotal(Detalle.getCredit());
 				}
 				if (Detalle.getTomthsum() == null) {
 					Detalle.setTomthsum(zero);
@@ -319,6 +326,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 				}
 				// Para articulos nuevos
 				System.out.println("" + _return + "");
+				//---------------------------------------------------------------------------------------------------------------
+				//actualizacion de saldo de cuenta
+				//---------------------------------------------------------------------------------------------------------------
+				account.setAcctcode(Detalle.getAccount());
+				AccountingDAO DAO1= new AccountingDAO();
+				DAO1.update_currtotal_accout(account, 1);
+				//---------------------------------------------------------------------------------------------------------------
 				Detalle.setTransid(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
 					JournalLinesDAO.journalEntryLines_mtto(Detalle,
