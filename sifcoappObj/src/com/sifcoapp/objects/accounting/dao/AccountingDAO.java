@@ -1415,6 +1415,9 @@ public class AccountingDAO extends CommonDAO {
 			break;
 
 		default:
+			_return.setCodigoError(1);
+       	 _return.setMensaje("no se encuentra accion por realizar");
+       	 
 			break;
 		}
 
