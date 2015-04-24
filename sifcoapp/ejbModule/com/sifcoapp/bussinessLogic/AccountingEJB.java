@@ -55,32 +55,34 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		return _return;
 	}
-	public ResultOutTO validate_exist_accperiod(Date parameters) throws EJBException{
-		ResultOutTO _return= new ResultOutTO();
-      AccountingDAO acc = new AccountingDAO();
-      AccPeriodTO period= new AccPeriodTO();
-      try {
-		period= acc.validate_exist_accperiod(parameters);
-	   
-      } catch (Exception e) {
-		// TODO Auto-generated catch block
-		_return.setCodigoError(1);
-		_return.setMensaje("no se encontro periodo contable");
-    	  e.printStackTrace();
-	}
-		if(period.getPeriodstat()==1){
+
+	public ResultOutTO validate_exist_accperiod(Date parameters)
+			throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+		AccountingDAO acc = new AccountingDAO();
+		AccPeriodTO period = new AccPeriodTO();
+		try {
+			period = acc.validate_exist_accperiod(parameters);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encontro periodo contable");
+			e.printStackTrace();
+		}
+		if (period.getPeriodstat() == 1) {
 			_return.setCodigoError(0);
 			_return.setMensaje("periodo contable activo ");
-		}else{
+		} else {
 			_return.setCodigoError(1);
 			_return.setMensaje("periodo contable inactivo");
 		}
-		
+
 		return _return;
 	}
-	
+
 	public List getAccount(int type) throws EJBException {
-		
+
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
@@ -89,7 +91,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-		
+
 		return _return;
 	}
 
@@ -284,18 +286,28 @@ public class AccountingEJB implements AccountingEJBRemote {
 			while (iterator.hasNext()) {
 				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
 						.next();
-				AccountTO account =new AccountTO();
-				//asigna el valor de la cuenta
+				// ------------------------------------------------------------------------------------------------------------
+				// nueva instancia de AccountTO para mandar como parametros para
+				// la funcion de actualizar saldos
+				// ------------------------------------------------------------------------------------------------------------
+				AccountTO account = new AccountTO();
+				int acction = 0;
+				// ------------------------------------------------------------------------------------------------------------
+				// asigna el valor de la cuenta
+				// ------------------------------------------------------------------------------------------------------------
 				if (Detalle.getDebit() == null) {
 					Detalle.setDebit(zero);
-				}else{
+				} else {
 					account.setCurrtotal(Detalle.getDebit());
+					acction=1;
+
 				}
-				//asigna el valor de la cuenta 
+				// asigna el valor de la cuenta
 				if (Detalle.getCredit() == null) {
 					Detalle.setCredit(zero);
-				}else{
+				} else {
 					account.setCurrtotal(Detalle.getCredit());
+					acction=2;
 				}
 				if (Detalle.getTomthsum() == null) {
 					Detalle.setTomthsum(zero);
@@ -326,13 +338,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 				}
 				// Para articulos nuevos
 				System.out.println("" + _return + "");
-				//---------------------------------------------------------------------------------------------------------------
-				//actualizacion de saldo de cuenta
-				//---------------------------------------------------------------------------------------------------------------
+				// ---------------------------------------------------------------------------------------------------------------
+				// actualizacion de saldo de cuenta
+				// ---------------------------------------------------------------------------------------------------------------
 				account.setAcctcode(Detalle.getAccount());
-				AccountingDAO DAO1= new AccountingDAO();
-				DAO1.update_currtotal_accout(account, 1);
-				//---------------------------------------------------------------------------------------------------------------
+				AccountingDAO DAO1 = new AccountingDAO();
+				DAO1.update_currtotal_accout(account,acction);
+				// ---------------------------------------------------------------------------------------------------------------
 				Detalle.setTransid(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
 					JournalLinesDAO.journalEntryLines_mtto(Detalle,
@@ -531,7 +543,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
-			
+
 			_return = DAO.getrecurringPostingExecute();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -555,15 +567,16 @@ public class AccountingEJB implements AccountingEJBRemote {
 				AccountingDAO DAO1 = new AccountingDAO(DAO.getConn());
 				DAO1.setIstransaccional(true);
 				node = (AccountTO) object;
-				if (!(node.getLevels()==1)) {
+				if (!(node.getLevels() == 1)) {
 					account = DAO1.getAccountByKey(node.getAcctcode());
-					if (account.getAcctcode()!=null) {
-						
+					if (account.getAcctcode() != null) {
+
 						int i = DAO1.account_mtto_new(node);
 					} else {
 						node.setCurrtotal(zero);
 						node.setEndtotal(zero);
-						int i = DAO1.cat_acc0_ACCOUNT_mtto(node,Common.MTTOINSERT);
+						int i = DAO1.cat_acc0_ACCOUNT_mtto(node,
+								Common.MTTOINSERT);
 					}
 
 				}
