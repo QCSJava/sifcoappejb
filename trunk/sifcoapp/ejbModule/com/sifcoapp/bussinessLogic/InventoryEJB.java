@@ -885,8 +885,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		goodDAO1.setIstransaccional(true);
 
 		@SuppressWarnings("unchecked")
-		AdminDAO DAO1 =new AdminDAO(DAO.getConn());
-		DAO1.setIstransaccional(true);
+		
 	
 		
 	Iterator<GoodsReceiptDetailTO> iterator2 = parameters
@@ -908,10 +907,19 @@ public class InventoryEJB implements InventoryEJBRemote {
 			Article.setSww(articleDetalle.getWhscode());
 			Article.setObjtype(articleDetalle.getObjtype());
 			
+			AdminDAO DAO1 =new AdminDAO(DAO.getConn());
+			DAO1.setIstransaccional(true);
 			
 			_return1  =DAO1.Update_inventory_articles(Article);
 		}
 		parameters.setDoctotal(total);
+		parameters.setCanceled("N");
+		parameters.setDocstatus("O");
+		parameters.setDoctype("I");
+		parameters.setJrnlmemo("Entrada de Mercancia");
+		parameters.setConfirmed("Y");
+		
+		
 		try {
 			_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
 		} catch (Exception e) {
