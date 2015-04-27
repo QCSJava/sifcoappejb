@@ -1257,7 +1257,7 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public ResultOutTO update_currtotal_accout(AccountTO Account, int acction)
+	public ResultOutTO update_currtotal_accout(AccountTO Account, String acction)
 			throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 		AccountTO account1 = new AccountTO();
@@ -1273,11 +1273,11 @@ public class AccountingDAO extends CommonDAO {
 				// ------------------------------------------------------------------------------------------------------------------
 
 		case 1:
-			if (acction == 1) {
+			if (acction.equals("D")) {
 				saldo = Account.getCurrtotal() + account1.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else if (acction == 2) {
+			} else if (acction.equals("C")) {
 				saldo = account1.getCurrtotal() - Account.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
@@ -1291,11 +1291,11 @@ public class AccountingDAO extends CommonDAO {
 			// 2- Pasivo
 			// ------------------------------------------------------------------------------------------------------------------
 		case 2:
-			if (acction == 2) {
+		if (acction.equals("C")) {
 				saldo = Account.getCurrtotal() + account1.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else if (acction == 1) {
+			} else if (acction.equals("D")) {
 				saldo = account1.getCurrtotal() - Account.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
@@ -1309,11 +1309,11 @@ public class AccountingDAO extends CommonDAO {
 			// 3-Capital
 			// ------------------------------------------------------------------------------------------------------------------
 		case 3:
-			 if(acction==2){
+			 if(acction.equals("C")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction==2){
+             }else if(acction.equals("D")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1327,11 +1327,11 @@ public class AccountingDAO extends CommonDAO {
 			// 4- Cuentas de Ingreso
 			// ------------------------------------------------------------------------------------------------------------------
 		case 4:
-			 if(acction==2){
+			 if(acction.equals("C")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction==1){
+             }else if(acction.equals("D")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1345,11 +1345,11 @@ public class AccountingDAO extends CommonDAO {
 			// 5- Cuentas de Costos 
 			// ------------------------------------------------------------------------------------------------------------------
 		case 5:
-			 if(acction==1){
+			 if(acction.equals("D")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction==2){
+             }else if(acction.equals("C")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1363,11 +1363,11 @@ public class AccountingDAO extends CommonDAO {
 			// 6- Cuentas de Gastos
 			// ------------------------------------------------------------------------------------------------------------------
 		case 6:
-			 if(acction==1){
+			 if(acction.equals("D")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction==2){
+             }else if(acction.equals("C")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1381,11 +1381,11 @@ public class AccountingDAO extends CommonDAO {
 			// Otros Ingresos
 			// ------------------------------------------------------------------------------------------------------------------
 		case 7:
-			 if(acction==2){
+			 if(acction.equals("C")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction==1){
+             }else if(acction.equals("D")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1399,11 +1399,11 @@ public class AccountingDAO extends CommonDAO {
 			// 8 - Otros GAstos
 			// ------------------------------------------------------------------------------------------------------------------
 		case 8:
-			 if(acction==1){
+			 if(acction.equals("D")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction==2){
+             }else if(acction.equals("C")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
