@@ -260,6 +260,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(
 				DAO.getConn());
 		JournalLinesDAO.setIstransaccional(true);
+		
+		
 		try {
 			if (parameters.getLoctotal() == null) {
 				parameters.setLoctotal(zero);
@@ -299,7 +301,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 					Detalle.setDebit(zero);
 				} else {
 					account.setCurrtotal(Detalle.getDebit());
-					acction=1;
+					Detalle.setDebcred("D");
 
 				}
 				// asigna el valor de la cuenta
@@ -307,7 +309,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 					Detalle.setCredit(zero);
 				} else {
 					account.setCurrtotal(Detalle.getCredit());
-					acction=2;
+					Detalle.setDebcred("C");
 				}
 				if (Detalle.getTomthsum() == null) {
 					Detalle.setTomthsum(zero);
@@ -342,8 +344,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// actualizacion de saldo de cuenta
 				// ---------------------------------------------------------------------------------------------------------------
 				account.setAcctcode(Detalle.getAccount());
-				AccountingDAO DAO1 = new AccountingDAO();
-				DAO1.update_currtotal_accout(account,acction);
+				AccountingDAO DAO1 = new AccountingDAO(DAO.getConn());
+				DAO1.setIstransaccional(true);
+				DAO1.update_currtotal_accout(account,Detalle.getDebcred());
 				// ---------------------------------------------------------------------------------------------------------------
 				Detalle.setTransid(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
@@ -364,6 +367,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			DAO.forceCloseConnection();
 			JournalLinesDAO.forceCloseConnection();
+			//DAO1.forceCloseConnection();
+			
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");

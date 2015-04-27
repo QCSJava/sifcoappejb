@@ -321,8 +321,11 @@ public class AccountingTest {
 
 		nuevo.setBatchnum(1);
 		art1.setLine_id(1);
+		art1.setAccount("1.1");
+		art1.setDebit(20.30);
 		detail.add(art1);
-		art2.setLine_id(2);
+		art2.setAccount("2.2");
+		art2.setCredit(20.30);
 		detail.add(art2);
 		nuevo.setJournalentryList(detail);
 
