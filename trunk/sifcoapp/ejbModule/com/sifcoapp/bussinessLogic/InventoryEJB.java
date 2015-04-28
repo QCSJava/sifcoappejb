@@ -547,7 +547,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	public ResultOutTO valid_goodsReceipt_mtto(GoodsreceiptTO parameters,int action)
 			throws EJBException {
-		System.out.println("llego al valid_goodsissues_mtto ");
+		System.out.println("llego al valid_goodsReceipt_mtto ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();

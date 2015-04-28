@@ -132,9 +132,26 @@ public class InventoryTEST {
 	public static void GoodReceipt_mtto() {
 
 		ResultOutTO _result = new ResultOutTO();
+		GoodsReceiptDetailTO art= new GoodsReceiptDetailTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
 		parameters.setDocnum(26);
 		parameters.setUsersign(1);
+		List detalle = new Vector();
+		art.setAcctcode("000-180-09-15");
+		art.setWhscode("COD-2");
+		art.setItemcode("000-180-09-15");
+		art.setPrice(5.30);
+		art.setQuantity(10.00);
+        art.setLinetotal(53.00);
+        art.setObjtype("30");
+        detalle.add(art);
+        java.util.Date utilDate = new java.util.Date(); //fecha actual
+		  long lnMilisegundos = utilDate.getTime();
+		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+        parameters.setGoodReceiptDetail(detalle);
+        parameters.setDocdate(sqlDate);
+        parameters.setTowhscode("COD-2");
+		
 		// parameters.setDoctotal(111.2);
 		try {
 			_result = Inventory.inv_GoodsReceipt_mtto(parameters, 1);

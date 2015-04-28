@@ -1368,7 +1368,8 @@ public class AdminDAO extends CommonDAO {
 		ResultOutTO _return = new ResultOutTO();
 		BranchArticlesTO brachArt = new BranchArticlesTO();
 		ArticlesTO Article2 = new ArticlesTO();
-
+		
+		List lstResultSet = null;
 		try {
 			brachArticles = getBranchArticles(Article.getItemCode());
 			Article2 = getArticlesByKey(Article.getItemCode());
@@ -1376,8 +1377,7 @@ public class AdminDAO extends CommonDAO {
 			double total;
 			double total_quantity = 0;
 			double quantity;
-			List lstResultSet = null;
-
+			
 			if (Article.getObjtype().equals("30")
 					|| Article.getObjtype().equals("11")
 					|| Article.getObjtype().equals("20")) {
@@ -1414,9 +1414,9 @@ public class AdminDAO extends CommonDAO {
 						quantity = branch2.getOnhand() - Article.getOnHand();
 					}
 
-					this.setDbObject("UPDATE cat_art1_brancharticles SET  onhand=? WHERE itemcode=? And whscode=?");
-					this.setDouble(1, "_onhand", quantity);
-					this.setString(2, "_itemcode", Article.getItemCode());
+					this.setDbObject("UPDATE cat_art1_brancharticles SET  onhand=? where itemcode=? and whscode=?");
+					this.setDouble(1, "onhand", quantity);
+					this.setString(2, "itemcode", Article.getItemCode());
 					this.setString(3, "whscode", Article.getSww());
 
 					lstResultSet = this.runQueryPrepared();
@@ -1435,12 +1435,12 @@ public class AdminDAO extends CommonDAO {
 			}
 			
 			this.setDbObject("UPDATE cat_art0_articles"
-					+ "SET  avgprice=?, onhand=? WHERE itemcode=?");
+					+ "SET  avgprice=?, onhand=? where itemcode=?");
 
-			this.setDouble(1, "_avgprice", AvgPrice);
-			this.setString(2, "_onhand", total_quantity);
-			this.setString(3, "_itemcode", Article.getItemCode());
-
+			this.setDouble(1, "avgprice", AvgPrice);
+			this.setString(2, "onhand", total_quantity);
+			this.setString(3, "itemcode", Article.getItemCode());
+			
 			lstResultSet = this.runQueryPrepared();
 
 		} catch (Exception e) {

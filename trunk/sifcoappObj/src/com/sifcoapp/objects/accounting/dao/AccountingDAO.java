@@ -502,8 +502,9 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters, int action)
 			throws Exception {
+		ResultOutTO _return = new ResultOutTO();
 		Date financyear = null;
 		Date f_refdate = null;
 		Date t_refdate = null;
@@ -617,8 +618,14 @@ public class AccountingDAO extends CommonDAO {
 		this.setInt(2, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
-
-		return v_resp;
+if(v_resp!=0){
+	_return.setCodigoError(1);
+	_return.setMensaje("Error al Realizar el procedimiento");
+}else{
+	_return.setCodigoError(0);
+	_return.setMensaje("Datos almacenados con exito");
+}
+		return _return;
 	}
 
 	public AccassignmentTO getAccAssignment() throws Exception {
