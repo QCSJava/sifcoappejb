@@ -138,9 +138,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters, int action)
 			throws EJBException {
-		int _return = 0;
+		ResultOutTO _return =new  ResultOutTO();
 
 		AccountingDAO DAO = new AccountingDAO();
 		try {

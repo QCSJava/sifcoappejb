@@ -69,10 +69,10 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters, int action)
 			throws Exception {
 		// TODO Auto-generated method stub
-		int _return = 0;
+		ResultOutTO _return= new ResultOutTO();
 
 		_return = bean.cat_accAssignment_mtto(parameters, action);
 

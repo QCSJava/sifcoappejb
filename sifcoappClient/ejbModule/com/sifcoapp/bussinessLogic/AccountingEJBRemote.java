@@ -23,7 +23,7 @@ public interface AccountingEJBRemote {
 
 	public int cat_accPeriod_mtto(int parameters, int usersign, int action)throws EJBException;
 	
-	public int cat_accAssignment_mtto(AccassignmentTO parameters, int action)throws EJBException;
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters, int action)throws EJBException;
 	
 	public AccassignmentTO getAccAssignment()throws EJBException;
 	
