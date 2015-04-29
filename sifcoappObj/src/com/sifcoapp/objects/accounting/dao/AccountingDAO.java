@@ -464,7 +464,7 @@ public class AccountingDAO extends CommonDAO {
 		this.setDbObject("{ call sp_get_valid_accperiod(?)}");
 		
 		java.sql.Date fecha= new java.sql.Date(parameters.getTime());
-		this.setDate(1, "_docdate", parameters);
+		this.setDate(1, "_docdate", fecha);
 
 		lstResultSet = this.runQuery();
 
