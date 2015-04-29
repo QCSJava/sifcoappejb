@@ -7,11 +7,14 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+
+
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.*;
@@ -105,19 +108,17 @@ public class InventoryEJB implements InventoryEJBRemote {
 			int action) throws EJBException {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		
-			_return = valid_goodsReceipt_mtto(parameters,action );
-			System.out.println(_return.getCodigoError());
-			if (_return.getCodigoError() != 0) {
-				return _return;
-			}
-		
-		
-		
+
+		_return = valid_goodsReceipt_mtto(parameters, action);
+		System.out.println(_return.getCodigoError());
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
+
 		Double total = zero;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		DAO.setIstransaccional(true);
-		_return=save_GoodsReceipt(parameters, action, DAO);
+		_return = save_GoodsReceipt(parameters, action, DAO);
 		try {
 
 			DAO.forceCommit();
@@ -347,7 +348,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 		try {
 			if (accion == Common.MTTOINSERT) {
-				DAO.adm_inventorylog_mtto(parameters, accion);
+				_return.setDocentry(DAO.adm_inventorylog_mtto(parameters,
+						accion));
 				DAO.forceCommit();
 			}
 		} catch (Exception e) {
@@ -398,13 +400,13 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
-		if (parameters.getTowhscode() == null) {
+		if (parameters.getFromwhscode() == null) {
 			_return.setCodigoError(1);
 			_return.setMensaje("Codigo de almacen null");
 
 			return _return;
 		}
-		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+		_return = EJB1.validate_branchActiv(parameters.getFromwhscode());
 
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -545,8 +547,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	}
 
-	public ResultOutTO valid_goodsReceipt_mtto(GoodsreceiptTO parameters,int action)
-			throws EJBException {
+	public ResultOutTO valid_goodsReceipt_mtto(GoodsreceiptTO parameters,
+			int action) throws EJBException {
 		System.out.println("llego al valid_goodsReceipt_mtto ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
@@ -609,7 +611,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación articulo existe
 			// ------------------------------------------------------------------------------------------------------------
-			
+
 			valid = false;
 			if (DBArticle != null) {
 				valid = true;
@@ -885,32 +887,17 @@ public class InventoryEJB implements InventoryEJBRemote {
 		goodDAO1.setIstransaccional(true);
 
 		@SuppressWarnings("unchecked")
-		
-	
-		
-	Iterator<GoodsReceiptDetailTO> iterator2 = parameters
+		Iterator<GoodsReceiptDetailTO> iterator2 = parameters
 				.getGoodReceiptDetail().iterator();
 		while (iterator2.hasNext()) {
-			
+
 			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2
 					.next();
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()
 					* articleDetalle.getPrice());
 			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total = total + articleDetalle.getLinetotal();
-			//-----------------------------------------------------------------------------------
-			//
-			//-----------------------------------------------------------------------------------
-			ArticlesInTO Article=new ArticlesInTO();
-			Article.setOnHand(articleDetalle.getQuantity());
-			Article.setItemCode(articleDetalle.getItemcode());
-			Article.setSww(articleDetalle.getWhscode());
-			Article.setObjtype(articleDetalle.getObjtype());
-			
-			AdminDAO DAO1 =new AdminDAO(DAO.getConn());
-			DAO1.setIstransaccional(true);
-			
-			_return1  =DAO1.Update_inventory_articles(Article);
+
 		}
 		parameters.setDoctotal(total);
 		parameters.setCanceled("N");
@@ -918,8 +905,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		parameters.setDoctype("I");
 		parameters.setJrnlmemo("Entrada de Mercancia");
 		parameters.setConfirmed("Y");
-		
-		
+
 		try {
 			_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
 		} catch (Exception e) {
@@ -927,43 +913,168 @@ public class InventoryEJB implements InventoryEJBRemote {
 			e.printStackTrace();
 		}
 
-		if(_return1.getCodigoError()==0){
 		Iterator<GoodsReceiptDetailTO> iterator = parameters
 				.getGoodReceiptDetail().iterator();
 		while (iterator.hasNext()) {
 			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
 					.next();
 			// Para articulos nuevos
+			// -----------------------------------------------------------------------------------
+			// actualizacion de articulos
+			// -----------------------------------------------------------------------------------
 			detalleReceipt.setDocentry(_return.getDocentry());
-			if (action == Common.MTTOINSERT) {
-				try {
-					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
-							Common.MTTOINSERT);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (action == Common.MTTODELETE) {
-				try {
-					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
-							Common.MTTODELETE);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
+			ArticlesInTO Article = new ArticlesInTO();
+			Article.setOnHand(detalleReceipt.getQuantity());
+			Article.setItemCode(detalleReceipt.getItemcode());
+			Article.setSww(detalleReceipt.getWhscode());
+			Article.setObjtype(detalleReceipt.getObjtype());
 
-		}else{
-			_return.setCodigoError(0);
-			return _return;
-			
+			AdminDAO DAO1 = new AdminDAO(DAO.getConn());
+			DAO1.setIstransaccional(true);
+			_return1 = DAO1.Update_inventory_articles(Article);
+			// -----------------------------------------------------------------------------------
+			//
+			// -----------------------------------------------------------------------------------
+			if (_return1.getCodigoError() == 0) {
+
+				if (action == Common.MTTOINSERT) {
+					try {
+						goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
+								Common.MTTOINSERT);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (action == Common.MTTODELETE) {
+					try {
+						goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
+								Common.MTTODELETE);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			}
+
 		}
 		_return.setCodigoError(0);
 		return _return;
 	}
 
+	public ResultOutTO save_Inventory_Log(GoodsreceiptTO parameters)
+			throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+		InventoryLogTO inventory = new InventoryLogTO();
+		// -----------------------------------------------------------------------------------------------------------------------------------------
+		// llenado de inventory por cada linea de detalle por documento
+		// -----------------------------------------------------------------------------------------------------------------------------------------
+		Iterator<GoodsReceiptDetailTO> iterator2 = parameters
+				.getGoodReceiptDetail().iterator();
+		while (iterator2.hasNext()) {
+
+			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2
+					.next();
+			inventory.setDocentry(articleDetalle.getDocentry());
+			inventory.setDoclinenum(articleDetalle.getLinenum());
+			inventory.setQuantity(articleDetalle.getQuantity());
+			// inventory.setEffectqty(parameters);
+			inventory.setLoctype(Integer.parseInt(articleDetalle.getObjtype()));
+			inventory.setLoccode(articleDetalle.getWhscode());
+			inventory.setTotallc(articleDetalle.getLinetotal());
+			inventory.setBase_ref(articleDetalle.getBaseref());
+			inventory.setBasetype(articleDetalle.getBasetype());
+			inventory.setAccumtype(1);
+			inventory.setActiontype(1);
+			inventory.setExpenseslc(0.0);
+			inventory.setDocduedate(parameters.getDocduedate());
+			inventory.setItemcode(articleDetalle.getItemcode());
+			// inventory.setBpcardcode(bpcardcode);
+			inventory.setDocdate(parameters.getDocdate());
+			inventory.setComment(parameters.getComments());
+			inventory.setJrnlmemo(parameters.getJrnlmemo());
+			inventory.setRef1(parameters.getRef1());
+			// inventory.setRef2(parameters.getR);
+			inventory.setBaseline(articleDetalle.getLinenum());
+			inventory.setSnbtype(4);
+			// inventory.setOcrcode();
+			// inventory.setOcrcode2();
+			// inventory.setOcrcode3();
+			// inventory.setCardname();
+			inventory.setDscription(articleDetalle.getDscription());
+			inventory.setPricerate(0.0);
+			inventory.setDoctotal(parameters.getDoctotal());
+			inventory.setPrice(articleDetalle.getPrice());
+			inventory.setTaxdate(parameters.getDocdate());
+			inventory.setUsersign(parameters.getUsersign());
+
+			_return = adm_inventorylog_mtto(inventory, 1);
+
+			if (_return.getCodigoError() != 0) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No se puede almacenar Linea de Documento "
+						+ articleDetalle.getLinenum());
+				_return.setLinenum(articleDetalle.getLinenum());
+				return _return;
+			}
+
+		}
+
+		return _return;
+	}
+
+	public ResultOutTO save_WarehouseJournal(GoodsreceiptTO parameters,
+			int docentry) throws EJBException {
+
+		WarehouseJournalTO WarehouseJournal = new WarehouseJournalTO();
+
+		Iterator<GoodsReceiptDetailTO> iterator2 = parameters
+				.getGoodReceiptDetail().iterator();
+		while (iterator2.hasNext()) {
+
+			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2
+					.next();
+			// ------------------------------------------------------------------------------------------------------------------------------
+			// llenando WarehouseJournalTO
+			// ------------------------------------------------------------------------------------------------------------------------------
+			WarehouseJournal.setTranstype(Integer.parseInt(parameters
+					.getObjtype()));
+			WarehouseJournal.setCreatedby(articleDetalle.getDocentry());
+			WarehouseJournal.setBase_ref(Integer.toString(parameters
+					.getDocnum()));
+			WarehouseJournal.setDoclinenum(articleDetalle.getLinenum());
+			WarehouseJournal.setItemcode(articleDetalle.getItemcode());
+			WarehouseJournal.setInqty(articleDetalle.getQuantity());
+			// WarehouseJournal.setOutqty();
+			WarehouseJournal.setPrice(articleDetalle.getPrice());
+			WarehouseJournal.setSublinenum(-1);
+			WarehouseJournal.setAppobjline(-1);
+			WarehouseJournal.setExpenses(0.0);
+			WarehouseJournal.setOpenexp(0.0);
+			WarehouseJournal.setAllocation(0.0);
+			WarehouseJournal.setOpenalloc(0.0);
+			WarehouseJournal.setExpalloc(0.0);
+			WarehouseJournal.setOexpalloc(0.0);
+			WarehouseJournal.setOpenpdiff(0.0);
+			WarehouseJournal.setNeginvadjs(0.0);
+			WarehouseJournal.setOpenneginv(0.0);
+			WarehouseJournal.setNegstckact(" ");
+			WarehouseJournal.setBtransval(0.0);
+			WarehouseJournal.setVarval(0.0);
+			WarehouseJournal.setBexpval(0.0);
+			WarehouseJournal.setCogsval(0.0);
+			WarehouseJournal.setBnegaval(0.0);
+			WarehouseJournal.setMessageid(docentry);
+			WarehouseJournal.setLoctype(-1);
+			WarehouseJournal.setLoccode(articleDetalle.getWhscode());
+						
+
+			
+		}
+		return null;
+	}
 	
+	//public ResultOutTO save_WarehouseJournal(GoodsreceiptTO parameters, int action,
+		//	GoodsReceiptDAO DAO)
 }
