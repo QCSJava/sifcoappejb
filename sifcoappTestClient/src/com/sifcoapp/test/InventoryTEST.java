@@ -148,7 +148,8 @@ public class InventoryTEST {
         java.util.Date utilDate = new java.util.Date(); //fecha actual
 		  long lnMilisegundos = utilDate.getTime();
 		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-        parameters.setGoodReceiptDetail(detalle);
+       
+		  parameters.setGoodReceiptDetail(detalle);
         parameters.setDocdate(sqlDate);
         parameters.setTowhscode("COD-2");
 		

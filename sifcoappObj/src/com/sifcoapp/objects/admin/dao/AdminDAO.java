@@ -1318,12 +1318,9 @@ public class AdminDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		System.out.println("Desde DAO");
-		this.setDbObject("SELECT c.catcode, c.tablecode, c.catvalue, "
-				+ "c.catvalue2,c.catvalue3,c.catstatus, c.usersign "
-				+ "FROM cat_tab1_catalogos c,cat_tab0_tables t  "
-				+ "where c.tablecode=t.tablecode  and t.tablename=?");
+		this.setDbObject("INSERT INTO PRUEBA (VALOR)VALUES(?)");
 		// this.setString(1, "return");
-		this.setString(1, "IN_CAT_NAME", nameCatalog);
+		this.setString(1, "IN_CAT_NAME", 1);
 
 		lstResultSet = this.runQueryPrepared();
 		System.out.println("return psg");
@@ -1368,8 +1365,8 @@ public class AdminDAO extends CommonDAO {
 		ResultOutTO _return = new ResultOutTO();
 		BranchArticlesTO brachArt = new BranchArticlesTO();
 		ArticlesTO Article2 = new ArticlesTO();
-		
-		List lstResultSet = null;
+
+		int lstResultSet = 0;
 		try {
 			brachArticles = getBranchArticles(Article.getItemCode());
 			Article2 = getArticlesByKey(Article.getItemCode());
@@ -1377,7 +1374,7 @@ public class AdminDAO extends CommonDAO {
 			double total;
 			double total_quantity = 0;
 			double quantity;
-			
+
 			if (Article.getObjtype().equals("30")
 					|| Article.getObjtype().equals("11")
 					|| Article.getObjtype().equals("20")) {
@@ -1418,8 +1415,8 @@ public class AdminDAO extends CommonDAO {
 					this.setDouble(1, "onhand", quantity);
 					this.setString(2, "itemcode", Article.getItemCode());
 					this.setString(3, "whscode", Article.getSww());
-
-					lstResultSet = this.runQueryPrepared();
+					
+					lstResultSet = this.runUpdate();
 
 				}
 
@@ -1429,19 +1426,20 @@ public class AdminDAO extends CommonDAO {
 			// Actualizacion de monto y precio de articulos en la tabla
 			// articulos
 			// ------------------------------------------------------------------------------------------------------------------------
-		
-			if (!Article.getObjtype().equals("30")|| !Article.getObjtype().equals("11")|| !Article.getObjtype().equals("20")){
-				AvgPrice=Article2.getAvgPrice();
+
+			if (!Article.getObjtype().equals("30")
+					&& !Article.getObjtype().equals("11")
+					&& !Article.getObjtype().equals("20")) {
+				AvgPrice = Article2.getAvgPrice();
 			}
-			
-			this.setDbObject("UPDATE cat_art0_articles"
-					+ "SET  avgprice=?, onhand=? where itemcode=?");
+
+			this.setDbObject("UPDATE cat_art0_articles SET avgprice=?, onhand=? WHERE itemcode=?");
 
 			this.setDouble(1, "avgprice", AvgPrice);
-			this.setString(2, "onhand", total_quantity);
+			this.setDouble(2, "onhand", total_quantity);
 			this.setString(3, "itemcode", Article.getItemCode());
-			
-			lstResultSet = this.runQueryPrepared();
+
+			lstResultSet = this.runUpdate();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
