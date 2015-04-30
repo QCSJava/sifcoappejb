@@ -1081,7 +1081,7 @@ public class AdminDAO extends CommonDAO {
 	/* Mantenimiento de la tabla warehouse y su detalle */
 	public int adm_warehousejournal_mtto(WarehouseJournalTO parameters,
 			int accion) throws Exception {
-
+// ResultOutTO _return = new ResultOutTO();
 		List v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissues_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_adm_warehousejournal_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
@@ -1154,7 +1154,9 @@ public class AdminDAO extends CommonDAO {
 		this.setInt(62, "_action", new Integer(accion));
 		v_resp = this.runQuery();
 		// System.out.println(this.getInt());
+		
 
+		//_return.setDocentry(this.getInt());
 		return this.getInt();
 
 	}
