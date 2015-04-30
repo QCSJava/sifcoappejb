@@ -7,13 +7,12 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
-
-
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
 import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -48,6 +47,17 @@ public class InventoryEJB implements InventoryEJBRemote {
 			throws EJBException {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Set el codigo de almacen del padre al detalle
+		// --------------------------------------------------------------------------------------------------------------------------------
+		Iterator<GoodsIssuesDetailTO> iterator3 = parameters
+				.getGoodIssuesDetail().iterator();
+		while (iterator3.hasNext()) {
+
+			GoodsIssuesDetailTO articleDetalle = (GoodsIssuesDetailTO) iterator3
+					.next();
+			articleDetalle.setWhscode(parameters.getFromwhscode());
+		}
 		_return = valid_goodsissues_mtto(parameters);
 		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {
@@ -108,7 +118,17 @@ public class InventoryEJB implements InventoryEJBRemote {
 			int action) throws EJBException {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Set el codigo de almacen del padre al detalle
+		// --------------------------------------------------------------------------------------------------------------------------------
+		Iterator<GoodsReceiptDetailTO> iterator2 = parameters
+				.getGoodReceiptDetail().iterator();
+		while (iterator2.hasNext()) {
 
+			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2
+					.next();
+			articleDetalle.setWhscode(parameters.getTowhscode());
+		}
 		_return = valid_goodsReceipt_mtto(parameters, action);
 		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {
@@ -908,6 +928,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 		try {
 			_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -919,9 +940,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
 					.next();
 			// Para articulos nuevos
-			// -----------------------------------------------------------------------------------
-			// actualizacion de articulos
-			// -----------------------------------------------------------------------------------
+
 			detalleReceipt.setDocentry(_return.getDocentry());
 			ArticlesInTO Article = new ArticlesInTO();
 			Article.setOnHand(detalleReceipt.getQuantity());
@@ -929,33 +948,42 @@ public class InventoryEJB implements InventoryEJBRemote {
 			Article.setSww(detalleReceipt.getWhscode());
 			Article.setObjtype(detalleReceipt.getObjtype());
 
-			AdminDAO DAO1 = new AdminDAO(DAO.getConn());
-			DAO1.setIstransaccional(true);
-			_return1 = DAO1.Update_inventory_articles(Article);
 			// -----------------------------------------------------------------------------------
 			//
 			// -----------------------------------------------------------------------------------
-			if (_return1.getCodigoError() == 0) {
 
-				if (action == Common.MTTOINSERT) {
-					try {
-						goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
-								Common.MTTOINSERT);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				if (action == Common.MTTODELETE) {
-					try {
-						goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
-								Common.MTTODELETE);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+			if (action == Common.MTTOINSERT) {
+				try {
+					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
+							Common.MTTOINSERT);
+					// -----------------------------------------------------------------------------------
+					//
+					// -----------------------------------------------------------------------------------
 
+					_return1 = save_Inventory_Log(parameters);
+
+					// -----------------------------------------------------------------------------------
+					// actualizacion de articulos
+					// -----------------------------------------------------------------------------------
+					AdminDAO DAO1 = new AdminDAO(DAO.getConn());
+					DAO1.setIstransaccional(true);
+					_return1 = DAO1.Update_inventory_articles(Article);
+					// -----------------------------------------------------------------------------------
+					//
+					// -----------------------------------------------------------------------------------
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (action == Common.MTTODELETE) {
+				try {
+					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
+							Common.MTTODELETE);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		}
@@ -1025,8 +1053,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 	}
 
 	public ResultOutTO save_WarehouseJournal(GoodsreceiptTO parameters,
-			int docentry) throws EJBException {
-
+			int docentry, GoodsReceiptDAO DAO) throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
 		WarehouseJournalTO WarehouseJournal = new WarehouseJournalTO();
 
 		Iterator<GoodsReceiptDetailTO> iterator2 = parameters
@@ -1068,13 +1096,50 @@ public class InventoryEJB implements InventoryEJBRemote {
 			WarehouseJournal.setMessageid(docentry);
 			WarehouseJournal.setLoctype(-1);
 			WarehouseJournal.setLoccode(articleDetalle.getWhscode());
-						
 
-			
+			AdminDAO DAO1 = new AdminDAO(DAO.getConn());
+
+			try {
+				_return.setDocentry(DAO1.adm_warehousejournal_mtto(
+						WarehouseJournal, 1));
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if (_return.getDocentry() == 0) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No se puede almacenar Linea de Documento "
+						+ articleDetalle.getLinenum());
+				_return.setLinenum(articleDetalle.getLinenum());
+				return _return;
+			} else {
+				_return.setCodigoError(0);
+				_return.setMensaje("datos almacenados con exito");
+			}
+
 		}
-		return null;
+
+		return _return;
 	}
-	
-	//public ResultOutTO save_WarehouseJournal(GoodsreceiptTO parameters, int action,
-		//	GoodsReceiptDAO DAO)
+
+	public ResultOutTO save_WarehouseJournallayer(ArticlesTO parameters,
+			int docentry, GoodsReceiptDAO DAO, double Balance, double total_line)
+			throws EJBException {
+
+		ResultOutTO _return = new ResultOutTO();
+		WarehouseJournalDetailTO WarehouseJournal = new WarehouseJournalDetailTO();
+		WarehouseJournal.setTransseq(docentry);
+		WarehouseJournal.setLayerid(0);
+		WarehouseJournal.setCalcprice(parameters.getAvgPrice());
+		WarehouseJournal.setBalance(Balance);
+		WarehouseJournal.setTransvalue(total_line);
+		WarehouseJournal.setLayerinqty(parameters.getOnHand());
+		WarehouseJournal.setLayeroutq(0.0);
+		WarehouseJournal.setRevaltotal(0.0);
+
+		return _return;
+	}
+
 }
