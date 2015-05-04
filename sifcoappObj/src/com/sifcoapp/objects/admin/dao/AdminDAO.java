@@ -30,6 +30,8 @@ import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
+import com.sifcoapp.objects.inventory.to.InventoryLogTO;
+import com.sifcoapp.objects.inventory.to.InventorylogInTo;
 import com.sun.rowset.CachedRowSetImpl;
 import com.sun.xml.rpc.processor.modeler.j2ee.xml.deploymentExtensionType;
 
@@ -1081,7 +1083,7 @@ public class AdminDAO extends CommonDAO {
 	/* Mantenimiento de la tabla warehouse y su detalle */
 	public int adm_warehousejournal_mtto(WarehouseJournalTO parameters,
 			int accion) throws Exception {
-// ResultOutTO _return = new ResultOutTO();
+		// ResultOutTO _return = new ResultOutTO();
 		List v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissues_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_adm_warehousejournal_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
@@ -1154,9 +1156,8 @@ public class AdminDAO extends CommonDAO {
 		this.setInt(62, "_action", new Integer(accion));
 		v_resp = this.runQuery();
 		// System.out.println(this.getInt());
-		
 
-		//_return.setDocentry(this.getInt());
+		// _return.setDocentry(this.getInt());
 		return this.getInt();
 
 	}
@@ -1360,7 +1361,7 @@ public class AdminDAO extends CommonDAO {
 		return lstResult;
 	}
 
-	public ResultOutTO Update_inventory_articles(ArticlesInTO Article)
+	public ResultOutTO Update_inventory_articles(ArticlesInTO Article,InventorylogInTo inventory)
 			throws EJBException {
 
 		List brachArticles = new Vector();
@@ -1372,30 +1373,12 @@ public class AdminDAO extends CommonDAO {
 		try {
 			brachArticles = getBranchArticles(Article.getItemCode());
 			Article2 = getArticlesByKey(Article.getItemCode());
-			double AvgPrice = 0;
-			double total;
-			double total_quantity = 0;
-			double quantity;
+			double AvgPrice = inventory.getAvgPrice();
+			double total=inventory.getTotallc();
+			double total_quantity= inventory.getTotal_quantity();
+			double quantity= inventory.getQuantity();
 
-			if (Article.getObjtype().equals("30")
-					|| Article.getObjtype().equals("11")
-					|| Article.getObjtype().equals("20")) {
-				// nueva cantidad de
-				// articulos------------------------------------------------------
-				total_quantity = Article2.getOnHand() + Article.getOnHand();
-				// monto
-				// total----------------------------------------------------------------------
-				total = (Article2.getAvgPrice() * Article2.getOnHand())
-						+ (Article.getOnHand() * Article.getAvgPrice());
-				// nuevo
-				// precio---------------------------------------------------------------------
-				AvgPrice = total / total_quantity;
-			} else {
-				// nueva cantidad de
-				// articulos------------------------------------------------------
-				total_quantity = Article2.getOnHand() - Article.getOnHand();
-
-			}
+		
 			// ------------------------------------------------------------------------------------------------------------------------
 			// Actualizacion de monto de articulos por alamacen
 			// ------------------------------------------------------------------------------------------------------------------------
@@ -1417,7 +1400,7 @@ public class AdminDAO extends CommonDAO {
 					this.setDouble(1, "onhand", quantity);
 					this.setString(2, "itemcode", Article.getItemCode());
 					this.setString(3, "whscode", Article.getSww());
-					
+
 					lstResultSet = this.runUpdate();
 
 				}
@@ -1450,6 +1433,68 @@ public class AdminDAO extends CommonDAO {
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos actualizados correctamente");
 		return _return;
+
+	}
+
+	public InventorylogInTo Calcul_arti(ArticlesInTO Article) throws EJBException {
+
+		List brachArticles = new Vector();
+		//ResultOutTO _return = new ResultOutTO();
+		BranchArticlesTO brachArt = new BranchArticlesTO();
+		ArticlesTO Article2 = new ArticlesTO();
+		InventorylogInTo Inventorylog=new InventorylogInTo();
+		int lstResultSet = 0;
+		try {
+			brachArticles = getBranchArticles(Article.getItemCode());
+			Article2 = getArticlesByKey(Article.getItemCode());
+			double AvgPrice = 0;
+			double total;
+			double total_quantity = 0;
+			double quantity;
+
+			if (Article.getObjtype().equals("30")
+					|| Article.getObjtype().equals("11")
+					|| Article.getObjtype().equals("20")) {
+				// nueva cantidad de
+				// articulos------------------------------------------------------
+				total_quantity = Article2.getOnHand() + Article.getOnHand();
+				// monto
+				// total----------------------------------------------------------------------
+				quantity=Article.getOnHand() * Article.getAvgPrice();
+				total = (Article2.getAvgPrice() * Article2.getOnHand())
+						+ (Article.getOnHand() * Article.getAvgPrice());
+				// nuevo
+				// precio---------------------------------------------------------------------
+				AvgPrice = total / total_quantity;
+			} else {
+				// nueva cantidad de
+				// articulos------------------------------------------------------
+				total_quantity = Article2.getOnHand() - Article.getOnHand();
+				quantity=Article.getOnHand() * Article.getAvgPrice();
+				AvgPrice=Article2.getAvgPrice();
+			}
+			
+			
+			//nueva cantidad de articulos
+			Inventorylog.setTotal_quantity(total_quantity);
+			Inventorylog.setBalance(total_quantity);
+			
+			//cantidad de entrada o salida
+			Inventorylog.setQuantity(quantity);
+			//nuevo precio
+			Inventorylog.setAvgPrice(AvgPrice);
+			Inventorylog.setTotallc(Article.getOnHand());
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return Inventorylog;
 
 	}
 }
