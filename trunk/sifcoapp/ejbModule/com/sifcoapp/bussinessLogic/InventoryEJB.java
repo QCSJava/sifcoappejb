@@ -960,14 +960,22 @@ public class InventoryEJB implements InventoryEJBRemote {
 					//
 					// -----------------------------------------------------------------------------------
 
-					_return1 = save_Inventory_Log(parameters);
+					_return1 = save_Inventory_Log(parameters, detalleReceipt);
+					_return1 = save_WarehouseJournal(parameters,
+							detalleReceipt, DAO);
 
 					// -----------------------------------------------------------------------------------
 					// actualizacion de articulos
 					// -----------------------------------------------------------------------------------
 					AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 					DAO1.setIstransaccional(true);
-					_return1 = DAO1.Update_inventory_articles(Article);
+					
+					InventorylogInTo Inventorylog =new InventorylogInTo();
+					Inventorylog=DAO1.Calcul_arti(Article);
+					Inventorylog.setDoclinenum(_return.getDocentry());
+					Inventorylog.setLayerId(detalleReceipt.getLinenum());
+					_return1= save_WarehouseJournallayer(Inventorylog, DAO);
+					_return1 = DAO1.Update_inventory_articles(Article,Inventorylog);
 					// -----------------------------------------------------------------------------------
 					//
 					// -----------------------------------------------------------------------------------
@@ -991,78 +999,67 @@ public class InventoryEJB implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO save_Inventory_Log(GoodsreceiptTO parameters)
-			throws EJBException {
+	public ResultOutTO save_Inventory_Log(GoodsreceiptTO parameters,
+			GoodsReceiptDetailTO articleDetalle) throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
 		InventoryLogTO inventory = new InventoryLogTO();
 		// -----------------------------------------------------------------------------------------------------------------------------------------
 		// llenado de inventory por cada linea de detalle por documento
 		// -----------------------------------------------------------------------------------------------------------------------------------------
-		Iterator<GoodsReceiptDetailTO> iterator2 = parameters
-				.getGoodReceiptDetail().iterator();
-		while (iterator2.hasNext()) {
 
-			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2
-					.next();
-			inventory.setDocentry(articleDetalle.getDocentry());
-			inventory.setDoclinenum(articleDetalle.getLinenum());
-			inventory.setQuantity(articleDetalle.getQuantity());
-			// inventory.setEffectqty(parameters);
-			inventory.setLoctype(Integer.parseInt(articleDetalle.getObjtype()));
-			inventory.setLoccode(articleDetalle.getWhscode());
-			inventory.setTotallc(articleDetalle.getLinetotal());
-			inventory.setBase_ref(articleDetalle.getBaseref());
-			inventory.setBasetype(articleDetalle.getBasetype());
-			inventory.setAccumtype(1);
-			inventory.setActiontype(1);
-			inventory.setExpenseslc(0.0);
-			inventory.setDocduedate(parameters.getDocduedate());
-			inventory.setItemcode(articleDetalle.getItemcode());
-			// inventory.setBpcardcode(bpcardcode);
-			inventory.setDocdate(parameters.getDocdate());
-			inventory.setComment(parameters.getComments());
-			inventory.setJrnlmemo(parameters.getJrnlmemo());
-			inventory.setRef1(parameters.getRef1());
-			// inventory.setRef2(parameters.getR);
-			inventory.setBaseline(articleDetalle.getLinenum());
-			inventory.setSnbtype(4);
-			// inventory.setOcrcode();
-			// inventory.setOcrcode2();
-			// inventory.setOcrcode3();
-			// inventory.setCardname();
-			inventory.setDscription(articleDetalle.getDscription());
-			inventory.setPricerate(0.0);
-			inventory.setDoctotal(parameters.getDoctotal());
-			inventory.setPrice(articleDetalle.getPrice());
-			inventory.setTaxdate(parameters.getDocdate());
-			inventory.setUsersign(parameters.getUsersign());
+		inventory.setDocentry(articleDetalle.getDocentry());
+		inventory.setDoclinenum(articleDetalle.getLinenum());
+		inventory.setQuantity(articleDetalle.getQuantity());
+		// inventory.setEffectqty(parameters);
+		inventory.setLoctype(Integer.parseInt(articleDetalle.getObjtype()));
+		inventory.setLoccode(articleDetalle.getWhscode());
+		inventory.setTotallc(articleDetalle.getLinetotal());
+		inventory.setBase_ref(articleDetalle.getBaseref());
+		inventory.setBasetype(articleDetalle.getBasetype());
+		inventory.setAccumtype(1);
+		inventory.setActiontype(1);
+		inventory.setExpenseslc(0.0);
+		inventory.setDocduedate(parameters.getDocduedate());
+		inventory.setItemcode(articleDetalle.getItemcode());
+		// inventory.setBpcardcode(parameters.get);
+		inventory.setDocdate(parameters.getDocdate());
+		inventory.setComment(parameters.getComments());
+		inventory.setJrnlmemo(parameters.getJrnlmemo());
+		inventory.setRef1(parameters.getRef1());
+		// inventory.setRef2(parameters.getR);
+		inventory.setBaseline(articleDetalle.getLinenum());
+		inventory.setSnbtype(4);
+		// inventory.setOcrcode();
+		// inventory.setOcrcode2();
+		// inventory.setOcrcode3();
+		// inventory.setCardname();
+		inventory.setDscription(articleDetalle.getDscription());
+		inventory.setPricerate(0.0);
+		inventory.setDoctotal(parameters.getDoctotal());
+		inventory.setPrice(articleDetalle.getPrice());
+		inventory.setTaxdate(parameters.getDocdate());
+		inventory.setUsersign(parameters.getUsersign());
 
-			_return = adm_inventorylog_mtto(inventory, 1);
+		_return = adm_inventorylog_mtto(inventory, 1);
 
-			if (_return.getCodigoError() != 0) {
-				_return.setCodigoError(1);
-				_return.setMensaje("No se puede almacenar Linea de Documento "
-						+ articleDetalle.getLinenum());
-				_return.setLinenum(articleDetalle.getLinenum());
-				return _return;
-			}
-
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No se puede almacenar Linea de Documento "
+					+ articleDetalle.getLinenum());
+			_return.setLinenum(articleDetalle.getLinenum());
+			return _return;
 		}
 
 		return _return;
 	}
 
 	public ResultOutTO save_WarehouseJournal(GoodsreceiptTO parameters,
-			int docentry, GoodsReceiptDAO DAO) throws EJBException {
+			GoodsReceiptDetailTO articleDetalle, GoodsReceiptDAO DAO)
+			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
 		WarehouseJournalTO WarehouseJournal = new WarehouseJournalTO();
 
-		Iterator<GoodsReceiptDetailTO> iterator2 = parameters
-				.getGoodReceiptDetail().iterator();
-		while (iterator2.hasNext()) {
-
-			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator2
-					.next();
+		
 			// ------------------------------------------------------------------------------------------------------------------------------
 			// llenando WarehouseJournalTO
 			// ------------------------------------------------------------------------------------------------------------------------------
@@ -1093,7 +1090,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			WarehouseJournal.setBexpval(0.0);
 			WarehouseJournal.setCogsval(0.0);
 			WarehouseJournal.setBnegaval(0.0);
-			WarehouseJournal.setMessageid(docentry);
+			WarehouseJournal.setMessageid(articleDetalle.getDocentry());
 			WarehouseJournal.setLoctype(-1);
 			WarehouseJournal.setLoccode(articleDetalle.getWhscode());
 
@@ -1119,26 +1116,46 @@ public class InventoryEJB implements InventoryEJBRemote {
 				_return.setMensaje("datos almacenados con exito");
 			}
 
-		}
+		
 
 		return _return;
 	}
 
-	public ResultOutTO save_WarehouseJournallayer(ArticlesTO parameters,
-			int docentry, GoodsReceiptDAO DAO, double Balance, double total_line)
+	public ResultOutTO save_WarehouseJournallayer(InventorylogInTo parameters, GoodsReceiptDAO DAO)
 			throws EJBException {
 
 		ResultOutTO _return = new ResultOutTO();
 		WarehouseJournalDetailTO WarehouseJournal = new WarehouseJournalDetailTO();
-		WarehouseJournal.setTransseq(docentry);
+		WarehouseJournal.setTransseq(parameters.getDoclinenum());
 		WarehouseJournal.setLayerid(0);
 		WarehouseJournal.setCalcprice(parameters.getAvgPrice());
-		WarehouseJournal.setBalance(Balance);
-		WarehouseJournal.setTransvalue(total_line);
-		WarehouseJournal.setLayerinqty(parameters.getOnHand());
+		WarehouseJournal.setBalance(parameters.getBalance());
+		WarehouseJournal.setTransvalue(parameters.getQuantity());
+		WarehouseJournal.setLayerinqty(parameters.getTotallc());
 		WarehouseJournal.setLayeroutq(0.0);
 		WarehouseJournal.setRevaltotal(0.0);
+		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 
+		try {
+			_return.setDocentry(DAO1.adm_warehousejournalDetail_mtto(WarehouseJournal, 1));
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (_return.getDocentry() == 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No se puede almacenar Linea de Documento "
+					+ parameters.getLayerId());
+			_return.setLinenum(parameters.getLayerId());
+			return _return;
+		} else {
+			_return.setCodigoError(0);
+			_return.setMensaje("datos almacenados con exito");
+		}
+
+	
 		return _return;
 	}
 
