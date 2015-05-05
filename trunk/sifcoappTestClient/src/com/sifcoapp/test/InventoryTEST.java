@@ -135,11 +135,12 @@ public class InventoryTEST {
 		GoodsReceiptDetailTO art= new GoodsReceiptDetailTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
 		parameters.setDocnum(26);
+		parameters.setObjtype("30");
 		parameters.setUsersign(1);
 		List detalle = new Vector();
-		art.setAcctcode("000-180-09-15");
-		art.setWhscode("COD-2");
-		art.setItemcode("000-180-09-15");
+		art.setAcctcode("1.1");
+		art.setWhscode("ALM-001");
+		art.setItemcode("001-004-545-6114");
 		art.setPrice(5.30);
 		art.setQuantity(10.00);
         art.setLinetotal(53.00);
@@ -151,7 +152,7 @@ public class InventoryTEST {
        
 		  parameters.setGoodReceiptDetail(detalle);
         parameters.setDocdate(sqlDate);
-        parameters.setTowhscode("COD-2");
+        parameters.setTowhscode("ALM-001");
 		
 		// parameters.setDoctotal(111.2);
 		try {

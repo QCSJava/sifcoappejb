@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.sql.Connection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -138,9 +139,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters, int action)
-			throws EJBException {
-		ResultOutTO _return =new  ResultOutTO();
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters,
+			int action) throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
 
 		AccountingDAO DAO = new AccountingDAO();
 		try {
@@ -250,18 +251,30 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action)
-			throws EJBException {
-		// VALOR POR DEFECTO PARA LOS DOUBLES##############
-		double zero = 0.00;
-		ResultOutTO _return = new ResultOutTO();
-		JournalEntryDAO DAO = new JournalEntryDAO();
+	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) {
+
+		return journalEntry_mtto(parameters, action, null);
+	}
+
+	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action,
+			Connection _conn) throws EJBException {
+
+		JournalEntryDAO DAO;
+		if (_conn == null) {
+			DAO = new JournalEntryDAO();
+		} else {
+			DAO = new JournalEntryDAO(_conn);
+		}
+
 		DAO.setIstransaccional(true);
 		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(
 				DAO.getConn());
 		JournalLinesDAO.setIstransaccional(true);
-		
-		
+
+		// VALOR POR DEFECTO PARA LOS DOUBLES##############
+		double zero = 0.00;
+		ResultOutTO _return = new ResultOutTO();
+
 		try {
 			if (parameters.getLoctotal() == null) {
 				parameters.setLoctotal(zero);
@@ -346,7 +359,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account.setAcctcode(Detalle.getAccount());
 				AccountingDAO DAO1 = new AccountingDAO(DAO.getConn());
 				DAO1.setIstransaccional(true);
-				DAO1.update_currtotal_accout(account,Detalle.getDebcred());
+				DAO1.update_currtotal_accout(account, Detalle.getDebcred());
 				// ---------------------------------------------------------------------------------------------------------------
 				Detalle.setTransid(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
@@ -367,8 +380,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			DAO.forceCloseConnection();
 			JournalLinesDAO.forceCloseConnection();
-			//DAO1.forceCloseConnection();
-			
+			// DAO1.forceCloseConnection();
+
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");

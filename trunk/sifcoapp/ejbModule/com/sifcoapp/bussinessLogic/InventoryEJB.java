@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -905,7 +906,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	public ResultOutTO save_GoodsReceipt(GoodsreceiptTO parameters, int action,
 			GoodsReceiptDAO DAO) throws EJBException {
-		
+
 		ResultOutTO _return = new ResultOutTO();
 		ResultOutTO _return1 = new ResultOutTO();
 		Double total = zero;
@@ -985,7 +986,6 @@ public class InventoryEJB implements InventoryEJBRemote {
 					_return1 = DAO1.Update_inventory_articles(Article,
 							Inventorylog);
 
-					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1002,23 +1002,22 @@ public class InventoryEJB implements InventoryEJBRemote {
 			}
 
 		}
-	
-	// -----------------------------------------------------------------------------------
-	// registro del asiento contable y actualizacion de la entrada
-	// -----------------------------------------------------------------------------------
-		_return1=complete_accounting_entry( parameters,DAO);
-		GoodsreceiptTO good= new GoodsreceiptTO();
-		
-		good=getGoodsReceiptByKey(_return.getDocentry());
+
+		// -----------------------------------------------------------------------------------
+		// registro del asiento contable y actualizacion de la entrada
+		// -----------------------------------------------------------------------------------
+		_return1 = complete_accounting_entry(parameters, DAO.getConn());
+		GoodsreceiptTO good = new GoodsreceiptTO();
+
+		good = getGoodsReceiptByKey(_return.getDocentry());
 		good.setTransid(_return1.getDocentry());
-		
-		_return=inv_GoodsReceipt_mtto(good,2);
-		
-	// -----------------------------------------------------------------------------------
-	//
-	// -----------------------------------------------------------------------------------	
-	
-	
+
+		_return = inv_GoodsReceipt_mtto(good, 2);
+
+		// -----------------------------------------------------------------------------------
+		//
+		// -----------------------------------------------------------------------------------
+
 		return _return;
 	}
 
@@ -1114,6 +1113,23 @@ public class InventoryEJB implements InventoryEJBRemote {
 		WarehouseJournal.setMessageid(articleDetalle.getDocentry());
 		WarehouseJournal.setLoctype(-1);
 		WarehouseJournal.setLoccode(articleDetalle.getWhscode());
+		WarehouseJournal.setOutqty(0.0);
+		WarehouseJournal.setOpenstock(0.0);
+		WarehouseJournal.setPricediff(0.0);
+		WarehouseJournal.setIoffincval(0.0);
+		WarehouseJournal.setDoffdecval(0.0);
+		WarehouseJournal.setDecval(0.0);
+		WarehouseJournal.setWipval(0.0);
+		WarehouseJournal.setWipvarval(0.0);
+		WarehouseJournal.setIncval(0.0);
+		WarehouseJournal.setSumstock(0.0);
+		WarehouseJournal.setOpenqty(0.0);
+
+		WarehouseJournal.setPaoffval(0.0);
+		WarehouseJournal.setOpenpaoff(0.0);
+
+		WarehouseJournal.setPaval(0.0);
+		WarehouseJournal.setOpenpa(0.0);
 
 		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 
@@ -1178,10 +1194,10 @@ public class InventoryEJB implements InventoryEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO complete_accounting_entry(GoodsreceiptTO parameters,GoodsReceiptDAO DAO)
-			throws EJBException {
-		
-		ResultOutTO _result=new ResultOutTO();
+	public ResultOutTO complete_accounting_entry(GoodsreceiptTO parameters,
+			Connection DAO) throws EJBException {
+
+		ResultOutTO _result = new ResultOutTO();
 		Double total = zero;
 		List list = parameters.getGoodReceiptDetail();
 		List aux = new Vector();
@@ -1219,16 +1235,19 @@ public class InventoryEJB implements InventoryEJBRemote {
 			for (Object obj2 : listaDet) {
 				GoodsReceiptDetailTO newGood = (GoodsReceiptDetailTO) obj2;
 				sum = sum + (newGood.getQuantity() * newGood.getPrice());
-			 acc=newGood.getAcctcode();
+				acc = newGood.getAcctcode();
 			}
 			// asiento contable
 			List detail = new Vector();
 			JournalEntryTO nuevo = new JournalEntryTO();
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
-
-			// nuevo.setBatchnum(1);
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+			// llenado del asiento contable
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+			// // nuevo.setBatchnum(1);
 			// LLenado del padre
+
 			nuevo.setObjtype("5");
 			nuevo.setMemo("entrada de mercancia");
 			nuevo.setUsersign(parameters.getUsersign());
@@ -1236,11 +1255,11 @@ public class InventoryEJB implements InventoryEJBRemote {
 			nuevo.setSystotal(sum);
 			// llenado de los hijos
 			art1.setLine_id(1);
-			//buscar la cuenta asignada al almacen 
-			AdminDAO admin=new AdminDAO( DAO.getConn());
-	        BranchTO branch;
-			//buscando la cuenta asignada de cuenta de existencias al almacen 
-	        try {
+			// buscar la cuenta asignada al almacen
+			AdminDAO admin = new AdminDAO(DAO);
+			BranchTO branch;
+			// buscando la cuenta asignada de cuenta de existencias al almacen
+			try {
 				branch = admin.getBranchByKey(parameters.getTowhscode());
 				art1.setAccount(branch.getBalinvntac());
 			} catch (Exception e) {
@@ -1249,18 +1268,18 @@ public class InventoryEJB implements InventoryEJBRemote {
 			}
 			art1.setDebit(sum);
 			detail.add(art1);
-			art1.setLine_id(2);
+			art2.setLine_id(2);
 			art2.setAccount(acc);
 			art2.setCredit(sum);
 			detail.add(art2);
-
 			nuevo.setJournalentryList(detail);
-			//llama al metodo dentro del ejeb para insertar el nuevo journal y actualizar las cuentas
-		AccountingEJB account = new AccountingEJB();
-		_result=account.journalEntry_mtto(nuevo, 1);
-		
+			// llama al metodo dentro del ejeb para insertar el nuevo journal y
+			// actualizar las cuentas
+			AccountingEJB account = new AccountingEJB();
+			_result = account.journalEntry_mtto(nuevo, 1, DAO);
+
 		}
 		return _result;
 	}
- 
+
 }
