@@ -16,6 +16,7 @@ import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.sales.DAO.*;
 import com.sifcoapp.objects.sales.to.*;
 import com.sun.org.apache.regexp.internal.RESyntaxException;
@@ -65,6 +66,17 @@ public class SalesEJB implements SalesEJBRemote {
 	public ResultOutTO inv_Sales_mtto(SalesTO parameters, int action)
 			throws Exception {
 		System.out.println("llego al salesejb");
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Set el codigo de almacen del padre al detalle
+		// --------------------------------------------------------------------------------------------------------------------------------
+		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
+				.iterator();
+		while (iterator1.hasNext()) {
+
+			SalesDetailTO articleDetalle = (SalesDetailTO) iterator1
+					.next();
+			articleDetalle.setWhscode(parameters.getTowhscode());
+		}
 		ResultOutTO _return = new ResultOutTO();
 		_return = validateSale(parameters);
 		System.out.println(_return.getCodigoError());
@@ -74,7 +86,7 @@ public class SalesEJB implements SalesEJBRemote {
 		SalesDAO DAO = new SalesDAO();
 		DAO.setIstransaccional(true);
 		try {
-			
+
 			// --------------------------------------------------------------------------------------------------------
 			// guardar venta
 			// --------------------------------------------------------------------------------------------------------
@@ -865,7 +877,7 @@ public class SalesEJB implements SalesEJBRemote {
 	public ResultOutTO saveSales(SalesDAO DAO, SalesTO parameters, int action)
 			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
-		
+
 		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
 		goodDAO1.setIstransaccional(true);
 

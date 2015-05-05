@@ -8,10 +8,13 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.admin.ejb.AdminEJB;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
 import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.catalogos.Common;
@@ -19,6 +22,7 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.*;
 import com.sifcoapp.objects.inventory.to.*;
 import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
+import com.sun.xml.rpc.processor.modeler.j2ee.xml.exceptionMappingType;
 
 /**
  * Session Bean implementation class InventoryEJB
@@ -706,6 +710,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				System.out.println(branch1.getWhscode());
 				System.out.println(GoodsReceiptDetail.getWhscode());
+
 				if (branch1.getWhscode()
 						.equals(GoodsReceiptDetail.getWhscode())) {
 					if (branch1.getWhscode() != null
@@ -900,6 +905,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	public ResultOutTO save_GoodsReceipt(GoodsreceiptTO parameters, int action,
 			GoodsReceiptDAO DAO) throws EJBException {
+		
 		ResultOutTO _return = new ResultOutTO();
 		ResultOutTO _return1 = new ResultOutTO();
 		Double total = zero;
@@ -942,6 +948,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			// Para articulos nuevos
 
 			detalleReceipt.setDocentry(_return.getDocentry());
+
 			ArticlesInTO Article = new ArticlesInTO();
 			Article.setOnHand(detalleReceipt.getQuantity());
 			Article.setItemCode(detalleReceipt.getItemcode());
@@ -969,16 +976,16 @@ public class InventoryEJB implements InventoryEJBRemote {
 					// -----------------------------------------------------------------------------------
 					AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 					DAO1.setIstransaccional(true);
-					
-					InventorylogInTo Inventorylog =new InventorylogInTo();
-					Inventorylog=DAO1.Calcul_arti(Article);
+
+					InventorylogInTo Inventorylog = new InventorylogInTo();
+					Inventorylog = DAO1.Calcul_arti(Article);
 					Inventorylog.setDoclinenum(_return.getDocentry());
 					Inventorylog.setLayerId(detalleReceipt.getLinenum());
-					_return1= save_WarehouseJournallayer(Inventorylog, DAO);
-					_return1 = DAO1.Update_inventory_articles(Article,Inventorylog);
-					// -----------------------------------------------------------------------------------
-					//
-					// -----------------------------------------------------------------------------------
+					_return1 = save_WarehouseJournallayer(Inventorylog, DAO);
+					_return1 = DAO1.Update_inventory_articles(Article,
+							Inventorylog);
+
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -995,7 +1002,23 @@ public class InventoryEJB implements InventoryEJBRemote {
 			}
 
 		}
-		_return.setCodigoError(0);
+	
+	// -----------------------------------------------------------------------------------
+	// registro del asiento contable y actualizacion de la entrada
+	// -----------------------------------------------------------------------------------
+		_return1=complete_accounting_entry( parameters,DAO);
+		GoodsreceiptTO good= new GoodsreceiptTO();
+		
+		good=getGoodsReceiptByKey(_return.getDocentry());
+		good.setTransid(_return1.getDocentry());
+		
+		_return=inv_GoodsReceipt_mtto(good,2);
+		
+	// -----------------------------------------------------------------------------------
+	//
+	// -----------------------------------------------------------------------------------	
+	
+	
 		return _return;
 	}
 
@@ -1059,70 +1082,66 @@ public class InventoryEJB implements InventoryEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		WarehouseJournalTO WarehouseJournal = new WarehouseJournalTO();
 
-		
-			// ------------------------------------------------------------------------------------------------------------------------------
-			// llenando WarehouseJournalTO
-			// ------------------------------------------------------------------------------------------------------------------------------
-			WarehouseJournal.setTranstype(Integer.parseInt(parameters
-					.getObjtype()));
-			WarehouseJournal.setCreatedby(articleDetalle.getDocentry());
-			WarehouseJournal.setBase_ref(Integer.toString(parameters
-					.getDocnum()));
-			WarehouseJournal.setDoclinenum(articleDetalle.getLinenum());
-			WarehouseJournal.setItemcode(articleDetalle.getItemcode());
-			WarehouseJournal.setInqty(articleDetalle.getQuantity());
-			// WarehouseJournal.setOutqty();
-			WarehouseJournal.setPrice(articleDetalle.getPrice());
-			WarehouseJournal.setSublinenum(-1);
-			WarehouseJournal.setAppobjline(-1);
-			WarehouseJournal.setExpenses(0.0);
-			WarehouseJournal.setOpenexp(0.0);
-			WarehouseJournal.setAllocation(0.0);
-			WarehouseJournal.setOpenalloc(0.0);
-			WarehouseJournal.setExpalloc(0.0);
-			WarehouseJournal.setOexpalloc(0.0);
-			WarehouseJournal.setOpenpdiff(0.0);
-			WarehouseJournal.setNeginvadjs(0.0);
-			WarehouseJournal.setOpenneginv(0.0);
-			WarehouseJournal.setNegstckact(" ");
-			WarehouseJournal.setBtransval(0.0);
-			WarehouseJournal.setVarval(0.0);
-			WarehouseJournal.setBexpval(0.0);
-			WarehouseJournal.setCogsval(0.0);
-			WarehouseJournal.setBnegaval(0.0);
-			WarehouseJournal.setMessageid(articleDetalle.getDocentry());
-			WarehouseJournal.setLoctype(-1);
-			WarehouseJournal.setLoccode(articleDetalle.getWhscode());
+		// ------------------------------------------------------------------------------------------------------------------------------
+		// llenando WarehouseJournalTO
+		// ------------------------------------------------------------------------------------------------------------------------------
+		WarehouseJournal
+				.setTranstype(Integer.parseInt(parameters.getObjtype()));
+		WarehouseJournal.setCreatedby(articleDetalle.getDocentry());
+		WarehouseJournal.setBase_ref(Integer.toString(parameters.getDocnum()));
+		WarehouseJournal.setDoclinenum(articleDetalle.getLinenum());
+		WarehouseJournal.setItemcode(articleDetalle.getItemcode());
+		WarehouseJournal.setInqty(articleDetalle.getQuantity());
+		// WarehouseJournal.setOutqty();
+		WarehouseJournal.setPrice(articleDetalle.getPrice());
+		WarehouseJournal.setSublinenum(-1);
+		WarehouseJournal.setAppobjline(-1);
+		WarehouseJournal.setExpenses(0.0);
+		WarehouseJournal.setOpenexp(0.0);
+		WarehouseJournal.setAllocation(0.0);
+		WarehouseJournal.setOpenalloc(0.0);
+		WarehouseJournal.setExpalloc(0.0);
+		WarehouseJournal.setOexpalloc(0.0);
+		WarehouseJournal.setOpenpdiff(0.0);
+		WarehouseJournal.setNeginvadjs(0.0);
+		WarehouseJournal.setOpenneginv(0.0);
+		WarehouseJournal.setNegstckact(" ");
+		WarehouseJournal.setBtransval(0.0);
+		WarehouseJournal.setVarval(0.0);
+		WarehouseJournal.setBexpval(0.0);
+		WarehouseJournal.setCogsval(0.0);
+		WarehouseJournal.setBnegaval(0.0);
+		WarehouseJournal.setMessageid(articleDetalle.getDocentry());
+		WarehouseJournal.setLoctype(-1);
+		WarehouseJournal.setLoccode(articleDetalle.getWhscode());
 
-			AdminDAO DAO1 = new AdminDAO(DAO.getConn());
+		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 
-			try {
-				_return.setDocentry(DAO1.adm_warehousejournal_mtto(
-						WarehouseJournal, 1));
+		try {
+			_return.setDocentry(DAO1.adm_warehousejournal_mtto(
+					WarehouseJournal, 1));
 
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-			if (_return.getDocentry() == 0) {
-				_return.setCodigoError(1);
-				_return.setMensaje("No se puede almacenar Linea de Documento "
-						+ articleDetalle.getLinenum());
-				_return.setLinenum(articleDetalle.getLinenum());
-				return _return;
-			} else {
-				_return.setCodigoError(0);
-				_return.setMensaje("datos almacenados con exito");
-			}
-
-		
+		if (_return.getDocentry() == 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No se puede almacenar Linea de Documento "
+					+ articleDetalle.getLinenum());
+			_return.setLinenum(articleDetalle.getLinenum());
+			return _return;
+		} else {
+			_return.setCodigoError(0);
+			_return.setMensaje("datos almacenados con exito");
+		}
 
 		return _return;
 	}
 
-	public ResultOutTO save_WarehouseJournallayer(InventorylogInTo parameters, GoodsReceiptDAO DAO)
-			throws EJBException {
+	public ResultOutTO save_WarehouseJournallayer(InventorylogInTo parameters,
+			GoodsReceiptDAO DAO) throws EJBException {
 
 		ResultOutTO _return = new ResultOutTO();
 		WarehouseJournalDetailTO WarehouseJournal = new WarehouseJournalDetailTO();
@@ -1137,7 +1156,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 
 		try {
-			_return.setDocentry(DAO1.adm_warehousejournalDetail_mtto(WarehouseJournal, 1));
+			_return.setDocentry(DAO1.adm_warehousejournalDetail_mtto(
+					WarehouseJournal, 1));
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1155,8 +1175,92 @@ public class InventoryEJB implements InventoryEJBRemote {
 			_return.setMensaje("datos almacenados con exito");
 		}
 
-	
 		return _return;
 	}
 
+	public ResultOutTO complete_accounting_entry(GoodsreceiptTO parameters,GoodsReceiptDAO DAO)
+			throws EJBException {
+		
+		ResultOutTO _result=new ResultOutTO();
+		Double total = zero;
+		List list = parameters.getGoodReceiptDetail();
+		List aux = new Vector();
+		List<List> listas = new Vector();
+		// recorre la lista de detalles
+		for (Object obj : list) {
+			GoodsReceiptDetailTO good = (GoodsReceiptDetailTO) obj;
+			String cod = good.getAcctcode();
+			List lisHija = new Vector();
+			// compara el codigo de cuenta para hacer una saumatoria y guardarlo
+			// en otra lista
+			for (Object obj2 : list) {
+				GoodsReceiptDetailTO good2 = (GoodsReceiptDetailTO) obj2;
+				if (cod.equals(good2.getAcctcode())) {
+					lisHija.add(obj2);
+				}
+			}
+			// guarda en la lista de listas
+			listas.add(lisHija);
+			// recorre la lista de listas para remover de la lista original los
+			// nodos visitados
+			for (Object node : list) {
+				GoodsReceiptDetailTO no = (GoodsReceiptDetailTO) node;
+				if (no.getAcctcode().equals(cod)) {
+					list.remove(no);
+				}
+			}
+			lisHija.clear();
+		}
+
+		for (List obj : listas) {
+			List listaDet = obj;
+			Double sum = 0.0;
+			String acc = null;
+			for (Object obj2 : listaDet) {
+				GoodsReceiptDetailTO newGood = (GoodsReceiptDetailTO) obj2;
+				sum = sum + (newGood.getQuantity() * newGood.getPrice());
+			 acc=newGood.getAcctcode();
+			}
+			// asiento contable
+			List detail = new Vector();
+			JournalEntryTO nuevo = new JournalEntryTO();
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+			// nuevo.setBatchnum(1);
+			// LLenado del padre
+			nuevo.setObjtype("5");
+			nuevo.setMemo("entrada de mercancia");
+			nuevo.setUsersign(parameters.getUsersign());
+			nuevo.setLoctotal(sum);
+			nuevo.setSystotal(sum);
+			// llenado de los hijos
+			art1.setLine_id(1);
+			//buscar la cuenta asignada al almacen 
+			AdminDAO admin=new AdminDAO( DAO.getConn());
+	        BranchTO branch;
+			//buscando la cuenta asignada de cuenta de existencias al almacen 
+	        try {
+				branch = admin.getBranchByKey(parameters.getTowhscode());
+				art1.setAccount(branch.getBalinvntac());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			art1.setDebit(sum);
+			detail.add(art1);
+			art1.setLine_id(2);
+			art2.setAccount(acc);
+			art2.setCredit(sum);
+			detail.add(art2);
+
+			nuevo.setJournalentryList(detail);
+			//llama al metodo dentro del ejeb para insertar el nuevo journal y actualizar las cuentas
+		AccountingEJB account = new AccountingEJB();
+		_result=account.journalEntry_mtto(nuevo, 1);
+		
+		}
+		return _result;
+	}
+ 
 }
