@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.inventory.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -12,6 +13,15 @@ import com.sun.rowset.CachedRowSetImpl;
 
 public class InventoryLogDAO extends CommonDAO{
 	
+	public InventoryLogDAO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public InventoryLogDAO(Connection _conn) {
+		super(_conn);
+		// TODO Auto-generated constructor stub
+	}
 	public int adm_inventorylog_mtto(InventoryLogTO parameters,int accion)throws Exception {
 		int v_resp;
 		// t.setDbObject("{call sp_inv_gis0_goodsissue  (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7)}");
