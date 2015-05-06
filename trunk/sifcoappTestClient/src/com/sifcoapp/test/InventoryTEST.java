@@ -139,6 +139,7 @@ public class InventoryTEST {
 		parameters.setUsersign(1);
 		List detalle = new Vector();
 		art.setAcctcode("1.1");
+		art.setObjtype("30");
 		art.setWhscode("ALM-001");
 		art.setItemcode("001-004-545-6114");
 		art.setPrice(5.30);

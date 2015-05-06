@@ -143,9 +143,9 @@ public class InventoryEJB implements InventoryEJBRemote {
 		Double total = zero;
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 		DAO.setIstransaccional(true);
-		_return = save_GoodsReceipt(parameters, action, DAO);
+		
 		try {
-
+			_return = save_GoodsReceipt(parameters, action, DAO);
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -979,9 +979,12 @@ public class InventoryEJB implements InventoryEJBRemote {
 					DAO1.setIstransaccional(true);
 
 					InventorylogInTo Inventorylog = new InventorylogInTo();
+					
 					Inventorylog = DAO1.Calcul_arti(Article);
+					
 					Inventorylog.setDoclinenum(_return.getDocentry());
 					Inventorylog.setLayerId(detalleReceipt.getLinenum());
+					
 					_return1 = save_WarehouseJournallayer(Inventorylog, DAO);
 					_return1 = DAO1.Update_inventory_articles(Article,
 							Inventorylog);
