@@ -1445,7 +1445,7 @@ public class AdminDAO extends CommonDAO {
 		InventorylogInTo Inventorylog = new InventorylogInTo();
 		int lstResultSet = 0;
 		try {
-			brachArticles = getBranchArticles(Article.getItemCode());
+			
 			Article2 = getArticlesByKey(Article.getItemCode());
 			double AvgPrice = 0;
 			double total;

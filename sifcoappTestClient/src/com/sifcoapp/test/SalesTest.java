@@ -109,11 +109,11 @@ public class SalesTest {
 		SalesDetailTO document1 = new SalesDetailTO();
 
 		document.setLinenum(1);
-		document.setItemcode("000-180-09-15");
+		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
 		document.setQuantity(10.25);
 		document.setPrice(11.25);
-		document.setWhscode("COD-2");
+		document.setWhscode("ALM-001");
 		document.setDiscprcnt(0.0000);
 		document.setLinetotal(0.0000);
 		document.setPricebefdi(0.00000);
@@ -126,11 +126,11 @@ public class SalesTest {
 		prueba.add(document);
 
 		document1.setLinenum(2);
-		document1.setItemcode("000-180-09-15");
+		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
 		document1.setQuantity(10.25);
 		document1.setPrice(11.25);
-		document1.setWhscode("COD-2");
+		document1.setWhscode("ALM-001");
 		document1.setDocentry(485);
 		document1.setLinetotal(0.0000);
 		document1.setPricebefdi(0.00000);
@@ -145,7 +145,7 @@ public class SalesTest {
 		  long lnMilisegundos = utilDate.getTime();
 		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
 		  
-		parameters.setTowhscode("COD-2");
+		parameters.setTowhscode("ALM-001");
 		parameters.setDocdate(sqlDate);
 		parameters.setUsersign(1);
 		parameters.setCardcode("000000001");
@@ -154,6 +154,7 @@ public class SalesTest {
 		parameters.setNret(0.00000);
 		parameters.setPaidsum(0.0000);
 		parameters.setRounddif(0.00000);
+		parameters.setObjtype("30");
 
 		parameters.setSalesDetails(prueba);
 
