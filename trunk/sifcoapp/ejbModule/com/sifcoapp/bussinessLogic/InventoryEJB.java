@@ -345,9 +345,9 @@ public class InventoryEJB implements InventoryEJBRemote {
 	}
 
 	public ResultOutTO adm_inventorylog_mtto(InventoryLogTO parameters,
-			int accion) throws EJBException {
+			int accion,Connection _conn) throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
-		InventoryLogDAO DAO = new InventoryLogDAO();
+		InventoryLogDAO DAO = new InventoryLogDAO(_conn);
 		DAO.setIstransaccional(true);
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
@@ -381,10 +381,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
-		} finally {
-
-			DAO.forceCloseConnection();
-		}
+		} 
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
@@ -968,7 +965,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 					//
 					// -----------------------------------------------------------------------------------
 
-					_return1 = save_Inventory_Log(parameters, detalleReceipt);
+					_return1 = save_Inventory_Log(parameters, detalleReceipt,DAO.getConn());
 					_return1 = save_WarehouseJournal(parameters,
 							detalleReceipt, DAO);
 
@@ -1025,7 +1022,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 	}
 
 	public ResultOutTO save_Inventory_Log(GoodsreceiptTO parameters,
-			GoodsReceiptDetailTO articleDetalle) throws EJBException {
+			GoodsReceiptDetailTO articleDetalle,Connection _conn) throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
 		InventoryLogTO inventory = new InventoryLogTO();
 		// -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1065,7 +1062,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		inventory.setTaxdate(parameters.getDocdate());
 		inventory.setUsersign(parameters.getUsersign());
 
-		_return = adm_inventorylog_mtto(inventory, 1);
+		_return = adm_inventorylog_mtto(inventory,1,_conn);
 
 		if (_return.getCodigoError() != 0) {
 			_return.setCodigoError(1);
@@ -1135,6 +1132,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		WarehouseJournal.setOpenpa(0.0);
 
 		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
+		DAO1.setIstransaccional(true);
 
 		try {
 			_return.setDocentry(DAO1.adm_warehousejournal_mtto(
@@ -1173,10 +1171,11 @@ public class InventoryEJB implements InventoryEJBRemote {
 		WarehouseJournal.setLayeroutq(0.0);
 		WarehouseJournal.setRevaltotal(0.0);
 		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
+		DAO1.setIstransaccional(true);
 
 		try {
 			_return.setDocentry(DAO1.adm_warehousejournalDetail_mtto(
-					WarehouseJournal, 1));
+					WarehouseJournal,1));
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1260,6 +1259,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 			art1.setLine_id(1);
 			// buscar la cuenta asignada al almacen
 			AdminDAO admin = new AdminDAO(DAO);
+			admin.setIstransaccional(true);
 			BranchTO branch;
 			// buscando la cuenta asignada de cuenta de existencias al almacen
 			try {

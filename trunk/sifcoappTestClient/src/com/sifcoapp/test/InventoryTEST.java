@@ -447,18 +447,7 @@ public class InventoryTEST {
 		}
 	}
 
-	public static void adm_inventoryLog_mtto(){
-		InventoryLogTO nuevo = new InventoryLogTO();
-		ResultOutTO retorno;
-		nuevo.setCardname("00001");
-		nuevo.setBase_ref("baseref");
-		Date fecha= new Date();
-		//nuevo.setDocdate(fecha);
-		nuevo.setDoctotal(55.25);
-		retorno=Inventory.adm_inventorylog_mtto(nuevo,Common.MTTOINSERT);
-		System.out.println(retorno.getMensaje());
-
-	}
+	
 	
 	public static void getInventory_by_key() {
 

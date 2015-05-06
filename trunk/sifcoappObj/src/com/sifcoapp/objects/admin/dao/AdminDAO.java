@@ -1267,11 +1267,10 @@ public class AdminDAO extends CommonDAO {
 		this.setDouble(6, "_layerinqty", new Double(parameters.getLayerinqty()));
 		this.setDouble(7, "_layeroutq", new Double(parameters.getLayeroutq()));
 		this.setDouble(8, "_revaltotal", new Double(parameters.getRevaltotal()));
-
 		this.setInt(9, "_action", new Integer(accion));
 		v_resp = this.runUpdate();
 		// System.out.println(this.getInt());
-
+      
 		return v_resp;
 
 	}
@@ -1445,8 +1444,9 @@ public class AdminDAO extends CommonDAO {
 		InventorylogInTo Inventorylog = new InventorylogInTo();
 		int lstResultSet = 0;
 		try {
-			
+
 			Article2 = getArticlesByKey(Article.getItemCode());
+
 			double AvgPrice = 0;
 			double total;
 			double total_quantity = 0;
