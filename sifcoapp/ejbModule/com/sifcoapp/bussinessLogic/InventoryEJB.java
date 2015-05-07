@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.EJBException;
-import javax.ejb.Stateless;
 
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
@@ -18,20 +17,18 @@ import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
 import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
-import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.*;
 import com.sifcoapp.objects.inventory.to.*;
-import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.exceptionMappingType;
+
 
 /**
  * Session Bean implementation class InventoryEJB
  */
 
 public class InventoryEJB implements InventoryEJBRemote {
-	Double zero = 0.00;
+	Double zero = 0.0;
 
 	/**
 	 * Default constructor.
@@ -61,14 +58,20 @@ public class InventoryEJB implements InventoryEJBRemote {
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
 
 		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar acción a realizar
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		if (action != Common.MTTOINSERT) {
+			_return = inv_GoodsReceipt_update(parameters, action);
+			return _return;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
 		// Asignación de valores por defecto y llenado:
 		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
 		// no aplican.
 		// --------------------------------------------------------------------------------------------------------------------------------
-
-		if (action == Common.MTTOINSERT) {
-			parameters = fillGoodReceipt(parameters);
-		}
+		parameters = fillGoodReceipt(parameters);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Hacer validaciones:
@@ -76,24 +79,22 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// no aplican para validaciones
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		if (action == Common.MTTOINSERT) {
-			_valid = validate_goodsReceipt(parameters, action);
+		_valid = validate_goodsReceipt(parameters, action);
 
-			if (_valid.getCodigoError() != 0) {
-				return _valid;
-			}
+		if (_valid.getCodigoError() != 0) {
+			return _valid;
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Guardar en base:
 		// Desde aqui se debe manajar como una transaccion global, cada metodo
-		// debe tener uan opción para ejecutarlo como parte de una transacción
+		// debe tener una opción para ejecutarlo como parte de una transacción
 		// global
 		// --------------------------------------------------------------------------------------------------------------------------------
 
 		try {
 			DAO.setIstransaccional(true);
-			_return = save_TransactionGoodsReceipt(parameters, action, DAO);
+			_return = save_TransactionGoodsReceipt(parameters, action, DAO.getConn());
 			DAO.forceCommit();
 
 		} catch (Exception e) {
@@ -317,60 +318,26 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 	}
 
-	public ResultOutTO save_TransactionGoodsReceipt(GoodsreceiptTO parameters, int action,
-			GoodsReceiptDAO DAO) throws Exception {
+	public ResultOutTO save_TransactionGoodsReceipt(GoodsreceiptTO parameters,
+			int action, Connection conn) throws Exception {
 
 		// Variables
 		ResultOutTO _return = new ResultOutTO();
 		ResultOutTO _return1 = new ResultOutTO();
-		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO(conn);
+		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(conn);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Mantenimiento de Encabezados de Entrada
+		// Guardar Encabezados y detalles de Entrada
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		goodDAO1.setIstransaccional(true);
-
-			_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Mantenimiento de Detalles de Entrada
-		// --------------------------------------------------------------------------------------------------------------------------------
-
-		Iterator<GoodsReceiptDetailTO> iterator = parameters
-				.getGoodReceiptDetail().iterator();
-		while (iterator.hasNext()) {
-			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
-					.next();
-			
-			// Asignación de PK en detalles
-			detalleReceipt.setDocentry(_return.getDocentry());
-
-			if (action == Common.MTTOINSERT) {
-				try {
-					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
-							Common.MTTOINSERT);					
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (action == Common.MTTODELETE) {
-				try {
-					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
-							Common.MTTODELETE);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+		_return = inv_GoodsReceipt_save (parameters, action, conn);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Registro de Inventory Log
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		iterator = parameters.getGoodReceiptDetail().iterator();
+		Iterator<GoodsReceiptDetailTO>iterator = parameters.getGoodReceiptDetail().iterator();
 		while (iterator.hasNext()) {
 			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
 					.next();
@@ -571,18 +538,89 @@ public class InventoryEJB implements InventoryEJBRemote {
 		good = getGoodsReceiptByKey(_return.getDocentry());
 		good.setTransid(_return1.getDocentry());
 
-		
-
 		// -----------------------------------------------------------------------------------
 		// Actualización de entrada con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
-		
+
 		_return = inv_GoodsReceipt_mtto(good, 2);
-		
+
 		return _return;
 	}
 
-	
+	public ResultOutTO inv_GoodsReceipt_update(GoodsreceiptTO parameters,
+			int action) throws EJBException {
+		// Variables
+		ResultOutTO _return = new ResultOutTO();
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		DAO.setIstransaccional(true);
+		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
+
+		try {
+			// Actualizar borrar encabezados
+			_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
+
+			// Borrar detalles
+			Iterator<GoodsReceiptDetailTO> iterator = parameters
+					.getGoodReceiptDetail().iterator();
+			if (action == Common.MTTODELETE) {
+				while (iterator.hasNext()) {
+					GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
+							.next();
+
+					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
+							Common.MTTODELETE);
+				}
+			}
+			DAO.forceCommit();
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Actualizados con exito");
+		return _return;
+	}
+
+	public ResultOutTO inv_GoodsReceipt_save(GoodsreceiptTO parameters,
+			int action, Connection conn) throws Exception {
+		// Variables
+		ResultOutTO _return = new ResultOutTO();
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO(conn);
+		DAO.setIstransaccional(true);
+		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Guardar encabezados
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Guardar detalles
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		Iterator<GoodsReceiptDetailTO> iterator = parameters
+				.getGoodReceiptDetail().iterator();
+		while (iterator.hasNext()) {
+			GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
+					.next();
+
+			detalleReceipt.setDocentry(_return.getDocentry());
+			goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
+					Common.MTTOINSERT);
+		}
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
+		return _return;
+	}
+
 	// #region Consultas Entradas inventario
 	public List getGoodsReceiptDetail(int docentry) throws EJBException {
 		// TODO Auto-generated method stub GoodsissuesDAO
@@ -625,6 +663,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		}
 		return _return;
 	}
+
 	// #endregion
 	// #endregion
 
@@ -650,7 +689,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		if (_return.getCodigoError() != 0) {
 			return _return;
 		}
-		Double total = 0.0;
+		Double total = zero;
 		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		DAO.setIstransaccional(true);
 		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO(DAO.getConn());
@@ -940,7 +979,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int action)
 			throws EJBException {
 		// TODO Auto-generated method stub
-		double total = 0.0;
+		double total = zero;
 		ResultOutTO _return = new ResultOutTO();
 		_return = valida_inv_transfers_mtto(parameters);
 		System.out.println(_return.getCodigoError());
@@ -1259,7 +1298,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		inventory.setBasetype(articleDetalle.getBasetype());
 		inventory.setAccumtype(1);
 		inventory.setActiontype(1);
-		inventory.setExpenseslc(0.0);
+		inventory.setExpenseslc(zero);
 		inventory.setDocduedate(parameters.getDocduedate());
 		inventory.setItemcode(articleDetalle.getItemcode());
 		// inventory.setBpcardcode(parameters.get);
@@ -1275,7 +1314,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 		// inventory.setOcrcode3();
 		// inventory.setCardname();
 		inventory.setDscription(articleDetalle.getDscription());
-		inventory.setPricerate(0.0);
+		inventory.setPricerate(zero);
 		inventory.setDoctotal(parameters.getDoctotal());
 		inventory.setPrice(articleDetalle.getPrice());
 		inventory.setTaxdate(parameters.getDocdate());
@@ -1314,41 +1353,41 @@ public class InventoryEJB implements InventoryEJBRemote {
 		WarehouseJournal.setPrice(articleDetalle.getPrice());
 		WarehouseJournal.setSublinenum(-1);
 		WarehouseJournal.setAppobjline(-1);
-		WarehouseJournal.setExpenses(0.0);
-		WarehouseJournal.setOpenexp(0.0);
-		WarehouseJournal.setAllocation(0.0);
-		WarehouseJournal.setOpenalloc(0.0);
-		WarehouseJournal.setExpalloc(0.0);
-		WarehouseJournal.setOexpalloc(0.0);
-		WarehouseJournal.setOpenpdiff(0.0);
-		WarehouseJournal.setNeginvadjs(0.0);
-		WarehouseJournal.setOpenneginv(0.0);
+		WarehouseJournal.setExpenses(zero);
+		WarehouseJournal.setOpenexp(zero);
+		WarehouseJournal.setAllocation(zero);
+		WarehouseJournal.setOpenalloc(zero);
+		WarehouseJournal.setExpalloc(zero);
+		WarehouseJournal.setOexpalloc(zero);
+		WarehouseJournal.setOpenpdiff(zero);
+		WarehouseJournal.setNeginvadjs(zero);
+		WarehouseJournal.setOpenneginv(zero);
 		WarehouseJournal.setNegstckact(" ");
-		WarehouseJournal.setBtransval(0.0);
-		WarehouseJournal.setVarval(0.0);
-		WarehouseJournal.setBexpval(0.0);
-		WarehouseJournal.setCogsval(0.0);
-		WarehouseJournal.setBnegaval(0.0);
+		WarehouseJournal.setBtransval(zero);
+		WarehouseJournal.setVarval(zero);
+		WarehouseJournal.setBexpval(zero);
+		WarehouseJournal.setCogsval(zero);
+		WarehouseJournal.setBnegaval(zero);
 		WarehouseJournal.setMessageid(articleDetalle.getDocentry());
 		WarehouseJournal.setLoctype(-1);
 		WarehouseJournal.setLoccode(articleDetalle.getWhscode());
-		WarehouseJournal.setOutqty(0.0);
-		WarehouseJournal.setOpenstock(0.0);
-		WarehouseJournal.setPricediff(0.0);
-		WarehouseJournal.setIoffincval(0.0);
-		WarehouseJournal.setDoffdecval(0.0);
-		WarehouseJournal.setDecval(0.0);
-		WarehouseJournal.setWipval(0.0);
-		WarehouseJournal.setWipvarval(0.0);
-		WarehouseJournal.setIncval(0.0);
-		WarehouseJournal.setSumstock(0.0);
-		WarehouseJournal.setOpenqty(0.0);
+		WarehouseJournal.setOutqty(zero);
+		WarehouseJournal.setOpenstock(zero);
+		WarehouseJournal.setPricediff(zero);
+		WarehouseJournal.setIoffincval(zero);
+		WarehouseJournal.setDoffdecval(zero);
+		WarehouseJournal.setDecval(zero);
+		WarehouseJournal.setWipval(zero);
+		WarehouseJournal.setWipvarval(zero);
+		WarehouseJournal.setIncval(zero);
+		WarehouseJournal.setSumstock(zero);
+		WarehouseJournal.setOpenqty(zero);
 
-		WarehouseJournal.setPaoffval(0.0);
-		WarehouseJournal.setOpenpaoff(0.0);
+		WarehouseJournal.setPaoffval(zero);
+		WarehouseJournal.setOpenpaoff(zero);
 
-		WarehouseJournal.setPaval(0.0);
-		WarehouseJournal.setOpenpa(0.0);
+		WarehouseJournal.setPaval(zero);
+		WarehouseJournal.setOpenpa(zero);
 
 		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 
@@ -1386,8 +1425,8 @@ public class InventoryEJB implements InventoryEJBRemote {
 		WarehouseJournal.setBalance(parameters.getBalance());
 		WarehouseJournal.setTransvalue(parameters.getQuantity());
 		WarehouseJournal.setLayerinqty(parameters.getTotallc());
-		WarehouseJournal.setLayeroutq(0.0);
-		WarehouseJournal.setRevaltotal(0.0);
+		WarehouseJournal.setLayeroutq(zero);
+		WarehouseJournal.setRevaltotal(zero);
 		AdminDAO DAO1 = new AdminDAO(DAO.getConn());
 
 		try {
@@ -1449,7 +1488,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 
 		for (List obj : listas) {
 			List listaDet = obj;
-			Double sum = 0.0;
+			Double sum = zero;
 			String acc = null;
 			for (Object obj2 : listaDet) {
 				GoodsReceiptDetailTO newGood = (GoodsReceiptDetailTO) obj2;
