@@ -1,7 +1,5 @@
 package com.sifcoapp.objects.inventory.dao;
 
-
-
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
@@ -14,31 +12,38 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+public class GoodsReceiptDAO extends CommonDAO {
 
-public class GoodsReceiptDAO extends CommonDAO{
-	
-	public List getGoodsreceipt(GoodsReceiptInTO param)throws Exception {
+	public GoodsReceiptDAO() {
+		super();
+	}
+
+	public GoodsReceiptDAO(Connection _conn) {
+		super(_conn);
+	}
+
+	public List getGoodsreceipt(GoodsReceiptInTO param) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
-		
+
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_goodsreceipt(?,?,?,?,?,?,?,?)}");
-		
-		if (param.getDocdate() == null){
+
+		if (param.getDocdate() == null) {
 			this.setDate(2, "_docdate", param.getDocdate());
-		}else
-		{
-			java.sql.Date fecha= new java.sql.Date(param.getDocdate().getTime());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(param.getDocdate()
+					.getTime());
 			this.setDate(2, "_docdate", fecha);
 		}
-		if (param.getDocduedate() == null){
+		if (param.getDocduedate() == null) {
 			this.setDate(8, "_docduedate", param.getDocduedate());
-		}else
-		{
-			java.sql.Date fecha= new java.sql.Date(param.getDocduedate().getTime());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(param.getDocduedate()
+					.getTime());
 			this.setDate(8, "_docdate", fecha);
 		}
-		
+
 		this.setInt(1, "_docnum", new Integer(param.getDocnum()));
 		this.setInt(3, "_series", new Integer(param.getSeries()));
 		this.setString(4, "_towhscode", param.getTowhscode());
@@ -53,7 +58,7 @@ public class GoodsReceiptDAO extends CommonDAO{
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		
+
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
@@ -89,7 +94,7 @@ public class GoodsReceiptDAO extends CommonDAO{
 		}
 		return _return;
 	}
-	//Retorna elemento goodsreceipt con detalle por clave
+
 	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) throws Exception {
 		GoodsreceiptTO _return = new GoodsreceiptTO();
 		List lstResultSet = null;
@@ -127,8 +132,9 @@ public class GoodsReceiptDAO extends CommonDAO{
 					documento.setUsersign(rowsetActual.getInt(18));
 					documento.setCreatedate(rowsetActual.getDate(19));
 					documento.setCreatetime(rowsetActual.getInt(20));
-					documento.setGoodReceiptDetail(Detail.getGoodReceiptDetail(rowsetActual.getInt(1)));
-					_return=documento;
+					documento.setGoodReceiptDetail(Detail
+							.getGoodReceiptDetail(rowsetActual.getInt(1)));
+					_return = documento;
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -138,42 +144,43 @@ public class GoodsReceiptDAO extends CommonDAO{
 		}
 		return _return;
 	}
-	
-	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion) throws Exception {
+
+	public int inv_GoodsReceipt_mtto(GoodsreceiptTO parameters, int accion)
+			throws Exception {
 
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_goodsreceipt_mtto    (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{? = call sp_inv_gre0_goodsreceipt_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		if (parameters.getDocdate() == null){
-			this.setDate(8,"_docdate", parameters.getDocdate());
-		}else
-		{
-			java.sql.Date fecha= new java.sql.Date(parameters.getDocdate().getTime());
-			this.setDate(8,"_docdate", fecha);
+		if (parameters.getDocdate() == null) {
+			this.setDate(8, "_docdate", parameters.getDocdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getDocdate()
+					.getTime());
+			this.setDate(8, "_docdate", fecha);
 		}
-		if (parameters.getDocduedate() == null){
-			this.setDate(9,"_docduedate", parameters.getDocduedate());
-		}else
-		{
-			java.sql.Date fecha= new java.sql.Date(parameters.getDocduedate().getTime());
-			this.setDate(9,"_docduedate", fecha);
+		if (parameters.getDocduedate() == null) {
+			this.setDate(9, "_docduedate", parameters.getDocduedate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getDocduedate()
+					.getTime());
+			this.setDate(9, "_docduedate", fecha);
 		}
-		this.setInt(2,"_docentry", new Integer(parameters.getDocentry()));
-		this.setInt(3,"_docnum", new Integer(parameters.getDocnum()));
-		this.setString(4,"_doctype", parameters.getDoctype());
-		this.setString(5,"_canceled", parameters.getCanceled());
-		this.setString(6,"_docstatus", parameters.getDocstatus());
-		this.setString(7,"_objtype", parameters.getObjtype());		
-		this.setDouble(10,"_doctotal", new Double(parameters.getDoctotal()));
-		this.setString(11,"_ref1", parameters.getRef1());
-		this.setString(12,"_comments", parameters.getComments());
-		this.setString(13,"_jrnlmemo", parameters.getJrnlmemo());
-		this.setInt(14,"_transid", new Integer(parameters.getTransid()));
-		this.setInt(15,"_series", new Integer(parameters.getSeries()));
-		this.setString(16,"_towhscode", parameters.getTowhscode());
-		this.setString(17,"_fromwhscode", parameters.getFromwhscode());
-		this.setString(18,"_confirmed", parameters.getConfirmed());
-		this.setInt(19,"_usersign", new Integer(parameters.getUsersign()));
+		this.setInt(2, "_docentry", new Integer(parameters.getDocentry()));
+		this.setInt(3, "_docnum", new Integer(parameters.getDocnum()));
+		this.setString(4, "_doctype", parameters.getDoctype());
+		this.setString(5, "_canceled", parameters.getCanceled());
+		this.setString(6, "_docstatus", parameters.getDocstatus());
+		this.setString(7, "_objtype", parameters.getObjtype());
+		this.setDouble(10, "_doctotal", new Double(parameters.getDoctotal()));
+		this.setString(11, "_ref1", parameters.getRef1());
+		this.setString(12, "_comments", parameters.getComments());
+		this.setString(13, "_jrnlmemo", parameters.getJrnlmemo());
+		this.setInt(14, "_transid", new Integer(parameters.getTransid()));
+		this.setInt(15, "_series", new Integer(parameters.getSeries()));
+		this.setString(16, "_towhscode", parameters.getTowhscode());
+		this.setString(17, "_fromwhscode", parameters.getFromwhscode());
+		this.setString(18, "_confirmed", parameters.getConfirmed());
+		this.setInt(19, "_usersign", new Integer(parameters.getUsersign()));
 		this.setInt(20, "_action", new Integer(accion));
 
 		v_resp = this.runQuery();
