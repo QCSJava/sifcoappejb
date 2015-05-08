@@ -17,6 +17,7 @@ import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
+import com.sifcoapp.objects.purchase.to.SupplierDetailTO;
 import com.sifcoapp.objects.sales.DAO.*;
 import com.sifcoapp.objects.sales.to.*;
 import com.sun.org.apache.regexp.internal.RESyntaxException;
@@ -257,6 +258,19 @@ public class SalesEJB implements SalesEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+		
+		// pasar el codigo de almacen a los hijos
+				Iterator<DeliveryTO> iterator3 = parameters.getDeliveryDetails()
+						.iterator();
+				while (iterator3.hasNext()) {
+
+					DeliveryTO articleDetalle = (DeliveryTO) iterator3
+							.next();
+					articleDetalle.setTowhscode(parameters.getTowhscode());
+				}
+				// -------------------------------------------------------------------------------------------------------------------------------
+				// validaciones-------------------------------------------------------------------------------------------------------------------
+		//validacion de los datos del delivery 
 		_return = Validateinv_Delivery(parameters);
 		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {

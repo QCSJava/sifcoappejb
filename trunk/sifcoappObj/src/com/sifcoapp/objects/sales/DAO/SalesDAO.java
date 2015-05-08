@@ -21,7 +21,8 @@ public class SalesDAO extends CommonDAO{
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?)}");
+		//(_docnum integer, _docdate date, _series integer, _towhscode character varying, _ref1 character varying, _ref2 character varying, _comments character varying, _docduedate date, _cardcode character varying, _cardname character varying, _taxdate date, _doctype character, _peymethod character varying, _docstatus character)
+		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -44,6 +45,24 @@ public class SalesDAO extends CommonDAO{
 		this.setString(5, "_ref1", param.getRef1());
 		this.setString(6, "_ref2", param.getRef2());
 		this.setString(7, "_comments", param.getComments());
+		this.setInt(3, "_series", new Integer(param.getSeries()));
+		this.setString(4, "_towhscode", param.getTowhscode());
+		this.setString(5, "_ref1", param.getRef1());
+		this.setString(6, "_ref2", param.getRef2());
+		this.setString(7, "_comments", param.getComments());
+		this.setString(9, "_cardcode", param.getCardcode());
+		this.setString(10, "_cardname", param.getCardname());
+		if (param.getTaxdate() == null){
+			this.setDate(11, "_taxtdate", param.getTaxdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(param.getTaxdate().getTime());
+			this.setDate(11, "_taxtdate", fecha);
+		}
+		this.setString(12,"_doctype", param.getDoctype());
+		this.setString(13, "_peymethod",param.getPeymethod());
+		this.setString(14, "_docstatus", param.getDocstatus());
+		
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
