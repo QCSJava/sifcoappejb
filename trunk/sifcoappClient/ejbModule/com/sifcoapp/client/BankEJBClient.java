@@ -6,7 +6,6 @@ import java.util.Vector;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-import net.bootsfaces.render.R;
 
 import com.sifcoapp.bussinessLogic.BankEJBRemote;
 import com.sifcoapp.bussinessLogic.CatalogEJBRemote;
