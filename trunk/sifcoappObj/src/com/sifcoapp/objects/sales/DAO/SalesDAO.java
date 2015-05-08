@@ -16,6 +16,44 @@ import com.sun.rowset.CachedRowSetImpl;
 
 public class SalesDAO extends CommonDAO{
 	
+	
+	
+	public  String last_Sales(int series,String _objtype) throws Exception{
+		List _return = new Vector();
+		List lstResultSet = null;
+		String ultimo = null;
+		
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		
+		this.setDbObject("{call sp_get_last_sales(?,?)}");
+		
+		this.setInt(1, "_series", series);
+		this.setString(2, "_objtype ",_objtype );
+		
+		
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		
+		while (liRowset.hasNext()) {
+			
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			
+					ultimo=rowsetActual.getString(1);
+				
+				rowsetActual.close();
+			
+		}
+		return ultimo;	
+}
+	
+	
+	
 	public List getSales(SalesInTO param) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
