@@ -25,6 +25,12 @@ public class SalesEJBClient {
 		}
 	}
 	
+	public String last_Sales(int series, String _objtype) throws Exception{
+		String _return;
+		_return= bean.last_Sales(series, _objtype);
+		return _return;
+		
+	}
 	public List getSales(SalesInTO param) throws Exception{
 		List _return;
 		_return= bean.getSales(param);

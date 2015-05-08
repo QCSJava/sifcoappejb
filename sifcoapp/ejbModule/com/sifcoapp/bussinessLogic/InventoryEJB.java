@@ -1059,51 +1059,7 @@ public class InventoryEJB implements InventoryEJBRemote {
 	// #endregion
 
 	// #region Transacciones
-	public ResultOutTO adm_inventorylog_mtto(InventoryLogTO parameters,
-			int accion) throws EJBException {
-		ResultOutTO _return = new ResultOutTO();
-		InventoryLogDAO DAO = new InventoryLogDAO();
-		DAO.setIstransaccional(true);
-		if (parameters.getDoctotal() == null) {
-			parameters.setDoctotal(zero);
-		}
-		if (parameters.getEffectqty() == null) {
-			parameters.setEffectqty(zero);
-		}
-		if (parameters.getExpenseslc() == null) {
-			parameters.setExpenseslc(zero);
-		}
-		if (parameters.getPrice() == null) {
-			parameters.setPrice(zero);
-		}
-		if (parameters.getPricerate() == null) {
-			parameters.setPricerate(zero);
-		}
-		if (parameters.getQuantity() == null) {
-			parameters.setQuantity(zero);
-		}
-		if (parameters.getTotallc() == null) {
-			parameters.setTotallc(zero);
-		}
-
-		try {
-			if (accion == Common.MTTOINSERT) {
-				_return.setDocentry(DAO.adm_inventorylog_mtto(parameters,
-						accion));
-				DAO.forceCommit();
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			DAO.rollBackConnection();
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			DAO.forceCloseConnection();
-		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados con exito");
-		return _return;
-	}
+	
 
 	public InventoryLogTO getInventoryLogByKey(int messageid)
 			throws EJBException {
