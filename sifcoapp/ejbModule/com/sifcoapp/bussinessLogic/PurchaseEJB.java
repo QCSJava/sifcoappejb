@@ -15,6 +15,7 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.purchase.dao.*;
 import com.sifcoapp.objects.purchase.to.*;
 import com.sifcoapp.objects.sales.to.DeliveryDetailTO;
+import com.sifcoapp.objects.sales.to.SalesDetailTO;
 
 /**
  * Session Bean implementation class SalesEJB
@@ -62,6 +63,17 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
 		System.out.println("llego al salesejb");
+		// pasar el codigo de almacen a los hijos
+		Iterator<PurchaseDetailTO> iterator3 = parameters.getpurchaseDetails()
+				.iterator();
+		while (iterator3.hasNext()) {
+
+			PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator3
+					.next();
+			articleDetalle.setWhscode(parameters.getTowhscode());
+		}
+		// -------------------------------------------------------------------------------------------------------------------------------
+		// validaciones-------------------------------------------------------------------------------------------------------------------
 		_return = validate_inv_Purchase_mtto(parameters);
 		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {
@@ -156,6 +168,17 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 	public ResultOutTO inv_PurchaseQuotation_mtto(
 			PurchaseQuotationTO parameters, int action) throws Exception {
 		// TODO Auto-generated method stub
+		// pasar el codigo de almacen a los hijos
+		Iterator<PurchaseQuotationDetailTO> iterator3 = parameters
+				.getPurchaseQuotationDetails().iterator();
+		while (iterator3.hasNext()) {
+
+			PurchaseQuotationDetailTO articleDetalle = (PurchaseQuotationDetailTO) iterator3
+					.next();
+			articleDetalle.setWhscode(parameters.getTowhscode());
+		}
+		// -------------------------------------------------------------------------------------------------------------------------------------
+		// validaciones-------------------------------------------------------------------------------------------------------------------------
 		System.out.println("llego al salesejb");
 		ResultOutTO _return = new ResultOutTO();
 		_return = validate_inv_PurchaseQuotation_mtto(parameters);
@@ -264,12 +287,24 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+
+		// pasar el codigo de almacen a los hijos
+		Iterator<SupplierDetailTO> iterator3 = parameters.getsupplierDetails()
+				.iterator();
+		while (iterator3.hasNext()) {
+
+			SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator3
+					.next();
+			articleDetalle.setWhscode(parameters.getTowhscode());
+		}
+		// -------------------------------------------------------------------------------------------------------------------------------
+		// validaciones-------------------------------------------------------------------------------------------------------------------
 		_return = validate_inv_supplier_mtto(parameters);
 		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {
 			return _return;
 		}
-	
+
 		SupplierDAO DAO = new SupplierDAO();
 		DAO.setIstransaccional(true);
 		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO(DAO.getConn());
@@ -280,15 +315,15 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			while (iterator2.hasNext()) {
 				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator2
 						.next();
-			
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity()); 
+
+				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-				
+
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
-				
+
 			}
 			;
-			parameters.setDiscsum(0.00); 
+			parameters.setDiscsum(0.00);
 			parameters.setNret(0.00);
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
@@ -337,7 +372,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		}
 		return _return;
 	}
-    
+
 	// validando inv_purchase_mtto
 	public ResultOutTO validate_inv_Purchase_mtto(PurchaseTO parameters)
 			throws Exception {
@@ -482,7 +517,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				return _return;
 			}
 
-			
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación almacen bloqueado para articulo
 			// ------------------------------------------------------------------------------------------------------------
@@ -664,7 +698,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				return _return;
 			}
 
-			
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación almacen bloqueado para articulo
 			// ------------------------------------------------------------------------------------------------------------
@@ -754,7 +787,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación del socio de negocio
 		// ------------------------------------------------------------------------------------------------------------
-		if (parameters.getCardcode()== null) {
+		if (parameters.getCardcode() == null) {
 			_return.setCodigoError(1);
 			_return.setMensaje("Codigo de socio de negocio null");
 
