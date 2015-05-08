@@ -1361,7 +1361,7 @@ public class AdminDAO extends CommonDAO {
 	}
 
 	public ResultOutTO Update_inventory_articles(ArticlesInTO Article,
-			InventorylogInTo inventory) throws EJBException {
+			InventorylogInTo inventory) throws Exception {
 
 		List brachArticles = new Vector();
 		ResultOutTO _return = new ResultOutTO();
@@ -1369,12 +1369,14 @@ public class AdminDAO extends CommonDAO {
 		ArticlesTO Article2 = new ArticlesTO();
 
 		int lstResultSet = 0;
-		try {
 			brachArticles = getBranchArticles(Article.getItemCode());
 			Article2 = getArticlesByKey(Article.getItemCode());
 			double AvgPrice = inventory.getAvgPrice();
+			//cantidad q se lleva 
 			double total = inventory.getTotallc();
+			//cantidad total dentro de la tabla articles
 			double total_quantity = inventory.getTotal_quantity();
+			//cantidad de la transaccion
 			double quantity = inventory.getQuantity();
 
 			// ------------------------------------------------------------------------------------------------------------------------
@@ -1424,10 +1426,6 @@ public class AdminDAO extends CommonDAO {
 
 			lstResultSet = this.runUpdate();
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos actualizados correctamente");
 		return _return;
@@ -1435,7 +1433,7 @@ public class AdminDAO extends CommonDAO {
 	}
 
 	public InventorylogInTo Calcul_arti(ArticlesInTO Article)
-			throws EJBException {
+			throws Exception {
 
 		List brachArticles = new Vector();
 		// ResultOutTO _return = new ResultOutTO();
@@ -1443,7 +1441,7 @@ public class AdminDAO extends CommonDAO {
 		ArticlesTO Article2 = new ArticlesTO();
 		InventorylogInTo Inventorylog = new InventorylogInTo();
 		int lstResultSet = 0;
-		try {
+		
 
 			Article2 = getArticlesByKey(Article.getItemCode());
 
@@ -1484,11 +1482,7 @@ public class AdminDAO extends CommonDAO {
 			Inventorylog.setAvgPrice(AvgPrice);
 			Inventorylog.setTotallc(Article.getOnHand());
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		
 		return Inventorylog;
 
 	}
