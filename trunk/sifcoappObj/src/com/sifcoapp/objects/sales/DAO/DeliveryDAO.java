@@ -26,7 +26,7 @@ public class DeliveryDAO extends CommonDAO{
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_delivery(?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_delivery(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -49,6 +49,19 @@ public class DeliveryDAO extends CommonDAO{
 		this.setString(5, "_ref1", param.getRef1());
 		this.setString(6, "_ref2", param.getRef2());
 		this.setString(7, "_comments", param.getComments());
+		this.setString(9,"_doctype", param.getDocnum());
+		this.setString(10,"_docstatus", param.getDocstatus());
+		this.setString(11,"_objtype", param.getObjtype());
+		this.setString(12, "_cardcode", param.getCardcode());
+		this.setString(13, "_cardname", param.getCardname());
+		if (param.getTaxdate() == null){
+			this.setDate(14, "_taxdate", param.getTaxdate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(param.getTaxdate().getTime());
+			this.setDate(14, "_taxdate", fecha);
+		}
+		
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
