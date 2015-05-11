@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 
 import com.sifcoapp.admin.ejb.AdminEJB;
+import com.sifcoapp.bussinessLogic.InventoryEJBLocal;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
@@ -24,10 +25,10 @@ import com.sifcoapp.objects.inventory.to.*;
 import com.sifcoapp.transaction.ejb.transactionEJB;
 
 /**
- * Session Bean implementation class InventoryEJB
+ * Session Bean implementation class InventoryEJB 
  */
 
-public class InventoryEJB implements InventoryEJBRemote {
+public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 	Double zero = 0.0;
 
 	/**
