@@ -55,7 +55,7 @@ public class PurchaseTest {
 		List lstPeriods = new Vector();
 		PurchaseInTO nuevo = new PurchaseInTO();
 		//nuevo.setSeries(8);
-		nuevo.setDocnum(485);
+		nuevo.setDocnum(12);
 		Date fecha= new Date();
 		//nuevo.setDocdate(fecha);
 		//nuevo.setSeries(42);

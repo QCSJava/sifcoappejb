@@ -49,7 +49,7 @@ public class DeliveryDAO extends CommonDAO{
 		this.setString(5, "_ref1", param.getRef1());
 		this.setString(6, "_ref2", param.getRef2());
 		this.setString(7, "_comments", param.getComments());
-		this.setString(9,"_doctype", param.getDocnum());
+		this.setString(9,"_doctype", param.getDoctype());
 		this.setString(10,"_docstatus", param.getDocstatus());
 		this.setString(11,"_objtype", param.getObjtype());
 		this.setString(12, "_cardcode", param.getCardcode());
