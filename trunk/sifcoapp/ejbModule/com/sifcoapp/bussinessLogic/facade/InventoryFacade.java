@@ -25,7 +25,7 @@ import com.sifcoapp.objects.inventory.to.TransfersTO;
 @Stateless
 public class InventoryFacade implements InventoryFacadeRemote {
 
-	@EJB private InventoryEJBLocal process;
+	//@EJB private InventoryEJBLocal process;
     public InventoryFacade() {
         // TODO Auto-generated constructor stub
     }
