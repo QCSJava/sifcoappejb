@@ -36,7 +36,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// TODO Auto-generated constructor stub
 	}
 
-	public  String last_Sales(int series,String _objtype) throws EJBException{
+	public  String last_Sales(int series,String _objtype) throws Exception{
 		
 		String ultimo = null;
 		SalesDAO DAO = new SalesDAO();

@@ -21,8 +21,7 @@ public class SalesDAO extends CommonDAO{
 	public  String last_Sales(int series,String _objtype) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
-		String ultimo = null;
-		
+		String ultimo= null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		
 		this.setDbObject("{call sp_get_last_sales(?,?)}");
@@ -41,13 +40,16 @@ public class SalesDAO extends CommonDAO{
 		liRowset = lstResultSet.listIterator();
 		
 		while (liRowset.hasNext()) {
-			
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			
-					ultimo=rowsetActual.getString(1);
+				while (rowsetActual.next()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			
+					
+			ultimo=rowsetActual.getString(1);
 				
 				rowsetActual.close();
-			
+				}	
 		}
 		return ultimo;	
 }
