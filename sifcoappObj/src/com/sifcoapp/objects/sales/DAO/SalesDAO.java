@@ -43,9 +43,7 @@ public class SalesDAO extends CommonDAO{
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			
 				while (rowsetActual.next()) {
-			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			
-					
 			ultimo=rowsetActual.getString(1);
 				
 				rowsetActual.close();

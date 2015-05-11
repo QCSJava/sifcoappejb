@@ -2,6 +2,7 @@ package com.sifcoapp.objects.purchase.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -49,6 +50,7 @@ public class PurchaseDAO extends CommonDAO{
 		this.setString(5, "_ref1", param.getRef1());
 		this.setString(6, "_ref2", param.getRef2());
 		this.setString(7, "_comments", param.getComments());
+	
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
