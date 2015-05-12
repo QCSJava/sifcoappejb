@@ -164,7 +164,18 @@ public class SalesEJB implements SalesEJBRemote {
 	public ResultOutTO inv_ClientCredi_mtto(ClientCrediTO parameters, int action)
 			throws Exception {
 		// TODO Auto-generated method stub
+		// --------------------------------------------------------------------------------------------------------------------------------
+				// Set el codigo de almacen del padre al detalle
+				// --------------------------------------------------------------------------------------------------------------------------------
+				Iterator<ClientCrediDetailTO> iterator1 = parameters.getclientDetails()
+						.iterator();
+				while (iterator1.hasNext()) {
 
+					ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator1
+							.next();
+					articleDetalle.setWhscode(parameters.getTowhscode());
+				}
+				// validaciones
 		ResultOutTO _return = new ResultOutTO();
 		_return = validateClientCredi(parameters);
 		System.out.println(_return.getCodigoError());
@@ -273,17 +284,17 @@ public class SalesEJB implements SalesEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		
 		// pasar el codigo de almacen a los hijos
-				Iterator<DeliveryTO> iterator3 = parameters.getDeliveryDetails()
+				Iterator<DeliveryDetailTO> iterator3 = parameters.getDeliveryDetails()
 						.iterator();
 				while (iterator3.hasNext()) {
 
-					DeliveryTO articleDetalle = (DeliveryTO) iterator3
+					DeliveryDetailTO articleDetalle = (DeliveryDetailTO) iterator3
 							.next();
-					articleDetalle.setTowhscode(parameters.getTowhscode());
+					articleDetalle.setWhscode(parameters.getTowhscode());
 				}
 				// -------------------------------------------------------------------------------------------------------------------------------
 				// validaciones-------------------------------------------------------------------------------------------------------------------
-		//validacion de los datos del delivery 
+		// validacion de los datos del delivery
 		_return = Validateinv_Delivery(parameters);
 		System.out.println(_return.getCodigoError());
 		if (_return.getCodigoError() != 0) {
