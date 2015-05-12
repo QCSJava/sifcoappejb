@@ -18,7 +18,7 @@ public class SalesDAO extends CommonDAO{
 	
 	
 	
-	public  String last_Sales(int series,String _objtype) throws Exception{
+	public  String last_input(int series,String _objtype) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
 		String ultimo= null;
@@ -27,7 +27,7 @@ public class SalesDAO extends CommonDAO{
 		this.setDbObject("{call sp_get_last_sales(?,?)}");
 		
 		this.setInt(1, "_series", series);
-		this.setString(2, "_objtype ",_objtype );
+		this.setString(2, "_objtype ",new Integer(_objtype) );
 		
 		
 		lstResultSet = this.runQuery();
