@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.EJBException;
+import javax.ejb.Stateless;
 
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.bussinessLogic.InventoryEJBLocal;
@@ -27,7 +28,7 @@ import com.sifcoapp.transaction.ejb.transactionEJB;
 /**
  * Session Bean implementation class InventoryEJB 
  */
-
+@Stateless
 public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 	Double zero = 0.0;
 
