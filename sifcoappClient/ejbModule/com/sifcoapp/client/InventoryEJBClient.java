@@ -18,8 +18,8 @@ public class InventoryEJBClient {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/InventoryEJB!com.sifcoapp.bussinessLogic.InventoryEJBRemote";
 	//Implementando EJB Facade
 	private static final String LOOKUP_STRING_FACADE = "java:global/sifcoappEAR/sifcoapp/InventoryFacade!com.sifcoapp.bussinessLogic.facade.InventoryFacadeRemote";
-	private static InventoryEJBRemote bean;
-	//private static InventoryFacadeRemote bean;
+	//private static InventoryEJBRemote bean;
+	private static InventoryFacadeRemote bean;
 	private static Context context = null;
 
 	public InventoryEJBClient() {
@@ -27,8 +27,8 @@ public class InventoryEJBClient {
 		// 2. Lookup and cast
 		try {
 			context = ClientUtility.getInitialContext();
-			bean = (InventoryEJBRemote) context.lookup(LOOKUP_STRING);
-			//bean = (InventoryFacadeRemote) context.lookup(LOOKUP_STRING_FACADE);
+			//bean = (InventoryEJBRemote) context.lookup(LOOKUP_STRING);
+			bean = (InventoryFacadeRemote) context.lookup(LOOKUP_STRING_FACADE);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
