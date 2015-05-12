@@ -33,7 +33,7 @@ import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.inventory.to.InventoryLogTO;
 import com.sifcoapp.objects.inventory.to.InventorylogInTo;
 import com.sun.rowset.CachedRowSetImpl;
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.deploymentExtensionType;
+
 
 public class AdminDAO extends CommonDAO {
 
