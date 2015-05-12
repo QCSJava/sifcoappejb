@@ -8,7 +8,7 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
-import org.glassfish.jersey.gf.ejb.internal.EjbExceptionMapper;
+
 
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
@@ -27,8 +27,7 @@ import com.sifcoapp.objects.inventory.to.InventoryLogTO;
 import com.sifcoapp.objects.inventory.to.InventorylogInTo;
 import com.sifcoapp.objects.sales.DAO.*;
 import com.sifcoapp.objects.sales.to.*;
-import com.sun.org.apache.regexp.internal.RESyntaxException;
-import com.sun.xml.ws.server.sei.EndpointResponseMessageBuilder.Bare;
+
 
 public class transactionEJB {
 	Double zero = 0.0;
