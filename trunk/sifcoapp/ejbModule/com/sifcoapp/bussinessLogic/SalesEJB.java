@@ -40,7 +40,7 @@ public class SalesEJB implements SalesEJBRemote {
 		String ultimo = null;
 		SalesDAO DAO = new SalesDAO();
 		try {
-			ultimo= DAO.last_Sales(series, _objtype);
+			ultimo= DAO.last_input(series, _objtype);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
