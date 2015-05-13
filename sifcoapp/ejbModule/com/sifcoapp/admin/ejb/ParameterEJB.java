@@ -21,14 +21,14 @@ import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.admin.to.parameterTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.TransfersDAO;
 import com.sifcoapp.objects.inventory.dao.TransfersDetailDAO;
 import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 
 public class ParameterEJB implements ParameterEJBRemote {
 	Double zero = 0.00;

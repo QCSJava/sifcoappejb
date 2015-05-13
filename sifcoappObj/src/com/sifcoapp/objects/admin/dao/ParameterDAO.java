@@ -21,8 +21,6 @@ import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.admin.to.parameterTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
@@ -31,8 +29,10 @@ import com.sifcoapp.objects.inventory.dao.GoodsissuesDetailDAO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
-import com.sifcoapp.objects.inventory.to.InventoryLogTO;
-import com.sifcoapp.objects.inventory.to.InventorylogInTo;
+import com.sifcoapp.objects.transaction.to.InventoryLogTO;
+import com.sifcoapp.objects.transaction.to.InventorylogInTo;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class ParameterDAO extends CommonDAO{

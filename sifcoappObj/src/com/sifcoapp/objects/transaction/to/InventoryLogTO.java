@@ -1,4 +1,4 @@
-package com.sifcoapp.objects.inventory.to;
+package com.sifcoapp.objects.transaction.to;
 
 import java.util.Date;
 

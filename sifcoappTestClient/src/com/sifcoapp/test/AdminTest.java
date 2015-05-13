@@ -19,8 +19,6 @@ import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
 import com.sifcoapp.objects.admin.to.TablesCatalogTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.security.to.ProfileDetOutTO;
@@ -514,59 +512,7 @@ public class AdminTest {
 					+ branch.getValue());
 		}
 	}
-
 	
-	public static void warehouseJournal_mtto() {
-
-		ResultOutTO _result = new ResultOutTO();
-		List detalles= new Vector();
-		WarehouseJournalTO para = new WarehouseJournalTO();
-		WarehouseJournalDetailTO detalle1= new WarehouseJournalDetailTO();
-		WarehouseJournalDetailTO detalle2= new WarehouseJournalDetailTO();
-		detalle1.setBalance(54.25);
-		detalle1.setCalcprice(25.25);
-		detalles.add(detalle1);
-		detalle2.setBalance(54.25);
-		detalle2.setCalcprice(25.25);
-		detalles.add(detalle2);
-		para.setDetailWarehouse(detalles);
-		para.setAllocation(25.25);
-		para.setTranstype(5);
-		
-
-		try {
-
-			 _result = AdminEJBService.adm_warehousejournal_mtto(para, 1);
-			 //para.setBase_num(2);
-		//	_result = AdminEJBService.cat_prl0_priceslist_mtto(para, 2, true);
-		} catch (Exception e) { // TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		System.out.println("luego de servicio"+"--"+_result.getMensaje());
-		System.out.println(_result.getCodigoError());
-
-	}
-	
-	public static void getWarehouse() {
-		List resp = null;
-		WarehouseJournalTO _return = null;
-		WarehouseJournalTO para = null;
-
-
-		try {
-			_return = AdminEJBService.getWarehouseJournalByKey(5);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(_return.getBase_ref()+"--"+_return.getTransseq());
-		Iterator<WarehouseJournalDetailTO> iterator = _return.getDetailWarehouse().iterator();
-		while (iterator.hasNext()) {
-			WarehouseJournalDetailTO det = (WarehouseJournalDetailTO) iterator.next();
-			System.out.println(det.getLayerid()+"---"+det.getBalance());
-		}
-	}
 
 	public static void findCatalogQS() {
 

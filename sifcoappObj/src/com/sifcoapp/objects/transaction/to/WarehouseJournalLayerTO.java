@@ -1,8 +1,8 @@
-package com.sifcoapp.objects.admin.to;
+package com.sifcoapp.objects.transaction.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
-public class WarehouseJournalDetailTO extends CommonTO {
+public class WarehouseJournalLayerTO extends CommonTO {
 
 	/**
 	 * 
@@ -16,11 +16,11 @@ public class WarehouseJournalDetailTO extends CommonTO {
 	private Double layerinqty;
 	private Double layeroutq;
 	private Double revaltotal;
-	public WarehouseJournalDetailTO() {
+	public WarehouseJournalLayerTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public WarehouseJournalDetailTO(int transseq, int layerid,
+	public WarehouseJournalLayerTO(int transseq, int layerid,
 			Double calcprice, Double balance, Double transvalue,
 			Double layerinqty, Double layeroutq, Double revaltotal) {
 		super();

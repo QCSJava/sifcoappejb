@@ -1,9 +1,37 @@
-package com.sifcoapp.objects.inventory.to;
+package com.sifcoapp.objects.transaction.to;
 
 import java.util.Date;
 
-public class InventorylogInTo {
+import com.sifcoapp.objects.common.to.CommonTO;
+
+public class InventorylogInTo extends CommonTO {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1589920682783810774L;
 	private int transseq;
+	private int layerId;
+	private int CalcPrice;
+	private int doclinenum;
+	private Double quantity;
+	private int loctype;
+	private String loccode;
+	private Double totallc;
+	private Double balance;
+	private String itemcode;
+	private String bpcardcode;
+	private Double AvgPrice;
+	private String jrnlmemo;
+	private String ref1;
+	private String ref2;
+	private int baseline;
+	private int snbtype;
+	private Double trasvalue;
+	private Double total;
+	private Double total_quantity;
+	private int usersign;
+	
 	public int getTransseq() {
 		return transseq;
 	}
@@ -163,25 +191,6 @@ public class InventorylogInTo {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	private int layerId;
-	private int CalcPrice;
-	private int doclinenum;
-	private Double quantity;
-	private int loctype;
-	private String loccode;
-	private Double totallc;
-	private Double balance;
-	private String itemcode;
-	private String bpcardcode;
-	private Double AvgPrice;
-	private String jrnlmemo;
-	private String ref1;
-	private String ref2;
-	private int baseline;
-	private int snbtype;
-	private Double trasvalue;
-	private Double total;
-	private Double total_quantity;
-	private int usersign;
+	
 
 }

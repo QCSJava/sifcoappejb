@@ -8,6 +8,7 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 
 import com.sifcoapp.bussinessLogic.CatalogEJBRemote;
+import com.sifcoapp.bussinessLogic.facade.CatalogFacadeRemote;
 import com.sifcoapp.clientutility.ClientUtility;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
@@ -16,7 +17,9 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 public class CatalogEJBClient {
 
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/CatalogEJB!com.sifcoapp.bussinessLogic.CatalogEJBRemote";
-	private static CatalogEJBRemote bean;
+	private static final String LOOKUP_STRING_FACADE = "java:global/sifcoappEAR/sifcoapp/CatalogFacade!com.sifcoapp.bussinessLogic.facade.CatalogFacadeRemote";
+	//private static CatalogEJBRemote bean;
+	private static CatalogFacadeRemote bean;
 	private static Context context = null;
 
 	public CatalogEJBClient() {
@@ -24,7 +27,8 @@ public class CatalogEJBClient {
 		// 2. Lookup and cast
 		try {
 			context = ClientUtility.getInitialContext();
-			bean = (CatalogEJBRemote) context.lookup(LOOKUP_STRING);
+			//bean = (CatalogEJBRemote) context.lookup(LOOKUP_STRING);
+			bean = (CatalogFacadeRemote) context.lookup(LOOKUP_STRING_FACADE);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

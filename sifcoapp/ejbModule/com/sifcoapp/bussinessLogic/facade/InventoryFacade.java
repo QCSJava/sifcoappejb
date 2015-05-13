@@ -4,6 +4,7 @@ import java.util.List;
  
 
 
+
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -15,9 +16,9 @@ import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
-import com.sifcoapp.objects.inventory.to.InventoryLogTO;
 import com.sifcoapp.objects.inventory.to.TransfersInTO;
 import com.sifcoapp.objects.inventory.to.TransfersTO;
+import com.sifcoapp.objects.transaction.to.InventoryLogTO;
 
 /**
  * Session Bean implementation class InventoryFacade
@@ -81,9 +82,5 @@ public class InventoryFacade implements InventoryFacadeRemote {
 		// TODO Auto-generated method stub
 		return process.getTransfersDetail(docentry);
 	}
-	public InventoryLogTO getInventoryLogByKey(int messageid)
-			throws EJBException {
-		// TODO Auto-generated method stub
-		return process.getInventoryLogByKey(messageid);
-	}
+	
 }

@@ -53,14 +53,16 @@ public class InventoryEJBClient {
 		return lstPeriods;
 	}
 
-	public ResultOutTO inv_goodsissues_mtto(GoodsissuesTO parameters, int accion) throws Exception {
+	public ResultOutTO inv_goodsissues_mtto(GoodsissuesTO parameters, int accion)
+			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO result;
 		result = bean.inv_goodsissues_mtto(parameters, accion);
 		return result;
 	}
 
-	public ResultOutTO inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion) throws Exception {
+	public ResultOutTO inv_GoodsReceipt_mtto(GoodsreceiptTO param, int accion)
+			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return;
 
@@ -69,7 +71,7 @@ public class InventoryEJBClient {
 		return _return;
 	}
 
-	public List getGoodsIssuesDetail(int docentry)throws Exception {
+	public List getGoodsIssuesDetail(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		List lstVector = new Vector();
 
@@ -86,13 +88,14 @@ public class InventoryEJBClient {
 
 		return lstVector;
 	}
-	
+
 	public GoodsissuesTO getGoodsissuesByKey(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		GoodsissuesTO lstPeriods = new GoodsissuesTO();
 		lstPeriods = bean.getGoodsissuesByKey(docentry);
 		return lstPeriods;
 	}
+
 	public GoodsreceiptTO getGoodsReceiptByKey(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		GoodsreceiptTO lstPeriods = new GoodsreceiptTO();
@@ -116,7 +119,8 @@ public class InventoryEJBClient {
 		return lstPeriods;
 	}
 
-	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int accion) throws Exception {
+	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int accion)
+			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return;
 		_return = bean.inv_transfers_mtto(parameters, accion);
@@ -132,11 +136,4 @@ public class InventoryEJBClient {
 		return lstVector;
 	}
 
-	
-	
-	public InventoryLogTO getInventoryLogByKey(int messageid) throws EJBException{
-		InventoryLogTO _return= new InventoryLogTO();
-		_return=bean.getInventoryLogByKey(messageid);
-		return _return;
-	}
 }
