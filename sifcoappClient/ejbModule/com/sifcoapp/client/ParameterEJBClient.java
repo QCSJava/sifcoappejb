@@ -32,7 +32,6 @@ public class ParameterEJBClient {
 
 	public ParameterEJBClient() {
 
-		// 2. Lookup and cast
 		try {
 			context = ClientUtility.getInitialContext();
 			bean = (ParameterEJBRemote) context.lookup(LOOKUP_STRING);
