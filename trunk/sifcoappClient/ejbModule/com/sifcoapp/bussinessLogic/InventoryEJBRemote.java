@@ -34,8 +34,4 @@ public interface InventoryEJBRemote {
 	public ResultOutTO inv_transfers_mtto(TransfersTO parameters, int accion)throws EJBException;
 
 	public List getTransfersDetail(int docentry) throws EJBException;
-
-	
-	
-	public InventoryLogTO getInventoryLogByKey(int messageid) throws EJBException;
 }

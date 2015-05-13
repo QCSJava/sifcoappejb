@@ -12,7 +12,7 @@ import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Stateless
-public class CatalogEJB implements CatalogEJBRemote {
+public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 
 	private Double zero = 0.00;
 

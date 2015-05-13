@@ -21,9 +21,9 @@ import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.admin.to.parameterTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 
 public class ParameterEJBClient {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/ParameterEJB!com.sifcoapp.admin.ejb.ParameterEJBRemote";

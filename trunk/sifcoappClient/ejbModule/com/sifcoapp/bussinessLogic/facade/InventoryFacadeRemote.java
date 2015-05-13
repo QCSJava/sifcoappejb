@@ -10,9 +10,9 @@ import com.sifcoapp.objects.inventory.to.GoodsReceiptInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesInTO;
 import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
-import com.sifcoapp.objects.inventory.to.InventoryLogTO;
 import com.sifcoapp.objects.inventory.to.TransfersInTO;
 import com.sifcoapp.objects.inventory.to.TransfersTO;
+import com.sifcoapp.objects.transaction.to.InventoryLogTO;
 
 @Remote
 public interface InventoryFacadeRemote {
@@ -41,5 +41,4 @@ public interface InventoryFacadeRemote {
 
 	public List getTransfersDetail(int docentry) throws EJBException;
 
-	public InventoryLogTO getInventoryLogByKey(int messageid) throws EJBException;
 }

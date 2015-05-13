@@ -132,29 +132,42 @@ public class InventoryTEST {
 	public static void GoodReceipt_mtto() {
 
 		ResultOutTO _result = new ResultOutTO();
-		GoodsReceiptDetailTO art= new GoodsReceiptDetailTO();
+		GoodsReceiptDetailTO art = new GoodsReceiptDetailTO();
+		GoodsReceiptDetailTO art2 = new GoodsReceiptDetailTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
 		parameters.setDocnum(26);
 		parameters.setObjtype("30");
 		parameters.setUsersign(1);
 		List detalle = new Vector();
+		art.setLinenum(1);
 		art.setAcctcode("1.1");
 		art.setObjtype("30");
 		art.setWhscode("ALM-001");
 		art.setItemcode("001-004-545-6114");
-		art.setPrice(5.30);
-		art.setQuantity(10.00);
-        art.setLinetotal(53.00);
-        art.setObjtype("30");
-        detalle.add(art);
-        java.util.Date utilDate = new java.util.Date(); //fecha actual
-		  long lnMilisegundos = utilDate.getTime();
-		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-       
-		  parameters.setGoodReceiptDetail(detalle);
-        parameters.setDocdate(sqlDate);
-        parameters.setTowhscode("ALM-001");
+		art.setPrice(7.378);
+		art.setQuantity(2.0);
+		art.setLinetotal(14.756);
+		art.setObjtype("30");
+		detalle.add(art);
+		art2.setLinenum(2);
+		art2.setAcctcode("1.1");
+		art2.setObjtype("30");
+		art2.setWhscode("ALM-001");
+		art2.setItemcode("001-021");
+		art2.setPrice(0.0813);
+		art2.setQuantity(1.0);
+		art2.setLinetotal(0.0813);
+		art2.setObjtype("30");
+		detalle.add(art2);
 		
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+
+		parameters.setGoodReceiptDetail(detalle);
+		parameters.setDocdate(sqlDate);
+		parameters.setTowhscode("ALM-001");
+
 		// parameters.setDoctotal(111.2);
 		try {
 			_result = Inventory.inv_GoodsReceipt_mtto(parameters, 1);
@@ -164,8 +177,8 @@ public class InventoryTEST {
 		}
 
 		System.out.println("luego de servicio");
-		System.out.println(_result.getCodigoError() + "----"
-				+ _result.getDocentry());
+		System.out.println(_result.getCodigoError() + "-"
+				+ _result.getDocentry()+ "-"+ _result.getMensaje());
 
 	}
 
@@ -447,28 +460,4 @@ public class InventoryTEST {
 		}
 	}
 
-	
-	
-	public static void getInventory_by_key() {
-
-		List lstPeriods = new Vector();
-		InventoryLogTO nuevo = new InventoryLogTO();
-
-		// nuevo.setDocdate(fecha);
-		// nuevo.setSeries(42);
-		try {
-			nuevo = Inventory.getInventoryLogByKey(6);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// TransfersTO periodo = (TransfersTO) lstPeriods.get(0);
-		System.out.println(nuevo.getBase_ref() + " - " 
-				+ " - " + nuevo.getDocentry() + "-");
-		/*
-		 * while (iterator.hasNext()) { TransfersTO periodo = (TransfersTO)
-		 * iterator.next(); System.out.println(periodo.getDocnum()+ " - " +
-		 * periodo.getSeries() + " - " + periodo.getDocentry()); }
-		 */
-	}
 }

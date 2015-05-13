@@ -20,13 +20,13 @@ import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalDetailTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.TransfersDAO;
 import com.sifcoapp.objects.inventory.dao.TransfersDetailDAO;
 import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 
 /**
  * Session Bean implementation class AdminEJB
@@ -585,172 +585,6 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,
-			int accion) throws EJBException {
-		ResultOutTO _return = new ResultOutTO();
-		AdminDAO adminDAO = new AdminDAO();
-		AdminDAO adminDAO1 = new AdminDAO();
-		adminDAO.setIstransaccional(true);
-		adminDAO1.setIstransaccional(true);
-		int clave;
-		int layerid = 0;
-		if (param.getAllocation() == null) {
-			param.setAllocation(zero);
-		}
-		if (param.getBexpval() == null) {
-			param.setBexpval(zero);
-		}
-		if (param.getBnegaval() == null) {
-			param.setBnegaval(zero);
-		}
-		if (param.getBtransval() == null) {
-			param.setBtransval(zero);
-		}
-		if (param.getCogsval() == null) {
-			param.setCogsval(zero);
-		}
-		if (param.getDecval() == null) {
-			param.setDecval(zero);
-		}
-		if (param.getDoffdecval() == null) {
-			param.setDoffdecval(zero);
-		}
-		if (param.getExpalloc() == null) {
-			param.setExpalloc(zero);
-		}
-		if (param.getExpenses() == null) {
-			param.setExpenses(zero);
-		}
-		if (param.getIncval() == null) {
-			param.setIncval(zero);
-		}
-		if (param.getInqty() == null) {
-			param.setInqty(zero);
-		}
-		if (param.getIoffincval() == null) {
-			param.setIoffincval(zero);
-		}
-		if (param.getNeginvadjs() == null) {
-			param.setNeginvadjs(zero);
-		}
-		if (param.getOexpalloc() == null) {
-			param.setOexpalloc(zero);
-		}
-		if (param.getOpenalloc() == null) {
-			param.setOpenalloc(zero);
-		}
-		if (param.getOpenexp() == null) {
-			param.setOpenexp(zero);
-		}
-		if (param.getOpenneginv() == null) {
-			param.setOpenneginv(zero);
-		}
-		if (param.getOpenpa() == null) {
-			param.setOpenpa(zero);
-		}
-		if (param.getOpenpaoff() == null) {
-			param.setOpenpaoff(zero);
-		}
-		if (param.getOpenpdiff() == null) {
-			param.setOpenpdiff(zero);
-		}
-		if (param.getOpenqty() == null) {
-			param.setOpenqty(zero);
-		}
-		if (param.getOpenstock() == null) {
-			param.setOpenstock(zero);
-		}
-		if (param.getOutqty() == null) {
-			param.setOutqty(zero);
-		}
-		if (param.getPaoffval() == null) {
-			param.setPaoffval(zero);
-		}
-		if (param.getPaval() == null) {
-			param.setPaval(zero);
-		}
-		if (param.getPrice() == null) {
-			param.setPrice(zero);
-		}
-		if (param.getPricediff() == null) {
-			param.setPricediff(zero);
-		}
-		if (param.getSumstock() == null) {
-			param.setSumstock(zero);
-		}
-		if (param.getVarval() == null) {
-			param.setVarval(zero);
-		}
-		if (param.getWipval() == null) {
-			param.setWipval(zero);
-		}
-		if (param.getWipvarval() == null) {
-			param.setWipvarval(zero);
-		}
-		try {
-			clave = adminDAO.adm_warehousejournal_mtto(param, accion);
-			Iterator<WarehouseJournalDetailTO> iterator = param
-					.getDetailWarehouse().iterator();
-			while (iterator.hasNext()) {
-				WarehouseJournalDetailTO nuevo = iterator.next();
-				if (nuevo.getBalance() == null) {
-					nuevo.setBalance(zero);
-				}
-				if (nuevo.getCalcprice() == null) {
-					nuevo.setCalcprice(zero);
-				}
-				if (nuevo.getLayerinqty() == null) {
-					nuevo.setLayerinqty(zero);
-				}
-				if (nuevo.getLayeroutq() == null) {
-					nuevo.setLayeroutq(zero);
-				}
-				if (nuevo.getRevaltotal() == null) {
-					nuevo.setRevaltotal(zero);
-				}
-				if (nuevo.getTransvalue() == null) {
-					nuevo.setTransvalue(zero);
-				}
-				layerid = layerid + 1;
-				nuevo.setTransseq(clave);
-				nuevo.setLayerid(layerid);
-				adminDAO1.adm_warehousejournalDetail_mtto(nuevo, accion);
-			}
-			adminDAO.forceCommit();
-			adminDAO1.forceCommit();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			adminDAO.rollBackConnection();
-			adminDAO1.rollBackConnection();
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			adminDAO.forceCloseConnection();
-			adminDAO1.forceCloseConnection();
-		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados con exito");
-		return _return;
-	}
-
-	public WarehouseJournalTO getWarehouseJournalByKey(int transseq)
-			throws EJBException {
-		WarehouseJournalTO _return = null;
-
-		AdminDAO adminDAO = new AdminDAO();
-
-		// para el manejo de transacciones
-		adminDAO.setIstransaccional(true);
-		try {
-			_return = adminDAO.getWarehouseJournalByKey(transseq);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-
-		return _return;
-	}
-
 	public List findCatQS(String nameCatalog) throws EJBException {
 		// TODO Auto-generated method stub
 		List catlgLst = null;
@@ -781,12 +615,12 @@ public class AdminEJB implements AdminEJBRemote {
 				_return.setMensaje("No se encontro Ningun Almacen con Este codigo ");
 				return _return;
 			}
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-		
+
 		if (_branch.isLocked()) {
 			_return.setCodigoError(1);
 			_return.setMensaje("Almacen se encuentra Bloqueado");

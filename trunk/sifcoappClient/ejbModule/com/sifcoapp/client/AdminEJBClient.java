@@ -17,8 +17,8 @@ import com.sifcoapp.objects.admin.to.EnterpriseOutTO;
 import com.sifcoapp.objects.admin.to.EnterpriseTO;
 import com.sifcoapp.objects.admin.to.PricesListInTO;
 import com.sifcoapp.objects.admin.to.PricesListTO;
-import com.sifcoapp.objects.admin.to.WarehouseJournalTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 
 public class AdminEJBClient {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/AdminEJB!com.sifcoapp.admin.ejb.AdminEJBRemote";
@@ -187,21 +187,7 @@ public class AdminEJBClient {
 
 		return _return;
 	}
-
-	public ResultOutTO adm_warehousejournal_mtto(WarehouseJournalTO param,
-			int accion) throws EJBException {
-		ResultOutTO _return = new ResultOutTO();
-		_return = bean.adm_warehousejournal_mtto(param, accion);
-		return _return;
-	}
-
-	public WarehouseJournalTO getWarehouseJournalByKey(int transseq)
-			throws EJBException {
-		WarehouseJournalTO _return = new WarehouseJournalTO();
-		_return = bean.getWarehouseJournalByKey(transseq);
-		return _return;
-	}
-
+	
 	/*
 	 * busqueda de catalogos por query string Rutilio Iraheta Marzo 2015
 	 */
