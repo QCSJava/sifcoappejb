@@ -49,9 +49,16 @@ public class UnityDAO extends CommonDAO {
 		this.setString(15,"_relatedacc1",parameter.getRelatedacc1());
         this.setString(16, "_relatedacc2",parameter.getRelatedacc2());	
         this.setString(17,"_relatedacc3",parameter.getRelatedacc3());
-        this.setString(18, "_relatedacc4",parameter.getRelatedacc4());	
-        this.setString(19,"_purchasedate", parameter.getPurchasedate());
+        this.setString(18, "_relatedacc4",parameter.getRelatedacc4());
+        if (parameter.getPurchasedate() == null){
+			this.setDate(19,"_purchasedate", parameter.getPurchasedate());
+		}else
+		{
+			java.sql.Date fecha= new java.sql.Date(parameter.getPurchasedate().getTime());
+			this.setDate(19,"_purchasedate", fecha);
+		}
         this.setString(20,"_usersign",parameter.getUsersign());
+        this.setInt(21,"_action",action);
             
 		v_resp = this.runUpdate();
 		
@@ -93,20 +100,13 @@ public class UnityDAO extends CommonDAO {
 					parameter.setYear(rowsetActual.getInt(11));
 					parameter.setBrand(rowsetActual.getString(12));
 					parameter.setDuedate(rowsetActual.getDate(13));
-					
-					/*private String dflaccount;
-					private String relatedacc1;
-					private String relatedacc2;
-					private String relatedacc3;
-					private String relatedacc4;
-					private Date purchasedate;
-					private int usersign;
-					parameter.setParametercode(rowsetActual.getInt(1));
-					parameter.setParametername(rowsetActual.getString(2));
-					parameter.setValue1(rowsetActual.getString(3));
-					parameter.setValue2(rowsetActual.getString(4));
-					parameter.setValue3(rowsetActual.getString(5));
-					parameter.setUsersign(rowsetActual.getInt(6));*/
+					parameter.setDflaccount(rowsetActual.getString(14));
+					parameter.setRelatedacc1(rowsetActual.getString(15));
+					parameter.setRelatedacc2(rowsetActual.getString(16));
+					parameter.setRelatedacc3(rowsetActual.getString(17));
+					parameter.setRelatedacc4(rowsetActual.getString(18));
+					parameter.setPurchasedate(rowsetActual.getDate(19));
+					parameter.setUsersign(rowsetActual.getInt(20));
 					_return.add(parameter);
 				}
 				rowsetActual.close();
@@ -117,5 +117,58 @@ public class UnityDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	public UnityTO getUnity_bykey(int code) throws Exception {
+		UnityTO _return = new UnityTO();
+		List lstResultSet = null;
 
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_unity_bykey(?)}");
+		
+		this.setInt(1, "_code", code);
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					UnityTO parameter = new UnityTO();
+					parameter.setCode(rowsetActual.getString(1));
+					parameter.setRecord(rowsetActual.getString(2));
+					parameter.setLicense(rowsetActual.getString(3));
+					parameter.setCard(rowsetActual.getString(4));
+					parameter.setDriver(rowsetActual.getString(5));
+					parameter.setCardcode(rowsetActual.getString(6));
+					parameter.setCardname(rowsetActual.getString(7));
+					parameter.setNotes(rowsetActual.getString(8));
+					parameter.setType(rowsetActual.getString(9));
+					parameter.setStatus(rowsetActual.getString(10));
+					parameter.setYear(rowsetActual.getInt(11));
+					parameter.setBrand(rowsetActual.getString(12));
+					parameter.setDuedate(rowsetActual.getDate(13));
+					parameter.setDflaccount(rowsetActual.getString(14));
+					parameter.setRelatedacc1(rowsetActual.getString(15));
+					parameter.setRelatedacc2(rowsetActual.getString(16));
+					parameter.setRelatedacc3(rowsetActual.getString(17));
+					parameter.setRelatedacc4(rowsetActual.getString(18));
+					parameter.setPurchasedate(rowsetActual.getDate(19));
+					parameter.setUsersign(rowsetActual.getInt(20));
+					//_return.add(parameter);
+					_return=parameter;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 }
