@@ -25,9 +25,9 @@ public class SalesEJBClient {
 		}
 	}
 	
-	public String last_Sales(int series, String _objtype) throws Exception{
+	public String last_INPUT(int series, String _objtype) throws Exception{
 		String _return;
-		_return= bean.last_Sales(series, _objtype);
+		_return= bean.last_INPUT(series, _objtype);
 		return _return;
 		
 	}

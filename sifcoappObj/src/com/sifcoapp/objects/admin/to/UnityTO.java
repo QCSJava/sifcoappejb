@@ -2,7 +2,7 @@ package com.sifcoapp.objects.admin.to;
 
 import java.sql.Date;
 
-public class unityTO {
+public class UnityTO {
 	public String getCode() {
 		return code;
 	}
@@ -123,11 +123,11 @@ public class unityTO {
 	public void setUsersign(int usersign) {
 		this.usersign = usersign;
 	}
-	public unityTO() {
+	public UnityTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public unityTO(String code, String record, String license, String card,
+	public UnityTO(String code, String record, String license, String card,
 			String driver, String cardcode, String cardname, String notes,
 			String type, String status, int year, String brand, Date duedate,
 			String dflaccount, String relatedacc1, String relatedacc2,
