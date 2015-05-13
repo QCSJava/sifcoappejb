@@ -27,7 +27,7 @@ public class SalesDAO extends CommonDAO{
 		this.setDbObject("{call sp_get_last_sales(?,?)}");
 		
 		this.setInt(1, "_series", series);
-		this.setString(2, "_objtype ",new Integer(_objtype) );
+		this.setInt(2, "_objtype ",new Integer(_objtype) );
 		
 		
 		lstResultSet = this.runQuery();
