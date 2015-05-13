@@ -360,9 +360,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Calculo de existencias y costos
 		// --------------------------------------------------------------------------------------------------------------------------------
-		Iterator<TransactionTo> iterator0 = transactions.iterator();
-		while (iterator0.hasNext()) {
-			TransactionTo ivt = (TransactionTo) iterator0.next();
+		for (Object object :transactions){
+			TransactionTo ivt = (TransactionTo) object;
 			ivt = trans.calculate(ivt);
 		}
 
@@ -372,11 +371,11 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 		for (Object object :transactions){
 			TransactionTo ivt = (TransactionTo)object;
-			inventoryLog = trans.fill_Inventory_Log(ivt);
-								
+
+			inventoryLog = trans.fill_Inventory_Log(ivt);							
 			res_invet = trans.save_Inventory_Log(inventoryLog, conn);
 			// Asignación de codigo MessageId
-			ivt.setMessageid(res_invet.getDocentry());
+			ivt.setMessageid(res_invet.getDocentry());			
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -395,10 +394,9 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// Registro de Warehouse Journal layer
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		Iterator<TransactionTo> iterator2 = transactions.iterator();
-		while (iterator2.hasNext()) {
+		for (Object object :transactions){
 
-			TransactionTo ivt = (TransactionTo) iterator2.next();
+			TransactionTo ivt = (TransactionTo) object;
 			warehouseJournallayer = trans.fill_WarehouseJournalLayer(ivt);
 			// Asiganción de TransSeq
 			res_whj = trans.save_WarehouseJournalLayer(warehouseJournallayer,
@@ -410,10 +408,9 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// Actualizacion de existencia articulos y almacenes
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		Iterator<TransactionTo> iterator3 = transactions.iterator();
-		while (iterator3.hasNext()) {
+		for (Object object :transactions){
 
-			TransactionTo ivt = (TransactionTo) iterator3.next();
+			TransactionTo ivt = (TransactionTo) object;
 			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 
@@ -442,7 +439,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 	private List fill_transaction(GoodsreceiptTO document) {
 		List _return = new Vector();
-		TransactionTo transaction = new TransactionTo();
+		
 
 		Iterator<GoodsReceiptDetailTO> iterator = document
 				.getGoodReceiptDetail().iterator();
@@ -450,6 +447,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			GoodsReceiptDetailTO detail = (GoodsReceiptDetailTO) iterator
 					.next();
 
+			TransactionTo transaction = new TransactionTo();
 			transaction.setTranstype(Integer.parseInt(document.getObjtype()));
 			transaction.setCreatedby(detail.getDocentry());
 			transaction.setBase_ref(Integer.toString(document.getDocnum()));
