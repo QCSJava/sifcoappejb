@@ -1249,6 +1249,9 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			try {
 				branch = admin.getBranchByKey(parameters.getTowhscode());
 				art1.setAccount(branch.getBalinvntac());
+				if (branch.getBalinvntac() == null){
+					throw new Exception("No hay una cuenta contable asignada");
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
