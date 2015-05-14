@@ -223,6 +223,8 @@ public class SalesEJB implements SalesEJBRemote {
 				}
 			}
 			DAO.forceCommit();
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos guardados correctamente");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
@@ -231,8 +233,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
+		
 		return _return;
 	}
 
@@ -341,6 +342,8 @@ public class SalesEJB implements SalesEJBRemote {
 				}
 			}
 			DAO.forceCommit();
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos guardados correctamente");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
@@ -349,8 +352,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
+		
 		return _return;
 	}
 
