@@ -252,137 +252,134 @@ public class AccountingEJB implements AccountingEJBRemote {
 	}
 
 	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) {
-
-		return journalEntry_mtto(parameters, action, null);
-	}
-
-	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action,
-			Connection _conn) throws EJBException {
-
-		JournalEntryDAO DAO;
-		if (_conn == null) {
-			DAO = new JournalEntryDAO();
-		} else {
-			DAO = new JournalEntryDAO(_conn);
-		}
-
-		DAO.setIstransaccional(true);
-		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(
-				DAO.getConn());
-		JournalLinesDAO.setIstransaccional(true);
-
-		// VALOR POR DEFECTO PARA LOS DOUBLES##############
-		double zero = 0.00;
 		ResultOutTO _return = new ResultOutTO();
-
+		JournalEntryDAO DAO = new JournalEntryDAO();
 		try {
-			if (parameters.getLoctotal() == null) {
-				parameters.setLoctotal(zero);
-			}
-			if (parameters.getSystotal() == null) {
-				parameters.setSystotal(zero);
-			}
-			if (parameters.getTransrate() == null) {
-				parameters.setTransrate(zero);
-			}
-			if (parameters.getWtapplied() == null) {
-				parameters.setWtapplied(zero);
-			}
-			if (parameters.getBaseamnt() == null) {
-				parameters.setBaseamnt(zero);
-			}
-			if (parameters.getBasevtat() == null) {
-				parameters.setBasevtat(zero);
-			}
-			_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
-			_return.getDocentry();
-			Iterator<JournalEntryLinesTO> iterator = parameters
-					.getJournalentryList().iterator();
-			while (iterator.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
-						.next();
-				// ------------------------------------------------------------------------------------------------------------
-				// nueva instancia de AccountTO para mandar como parametros para
-				// la funcion de actualizar saldos
-				// ------------------------------------------------------------------------------------------------------------
-				AccountTO account = new AccountTO();
-				int acction = 0;
-				// ------------------------------------------------------------------------------------------------------------
-				// asigna el valor de la cuenta
-				// ------------------------------------------------------------------------------------------------------------
-				if (Detalle.getDebit() == null) {
-					Detalle.setDebit(zero);
-				} else {
-					account.setCurrtotal(Detalle.getDebit());
-					Detalle.setDebcred("D");
-
-				}
-				// asigna el valor de la cuenta
-				if (Detalle.getCredit() == null) {
-					Detalle.setCredit(zero);
-				} else {
-					account.setCurrtotal(Detalle.getCredit());
-					Detalle.setDebcred("C");
-				}
-				if (Detalle.getTomthsum() == null) {
-					Detalle.setTomthsum(zero);
-				}
-				if (Detalle.getBasesum() == null) {
-					Detalle.setBasesum(zero);
-				}
-				if (Detalle.getVatrate() == null) {
-					Detalle.setVatrate(zero);
-				}
-				if (Detalle.getSysbasesum() == null) {
-					Detalle.setSysbasesum(zero);
-				}
-				if (Detalle.getVatamount() == null) {
-					Detalle.setVatamount(zero);
-				}
-				if (Detalle.getGrossvalue() == null) {
-					Detalle.setGrossvalue(zero);
-				}
-				if (Detalle.getBalduedeb() == null) {
-					Detalle.setBalduedeb(zero);
-				}
-				if (Detalle.getBalduecred() == null) {
-					Detalle.setBalduecred(zero);
-				}
-				if (Detalle.getTotalvat() == null) {
-					Detalle.setTotalvat(zero);
-				}
-				// Para articulos nuevos
-				System.out.println("" + _return + "");
-				// ---------------------------------------------------------------------------------------------------------------
-				// actualizacion de saldo de cuenta
-				// ---------------------------------------------------------------------------------------------------------------
-				account.setAcctcode(Detalle.getAccount());
-				AccountingDAO DAO1 = new AccountingDAO(DAO.getConn());
-				DAO1.setIstransaccional(true);
-				DAO1.update_currtotal_accout(account, Detalle.getDebcred());
-				// ---------------------------------------------------------------------------------------------------------------
-				Detalle.setTransid(_return.getDocentry());
-				if (action == Common.MTTOINSERT) {
-					JournalLinesDAO.journalEntryLines_mtto(Detalle,
-							Common.MTTOINSERT);
-				}
-				if (action == Common.MTTODELETE) {
-					JournalLinesDAO.journalEntryLines_mtto(Detalle,
-							Common.MTTODELETE);
-				}
-			}
+			_return = journalEntry_mtto(parameters, action, DAO.getConn());
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
-
 			DAO.forceCloseConnection();
-			JournalLinesDAO.forceCloseConnection();
-			// DAO1.forceCloseConnection();
+		}
+		return _return;
+	}
+
+	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action,
+			Connection _conn) throws Exception {
+
+		JournalEntryDAO DAO = new JournalEntryDAO(_conn);
+
+		DAO.setIstransaccional(true);
+		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(_conn);
+		JournalLinesDAO.setIstransaccional(true);
+
+		// Valores por defecto
+		double zero = 0.00;
+		ResultOutTO _return = new ResultOutTO();
+
+		if (parameters.getLoctotal() == null) {
+			parameters.setLoctotal(zero);
+		}
+		if (parameters.getSystotal() == null) {
+			parameters.setSystotal(zero);
+		}
+		if (parameters.getTransrate() == null) {
+			parameters.setTransrate(zero);
+		}
+		if (parameters.getWtapplied() == null) {
+			parameters.setWtapplied(zero);
+		}
+		if (parameters.getBaseamnt() == null) {
+			parameters.setBaseamnt(zero);
+		}
+		if (parameters.getBasevtat() == null) {
+			parameters.setBasevtat(zero);
+		}
+
+		// Guardar encabezado
+
+		_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
+		_return.getDocentry();
+
+		// Guardar detalle
+		Iterator<JournalEntryLinesTO> iterator = parameters
+				.getJournalentryList().iterator();
+		while (iterator.hasNext()) {
+			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator.next();
+			// ------------------------------------------------------------------------------------------------------------
+			// nueva instancia de AccountTO para mandar como parametros para
+			// la funcion de actualizar saldos
+			// ------------------------------------------------------------------------------------------------------------
+			AccountTO account = new AccountTO();
+			int acction = 0;
+			// ------------------------------------------------------------------------------------------------------------
+			// Valores por defecto del detalle
+			// ------------------------------------------------------------------------------------------------------------
+			if (Detalle.getDebit() == null) {
+				Detalle.setDebit(zero);
+			} else {
+				account.setCurrtotal(Detalle.getDebit());
+				Detalle.setDebcred("D");
+			}
+			if (Detalle.getCredit() == null) {
+				Detalle.setCredit(zero);
+			} else {
+				account.setCurrtotal(Detalle.getCredit());
+				Detalle.setDebcred("C");
+			}
+			if (Detalle.getTomthsum() == null) {
+				Detalle.setTomthsum(zero);
+			}
+			if (Detalle.getBasesum() == null) {
+				Detalle.setBasesum(zero);
+			}
+			if (Detalle.getVatrate() == null) {
+				Detalle.setVatrate(zero);
+			}
+			if (Detalle.getSysbasesum() == null) {
+				Detalle.setSysbasesum(zero);
+			}
+			if (Detalle.getVatamount() == null) {
+				Detalle.setVatamount(zero);
+			}
+			if (Detalle.getGrossvalue() == null) {
+				Detalle.setGrossvalue(zero);
+			}
+			if (Detalle.getBalduedeb() == null) {
+				Detalle.setBalduedeb(zero);
+			}
+			if (Detalle.getBalduecred() == null) {
+				Detalle.setBalduecred(zero);
+			}
+			if (Detalle.getTotalvat() == null) {
+				Detalle.setTotalvat(zero);
+			}
+
+			// ---------------------------------------------------------------------------------------------------------------
+			Detalle.setTransid(_return.getDocentry());
+			if (action == Common.MTTOINSERT) {
+				JournalLinesDAO.journalEntryLines_mtto(Detalle,
+						Common.MTTOINSERT);
+			}
+			if (action == Common.MTTODELETE) {
+				JournalLinesDAO.journalEntryLines_mtto(Detalle,
+						Common.MTTODELETE);
+			}
+
+			// ---------------------------------------------------------------------------------------------------------------
+			// actualizacion de saldo de cuenta
+			// ---------------------------------------------------------------------------------------------------------------
+			account.setAcctcode(Detalle.getAccount());
+			AccountingDAO DAO1 = new AccountingDAO(_conn);
+			DAO1.setIstransaccional(true);
+			
+			DAO1.update_currtotal_accout(account, Detalle.getDebcred());
 
 		}
+
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;

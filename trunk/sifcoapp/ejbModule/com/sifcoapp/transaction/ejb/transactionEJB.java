@@ -84,7 +84,7 @@ public class transactionEJB {
 		warehouseDAO.setIstransaccional(true);
 
 		_return.setDocentry(warehouseDAO.adm_warehousejournalLayer_mtto(
-				warehousejournal, 1));
+				warehousejournal, Common.MTTOINSERT));
 
 		if (_return.getDocentry() == 0) {
 			_return.setCodigoError(1);
@@ -210,7 +210,7 @@ public class transactionEJB {
 		WarehouseJournalLayer.setLayeroutq(transaction.getOutqty());
 		WarehouseJournalLayer.setRevaltotal(zero);
 
-		return null;
+		return WarehouseJournalLayer;
 	}
 
 	public TransactionTo calculate(TransactionTo transaction)
