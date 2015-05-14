@@ -338,7 +338,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		ResultOutTO res_whj = new ResultOutTO();
 		ResultOutTO res_whjl = new ResultOutTO();
 		ResultOutTO res_jour = new ResultOutTO();
-		
+
 		ResultOutTO res_UpdateOnhand = new ResultOutTO();
 		ResultOutTO res_UpdateWareHouse = new ResultOutTO();
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO(conn);
@@ -423,7 +423,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// -----------------------------------------------------------------------------------
 
 		journal = fill_JournalEntry(goodReceipt);
-		
+
 		AccountingEJB account = new AccountingEJB();
 		res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT, conn);
 
@@ -431,7 +431,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
 		goodReceipt.setTransid(res_jour.getDocentry());
-		_return = inv_GoodsReceipt_mtto(goodReceipt,Common.MTTOUPDATE);
+		_return = inv_GoodsReceipt_mtto(goodReceipt, Common.MTTOUPDATE);
 
 		return _return;
 	}
@@ -1182,7 +1182,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 	// #region Transacciones
 
-	public JournalEntryTO fill_JournalEntry(GoodsreceiptTO parameters) throws EJBException {
+	public JournalEntryTO fill_JournalEntry(GoodsreceiptTO parameters)
+			throws Exception {
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		Double total = zero;
@@ -1244,18 +1245,16 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setLine_id(1);
 			// buscar la cuenta asignada al almacen
 			AdminDAO admin = new AdminDAO();
-			BranchTO branch;
+			BranchTO branch = new BranchTO();
 			// buscando la cuenta asignada de cuenta de existencias al almacen
-			try {
-				branch = admin.getBranchByKey(parameters.getTowhscode());
-				art1.setAccount(branch.getBalinvntac());
-				if (branch.getBalinvntac() == null){
-					throw new Exception("No hay una cuenta contable asignada");
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+			branch = admin.getBranchByKey(parameters.getTowhscode());
+			art1.setAccount(branch.getBalinvntac());
+
+			if (branch.getBalinvntac() == null) {
+				throw new Exception("No hay una cuenta contable asignada");
 			}
+
 			art1.setDebit(sum);
 			detail.add(art1);
 			art2.setLine_id(2);
