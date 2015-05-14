@@ -325,7 +325,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 	}
 
-	public ResultOutTO save_TransactionGoodsReceipt(GoodsreceiptTO parameters,
+	public ResultOutTO save_TransactionGoodsReceipt(GoodsreceiptTO goodReceipt,
 			int action, Connection conn) throws Exception {
 
 		// Variables
@@ -338,29 +338,31 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		ResultOutTO res_whj = new ResultOutTO();
 		ResultOutTO res_whjl = new ResultOutTO();
 		ResultOutTO res_jour = new ResultOutTO();
+		
 		ResultOutTO res_UpdateOnhand = new ResultOutTO();
 		ResultOutTO res_UpdateWareHouse = new ResultOutTO();
 		GoodsReceiptDAO DAO = new GoodsReceiptDAO(conn);
-		TransactionDAO transDAO = new TransactionDAO();
 		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(conn);
 		transactionEJB trans = new transactionEJB();
+		JournalEntryTO journal = new JournalEntryTO();
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Guardar Encabezados y detalles de Entrada
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		_return = inv_GoodsReceipt_save(parameters, action, conn);
+		_return = inv_GoodsReceipt_save(goodReceipt, action, conn);
+		goodReceipt.setDocentry(_return.getDocentry());
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Llenar objeto tipo transacción
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		transactions = fill_transaction(parameters);
+		transactions = fill_transaction(goodReceipt);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Calculo de existencias y costos
 		// --------------------------------------------------------------------------------------------------------------------------------
-		for (Object object :transactions){
+		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
 			ivt = trans.calculate(ivt);
 		}
@@ -369,49 +371,48 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// Registro de Inventory Log
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		for (Object object :transactions){
-			TransactionTo ivt = (TransactionTo)object;
+		for (Object object : transactions) {
+			TransactionTo ivt = (TransactionTo) object;
 
-			inventoryLog = trans.fill_Inventory_Log(ivt);							
+			inventoryLog = trans.fill_Inventory_Log(ivt);
 			res_invet = trans.save_Inventory_Log(inventoryLog, conn);
 			// Asignación de codigo MessageId
-			ivt.setMessageid(res_invet.getDocentry());			
+			ivt.setMessageid(res_invet.getDocentry());
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Registro de Warehouse Journal
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		for (Object object :transactions){
+		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
 			warehouseJournal = trans.fill_WarehouseJournal(ivt);
 			// Asiganción de TransSeq
 			res_whj = trans.save_WarehouseJournal(warehouseJournal, conn);
-			ivt.setTransseq(res_invet.getDocentry());
+			ivt.setTransseq(res_whj.getDocentry());
 		}
-		
+
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Registro de Warehouse Journal layer
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		for (Object object :transactions){
+		for (Object object : transactions) {
 
 			TransactionTo ivt = (TransactionTo) object;
 			warehouseJournallayer = trans.fill_WarehouseJournalLayer(ivt);
 			// Asiganción de TransSeq
-			res_whj = trans.save_WarehouseJournalLayer(warehouseJournallayer,
+			res_whjl = trans.save_WarehouseJournalLayer(warehouseJournallayer,
 					conn);
-			ivt.setMessageid(res_invet.getDocentry());
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Actualizacion de existencia articulos y almacenes
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		for (Object object :transactions){
-
+		for (Object object : transactions) {
+			TransactionDAO transDAO = new TransactionDAO(conn);
+			transDAO.setIstransaccional(true);
 			TransactionTo ivt = (TransactionTo) object;
-			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 
 			ivt.setMessageid(res_invet.getDocentry());
@@ -421,25 +422,22 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
 
-		res_jour = complete_accounting_entry(parameters, DAO.getConn());
-		GoodsreceiptTO good = new GoodsreceiptTO();
-
-		// good = getGoodsReceiptByKey(_return.getDocentry());
-		// good.setTransid(res_jour.getDocentry());
-		parameters.setTransid(res_jour.getDocentry());
+		journal = fill_JournalEntry(goodReceipt);
+		
+		AccountingEJB account = new AccountingEJB();
+		res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT, conn);
 
 		// -----------------------------------------------------------------------------------
-		// Actualización de entrada con datos de Asiento contable
+		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
-
-		// _return = inv_GoodsReceipt_mtto(good,2);
+		goodReceipt.setTransid(res_jour.getDocentry());
+		_return = inv_GoodsReceipt_mtto(goodReceipt,Common.MTTOUPDATE);
 
 		return _return;
 	}
 
 	private List fill_transaction(GoodsreceiptTO document) {
 		List _return = new Vector();
-		
 
 		Iterator<GoodsReceiptDetailTO> iterator = document
 				.getGoodReceiptDetail().iterator();
@@ -486,7 +484,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			transaction.setWipval(zero);
 			transaction.setWipvarval(zero);
 			transaction.setIncval(zero);
-			transaction.setSumstock(zero);
+			transaction.setSumstock(detail.getLinetotal());
 			transaction.setOpenqty(zero);
 			transaction.setPaoffval(zero);
 			transaction.setOpenpaoff(zero);
@@ -1184,9 +1182,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 	// #region Transacciones
 
-	public ResultOutTO complete_accounting_entry(GoodsreceiptTO parameters,
-			Connection DAO) throws EJBException {
-
+	public JournalEntryTO fill_JournalEntry(GoodsreceiptTO parameters) throws EJBException {
+		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		Double total = zero;
 		List list = parameters.getGoodReceiptDetail();
@@ -1197,7 +1194,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			GoodsReceiptDetailTO good = (GoodsReceiptDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
-			// compara el codigo de cuenta para hacer una saumatoria y guardarlo
+			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
 			// en otra lista
 			for (Object obj2 : list) {
 				GoodsReceiptDetailTO good2 = (GoodsReceiptDetailTO) obj2;
@@ -1229,7 +1226,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			}
 			// asiento contable
 			List detail = new Vector();
-			JournalEntryTO nuevo = new JournalEntryTO();
+
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1239,14 +1236,14 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			// LLenado del padre
 
 			nuevo.setObjtype("5");
-			nuevo.setMemo("entrada de mercancia");
+			nuevo.setMemo(parameters.getJrnlmemo());
 			nuevo.setUsersign(parameters.getUsersign());
 			nuevo.setLoctotal(sum);
 			nuevo.setSystotal(sum);
 			// llenado de los hijos
 			art1.setLine_id(1);
 			// buscar la cuenta asignada al almacen
-			AdminDAO admin = new AdminDAO(DAO);
+			AdminDAO admin = new AdminDAO();
 			BranchTO branch;
 			// buscando la cuenta asignada de cuenta de existencias al almacen
 			try {
@@ -1263,13 +1260,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setCredit(sum);
 			detail.add(art2);
 			nuevo.setJournalentryList(detail);
-			// llama al metodo dentro del ejeb para insertar el nuevo journal y
-			// actualizar las cuentas
-			AccountingEJB account = new AccountingEJB();
-			_result = account.journalEntry_mtto(nuevo, Common.MTTOINSERT, DAO);
-
 		}
-		return _result;
+		return nuevo;
 	}
 
 	// #endregion

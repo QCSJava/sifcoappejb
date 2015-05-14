@@ -421,9 +421,7 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		System.out.println("return psg");
-
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -1266,7 +1264,7 @@ if(v_resp!=0){
 		return _return;
 	}
 
-	public ResultOutTO update_currtotal_accout(AccountTO Account, String acction)
+	public ResultOutTO update_currtotal_accout(AccountTO Account, String action)
 			throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 		AccountTO account1 = new AccountTO();
@@ -1282,11 +1280,11 @@ if(v_resp!=0){
 				// ------------------------------------------------------------------------------------------------------------------
 
 		case 1:
-			if (acction.equals("D")) {
+			if (action.equals("D")) {
 				saldo = Account.getCurrtotal() + account1.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else if (acction.equals("C")) {
+			} else if (action.equals("C")) {
 				saldo = account1.getCurrtotal() - Account.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
@@ -1300,11 +1298,11 @@ if(v_resp!=0){
 			// 2- Pasivo
 			// ------------------------------------------------------------------------------------------------------------------
 		case 2:
-		if (acction.equals("C")) {
+		if (action.equals("C")) {
 				saldo = Account.getCurrtotal() + account1.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else if (acction.equals("D")) {
+			} else if (action.equals("D")) {
 				saldo = account1.getCurrtotal() - Account.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
@@ -1318,11 +1316,11 @@ if(v_resp!=0){
 			// 3-Capital
 			// ------------------------------------------------------------------------------------------------------------------
 		case 3:
-			 if(acction.equals("C")){
+			 if(action.equals("C")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction.equals("D")){
+             }else if(action.equals("D")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1336,11 +1334,11 @@ if(v_resp!=0){
 			// 4- Cuentas de Ingreso
 			// ------------------------------------------------------------------------------------------------------------------
 		case 4:
-			 if(acction.equals("C")){
+			 if(action.equals("C")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction.equals("D")){
+             }else if(action.equals("D")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1354,11 +1352,11 @@ if(v_resp!=0){
 			// 5- Cuentas de Costos 
 			// ------------------------------------------------------------------------------------------------------------------
 		case 5:
-			 if(acction.equals("D")){
+			 if(action.equals("D")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction.equals("C")){
+             }else if(action.equals("C")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1372,11 +1370,11 @@ if(v_resp!=0){
 			// 6- Cuentas de Gastos
 			// ------------------------------------------------------------------------------------------------------------------
 		case 6:
-			 if(acction.equals("D")){
+			 if(action.equals("D")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction.equals("C")){
+             }else if(action.equals("C")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1390,11 +1388,11 @@ if(v_resp!=0){
 			// Otros Ingresos
 			// ------------------------------------------------------------------------------------------------------------------
 		case 7:
-			 if(acction.equals("C")){
+			 if(action.equals("C")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction.equals("D")){
+             }else if(action.equals("D")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
@@ -1405,14 +1403,14 @@ if(v_resp!=0){
              }
 			break;
 			// ------------------------------------------------------------------------------------------------------------------
-			// 8 - Otros GAstos
+			// 8 - Otros Gastos
 			// ------------------------------------------------------------------------------------------------------------------
 		case 8:
-			 if(acction.equals("D")){
+			 if(action.equals("D")){
             	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
             	 account1.setCurrtotal(saldo); 
             	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(acction.equals("C")){
+             }else if(action.equals("C")){
             	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
             	 account1.setCurrtotal(saldo);
             	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    

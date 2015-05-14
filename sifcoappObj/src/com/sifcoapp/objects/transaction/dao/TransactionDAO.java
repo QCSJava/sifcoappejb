@@ -169,7 +169,6 @@ public class TransactionDAO extends CommonDAO {
 		_return.setCodigoError(lstResultSet);
 		_return.setMensaje("Datos actualizados correctamente");
 		return _return;
-
 	}
 
 }
