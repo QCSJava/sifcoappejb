@@ -421,7 +421,7 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -460,8 +460,8 @@ public class AccountingDAO extends CommonDAO {
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 
 		this.setDbObject("{ call sp_get_valid_accperiod(?)}");
-		
-		java.sql.Date fecha= new java.sql.Date(parameters.getTime());
+
+		java.sql.Date fecha = new java.sql.Date(parameters.getTime());
 		this.setDate(1, "_docdate", fecha);
 
 		lstResultSet = this.runQuery();
@@ -502,8 +502,8 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters, int action)
-			throws Exception {
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters,
+			int action) throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 		Date financyear = null;
 		Date f_refdate = null;
@@ -618,13 +618,13 @@ public class AccountingDAO extends CommonDAO {
 		this.setInt(2, "_action", new Integer(action));
 
 		v_resp = this.runUpdate();
-if(v_resp!=0){
-	_return.setCodigoError(1);
-	_return.setMensaje("Error al Realizar el procedimiento");
-}else{
-	_return.setCodigoError(0);
-	_return.setMensaje("Datos almacenados con exito");
-}
+		if (v_resp != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Error al Realizar el procedimiento");
+		} else {
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos almacenados con exito");
+		}
 		return _return;
 	}
 
@@ -1264,173 +1264,16 @@ if(v_resp!=0){
 		return _return;
 	}
 
-	public ResultOutTO update_currtotal_accout(AccountTO Account, String action)
-			throws Exception {
-		ResultOutTO _return = new ResultOutTO();
-		AccountTO account1 = new AccountTO();
-		double saldo;
-		account1 = getAccountByKey(Account.getAcctcode());
-		// ------------------------------------------------------------------------------------------------------------------
-		// 1 si su saldo esta en el debe Y 2 si su saldo estan el haber
-		// ------------------------------------------------------------------------------------------------------------------
+	public int update_currtotal(AccountTO transaction) throws Exception {
 
-		switch (account1.getGroupmask()) {
-		// ------------------------------------------------------------------------------------------------------------------
-				// 1- Activo
-				// ------------------------------------------------------------------------------------------------------------------
+		int lstResultSet = 0;
 
-		case 1:
-			if (action.equals("D")) {
-				saldo = Account.getCurrtotal() + account1.getCurrtotal();
-				account1.setCurrtotal(saldo);
-				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else if (action.equals("C")) {
-				saldo = account1.getCurrtotal() - Account.getCurrtotal();
-				account1.setCurrtotal(saldo);
-				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+		this.setDbObject("UPDATE cat_acc0_account SET currtotal=? WHERE acctcode=?");
+		this.setDouble(1, "currtotal", transaction.getCurrtotal());
+		this.setDouble(2, "acctcode", transaction.getAcctcode());
 
-			}
-			break;
-			// ------------------------------------------------------------------------------------------------------------------
-			// 2- Pasivo
-			// ------------------------------------------------------------------------------------------------------------------
-		case 2:
-		if (action.equals("C")) {
-				saldo = Account.getCurrtotal() + account1.getCurrtotal();
-				account1.setCurrtotal(saldo);
-				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else if (action.equals("D")) {
-				saldo = account1.getCurrtotal() - Account.getCurrtotal();
-				account1.setCurrtotal(saldo);
-				int i = cat_acc0_ACCOUNT_mtto(account1, 2);
-			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+		lstResultSet = this.runUpdate();
 
-			}
-			break;
-			// ------------------------------------------------------------------------------------------------------------------
-			// 3-Capital
-			// ------------------------------------------------------------------------------------------------------------------
-		case 3:
-			 if(action.equals("C")){
-            	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
-            	 account1.setCurrtotal(saldo); 
-            	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(action.equals("D")){
-            	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
-            	 account1.setCurrtotal(saldo);
-            	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
-             }else{
-            	 _return.setCodigoError(1);
-            	 _return.setMensaje("no se encuentra accion por realizar");
-            	 
-             }
-			break;
-			// ------------------------------------------------------------------------------------------------------------------
-			// 4- Cuentas de Ingreso
-			// ------------------------------------------------------------------------------------------------------------------
-		case 4:
-			 if(action.equals("C")){
-            	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
-            	 account1.setCurrtotal(saldo); 
-            	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(action.equals("D")){
-            	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
-            	 account1.setCurrtotal(saldo);
-            	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
-             }else{
-            	 _return.setCodigoError(1);
-            	 _return.setMensaje("no se encuentra accion por realizar");
-            	 
-             }
-			break;
-			// ------------------------------------------------------------------------------------------------------------------
-			// 5- Cuentas de Costos 
-			// ------------------------------------------------------------------------------------------------------------------
-		case 5:
-			 if(action.equals("D")){
-            	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
-            	 account1.setCurrtotal(saldo); 
-            	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(action.equals("C")){
-            	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
-            	 account1.setCurrtotal(saldo);
-            	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
-             }else{
-            	 _return.setCodigoError(1);
-            	 _return.setMensaje("no se encuentra accion por realizar");
-            	 
-             }
-			break;
-			// ------------------------------------------------------------------------------------------------------------------
-			// 6- Cuentas de Gastos
-			// ------------------------------------------------------------------------------------------------------------------
-		case 6:
-			 if(action.equals("D")){
-            	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
-            	 account1.setCurrtotal(saldo); 
-            	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(action.equals("C")){
-            	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
-            	 account1.setCurrtotal(saldo);
-            	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
-             }else{
-            	 _return.setCodigoError(1);
-            	 _return.setMensaje("no se encuentra accion por realizar");
-            	 
-             }
-			break;
-			// ------------------------------------------------------------------------------------------------------------------
-			// Otros Ingresos
-			// ------------------------------------------------------------------------------------------------------------------
-		case 7:
-			 if(action.equals("C")){
-            	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
-            	 account1.setCurrtotal(saldo); 
-            	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(action.equals("D")){
-            	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
-            	 account1.setCurrtotal(saldo);
-            	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
-             }else{
-            	 _return.setCodigoError(1);
-            	 _return.setMensaje("no se encuentra accion por realizar");
-            	 
-             }
-			break;
-			// ------------------------------------------------------------------------------------------------------------------
-			// 8 - Otros Gastos
-			// ------------------------------------------------------------------------------------------------------------------
-		case 8:
-			 if(action.equals("D")){
-            	 saldo = Account.getCurrtotal() + account1.getCurrtotal(); 
-            	 account1.setCurrtotal(saldo); 
-            	 int i =  cat_acc0_ACCOUNT_mtto( account1, 2);               			  
-             }else if(action.equals("C")){
-            	 saldo = account1.getCurrtotal() - Account.getCurrtotal();
-            	 account1.setCurrtotal(saldo);
-            	 int i = cat_acc0_ACCOUNT_mtto( account1, 2);    
-             }else{
-            	 _return.setCodigoError(1);
-            	 _return.setMensaje("no se encuentra accion por realizar");
-            	 
-             }
-			break;
-
-		default:
-			_return.setCodigoError(1);
-       	 _return.setMensaje("no se encuentra accion por realizar");
-       	 
-			break;
-		}
-
-		_return.setCodigoError(0);
-		_return.setMensaje("cuenta actualizada correctamente");
-		return null;
-
+		return lstResultSet;
 	}
 }

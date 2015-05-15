@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
+import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.transaction.to.TransactionTo;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class JournalEntryDAO extends CommonDAO {
@@ -353,4 +356,7 @@ public class JournalEntryDAO extends CommonDAO {
 
 		return this.getInt();
 	}
+
+	
+
 }
