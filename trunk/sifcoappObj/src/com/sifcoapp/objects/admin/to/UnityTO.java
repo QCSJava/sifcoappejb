@@ -1,8 +1,14 @@
 package com.sifcoapp.objects.admin.to;
 
-import java.sql.Date;
+import java.util.Date;
 
-public class UnityTO {
+import com.sifcoapp.objects.common.to.CommonTO;
+
+public class UnityTO extends CommonTO {
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5253430276107683520L;
 	public String getCode() {
 		return code;
 	}

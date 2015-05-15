@@ -6,6 +6,10 @@ import com.sifcoapp.objects.common.to.CommonTO;
 
 public class parameterTO extends CommonTO {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1259249841414588622L;
 	private int parametercode;
 	public int getParametercode() {
 		return parametercode;

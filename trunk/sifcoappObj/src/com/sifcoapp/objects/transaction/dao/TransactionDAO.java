@@ -35,7 +35,7 @@ import com.sifcoapp.objects.transaction.to.TransactionTo;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 import com.sun.rowset.CachedRowSetImpl;
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.deploymentExtensionType;
+
 
 public class TransactionDAO extends CommonDAO {
 

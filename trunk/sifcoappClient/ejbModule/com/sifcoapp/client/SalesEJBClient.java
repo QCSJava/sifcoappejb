@@ -32,6 +32,7 @@ public class SalesEJBClient {
 		
 	}
 	public List getSales(SalesInTO param) throws Exception{
+		System.out.println("llego al client");
 		List _return;
 		_return= bean.getSales(param);
 		return _return;
