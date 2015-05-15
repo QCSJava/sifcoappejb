@@ -135,7 +135,7 @@ public class InventoryTEST {
 		GoodsReceiptDetailTO art = new GoodsReceiptDetailTO();
 		GoodsReceiptDetailTO art2 = new GoodsReceiptDetailTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
-		parameters.setDocnum(26);
+		//parameters.setDocnum(26);
 		parameters.setObjtype("30");
 		parameters.setUsersign(1);
 		List detalle = new Vector();
@@ -163,7 +163,7 @@ public class InventoryTEST {
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-
+      
 		parameters.setGoodReceiptDetail(detalle);
 		parameters.setDocdate(sqlDate);
 		parameters.setTowhscode("ALM-001");

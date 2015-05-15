@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 
 
 
+
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
@@ -50,6 +51,7 @@ public class SalesEJB implements SalesEJBRemote {
 	
 	}
 	public List getSales(SalesInTO param) throws Exception {
+		System.out.println("llego al sales ejb");
 		// TODO Auto-generated method stub
 		List _return;
 		SalesDAO DAO = new SalesDAO();
@@ -741,7 +743,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO Validateinv_Delivery(DeliveryTO parameters)
 			throws EJBException {
-		System.out.println("llego al validateinv_Delivery ");
+		System.out.println("llego al vav_Delivery ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();

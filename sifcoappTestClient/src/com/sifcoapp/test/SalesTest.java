@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import com.sifcoapp.bussinessLogic.SalesEJB;
 import com.sifcoapp.client.SalesEJBClient;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.to.*;
@@ -15,9 +16,9 @@ public class SalesTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		if (sales == null)
+		/*if (sales == null)
 			sales = new SalesEJBClient();
-
+*/
 		String v_method = args[0];
 
 		/*
@@ -55,12 +56,12 @@ public class SalesTest {
 
 		List lstPeriods = new Vector();
 		SalesInTO nuevo = new SalesInTO();
-		nuevo.setSeries(8);
-		Date fecha = new Date();
-		// nuevo.setDocdate(fecha);
-		// nuevo.setSeries(42);
+		
 		try {
-			lstPeriods = sales.getSales(nuevo);
+			
+			SalesEJB nuevo1= new SalesEJB();
+			lstPeriods =  nuevo1.getSales(nuevo);
+					//sales.getDelivery(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -179,11 +180,7 @@ public class SalesTest {
 
 		List lstPeriods = new Vector();
 		ClientCrediInTO nuevo = new ClientCrediInTO();
-		// nuevo.setSeries(8);
-		nuevo.setDocnum(1);
-		Date fecha = new Date();
-		// nuevo.setDocdate(fecha);
-		// nuevo.setSeries(42);
+		
 		try {
 			lstPeriods = sales.getClientCredi(nuevo);
 		} catch (Exception e) {
@@ -294,13 +291,12 @@ public class SalesTest {
 
 		List lstPeriods = new Vector();
 		DeliveryInTO nuevo = new DeliveryInTO();
-		// nuevo.setSeries(8);
-		nuevo.setDocnum(485);
-		Date fecha = new Date();
-		// nuevo.setDocdate(fecha);
-		// nuevo.setSeries(42);
+		
 		try {
-			lstPeriods = sales.getDelivery(nuevo);
+			
+			SalesEJB nuevo1= new SalesEJB();
+			lstPeriods =  nuevo1.getDelivery(nuevo);
+					//sales.getDelivery(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -402,7 +398,9 @@ public class SalesTest {
 		parameters.setDoctotal(15.5);
 		parameters.setDeliveryDetails(prueba);
 		try {
-			_result = sales.inv_Delivery_mtto(parameters, 1);
+			SalesEJB nuevo= new SalesEJB();
+			_result = nuevo.inv_Delivery_mtto(parameters, 1);
+					//sales.inv_Delivery_mtto(parameters, 1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error EJB " + e.getMessage());

@@ -45,6 +45,7 @@ public class UnityDAO extends CommonDAO {
 			java.sql.Date fecha= new java.sql.Date(parameter.getDuedate().getTime());
 			this.setDate(13,"_duedate", fecha);
 		}
+		
 	    this.setString(14,"_dflaccount",parameter.getDflaccount());
 		this.setString(15,"_relatedacc1",parameter.getRelatedacc1());
         this.setString(16, "_relatedacc2",parameter.getRelatedacc2());	
