@@ -1219,18 +1219,10 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			 }
 			 
 			 aux.add(good);
-			 
-			// recorre la lista de listas para remover de la lista original los
-			// nodos visitados
-			/*for (Object node : list) {
-				GoodsReceiptDetailTO no = (GoodsReceiptDetailTO) node;
-				if (no.getAcctcode().equals(cod)) {
-					list.remove(no);
-				}
-			}
-			lisHija.clear();*/
+				
 		}
-
+//recorre la lista de listas para encontrar los detalles de  el asiento contable
+		List detail = new Vector();
 		for (List obj1 : listas) {
 			List listaDet = obj1;
 			Double sum = zero;
@@ -1241,7 +1233,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 				acc = newGood.getAcctcode();
 			}
 			// asiento contable
-			List detail = new Vector();
+			
 
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
@@ -1276,10 +1268,9 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setAccount(acc);
 			art2.setCredit(sum);
 			detail.add(art2);
-			nuevo.setJournalentryList(detail);
+			
 		}
-		
-	
+		nuevo.setJournalentryList(detail);
 		return nuevo;
 
 	// #endregion

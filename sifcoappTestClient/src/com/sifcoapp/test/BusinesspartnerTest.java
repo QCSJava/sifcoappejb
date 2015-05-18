@@ -59,7 +59,7 @@ public class BusinesspartnerTest {
 		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
 	 List lstPeriods3 = null;
 		BusinesspartnerTO nuevo = new BusinesspartnerTO();
-		nuevo.setCardcode("000000001");
+		
 		
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
@@ -71,7 +71,7 @@ public class BusinesspartnerTest {
 				+ lstPeriods.getAddid());
 		/**/
 		try {
-			nuevo = catalog.get_businesspartnerBykey("C101");
+			lstPeriods3 = catalog.get_businesspartner(lstPeriods2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
