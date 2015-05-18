@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.InventoryEJBClient;
+import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.to.*;
@@ -140,7 +143,7 @@ public class InventoryTEST {
 		parameters.setUsersign(1);
 		List detalle = new Vector();
 		art.setLinenum(1);
-		art.setAcctcode("1.1");
+		art.setAcctcode("1101");
 		art.setObjtype("30");
 		art.setWhscode("ALM-001");
 		art.setItemcode("001-004-545-6114");
@@ -150,7 +153,7 @@ public class InventoryTEST {
 		art.setObjtype("30");
 		detalle.add(art);
 		art2.setLinenum(2);
-		art2.setAcctcode("1.1");
+		art2.setAcctcode("1101");
 		art2.setObjtype("30");
 		art2.setWhscode("ALM-001");
 		art2.setItemcode("001-021");
@@ -459,5 +462,62 @@ public class InventoryTEST {
 					+ periodo.getSeries() + " - " + periodo.getDocentry());
 		}
 	}
+	public  static void  fill_JournalEntry(){
+		
+		JournalEntryTO _result = new JournalEntryTO();
+		GoodsReceiptDetailTO art = new GoodsReceiptDetailTO();
+		GoodsReceiptDetailTO art2 = new GoodsReceiptDetailTO();
+		GoodsreceiptTO parameters = new GoodsreceiptTO();
+		//parameters.setDocnum(26);
+		parameters.setObjtype("30");
+		parameters.setUsersign(1);
+		List detalle = new Vector();
+		//1
+		art.setLinenum(1);
+		art.setAcctcode("1101");
+		art.setObjtype("30");
+		art.setWhscode("ALM-001");
+		art.setItemcode("001-004-545-6114");
+		art.setPrice(7.378);
+		art.setQuantity(2.0);
+		art.setLinetotal(14.756);
+		art.setObjtype("30");
+		detalle.add(art);
+		//2
+		art2.setLinenum(2);
+		art2.setAcctcode("1101");
+		art2.setObjtype("30");
+		art2.setWhscode("ALM-001");
+		art2.setItemcode("001-021");
+		art2.setPrice(0.0813);
+		art2.setQuantity(1.0);
+		art2.setLinetotal(0.0813);
+		art2.setObjtype("30");
+		detalle.add(art2);
+		
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+      
+		parameters.setGoodReceiptDetail(detalle);
+		parameters.setDocdate(sqlDate);
+		parameters.setTowhscode("ALM-001");
+		
+		try {
+			_result = Inventory.fill_JournalEntry(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error EJB " + e.getMessage());
+		}
 
+		System.out.println("luego de servicio");
+		Iterator<JournalEntryLinesTO> iterator = _result.getJournalentryList().iterator();
+		while (iterator.hasNext()) {
+			JournalEntryLinesTO periodo = (JournalEntryLinesTO) iterator
+					.next();
+			System.out.println(periodo.getDebit()+ " - "
+					+ periodo.getCredit() + " - " + periodo.getAccount());
+		}
+		
+	}
 }

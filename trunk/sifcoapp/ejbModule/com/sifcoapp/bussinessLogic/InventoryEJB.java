@@ -1186,38 +1186,53 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			throws Exception {
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
+		boolean ind = false;
 		Double total = zero;
 		List list = parameters.getGoodReceiptDetail();
 		List aux = new Vector();
 		List<List> listas = new Vector();
+		List aux1= new Vector(); 
 		// recorre la lista de detalles
 		for (Object obj : list) {
 			GoodsReceiptDetailTO good = (GoodsReceiptDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
+			
+			 //comparando lista aux de nodos visitados
+			 for (Object obj2 : aux) {
+					GoodsReceiptDetailTO good2 = (GoodsReceiptDetailTO) obj2;
+					if (cod.equals(good2.getAcctcode())) {
+						ind=true;
+					}
+			 }
 			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
 			// en otra lista
-			for (Object obj2 : list) {
-				GoodsReceiptDetailTO good2 = (GoodsReceiptDetailTO) obj2;
-				if (cod.equals(good2.getAcctcode())) {
-					lisHija.add(obj2);
+			 if(ind==false){
+			for (Object obj3 : list) {
+				GoodsReceiptDetailTO good3 = (GoodsReceiptDetailTO) obj3;
+				if (cod.equals(good3.getAcctcode())) {
+					lisHija.add(good3);
 				}
 			}
 			// guarda en la lista de listas
 			listas.add(lisHija);
+			 }
+			 
+			 aux.add(good);
+			 
 			// recorre la lista de listas para remover de la lista original los
 			// nodos visitados
-			for (Object node : list) {
+			/*for (Object node : list) {
 				GoodsReceiptDetailTO no = (GoodsReceiptDetailTO) node;
 				if (no.getAcctcode().equals(cod)) {
 					list.remove(no);
 				}
 			}
-			lisHija.clear();
+			lisHija.clear();*/
 		}
 
-		for (List obj : listas) {
-			List listaDet = obj;
+		for (List obj1 : listas) {
+			List listaDet = obj1;
 			Double sum = zero;
 			String acc = null;
 			for (Object obj2 : listaDet) {
@@ -1263,8 +1278,10 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			detail.add(art2);
 			nuevo.setJournalentryList(detail);
 		}
+		
+	
 		return nuevo;
-	}
 
 	// #endregion
+}
 }

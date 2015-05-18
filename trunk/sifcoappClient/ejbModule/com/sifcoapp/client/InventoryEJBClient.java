@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import com.sifcoapp.bussinessLogic.InventoryEJBRemote;
 import com.sifcoapp.bussinessLogic.facade.InventoryFacadeRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.to.*;
 
@@ -18,7 +19,7 @@ public class InventoryEJBClient {
 	private static final String LOOKUP_STRING = "java:global/sifcoappEAR/sifcoapp/InventoryEJB!com.sifcoapp.bussinessLogic.InventoryEJBRemote";
 	//Implementando EJB Facade
 	private static final String LOOKUP_STRING_FACADE = "java:global/sifcoappEAR/sifcoapp/InventoryFacade!com.sifcoapp.bussinessLogic.facade.InventoryFacadeRemote";
-	//private static InventoryEJBRemote bean;
+	private static InventoryEJBRemote bean1;
 	private static InventoryFacadeRemote bean;
 	private static Context context = null;
 
@@ -27,7 +28,7 @@ public class InventoryEJBClient {
 		// 2. Lookup and cast
 		try {
 			context = ClientUtility.getInitialContext();
-			//bean = (InventoryEJBRemote) context.lookup(LOOKUP_STRING);
+			bean1 = (InventoryEJBRemote) context.lookup(LOOKUP_STRING);
 			bean = (InventoryFacadeRemote) context.lookup(LOOKUP_STRING_FACADE);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -134,6 +135,23 @@ public class InventoryEJBClient {
 		lstVector = bean.getTransfersDetail(docentry);
 
 		return lstVector;
+	}
+    
+	public JournalEntryTO fill_JournalEntry(GoodsreceiptTO parameters)
+			throws EJBException{
+		JournalEntryTO lstPeriods = new JournalEntryTO();
+		try {
+			lstPeriods = bean1.fill_JournalEntry(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lstPeriods;
+		
+		
+		
+		
+		
 	}
 
 }

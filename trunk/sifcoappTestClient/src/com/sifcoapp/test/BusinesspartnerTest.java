@@ -59,7 +59,7 @@ public class BusinesspartnerTest {
 		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
 	 List lstPeriods3 = null;
 		BusinesspartnerTO nuevo = new BusinesspartnerTO();
-		nuevo.setCardcode("000001");
+		nuevo.setCardcode("000000001");
 		
 		//nuevo.setCardname("P");
 		//nuevo.setSeries(42);
