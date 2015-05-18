@@ -36,7 +36,7 @@ public class CatalogFacade implements CatalogFacadeRemote {
 	public List get_businesspartner(BusinesspartnerInTO parameters)
 			throws EJBException {
 		// TODO Auto-generated method stub
-		return null;
+		return process.get_businesspartner(parameters);
 	}
 
 	public BusinesspartnerTO get_businesspartnerBykey(String parameters)
