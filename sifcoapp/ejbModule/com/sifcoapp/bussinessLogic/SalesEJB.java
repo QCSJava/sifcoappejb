@@ -225,8 +225,7 @@ public class SalesEJB implements SalesEJBRemote {
 				}
 			}
 			DAO.forceCommit();
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
@@ -235,7 +234,8 @@ public class SalesEJB implements SalesEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
-		
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
 
@@ -344,8 +344,7 @@ public class SalesEJB implements SalesEJBRemote {
 				}
 			}
 			DAO.forceCommit();
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
@@ -354,7 +353,8 @@ public class SalesEJB implements SalesEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
-		
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados correctamente");
 		return _return;
 	}
 
@@ -567,7 +567,7 @@ public class SalesEJB implements SalesEJBRemote {
 				_return.setCodigoError(1);
 				_return.setMensaje("El articulo " + salesDetail.getItemcode()
 						+ " " + salesDetail.getDscription()
-						+ " Reace en un Inventario Negativo. linea :"
+						+ " Recae en un Inventario Negativo. linea :"
 						+ salesDetail.getLinenum());
 				return _return;
 			}
@@ -973,6 +973,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		}
 		_return.setCodigoError(0);
+		_return.setMensaje("Datos almacenados con exito");
 		return _return;
 
 	}

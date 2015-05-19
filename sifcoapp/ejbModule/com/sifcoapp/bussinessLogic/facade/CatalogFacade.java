@@ -45,10 +45,5 @@ public class CatalogFacade implements CatalogFacadeRemote {
 		return process.get_businesspartnerBykey(parameters);
 	}
 
-	public ResultOutTO validate_businesspartnerBykey(String parameters)
-			throws EJBException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
