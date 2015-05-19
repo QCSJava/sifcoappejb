@@ -60,13 +60,6 @@ public class CatalogEJBClient {
 		return lstPeriods;
 	}
 
-	public ResultOutTO validate_businesspartnerBykey(String parameters)
-			throws Exception {
-		
-		ResultOutTO _return = new ResultOutTO();
-		_return = bean.validate_businesspartnerBykey(parameters);
-		return _return;
-
-	}
+	
 
 }

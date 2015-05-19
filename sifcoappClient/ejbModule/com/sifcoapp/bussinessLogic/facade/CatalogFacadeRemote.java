@@ -20,6 +20,4 @@ public interface CatalogFacadeRemote {
 	public BusinesspartnerTO get_businesspartnerBykey(String parameters)
 			throws EJBException;
 
-	public ResultOutTO validate_businesspartnerBykey(String parameters)
-			throws EJBException;
 }
