@@ -112,7 +112,7 @@ public class SalesTest {
 		document.setLinenum(1);
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
-		document.setQuantity(10.25);
+		document.setQuantity(0.00);
 		document.setPrice(11.25);
 		document.setWhscode("ALM-001");
 		document.setDiscprcnt(0.0000);
@@ -129,10 +129,10 @@ public class SalesTest {
 		document1.setLinenum(2);
 		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
-		document1.setQuantity(10.25);
+		document1.setQuantity(2.00);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
-		document1.setDocentry(485);
+		//document1.setDocentry(485);
 		document1.setLinetotal(0.0000);
 		document1.setPricebefdi(0.00000);
 		document1.setPriceafvat(0.0000);
@@ -148,6 +148,7 @@ public class SalesTest {
 		  
 		parameters.setTowhscode("ALM-001");
 		parameters.setDocdate(sqlDate);
+		parameters.setSeries(2);
 		parameters.setUsersign(1);
 		parameters.setCardcode("000000001");
 		parameters.setDoctotal(20.35588);
