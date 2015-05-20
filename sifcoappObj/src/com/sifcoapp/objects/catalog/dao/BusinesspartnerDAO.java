@@ -1,4 +1,5 @@
 package com.sifcoapp.objects.catalog.dao;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -12,6 +13,12 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sun.rowset.CachedRowSetImpl;
 public class BusinesspartnerDAO extends CommonDAO{
 	
+	public BusinesspartnerDAO(Connection _conn){
+		super(_conn);
+	}
+	public BusinesspartnerDAO(){
+		super();
+	}
 	//##################################  CRUD DE TABLA BUSINESSPARTNER ####################################
 	public int inv_cat_bpa_businesspartner_mtto(BusinesspartnerTO parameters, int action) throws Exception {
 		int v_resp = 0;

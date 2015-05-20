@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -8,10 +9,19 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.admin.ejb.AdminEJB;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryTO;
+import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
+import com.sifcoapp.objects.admin.to.BranchTO;
+import com.sifcoapp.objects.admin.to.CatalogTO;
+import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
+import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
+import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sifcoapp.objects.purchase.dao.*;
 import com.sifcoapp.objects.purchase.to.*;
 import com.sifcoapp.objects.sales.to.DeliveryDetailTO;
@@ -22,6 +32,7 @@ import com.sifcoapp.objects.sales.to.SalesDetailTO;
  */
 @Stateless
 public class PurchaseEJB implements PurchaseEJBRemote {
+	Double zero = 0.0;
 
 	/**
 	 * Default constructor.
@@ -62,6 +73,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
+		ResultOutTO res_jour = new ResultOutTO();
 		System.out.println("llego al salesejb");
 		// pasar el codigo de almacen a los hijos
 		Iterator<PurchaseDetailTO> iterator3 = parameters.getpurchaseDetails()
@@ -120,6 +132,18 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 							Common.MTTODELETE);
 				}
 			}
+			// -----------------------------------------------------------------------------------
+			// registro del asiento contable y actualización de saldos
+			// -----------------------------------------------------------------------------------
+			JournalEntryTO journal = fill_JournalEntry(parameters,
+					DAO.getConn());
+
+			AccountingEJB account = new AccountingEJB();
+			res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT,
+					DAO.getConn());
+			// -----------------------------------------------------------------------------------
+			//
+			// -----------------------------------------------------------------------------------
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -915,5 +939,107 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		return _return;
 
+	}
+
+	public JournalEntryTO fill_JournalEntry(PurchaseTO parameters,
+			Connection conn) throws Exception {
+
+		String buss_c;
+		String branch_c;
+		String iva_c;
+		String fovialCotrans_c = null;
+		double bussines = 0;
+		double branch = 0;
+		double tax = 0;
+		double fovc = 0;
+
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+		boolean ind = false;
+		Double total = zero;
+		List list = parameters.getpurchaseDetails();
+		List aux = new Vector();
+		List<List> listas = new Vector();
+		List aux1 = new Vector();
+		// recorre la lista de detalles
+		for (Object obj : list) {
+			PurchaseDetailTO good = (PurchaseDetailTO) obj;
+			String cod = good.getAcctcode();
+			List lisHija = new Vector();
+			// calculando los impuestos y saldo de las cuentas
+			// --------------------------------------------------------------------------------
+			branch = branch + good.getLinetotal();
+			double impuesto = good.getLinetotal() * 0.13;
+			fovc = fovc + (good.getVatsum() - impuesto);
+			tax = tax + impuesto;
+			bussines = bussines + good.getGtotal();
+
+		}
+		// consultando en la base de datos los codigos de cuenta asignados
+		// cuenta de bussines partner
+		buss_c = parameters.getCtlaccount();
+		// buscar la cuenta asignada al almacen
+		AdminDAO admin = new AdminDAO();
+		BranchTO branch1 = new BranchTO();
+		// buscando la cuenta asignada de cueta de existencias al almacen
+		branch1 = admin.getBranchByKey(parameters.getTowhscode());
+		branch_c = branch1.getBalinvntac();
+		if (branch1.getBalinvntac() == null) {
+			throw new Exception("No hay una cuenta contable asignada");
+		}
+		// buscando cuenta asignada para iva y fovial
+		if (fovc != 0) {
+			CatalogTO Catalog = new CatalogTO();
+			Catalog = admin.findCatalogByKey("FOV1", 10);
+			fovialCotrans_c = Catalog.getCatvalue2();
+			iva_c = Catalog.getCatvalue();
+		} else {
+			CatalogTO Catalog = new CatalogTO();
+			Catalog = admin.findCatalogByKey("IVA", 10);
+			iva_c = Catalog.getCatvalue2();
+		}
+		// asiento contable
+
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art3 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art4 = new JournalEntryLinesTO();
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// llenado del asiento contable
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// LLenado del padre
+		List detail = new Vector();
+		nuevo.setObjtype("5");
+		nuevo.setMemo("por Compra de Repuestos");
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setLoctotal(bussines);
+		nuevo.setSystotal(bussines);
+		// llenado de los
+		// hijos---------------------------------------------------------------------------------------------------
+		// cuenta del socio de negocio
+		art1.setLine_id(1);
+		art1.setCredit(bussines);
+		;
+		art1.setAccount(buss_c);
+		detail.add(art1);
+		// cuenta asignada al almacen
+		art2.setLine_id(2);
+		art2.setAccount(branch_c);
+		art2.setDebit(branch);
+		detail.add(art2);
+		// cuenta de iva
+		art3.setLine_id(3);
+		art3.setDebit(tax);
+		art3.setAccount(iva_c);
+		detail.add(art3);
+		// cuenta de cotrans y fovial si se aplica el impuesto
+		if (fovc != 0) {
+			art4.setLine_id(4);
+			art4.setDebit(fovc);
+			art4.setAccount(fovialCotrans_c);
+			detail.add(art4);
+		}
+		nuevo.setJournalentryList(detail);
+		return nuevo;
 	}
 }

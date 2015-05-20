@@ -126,7 +126,7 @@ public class SalesDAO extends CommonDAO{
 					sales.setCardcode(rowsetActual.getString(9));
 					sales.setNumatcard(rowsetActual.getString(10));
 					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
+					sales.setVatsum(rowsetActual.getDouble(12));
 					sales.setDiscsum(rowsetActual.getDouble(13));
 					sales.setDoctotal(rowsetActual.getDouble(14));
 					sales.setRef1(rowsetActual.getString(15));
@@ -200,7 +200,7 @@ public class SalesDAO extends CommonDAO{
 					sales.setCardcode(rowsetActual.getString(9));
 					sales.setNumatcard(rowsetActual.getString(10));
 					sales.setCardname(rowsetActual.getString(11));
-					sales.setVatsum(rowsetActual.getString(12));
+					sales.setVatsum(rowsetActual.getDouble(12));
 					sales.setDiscsum(rowsetActual.getDouble(13));
 					sales.setDoctotal(rowsetActual.getDouble(14));
 					sales.setRef1(rowsetActual.getString(15));
@@ -306,7 +306,7 @@ public class SalesDAO extends CommonDAO{
 		this.setString(10,"_cardcode", parameters.getCardcode());
 		this.setString(11,"_numatcard", parameters.getNumatcard());
 		this.setString(12,"_cardname", parameters.getCardname());
-		this.setString(13,"_vatsum", parameters.getVatsum());
+		this.setDouble(13,"_vatsum", parameters.getVatsum());
 		this.setDouble(14,"_discsum",new Double(parameters.getDiscsum()));
 		this.setDouble(15,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(16,"_ref1", parameters.getRef1());

@@ -111,25 +111,25 @@ public class PurchaseTest {
 		
 		//document.setDocentry(1);
 		document.setLinenum(1);
-		document.setItemcode("ART-001");
+		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
 		document.setQuantity(10.25);
 		document.setPrice(11.25);
-		//document.setLinetotal(100.00);
+		document.setLinetotal(0.0);
 		prueba.add(document);
-		//document1.setDocentry(1);
+		
 		document1.setLinenum(2);
-		document1.setItemcode("ART-001");
+		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
 		document1.setQuantity(10.25);
 		document1.setPrice(11.25);
-		//document1.setLinetotal(100.00);
+		document1.setLinetotal(0.0);
 		prueba.add(document1);
+		parameters.setTowhscode("ALM-001");
 		parameters.setDocnum(48);
 		parameters.setUsersign(1);
-		//parameters.setDocentry(26);
 		parameters.setCardcode("P");
-		//parameters.setDoctotal(15.5);
+		parameters.setDoctotal(0.0);
 		parameters.setpurchaseDetails(prueba);
 		try {
 			_result = Purchase.inv_Purchase_mtto(parameters,1);
