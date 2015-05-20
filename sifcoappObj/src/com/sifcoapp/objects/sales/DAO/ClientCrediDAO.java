@@ -78,7 +78,7 @@ public class ClientCrediDAO extends CommonDAO{
 					ClientCredi.setCardcode(rowsetActual.getString(9));
 					ClientCredi.setNumatcard(rowsetActual.getString(10));
 					ClientCredi.setCardname(rowsetActual.getString(11));
-					ClientCredi.setVatsum(rowsetActual.getString(12));
+					ClientCredi.setVatsum(rowsetActual.getDouble(12));
 					ClientCredi.setDiscsum(rowsetActual.getDouble(13));
 					ClientCredi.setDoctotal(rowsetActual.getDouble(14));
 					ClientCredi.setRef1(rowsetActual.getString(15));
@@ -151,7 +151,7 @@ public class ClientCrediDAO extends CommonDAO{
 					ClientCredi.setCardcode(rowsetActual.getString(9));
 					ClientCredi.setNumatcard(rowsetActual.getString(10));
 					ClientCredi.setCardname(rowsetActual.getString(11));
-					ClientCredi.setVatsum(rowsetActual.getString(12));
+					ClientCredi.setVatsum(rowsetActual.getDouble(12));
 					ClientCredi.setDiscsum(rowsetActual.getDouble(13));
 					ClientCredi.setDoctotal(rowsetActual.getDouble(14));
 					ClientCredi.setRef1(rowsetActual.getString(15));
