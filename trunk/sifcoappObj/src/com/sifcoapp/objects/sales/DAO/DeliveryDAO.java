@@ -87,7 +87,7 @@ public class DeliveryDAO extends CommonDAO{
 					Delivery.setCardcode(rowsetActual.getString(9));
 					Delivery.setNumatcard(rowsetActual.getString(10));
 					Delivery.setCardname(rowsetActual.getString(11));
-					Delivery.setVatsum(rowsetActual.getString(12));
+					Delivery.setVatsum(rowsetActual.getDouble(12));
 					Delivery.setDiscsum(rowsetActual.getDouble(13));
 					Delivery.setDoctotal(rowsetActual.getDouble(14));
 					Delivery.setRef1(rowsetActual.getString(15));
@@ -160,7 +160,7 @@ public class DeliveryDAO extends CommonDAO{
 					Delivery.setCardcode(rowsetActual.getString(9));
 					Delivery.setNumatcard(rowsetActual.getString(10));
 					Delivery.setCardname(rowsetActual.getString(11));
-					Delivery.setVatsum(rowsetActual.getString(12));
+					Delivery.setVatsum(rowsetActual.getDouble(12));
 					Delivery.setDiscsum(rowsetActual.getDouble(13));
 					Delivery.setDoctotal(rowsetActual.getDouble(14));
 					Delivery.setRef1(rowsetActual.getString(15));

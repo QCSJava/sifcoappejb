@@ -30,7 +30,7 @@ public class DeliveryTO extends CommonTO{
 	private String cardcode;
 	private String numatcard;
 	private String cardname;
-	private String vatsum;
+	private double vatsum;
 	private Double discsum;
 	private Double doctotal;
 	private String ref1;
@@ -71,7 +71,7 @@ public class DeliveryTO extends CommonTO{
 	
 	public DeliveryTO(int docentry, int docnum, String doctype, String canceled,
 			String docstatus, String objtype, Date docdate, Date docduedate,
-			String cardcode, String numatcard, String cardname, String vatsum,
+			String cardcode, String numatcard, String cardname, double vatsum,
 			Double discsum, Double doctotal, String ref1, String ref2,
 			String comments, String jrnlmemo, Date paidtodate, int transid,
 			int receiptnum, int groupnum, String confirmed, String createtran,
@@ -195,10 +195,10 @@ public class DeliveryTO extends CommonTO{
 	public void setCardname(String cardname) {
 		this.cardname = cardname;
 	}
-	public String getVatsum() {
+	public double getVatsum() {
 		return vatsum;
 	}
-	public void setVatsum(String vatsum) {
+	public void setVatsum(double vatsum) {
 		this.vatsum = vatsum;
 	}
 	public Double getDiscsum() {
