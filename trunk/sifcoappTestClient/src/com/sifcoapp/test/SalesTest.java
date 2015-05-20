@@ -12,13 +12,14 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.to.*;
 
 public class SalesTest {
+	
 	private static SalesEJBClient sales;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		/*if (sales == null)
+		if (sales == null)
 			sales = new SalesEJBClient();
-*/
+
 		String v_method = args[0];
 
 		/*
@@ -113,7 +114,7 @@ public class SalesTest {
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
 		document.setQuantity(0.00);
-		document.setPrice(11.25);
+		document.setPrice(0.25);
 		document.setWhscode("ALM-001");
 		document.setDiscprcnt(0.0000);
 		document.setLinetotal(0.0000);
@@ -129,7 +130,7 @@ public class SalesTest {
 		document1.setLinenum(2);
 		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
-		document1.setQuantity(2.00);
+		document1.setQuantity(0.00);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
 		//document1.setDocentry(485);
@@ -148,32 +149,34 @@ public class SalesTest {
 		  
 		parameters.setTowhscode("ALM-001");
 		parameters.setDocdate(sqlDate);
+		parameters.setDocduedate(sqlDate);
+		parameters.setTaxdate(sqlDate);
 		parameters.setSeries(2);
 		parameters.setUsersign(1);
 		parameters.setCardcode("000000001");
-		parameters.setDoctotal(20.35588);
+		parameters.setDoctotal(2.35588);
 		parameters.setDiscsum(0.00000);
 		parameters.setNret(0.00000);
 		parameters.setPaidsum(0.0000);
 		parameters.setRounddif(0.00000);
 		parameters.setObjtype("30");
+		parameters.setVatsum(0.000000);
 
 		parameters.setSalesDetails(prueba);
 
 		System.out.println(document1.getItemcode());
 
-		try {
 
-			_result = sales.inv_Sales_mtto(parameters, 1);
-			System.out.println(_result.getCodigoError());
+		try {
+			_result = sales.inv_Sales_mtto(parameters,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error EJB " + e.getMessage());
+			e.printStackTrace();
 		}
-
+			
 		System.out.println("luego de servicio");
 		System.out.println(_result.getCodigoError() + "---"
-				+ _result.getDocentry());
+				+ _result.getDocentry()+ "---------------"+_result.getMensaje());
 
 	}
 
@@ -182,8 +185,12 @@ public class SalesTest {
 		List lstPeriods = new Vector();
 		ClientCrediInTO nuevo = new ClientCrediInTO();
 		
+		
 		try {
-			lstPeriods = sales.getClientCredi(nuevo);
+			
+			//SalesEJB nuevo1= new SalesEJB();
+			lstPeriods =  sales.getClientCredi(nuevo);
+					//sales.getDelivery(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

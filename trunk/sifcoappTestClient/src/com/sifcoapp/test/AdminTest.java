@@ -114,7 +114,7 @@ public class AdminTest {
 		List catlgLst = null;
 
 		try {
-			catlgLst = AdminEJBService.findCatalog("paises");
+			catlgLst = AdminEJBService.findCatalog("Impuestos");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
