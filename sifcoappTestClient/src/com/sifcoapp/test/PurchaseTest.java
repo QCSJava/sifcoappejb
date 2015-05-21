@@ -116,6 +116,15 @@ public class PurchaseTest {
 		document.setQuantity(10.25);
 		document.setPrice(11.25);
 		document.setLinetotal(0.0);
+		document.setDiscprcnt(0.0000);
+		
+		document.setPricebefdi(0.00000);
+		document.setPriceafvat(0.0000);
+		document.setStockpricestockprice(0.00000);
+		document.setVatappld(0.000000);
+		document.setVatsum(0.0000);
+		document.setGrssprofit(0.000000);
+		document.setGtotal(0.000000);
 		prueba.add(document);
 		
 		document1.setLinenum(2);
@@ -124,13 +133,36 @@ public class PurchaseTest {
 		document1.setQuantity(10.25);
 		document1.setPrice(11.25);
 		document1.setLinetotal(0.0);
+		document1.setPricebefdi(0.00000);
+		document1.setPriceafvat(0.0000);
+		document1.setStockpricestockprice(0.00000);
+		document1.setVatappld(0.000000);
+		document1.setVatsum(0.0000);
+		document1.setGrssprofit(0.000000);
+		document1.setGtotal(0.000000);
+		document.setDiscprcnt(0.0000);
+		
 		prueba.add(document1);
+		
+		
+		
+		java.util.Date utilDate = new java.util.Date(); //fecha actual
+		  long lnMilisegundos = utilDate.getTime();
+		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+		  
+		
+		parameters.setDocdate(sqlDate);
+		parameters.setDocduedate(sqlDate);
+		parameters.setTaxdate(sqlDate);
 		parameters.setTowhscode("ALM-001");
+		parameters.setCardcode("C125");
 		parameters.setDocnum(48);
 		parameters.setUsersign(1);
-		parameters.setCardcode("P");
+		
 		parameters.setDoctotal(0.0);
 		parameters.setpurchaseDetails(prueba);
+		parameters.setVatsum(0.0);
+		parameters.setCtlaccount("1101020104");
 		try {
 			_result = Purchase.inv_Purchase_mtto(parameters,1);
 		} catch (Exception e) {

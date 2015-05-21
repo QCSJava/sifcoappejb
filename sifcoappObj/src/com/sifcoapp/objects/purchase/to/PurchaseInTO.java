@@ -20,7 +20,7 @@ public class PurchaseInTO extends CommonTO{
 	private String cardcode;
 	private String numatcard;
 	private String cardname;
-	private String vatsum;
+	private Double vatsum;
 	private Double discsum;
 	private Double doctotal;
 	private String ref1;
@@ -58,7 +58,7 @@ public class PurchaseInTO extends CommonTO{
 
 	public PurchaseInTO(int docentry, int docnum, String doctype, String canceled,
 			String docstatus, String objtype, Date docdate, Date docduedate,
-			String cardcode, String numatcard, String cardname, String vatsum,
+			String cardcode, String numatcard, String cardname, Double vatsum,
 			Double discsum, Double doctotal, String ref1, String ref2,
 			String comments, String jrnlmemo, Date paidtodate, int transid,
 			int receiptnum, int groupnum, String confirmed, String createtran,
@@ -199,11 +199,11 @@ public class PurchaseInTO extends CommonTO{
 		this.cardname = cardname;
 	}
 
-	public String getVatsum() {
+	public Double getVatsum() {
 		return vatsum;
 	}
 
-	public void setVatsum(String vatsum) {
+	public void setVatsum(Double vatsum) {
 		this.vatsum = vatsum;
 	}
 

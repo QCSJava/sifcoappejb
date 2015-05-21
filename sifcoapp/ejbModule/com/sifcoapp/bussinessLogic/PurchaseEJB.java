@@ -20,12 +20,20 @@ import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
+import com.sifcoapp.objects.inventory.dao.GoodsReceiptDAO;
 import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
 import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sifcoapp.objects.purchase.dao.*;
 import com.sifcoapp.objects.purchase.to.*;
 import com.sifcoapp.objects.sales.to.DeliveryDetailTO;
 import com.sifcoapp.objects.sales.to.SalesDetailTO;
+import com.sifcoapp.objects.transaction.dao.TransactionDAO;
+import com.sifcoapp.objects.transaction.to.InventoryLogTO;
+import com.sifcoapp.objects.transaction.to.TransactionTo;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
+import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
+import com.sifcoapp.transaction.ejb.transactionEJB;
 
 /**
  * Session Bean implementation class SalesEJB
@@ -40,6 +48,587 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 	public PurchaseEJB() {
 		// TODO Auto-generated constructor stub
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// mantenimientos compras
+	// -----------------------------------------------------------------------------------------------------------------
+	public ResultOutTO inv_Purchase_mtto(PurchaseTO parameters, int action)
+			throws EJBException {
+
+		// Declaración de variables
+
+		ResultOutTO _valid = new ResultOutTO();
+		ResultOutTO _return = new ResultOutTO();
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar acción a realizar
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		if (action != Common.MTTOINSERT) {
+			_return = inv_GoodsReceipt_update(parameters, action);
+			return _return;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Asignación de valores por defecto y llenado:
+		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
+		// no aplican.
+		// --------------------------------------------------------------------------------------------------------------------------------
+		parameters = fillGoodReceipt(parameters);
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Hacer validaciones:
+		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
+		// no aplican para validaciones
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_valid = validate_goodsReceipt(parameters, action);
+
+		if (_valid.getCodigoError() != 0) {
+			return _valid;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Guardar en base:
+		// Desde aqui se debe manajar como una transaccion global, cada metodo
+		// debe tener una opción para ejecutarlo como parte de una transacción
+		// global
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		try {
+			DAO.setIstransaccional(true);
+			_return = save_TransactionGoodsReceipt(parameters, action,
+					DAO.getConn());
+			DAO.forceCommit();
+
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
+		return _return;
+	}
+
+	public ResultOutTO inv_GoodsReceipt_update(PurchaseTO parameters, int action)
+			throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		try {
+			_return = inv_GoodsReceipt_update(parameters, action, DAO.getConn());
+			DAO.forceCommit();
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+			DAO.forceCloseConnection();
+		}
+		return _return;
+
+	}
+
+	public ResultOutTO inv_GoodsReceipt_update(PurchaseTO parameters,
+			int action, Connection conn) throws EJBException {
+		// Variables
+		ResultOutTO _return = new ResultOutTO();
+		PurchaseDAO DAO = new PurchaseDAO();
+		DAO.setIstransaccional(true);
+		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO(DAO.getConn());
+		goodDAO1.setIstransaccional(true);
+
+		try {
+			// Actualizar/borrar encabezados
+			_return.setDocentry(DAO.inv_Purchase_mtto(parameters, action));
+
+			// Borrar detalles
+			Iterator<PurchaseDetailTO> iterator = parameters
+					.getpurchaseDetails().iterator();
+			if (action == Common.MTTODELETE) {
+				while (iterator.hasNext()) {
+					PurchaseDetailTO detalleReceipt = (PurchaseDetailTO) iterator
+							.next();
+
+					goodDAO1.inv_PurchaseDetail_mtto(detalleReceipt,
+							Common.MTTODELETE);
+				}
+			}
+			DAO.forceCommit();
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Actualizados con exito");
+		return _return;
+	}
+
+	public ResultOutTO inv_purchase_save(PurchaseTO parameters, int action,
+			Connection conn) throws Exception {
+		// Variables
+		ResultOutTO _return = new ResultOutTO();
+		PurchaseDAO DAO = new PurchaseDAO(conn);
+		DAO.setIstransaccional(true);
+		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO(conn);
+		goodDAO1.setIstransaccional(true);
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Guardar encabezados
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_return.setDocentry(DAO.inv_Purchase_mtto(parameters, action));
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Guardar detalles
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		Iterator<PurchaseDetailTO> iterator = parameters.getpurchaseDetails()
+				.iterator();
+		while (iterator.hasNext()) {
+			PurchaseDetailTO detalleReceipt = (PurchaseDetailTO) iterator
+					.next();
+
+			detalleReceipt.setDocentry(_return.getDocentry());
+			goodDAO1.inv_PurchaseDetail_mtto(detalleReceipt, Common.MTTOINSERT);
+
+		}
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
+		return _return;
+	}
+
+	private PurchaseTO fillGoodReceipt(PurchaseTO parameters) {
+
+		// variables
+		Double total = zero;
+		ArticlesTO DBArticle = new ArticlesTO();
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Valores por defecto detalle
+		// --------------------------------------------------------------------------------------------------------------------------------
+		@SuppressWarnings("unchecked")
+		Iterator<PurchaseDetailTO> iterator = parameters.getpurchaseDetails()
+				.iterator();
+		while (iterator.hasNext()) {
+			PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator
+					.next();
+
+			AdminEJB EJB = new AdminEJB();
+
+			DBArticle = EJB.getArticlesByKey(articleDetalle.getItemcode());
+
+			// Asignar a documento
+			articleDetalle.setArticle(DBArticle);
+
+			// Asignación de almacen en cada detalle
+			articleDetalle.setWhscode(parameters.getTowhscode());
+
+			// Asignaciones varias
+			articleDetalle.setDscription(DBArticle.getItemName());
+			articleDetalle.setUnitmsr(DBArticle.getInvntryUom());
+
+			// Calculo de totales
+			articleDetalle.setLinetotal(articleDetalle.getQuantity()
+					* articleDetalle.getPrice());
+			articleDetalle.setOpenqty(articleDetalle.getQuantity());
+			total = total + articleDetalle.getLinetotal();
+
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Valores por defecto encabezado
+		// --------------------------------------------------------------------------------------------------------------------------------
+		parameters.setDoctotal(total);
+		parameters.setCanceled("N");
+		parameters.setDocstatus("O");
+		parameters.setDoctype("I");
+		parameters.setJrnlmemo("Entrada de Mercancia");
+		parameters.setConfirmed("Y");
+		parameters.setDocduedate(parameters.getDocdate());
+
+		return parameters;
+	}
+
+	private List fill_transaction(PurchaseTO document) {
+		List _return = new Vector();
+
+		Iterator<PurchaseDetailTO> iterator = document
+				.getpurchaseDetails().iterator();
+		while (iterator.hasNext()) {
+			PurchaseDetailTO detail = (PurchaseDetailTO) iterator
+					.next();
+
+			TransactionTo transaction = new TransactionTo();
+			transaction.setTransseq(0);
+			transaction.setDocentry(document.getDocentry());
+			transaction.setDocnum(Integer.toString(document.getDocnum()));
+			transaction.setDocduedate(document.getDocduedate());
+			transaction.setDocdate(document.getDocdate());
+			transaction.setComment(document.getComments());
+			transaction.setJrnlmemo(document.getJrnlmemo());
+			transaction.setUsersign(document.getUsersign());
+			transaction.setRef1("");
+			transaction.setRef2(document.getRef1());
+			transaction.setLinenum(detail.getLinenum());
+			transaction.setItemcode(detail.getItemcode());
+			transaction.setDscription(detail.getDscription());
+			transaction.setQuantity(detail.getQuantity());
+			transaction.setPrice(detail.getPrice());
+			transaction.setLinetotal(detail.getLinetotal());
+			transaction.setWhscode(detail.getWhscode());
+			transaction.setAcctcode(detail.getAcctcode());
+			transaction.setOcrcode("");
+			transaction.setVatgroup("");
+			transaction.setPriceafvat(zero);
+			transaction.setVatsum(zero);
+			transaction.setObjtype(detail.getObjtype());
+			transaction.setGrssprofit(zero);
+			transaction.setTaxcode("");
+			transaction.setVatappld(zero);
+			transaction.setStockprice(detail.getPrice());
+			transaction.setGtotal(zero);
+			transaction.setInqty(zero);
+			transaction.setOutqty(zero);
+			transaction.setMessageid(0);
+			transaction.setBalance(zero);
+			transaction.setNewOnhand(zero);
+			transaction.setNewWhsOnhand(zero);
+			transaction.setNewAvgprice(zero);
+			transaction.setArticle(detail.getArticle());
+
+			_return.add(transaction);
+
+			/*
+			 * transaction.setTransseq(detail.getTransseq());
+			 * transaction.setDocentry(detail.getDocentry());
+			 * transaction.setDocnum(detail.getDocnum());
+			 * transaction.setDocduedate(detail.getDocduedate());
+			 * transaction.setDocdate(detail.getDocdate());
+			 * transaction.setComment(detail.getComment());
+			 * transaction.setJrnlmemo(detail.getJrnlmemo());
+			 * transaction.setUsersign(detail.getUsersign());
+			 * transaction.setRef1(detail.getRef1());
+			 * transaction.setRef2(detail.getRef2());
+			 * transaction.setLinenum(detail.getLinenum());
+			 * transaction.setItemcode(detail.getItemcode());
+			 * transaction.setDscription(detail.getDscription());
+			 * transaction.setQuantity(detail.getQuantity());
+			 * transaction.setPrice(detail.getPrice());
+			 * transaction.setLinetotal(detail.getLinetotal());
+			 * transaction.setWhscode(detail.getWhscode());
+			 * transaction.setAcctcode(detail.getAcctcode());
+			 * transaction.setOcrcode(detail.getOcrcode());
+			 * transaction.setVatgroup(detail.getVatgroup());
+			 * transaction.setPriceafvat(detail.getPriceafvat());
+			 * transaction.setVatsum(detail.getVatsum());
+			 * transaction.setObjtype(detail.getObjtype());
+			 * transaction.setGrssprofit(detail.getGrssprofit());
+			 * transaction.setTaxcode(detail.getTaxcode());
+			 * transaction.setVatappld(detail.getVatappld());
+			 * transaction.setStockprice(detail.getStockprice());
+			 * transaction.setGtotal(detail.getGtotal());
+			 * transaction.setInqty(detail.getInqty());
+			 * transaction.setOutqty(detail.getOutqty());
+			 * transaction.setMessageid(detail.getMessageid());
+			 * transaction.setBalance(detail.getBalance());
+			 * transaction.setNewonhand(detail.getNewonhand());
+			 * transaction.setNewwhsonhand(detail.getNewwhsonhand());
+			 * transaction.setNewavgprice(detail.getNewavgprice());
+			 */
+
+		}
+		return _return;
+	}
+
+	public ResultOutTO validate_goodsReceipt(PurchaseTO parameters, int action)
+			throws EJBException {
+
+		// Variables
+		boolean valid = false;
+		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+		AdminEJB EJB1 = new AdminEJB();
+		List branch = new Vector();
+		ArticlesTO DBArticle = new ArticlesTO();
+		String code;
+
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getTowhscode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen null");
+
+			return _return;
+		}
+		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+
+			return _return;
+		}
+
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación de fecha de periodo contable
+		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getDocdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No se encuentra fecha del documento");
+
+			return _return;
+		}
+		_return = acc.validate_exist_accperiod(parameters.getDocdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
+			return _return;
+		}
+
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación de Socios de Negocio Activo
+		// ------------------------------------------------------------------------------------------------------------
+
+		Iterator<PurchaseDetailTO> iterator1 = parameters.getpurchaseDetails()
+				.iterator();
+
+		// recorre el Detalle
+		while (iterator1.hasNext()) {
+
+			// Consultar información actualizada desde la base
+			PurchaseDetailTO PurchaseDetail = (PurchaseDetailTO) iterator1
+					.next();
+
+			DBArticle = PurchaseDetail.getArticle();
+
+			// Asignar articulo al detalle
+			PurchaseDetail.setArticle(DBArticle);
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo existe
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle != null) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseDetail.getItemcode() + " "
+						+ PurchaseDetail.getDscription()
+
+						+ " no existe,informar al administrador. linea :"
+						+ PurchaseDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo activo
+			// ------------------------------------------------------------------------------------------------------------
+
+			valid = false;
+			if (DBArticle.getValidFor() != null
+					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseDetail.getItemcode() + " "
+						+ PurchaseDetail.getDscription()
+
+						+ " No esta activo. linea :"
+						+ PurchaseDetail.getLinenum());
+				System.out.println(valid);
+				return _return;
+
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación articulo de compra
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+			if (DBArticle.getInvntItem() != null
+					&& DBArticle.getInvntItem().toUpperCase().equals("Y")) {
+				valid = true;
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseDetail.getItemcode() + " "
+						+ PurchaseDetail.getDscription()
+						+ " No es un articulo de venta. linea :"
+						+ PurchaseDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado para articulo
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(PurchaseDetail.getWhscode());
+
+				if (branch1.getWhscode().equals(PurchaseDetail.getWhscode())) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(PurchaseDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ PurchaseDetail.getItemcode()
+						+ " "
+						+ PurchaseDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ PurchaseDetail.getLinenum());
+				return _return;
+			}
+
+		}
+		_return.setCodigoError(0);
+
+		return _return;
+
+	}
+
+	public ResultOutTO save_TransactionGoodsReceipt(PurchaseTO purchase,
+			int action, Connection conn) throws Exception {
+
+		// Variables
+		List transactions = new Vector();
+		InventoryLogTO inventoryLog = new InventoryLogTO();
+		WarehouseJournalTO warehouseJournal = new WarehouseJournalTO();
+		WarehouseJournalLayerTO warehouseJournallayer = new WarehouseJournalLayerTO();
+		ResultOutTO _return = new ResultOutTO();
+		ResultOutTO res_invet = new ResultOutTO();
+		ResultOutTO res_whj = new ResultOutTO();
+		ResultOutTO res_whjl = new ResultOutTO();
+		ResultOutTO res_jour = new ResultOutTO();
+		ResultOutTO res_UpdateOnhand = new ResultOutTO();
+		PurchaseDAO DAO = new PurchaseDAO(conn);
+		transactionEJB trans = new transactionEJB();
+		JournalEntryTO journal = new JournalEntryTO();
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Guardar Encabezados y detalles de Entrada
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_return = inv_purchase_save(purchase, action, conn);
+		purchase.setDocentry(_return.getDocentry());
+		purchase.setDocnum(_return.getDocentry());
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Llenar objeto tipo transacción
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		transactions = fill_transaction(purchase);
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Calculo de existencias y costos
+		// --------------------------------------------------------------------------------------------------------------------------------
+		for (Object object : transactions) {
+			TransactionTo ivt = (TransactionTo) object;
+			ivt = trans.calculate(ivt);
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Registro de Inventory Log
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		for (Object object : transactions) {
+			TransactionTo ivt = (TransactionTo) object;
+
+			inventoryLog = trans.fill_Inventory_Log(ivt);
+			res_invet = trans.save_Inventory_Log(inventoryLog, conn);
+			// Asignación de codigo MessageId
+			ivt.setMessageid(res_invet.getDocentry());
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Registro de Warehouse Journal
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		for (Object object : transactions) {
+			TransactionTo ivt = (TransactionTo) object;
+			warehouseJournal = trans.fill_WarehouseJournal(ivt);
+			// Asiganción de TransSeq
+			res_whj = trans.save_WarehouseJournal(warehouseJournal, conn);
+			ivt.setTransseq(res_whj.getDocentry());
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Registro de Warehouse Journal layer
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		for (Object object : transactions) {
+
+			TransactionTo ivt = (TransactionTo) object;
+			warehouseJournallayer = trans.fill_WarehouseJournalLayer(ivt);
+			// Asiganción de TransSeq
+			res_whjl = trans.save_WarehouseJournalLayer(warehouseJournallayer,
+					conn);
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Actualizacion de existencia articulos y almacenes
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		for (Object object : transactions) {
+			TransactionDAO transDAO = new TransactionDAO(conn);
+			transDAO.setIstransaccional(true);
+			TransactionTo ivt = (TransactionTo) object;
+			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
+		}
+
+		// -----------------------------------------------------------------------------------
+		// registro del asiento contable y actualización de saldos
+		// -----------------------------------------------------------------------------------
+
+		journal = fill_JournalEntry(purchase);
+
+		AccountingEJB account = new AccountingEJB();
+		res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT, conn);
+
+		// -----------------------------------------------------------------------------------
+		// Actualización de documento con datos de Asiento contable
+		// -----------------------------------------------------------------------------------
+		purchase.setTransid(res_jour.getDocentry());
+		_return = inv_GoodsReceipt_update(purchase, Common.MTTOUPDATE, conn);
+
+		return _return;
+	}
+	// -----------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------
 
 	public List getPurchase(PurchaseInTO param) throws Exception {
 		// TODO Auto-generated method stub
@@ -69,95 +658,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO inv_Purchase_mtto(PurchaseTO parameters, int action)
-			throws Exception {
-		// TODO Auto-generated method stub
-		ResultOutTO _return = new ResultOutTO();
-		ResultOutTO res_jour = new ResultOutTO();
-		System.out.println("llego al salesejb");
-		// pasar el codigo de almacen a los hijos
-		Iterator<PurchaseDetailTO> iterator3 = parameters.getpurchaseDetails()
-				.iterator();
-		while (iterator3.hasNext()) {
-
-			PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator3
-					.next();
-			articleDetalle.setWhscode(parameters.getTowhscode());
-		}
-		// -------------------------------------------------------------------------------------------------------------------------------
-		// validaciones-------------------------------------------------------------------------------------------------------------------
-		_return = validate_inv_Purchase_mtto(parameters);
-		System.out.println(_return.getCodigoError());
-		if (_return.getCodigoError() != 0) {
-			return _return;
-		}
-
-		PurchaseDAO DAO = new PurchaseDAO();
-		DAO.setIstransaccional(true);
-		PurchaseDetailDAO goodDAO1 = new PurchaseDetailDAO(DAO.getConn());
-		goodDAO1.setIstransaccional(true);
-		try {
-			Iterator<PurchaseDetailTO> iterator2 = parameters
-					.getpurchaseDetails().iterator();
-			while (iterator2.hasNext()) {
-				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator2
-						.next();
-
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
-				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-
-				articleDetalle.setFactor1(articleDetalle.getQuantity());
-
-			}
-
-			parameters.setDiscsum(0.00);
-			parameters.setNret(0.00);
-			parameters.setPaidsum(0.00);
-			parameters.setRounddif(0.00);
-			_return.setDocentry(DAO.inv_Purchase_mtto(parameters, action));
-
-			Iterator<PurchaseDetailTO> iterator = parameters
-					.getpurchaseDetails().iterator();
-			while (iterator.hasNext()) {
-				PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator
-						.next();
-				// Para articulos nuevos
-				articleDetalle.setDocentry(_return.getDocentry());
-				if (action == Common.MTTOINSERT) {
-					goodDAO1.inv_PurchaseDetail_mtto(articleDetalle,
-							Common.MTTOINSERT);
-				}
-				if (action == Common.MTTODELETE) {
-					goodDAO1.inv_PurchaseDetail_mtto(articleDetalle,
-							Common.MTTODELETE);
-				}
-			}
-			// -----------------------------------------------------------------------------------
-			// registro del asiento contable y actualización de saldos
-			// -----------------------------------------------------------------------------------
-			JournalEntryTO journal = fill_JournalEntry(parameters,
-					DAO.getConn());
-
-			AccountingEJB account = new AccountingEJB();
-			res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT,
-					DAO.getConn());
-			// -----------------------------------------------------------------------------------
-			//
-			// -----------------------------------------------------------------------------------
-			DAO.forceCommit();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			DAO.rollBackConnection();
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			DAO.forceCloseConnection();
-		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
-		return _return;
-	}
-
+	
 	// ####purchasequantition
 	public List getPurchaseQuotation(PurchaseQuotationInTO param)
 			throws Exception {
@@ -941,8 +1442,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	}
 
-	public JournalEntryTO fill_JournalEntry(PurchaseTO parameters,
-			Connection conn) throws Exception {
+	public JournalEntryTO fill_JournalEntry(PurchaseTO parameters)
+			throws Exception {
 
 		String buss_c;
 		String branch_c;
@@ -980,13 +1481,16 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		buss_c = parameters.getCtlaccount();
 		// buscar la cuenta asignada al almacen
 		AdminDAO admin = new AdminDAO();
+
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cueta de existencias al almacen
+
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		branch_c = branch1.getBalinvntac();
 		if (branch1.getBalinvntac() == null) {
 			throw new Exception("No hay una cuenta contable asignada");
 		}
+
 		// buscando cuenta asignada para iva y fovial
 		if (fovc != 0) {
 			CatalogTO Catalog = new CatalogTO();

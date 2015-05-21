@@ -89,7 +89,7 @@ public class PurchaseDAO extends CommonDAO{
 					purchase.setCardcode(rowsetActual.getString(9));
 					purchase.setNumatcard(rowsetActual.getString(10));
 					purchase.setCardname(rowsetActual.getString(11));
-					purchase.setVatsum(rowsetActual.getString(12));
+					purchase.setVatsum(rowsetActual.getDouble(12));
 					purchase.setDiscsum(rowsetActual.getDouble(13));
 					purchase.setDoctotal(rowsetActual.getDouble(14));
 					purchase.setRef1(rowsetActual.getString(15));
@@ -162,7 +162,7 @@ public class PurchaseDAO extends CommonDAO{
 					purchase.setCardcode(rowsetActual.getString(9));
 					purchase.setNumatcard(rowsetActual.getString(10));
 					purchase.setCardname(rowsetActual.getString(11));
-					purchase.setVatsum(rowsetActual.getString(12));
+					purchase.setVatsum(rowsetActual.getDouble(12));
 					purchase.setDiscsum(rowsetActual.getDouble(13));
 					purchase.setDoctotal(rowsetActual.getDouble(14));
 					purchase.setRef1(rowsetActual.getString(15));
@@ -268,7 +268,7 @@ public class PurchaseDAO extends CommonDAO{
 		this.setString(10,"_cardcode", parameters.getCardcode());
 		this.setString(11,"_numatcard", parameters.getNumatcard());
 		this.setString(12,"_cardname", parameters.getCardname());
-		this.setString(13,"_vatsum", parameters.getVatsum());
+		this.setDouble(13,"_vatsum", parameters.getVatsum());
 		this.setDouble(14,"_discsum",new Double(parameters.getDiscsum()));
 		this.setDouble(15,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(16,"_ref1", parameters.getRef1());

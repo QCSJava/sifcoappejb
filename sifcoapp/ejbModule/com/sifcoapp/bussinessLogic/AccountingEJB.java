@@ -317,7 +317,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				.getJournalentryList().iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator.next();
-
+             
 			// ------------------------------------------------------------------------------------------------------------
 			// Valores por defecto del detalle
 			// ------------------------------------------------------------------------------------------------------------
@@ -366,6 +366,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			// ---------------------------------------------------------------------------------------------------------------
 			Detalle.setTransid(_return.getDocentry());
+			Detalle.setTranstype(Integer.toString(_return.getDocentry()));
 			if (action == Common.MTTOINSERT) {
 				JournalLinesDAO.journalEntryLines_mtto(Detalle,
 						Common.MTTOINSERT);
@@ -485,7 +486,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -502,7 +503,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;

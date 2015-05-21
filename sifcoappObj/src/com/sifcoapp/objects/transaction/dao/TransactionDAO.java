@@ -165,7 +165,16 @@ public class TransactionDAO extends CommonDAO {
 		this.setString(3, "itemcode", transaction.getItemcode());
 
 		lstResultSet = this.runUpdate();
+       
+		this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
 
+		
+		this.setDouble(1, "onhand", transaction.getNewWhsOnhand());
+		this.setString(2, "itemcode", transaction.getItemcode());
+		this.setString(3, "whscode", transaction.getWhscode());
+
+		lstResultSet = this.runUpdate();
+		
 		_return.setCodigoError(lstResultSet);
 		_return.setMensaje("Datos actualizados correctamente");
 		return _return;
