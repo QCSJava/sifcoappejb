@@ -83,8 +83,9 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// no aplican para validaciones
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		_valid = validate_goodsReceipt(parameters, action);
-
+		
+			_valid = validate_inv_Purchase_mtto(parameters);
+		
 		if (_valid.getCodigoError() != 0) {
 			return _valid;
 		}
@@ -349,177 +350,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO validate_goodsReceipt(PurchaseTO parameters, int action)
-			throws EJBException {
-
-		// Variables
-		boolean valid = false;
-		ResultOutTO _return = new ResultOutTO();
-		AccountingEJB acc = new AccountingEJB();
-		AdminEJB EJB1 = new AdminEJB();
-		List branch = new Vector();
-		ArticlesTO DBArticle = new ArticlesTO();
-		String code;
-
-		// ------------------------------------------------------------------------------------------------------------
-		// Validación almacen bloqueado
-		// ------------------------------------------------------------------------------------------------------------
-		if (parameters.getTowhscode() == null) {
-			_return.setCodigoError(1);
-			_return.setMensaje("Codigo de almacen null");
-
-			return _return;
-		}
-		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
-
-		if (_return.getCodigoError() != 0) {
-			_return.setCodigoError(1);
-			_return.setMensaje("El Almacen no esta activo");
-
-			return _return;
-		}
-
-		// ------------------------------------------------------------------------------------------------------------
-		// Validación de fecha de periodo contable
-		// ------------------------------------------------------------------------------------------------------------
-		if (parameters.getDocdate() == null) {
-			_return.setCodigoError(1);
-			_return.setMensaje("No se encuentra fecha del documento");
-
-			return _return;
-		}
-		_return = acc.validate_exist_accperiod(parameters.getDocdate());
-		if (_return.getCodigoError() != 0) {
-			_return.setCodigoError(1);
-			_return.setMensaje("El documento tiene una fecha Fuera del periodo contable activo");
-			return _return;
-		}
-
-		// ------------------------------------------------------------------------------------------------------------
-		// Validación de Socios de Negocio Activo
-		// ------------------------------------------------------------------------------------------------------------
-
-		Iterator<PurchaseDetailTO> iterator1 = parameters.getpurchaseDetails()
-				.iterator();
-
-		// recorre el Detalle
-		while (iterator1.hasNext()) {
-
-			// Consultar información actualizada desde la base
-			PurchaseDetailTO PurchaseDetail = (PurchaseDetailTO) iterator1
-					.next();
-
-			DBArticle = PurchaseDetail.getArticle();
-
-			// Asignar articulo al detalle
-			PurchaseDetail.setArticle(DBArticle);
-
-			// ------------------------------------------------------------------------------------------------------------
-			// Validación articulo existe
-			// ------------------------------------------------------------------------------------------------------------
-
-			valid = false;
-			if (DBArticle != null) {
-				valid = true;
-			}
-
-			if (!valid) {
-				_return.setLinenum(PurchaseDetail.getLinenum());
-				_return.setCodigoError(1);
-				_return.setMensaje("El articulo "
-						+ PurchaseDetail.getItemcode() + " "
-						+ PurchaseDetail.getDscription()
-
-						+ " no existe,informar al administrador. linea :"
-						+ PurchaseDetail.getLinenum());
-				System.out.println(valid);
-				return _return;
-
-			}
-
-			// ------------------------------------------------------------------------------------------------------------
-			// Validación articulo activo
-			// ------------------------------------------------------------------------------------------------------------
-
-			valid = false;
-			if (DBArticle.getValidFor() != null
-					&& DBArticle.getValidFor().toUpperCase().equals("Y")) {
-				valid = true;
-			}
-
-			if (!valid) {
-				_return.setLinenum(PurchaseDetail.getLinenum());
-				_return.setCodigoError(1);
-				_return.setMensaje("El articulo "
-						+ PurchaseDetail.getItemcode() + " "
-						+ PurchaseDetail.getDscription()
-
-						+ " No esta activo. linea :"
-						+ PurchaseDetail.getLinenum());
-				System.out.println(valid);
-				return _return;
-
-			}
-
-			// ------------------------------------------------------------------------------------------------------------
-			// Validación articulo de compra
-			// ------------------------------------------------------------------------------------------------------------
-			valid = false;
-			if (DBArticle.getInvntItem() != null
-					&& DBArticle.getInvntItem().toUpperCase().equals("Y")) {
-				valid = true;
-			}
-
-			if (!valid) {
-				_return.setLinenum(PurchaseDetail.getLinenum());
-				_return.setCodigoError(1);
-				_return.setMensaje("El articulo "
-						+ PurchaseDetail.getItemcode() + " "
-						+ PurchaseDetail.getDscription()
-						+ " No es un articulo de venta. linea :"
-						+ PurchaseDetail.getLinenum());
-				return _return;
-			}
-
-			// ------------------------------------------------------------------------------------------------------------
-			// Validación almacen bloqueado para articulo
-			// ------------------------------------------------------------------------------------------------------------
-			valid = false;
-
-			branch = DBArticle.getBranchArticles();
-
-			for (Object object : branch) {
-				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(PurchaseDetail.getWhscode());
-
-				if (branch1.getWhscode().equals(PurchaseDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
-							&& branch1.getLocked() != null
-							&& branch1.getLocked().toUpperCase().equals("F")) {
-						valid = true;
-					}
-				}
-			}
-
-			if (!valid) {
-				_return.setLinenum(PurchaseDetail.getLinenum());
-				_return.setCodigoError(1);
-				_return.setMensaje("El articulo "
-						+ PurchaseDetail.getItemcode()
-						+ " "
-						+ PurchaseDetail.getDscription()
-						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
-						+ PurchaseDetail.getLinenum());
-				return _return;
-			}
-
-		}
-		_return.setCodigoError(0);
-
-		return _return;
-
-	}
 
 	public ResultOutTO save_TransactionGoodsReceipt(PurchaseTO purchase,
 			int action, Connection conn) throws Exception {
@@ -900,7 +730,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	// validando inv_purchase_mtto
 	public ResultOutTO validate_inv_Purchase_mtto(PurchaseTO parameters)
-			throws Exception {
+			throws EJBException {
 		System.out.println("llego al validate purchase_mtto ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
