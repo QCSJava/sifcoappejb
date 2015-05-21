@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.sifcoapp.bussinessLogic.SalesEJB;
 import com.sifcoapp.client.SalesEJBClient;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.to.*;
@@ -60,7 +59,7 @@ public class SalesTest {
 		
 		try {
 			
-			SalesEJB nuevo1= new SalesEJB();
+			SalesEJBClient nuevo1= new SalesEJBClient();
 			lstPeriods =  nuevo1.getSales(nuevo);
 					//sales.getDelivery(nuevo);
 		} catch (Exception e) {
@@ -302,7 +301,7 @@ public class SalesTest {
 		
 		try {
 			
-			SalesEJB nuevo1= new SalesEJB();
+			SalesEJBClient nuevo1= new SalesEJBClient();
 			lstPeriods =  nuevo1.getDelivery(nuevo);
 					//sales.getDelivery(nuevo);
 		} catch (Exception e) {
@@ -406,7 +405,7 @@ public class SalesTest {
 		parameters.setDoctotal(15.5);
 		parameters.setDeliveryDetails(prueba);
 		try {
-			SalesEJB nuevo= new SalesEJB();
+			SalesEJBClient nuevo= new SalesEJBClient();
 			_result = nuevo.inv_Delivery_mtto(parameters, 1);
 					//sales.inv_Delivery_mtto(parameters, 1);
 		} catch (Exception e) {

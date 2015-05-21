@@ -3,6 +3,7 @@
  */
 package com.sifcoapp.objects.inventory.to;
 
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 /**
@@ -33,6 +34,7 @@ public class GoodsReceiptDetailTO extends CommonTO {
 	private String usebaseun;
 	private String objtype;
 	private String unitmsr;
+	private ArticlesTO article;
 
 	public int getDocentry() {
 		return docentry;
@@ -176,6 +178,14 @@ public class GoodsReceiptDetailTO extends CommonTO {
 
 	public void setUnitmsr(String unitmsr) {
 		this.unitmsr = unitmsr;
+	}
+
+	public ArticlesTO getArticle() {
+		return article;
+	}
+
+	public void setArticle(ArticlesTO article) {
+		this.article = article;
 	}
 
 	/**

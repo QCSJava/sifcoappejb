@@ -1270,7 +1270,7 @@ public class AccountingDAO extends CommonDAO {
 
 		this.setDbObject("UPDATE cat_acc0_account SET currtotal=? WHERE acctcode=?");
 		this.setDouble(1, "currtotal", transaction.getCurrtotal());
-		this.setDouble(2, "acctcode", transaction.getAcctcode());
+		this.setString(2, "acctcode", transaction.getAcctcode());
 
 		lstResultSet = this.runUpdate();
 

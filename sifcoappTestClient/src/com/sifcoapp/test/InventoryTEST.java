@@ -138,12 +138,16 @@ public class InventoryTEST {
 		GoodsReceiptDetailTO art = new GoodsReceiptDetailTO();
 		GoodsReceiptDetailTO art2 = new GoodsReceiptDetailTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
+		Date fecha = new Date();
 		//parameters.setDocnum(26);
 		parameters.setObjtype("30");
 		parameters.setUsersign(1);
+		parameters.setComments("Prueba inicial");
+		parameters.setDocdate(fecha);
+		parameters.setDocduedate(fecha);
 		List detalle = new Vector();
 		art.setLinenum(1);
-		art.setAcctcode("1101");
+		art.setAcctcode("410102");
 		art.setObjtype("30");
 		art.setWhscode("ALM-001");
 		art.setItemcode("001-004-545-6114");
@@ -153,7 +157,7 @@ public class InventoryTEST {
 		art.setObjtype("30");
 		detalle.add(art);
 		art2.setLinenum(2);
-		art2.setAcctcode("1101");
+		art2.setAcctcode("410102");
 		art2.setObjtype("30");
 		art2.setWhscode("ALM-001");
 		art2.setItemcode("001-021");
