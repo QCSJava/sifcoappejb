@@ -417,8 +417,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
@@ -435,8 +434,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
@@ -453,8 +451,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
@@ -471,8 +468,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
@@ -489,8 +485,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
@@ -507,8 +502,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
@@ -525,8 +519,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
@@ -543,20 +536,15 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				_return.setCodigoError(1);
-				_return.setMensaje("no se encuentra accion por realizar");
+				throw new Exception ("Error en ceunta contable, informar al administrador");
 
 			}
 			break;
 
 		default:
-			_return.setCodigoError(1);
-			_return.setMensaje("no se encuentra accion por realizar");
-
-			break;
+			throw new Exception ("Error en ceunta contable, informar al administrador");
 		}
 
-		int i = update_currtotal(account1, conn);
 
 		_return.setCodigoError(0);
 		_return.setMensaje("cuenta actualizada correctamente");
