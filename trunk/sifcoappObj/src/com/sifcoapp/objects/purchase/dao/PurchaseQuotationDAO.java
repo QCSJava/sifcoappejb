@@ -78,7 +78,7 @@ public class PurchaseQuotationDAO extends CommonDAO{
 					purchase.setCardcode(rowsetActual.getString(9));
 					purchase.setNumatcard(rowsetActual.getString(10));
 					purchase.setCardname(rowsetActual.getString(11));
-					purchase.setVatsum(rowsetActual.getString(12));
+					purchase.setVatsum(rowsetActual.getDouble(12));
 					purchase.setDiscsum(rowsetActual.getDouble(13));
 					purchase.setDoctotal(rowsetActual.getDouble(14));
 					purchase.setRef1(rowsetActual.getString(15));
@@ -151,7 +151,7 @@ public class PurchaseQuotationDAO extends CommonDAO{
 					purchase.setCardcode(rowsetActual.getString(9));
 					purchase.setNumatcard(rowsetActual.getString(10));
 					purchase.setCardname(rowsetActual.getString(11));
-					purchase.setVatsum(rowsetActual.getString(12));
+					purchase.setVatsum(rowsetActual.getDouble(12));
 					purchase.setDiscsum(rowsetActual.getDouble(13));
 					purchase.setDoctotal(rowsetActual.getDouble(14));
 					purchase.setRef1(rowsetActual.getString(15));

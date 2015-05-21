@@ -132,7 +132,7 @@ public class SalesTest {
 		document1.setQuantity(0.00);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
-		//document1.setDocentry(485);
+		
 		document1.setLinetotal(0.0000);
 		document1.setPricebefdi(0.00000);
 		document1.setPriceafvat(0.0000);

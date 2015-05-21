@@ -78,7 +78,7 @@ public class SupplierDAO extends CommonDAO{
 					Supplier.setCardcode(rowsetActual.getString(9));
 					Supplier.setNumatcard(rowsetActual.getString(10));
 					Supplier.setCardname(rowsetActual.getString(11));
-					Supplier.setVatsum(rowsetActual.getString(12));
+					Supplier.setVatsum(rowsetActual.getDouble(12));
 					Supplier.setDiscsum(rowsetActual.getDouble(13));
 					Supplier.setDoctotal(rowsetActual.getDouble(14));
 					Supplier.setRef1(rowsetActual.getString(15));
@@ -151,7 +151,7 @@ public class SupplierDAO extends CommonDAO{
 					Supplier.setCardcode(rowsetActual.getString(9));
 					Supplier.setNumatcard(rowsetActual.getString(10));
 					Supplier.setCardname(rowsetActual.getString(11));
-					Supplier.setVatsum(rowsetActual.getString(12));
+					Supplier.setVatsum(rowsetActual.getDouble(12));
 					Supplier.setDiscsum(rowsetActual.getDouble(13));
 					Supplier.setDoctotal(rowsetActual.getDouble(14));
 					Supplier.setRef1(rowsetActual.getString(15));

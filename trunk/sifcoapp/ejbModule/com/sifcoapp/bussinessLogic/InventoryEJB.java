@@ -1295,6 +1295,14 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			nuevo.setUsersign(parameters.getUsersign());
 			nuevo.setLoctotal(sum);
 			nuevo.setSystotal(sum);
+			nuevo.setBtfstatus("O");
+			nuevo.setTranstype("5");
+			nuevo.setBaseref(parameters.getRef1());
+			nuevo.setRefdate(parameters.getDocduedate());
+			nuevo.setRef1(parameters.getRef1());
+			//nuevo.setRef2(ref2);
+
+
 			// llenado de los hijos
 			art1.setLine_id(1);
 			// buscar la cuenta asignada al almacen
@@ -1310,10 +1318,69 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			}
 
 			art1.setDebit(sum);
+			art1.setDuedate(parameters.getDocduedate());
+			art1.setShortname(branch.getBalinvntac());
+			art1.setContraact(acc);
+			art1.setLinememo("entrada de mercancias");	
+			art1.setRefdate(parameters.getDocduedate());
+			art1.setRef1(parameters.getRef1());
+			//art1.setRef2();
+			art1.setBaseref(parameters.getRef1());
+			art1.setTaxdate(parameters.getDocduedate());
+			//art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);	
+			art1.setRellineid(-1);	
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(0.0);
+			art1.setClosed("N");
+			art1.setGrossvalue(0.0);
+			art1.setBalduedeb(sum);
+			art1.setBalduecred(0.0);
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);	
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(0.0);	
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");	
+
 			detail.add(art1);
+			
 			art2.setLine_id(2);
 			art2.setAccount(acc);
 			art2.setCredit(sum);
+			art2.setDuedate(parameters.getDocduedate());
+			art2.setShortname(acc);
+			art2.setContraact(branch.getBalinvntac());
+			art2.setLinememo("entrada de mercancias");	
+			art2.setRefdate(parameters.getDocduedate());
+			art2.setRef1(parameters.getRef1());
+			//art2.setRef2();
+			art2.setBaseref(parameters.getRef1());
+			art2.setTaxdate(parameters.getDocduedate());
+			//art1.setFinncpriod(finncpriod);
+			art2.setReltransid(-1);	
+			art2.setRellineid(-1);	
+			art2.setReltype("N");
+			art2.setObjtype("5");
+			art2.setVatline("N");
+			art2.setVatamount(0.0);
+			art2.setClosed("N");
+			art2.setGrossvalue(0.0);
+			art2.setBalduedeb(0.0);
+			art2.setBalduecred(sum);
+			art2.setIsnet("Y");
+			art2.setTaxtype(0);	
+			art2.setTaxpostacc("N");
+			art2.setTotalvat(0.0);	
+			art2.setWtliable("N");
+			art2.setWtline("N");
+			art2.setPayblock("N");
+			art2.setOrdered("N");
+			
 			detail.add(art2);
 			
 		}
