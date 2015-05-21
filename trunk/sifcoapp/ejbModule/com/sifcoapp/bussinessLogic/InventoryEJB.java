@@ -121,6 +121,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 		// variables
 		Double total = zero;
+		ArticlesTO DBArticle = new ArticlesTO();
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto detalle
@@ -129,17 +130,30 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		Iterator<GoodsReceiptDetailTO> iterator = parameters
 				.getGoodReceiptDetail().iterator();
 		while (iterator.hasNext()) {
-
-			// Asignación de almacen en cada detalle
 			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator
 					.next();
+			
+			AdminEJB EJB = new AdminEJB();			
+
+			DBArticle = EJB.getArticlesByKey(articleDetalle.getItemcode());
+			
+			//Asignar a documento 
+			articleDetalle.setArticle(DBArticle);
+						
+			// Asignación de almacen en cada detalle
 			articleDetalle.setWhscode(parameters.getTowhscode());
 
+			//Asignaciones varias
+			articleDetalle.setDscription(DBArticle.getItemName());
+			articleDetalle.setUnitmsr(DBArticle.getInvntryUom());
+			
 			// Calculo de totales
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()
 					* articleDetalle.getPrice());
 			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total = total + articleDetalle.getLinetotal();
+			
+			
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -211,19 +225,15 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 		// recorre el Detalle
 		while (iterator1.hasNext()) {
-			AdminEJB EJB = new AdminEJB();
+			
 			// Consultar información actualizada desde la base
 			GoodsReceiptDetailTO GoodsReceiptDetail = (GoodsReceiptDetailTO) iterator1
 					.next();
 
-			code = GoodsReceiptDetail.getItemcode();
-
-			DBArticle = EJB.getArticlesByKey(code);
+			DBArticle = GoodsReceiptDetail.getArticle();
 			
 			//Asignar articulo al detalle
-			GoodsReceiptDetail.setArticle(DBArticle);
-			GoodsReceiptDetail.setDscription(DBArticle.getItemName());
-		 
+			GoodsReceiptDetail.setArticle(DBArticle);		
 
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación articulo existe
