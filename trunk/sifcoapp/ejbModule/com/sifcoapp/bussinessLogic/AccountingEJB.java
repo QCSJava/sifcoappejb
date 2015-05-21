@@ -24,10 +24,6 @@ import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
-import com.sifcoapp.objects.inventory.to.GoodsIssuesDetailTO;
-import com.sifcoapp.objects.purchase.dao.PurchaseDAO;
-import com.sifcoapp.objects.purchase.dao.PurchaseDetailDAO;
-import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
 
 /**
  * Session Bean implementation class AccountingEJB
@@ -212,6 +208,18 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public int update_currtotal(AccountTO parameters, Connection conn)
+			throws Exception {
+		// TODO Auto-generated method stub
+		int _return = 0;
+		AccountingDAO DAO = new AccountingDAO(conn);
+		DAO.setIstransaccional(true);
+
+		_return = DAO.update_currtotal(parameters);
+
+		return _return;
+	}
+
 	public List getTreeAccount() throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
@@ -309,27 +317,24 @@ public class AccountingEJB implements AccountingEJBRemote {
 				.getJournalentryList().iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator.next();
-			// ------------------------------------------------------------------------------------------------------------
-			// nueva instancia de AccountTO para mandar como parametros para
-			// la funcion de actualizar saldos
-			// ------------------------------------------------------------------------------------------------------------
-			AccountTO account = new AccountTO();
-			int acction = 0;
+
 			// ------------------------------------------------------------------------------------------------------------
 			// Valores por defecto del detalle
 			// ------------------------------------------------------------------------------------------------------------
+
+			AccountTO account = new AccountTO();
+
 			if (Detalle.getDebit() == null) {
 				Detalle.setDebit(zero);
 			} else {
-				
-				account.setCurrtotal(Detalle.getDebit());
 				Detalle.setDebcred("D");
+				account.setCurrtotal(Detalle.getDebit());
 			}
 			if (Detalle.getCredit() == null) {
 				Detalle.setCredit(zero);
 			} else {
-				account.setCurrtotal(Detalle.getCredit());
 				Detalle.setDebcred("C");
+				account.setCurrtotal(Detalle.getCredit());
 			}
 			if (Detalle.getTomthsum() == null) {
 				Detalle.setTomthsum(zero);
@@ -373,17 +378,190 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// ---------------------------------------------------------------------------------------------------------------
 			// actualizacion de saldo de cuenta
 			// ---------------------------------------------------------------------------------------------------------------
+
 			account.setAcctcode(Detalle.getAccount());
-			AccountingDAO DAO1 = new AccountingDAO(_conn);
-			DAO1.setIstransaccional(true);
-			
-			DAO1.update_currtotal_accout(account, Detalle.getDebcred());
+			update_currtotal(account, Detalle.getDebcred(), _conn);
 
 		}
 
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
+	}
+
+	public ResultOutTO update_currtotal(AccountTO Account, String action,
+			Connection conn) throws Exception {
+		ResultOutTO _return = new ResultOutTO();
+		AccountTO account1 = new AccountTO();
+		double saldo;
+		account1 = getAccountByKey(Account.getAcctcode());
+		// ------------------------------------------------------------------------------------------------------------------
+		// 1 si su saldo esta en el debe Y 2 si su saldo estan el haber
+		if (account1 == null || account1.getPostable().equals("N")) {
+			throw new Exception(
+					"La cuenta contable no existe o no es posteable");
+		}
+		// ------------------------------------------------------------------------------------------------------------------
+
+		switch (account1.getGroupmask()) {
+		// ------------------------------------------------------------------------------------------------------------------
+		// 1- Activo
+		// ------------------------------------------------------------------------------------------------------------------
+
+		case 1:
+			if (action.equals("D")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+			} else if (action.equals("C")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 2- Pasivo
+		// ------------------------------------------------------------------------------------------------------------------
+		case 2:
+			if (action.equals("C")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else if (action.equals("D")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 3-Capital
+		// ------------------------------------------------------------------------------------------------------------------
+		case 3:
+			if (action.equals("C")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else if (action.equals("D")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 4- Cuentas de Ingreso
+		// ------------------------------------------------------------------------------------------------------------------
+		case 4:
+			if (action.equals("C")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else if (action.equals("D")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 5- Cuentas de Costos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 5:
+			if (action.equals("D")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else if (action.equals("C")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 6- Cuentas de Gastos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 6:
+			if (action.equals("D")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else if (action.equals("C")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// Otros Ingresos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 7:
+			if (action.equals("C")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else if (action.equals("D")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 8 - Otros Gastos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 8:
+			if (action.equals("D")) {
+				saldo = Account.getCurrtotal() + account1.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else if (action.equals("C")) {
+				saldo = account1.getCurrtotal() - Account.getCurrtotal();
+				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
+			} else {
+				_return.setCodigoError(1);
+				_return.setMensaje("no se encuentra accion por realizar");
+
+			}
+			break;
+
+		default:
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra accion por realizar");
+
+			break;
+		}
+
+		int i = update_currtotal(account1, conn);
+
+		_return.setCodigoError(0);
+		_return.setMensaje("cuenta actualizada correctamente");
+		return null;
+
 	}
 
 	// ################### BUDGET ######################

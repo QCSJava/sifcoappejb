@@ -104,36 +104,39 @@ public class transactionEJB {
 
 		InventoryLogTO inventory = new InventoryLogTO();
 
-		inventory.setDocentry(transaction.getCreatedby());
-		inventory.setDoclinenum(transaction.getDoclinenum());
+		inventory.setDocentry(transaction.getDocentry());
+		inventory.setTranstype(Integer.parseInt(transaction.getObjtype()));
+		inventory.setDoclinenum(transaction.getLinenum());
 		inventory.setQuantity(transaction.getQuantity());
 		inventory.setEffectqty(transaction.getQuantity());
 		inventory.setLoctype(0); // valor defecto
-		inventory.setLoccode(transaction.getLoccode());
-		inventory.setTotallc(transaction.getOpenstock());
-		inventory.setBase_ref(transaction.getBase_ref());
+		inventory.setLoccode(transaction.getWhscode());
+		inventory.setTotallc(transaction.getLinetotal());
+		//inventory.setBaseabsent(null);
 		inventory.setBasetype(-1);
 		inventory.setAccumtype(1);
 		inventory.setActiontype(1);
 		inventory.setExpenseslc(zero);
 		inventory.setDocduedate(transaction.getDocduedate());
 		inventory.setItemcode(transaction.getItemcode());
-		inventory.setBpcardcode(transaction.getIoffincacc());
-		inventory.setDocdate(transaction.getDocdate());
+		inventory.setBpcardcode(transaction.getAcctcode());
+		inventory.setDocdate(transaction.getDocdate());		
 		inventory.setComment(transaction.getComment());
 		inventory.setJrnlmemo(transaction.getJrnlmemo());
-		inventory.setRef1(transaction.getBase_ref());
+		inventory.setRef1(transaction.getRef1());
 		inventory.setRef2(transaction.getRef2());
-		inventory.setBaseline(transaction.getDoclinenum());
+		inventory.setBaseline(-1);
 		inventory.setSnbtype(-1);
-		// inventory.setOcrcode();
-		// inventory.setOcrcode2();
-		// inventory.setOcrcode3();
-		// inventory.setCardname(detalleReceipt);
+		//inventory.setCreatetime();
+		//inventory.setCreatetime();
+		inventory.setOcrcode(transaction.getOcrcode());
+		//inventory.setOcrcode2();
+		//inventory.setOcrcode3();
+		inventory.setCardname(transaction.getCardname());
 		inventory.setDscription(transaction.getDscription());
-		inventory.setBase_ref(transaction.getBase_ref());
+		inventory.setBase_ref(transaction.getDocnum());
 		inventory.setPricerate(zero);
-		inventory.setDoctotal(transaction.getOpenstock());
+		inventory.setDoctotal(transaction.getLinetotal());
 		inventory.setPrice(transaction.getPrice());
 		inventory.setTaxdate(transaction.getDocdate());
 		inventory.setUsersign(transaction.getUsersign());
@@ -150,49 +153,67 @@ public class transactionEJB {
 		// llenando WarehouseJournalTO
 		// ------------------------------------------------------------------------------------------------------------------------------
 
-		WarehouseJournal.setTranstype(transaction.getTranstype());
-		WarehouseJournal.setCreatedby(transaction.getCreatedby());
-		WarehouseJournal.setBase_ref(transaction.getBase_ref());
-		WarehouseJournal.setDoclinenum(transaction.getDoclinenum());
+		WarehouseJournal.setTranstype(Integer.parseInt(transaction.getObjtype()));
+		WarehouseJournal.setCreatedby(transaction.getDocentry());
+		WarehouseJournal.setBase_ref(transaction.getDocnum());
+		WarehouseJournal.setDoclinenum(transaction.getLinenum());
 		WarehouseJournal.setItemcode(transaction.getItemcode());
 		WarehouseJournal.setInqty(transaction.getInqty());
 		WarehouseJournal.setOutqty(transaction.getOutqty());
 		WarehouseJournal.setPrice(transaction.getPrice());
-		WarehouseJournal.setSublinenum(transaction.getSublinenum());
-		WarehouseJournal.setAppobjline(transaction.getAppobjline());
-		WarehouseJournal.setExpenses(transaction.getExpenses());
-		WarehouseJournal.setOpenexp(transaction.getOpenexp());
-		WarehouseJournal.setAllocation(transaction.getAllocation());
-		WarehouseJournal.setOpenalloc(transaction.getOpenalloc());
-		WarehouseJournal.setExpalloc(transaction.getExpalloc());
-		WarehouseJournal.setOexpalloc(transaction.getOexpalloc());
-		WarehouseJournal.setOpenpdiff(transaction.getOpenpdiff());
-		WarehouseJournal.setNeginvadjs(transaction.getNeginvadjs());
-		WarehouseJournal.setOpenneginv(transaction.getOpenneginv());
-		WarehouseJournal.setNegstckact(transaction.getNegstckact());
-		WarehouseJournal.setBtransval(transaction.getBtransval());
-		WarehouseJournal.setVarval(transaction.getVarval());
-		WarehouseJournal.setBexpval(transaction.getBexpval());
-		WarehouseJournal.setCogsval(transaction.getCogsval());
-		WarehouseJournal.setBnegaval(transaction.getBnegaval());
+		//WarehouseJournal.setTrnsfract(trnsfract);
+		//WarehouseJournal.setPricedifac(pricedifac);
+		//WarehouseJournal.setVarianceac(varianceac);
+		//WarehouseJournal.setReturnact(returnact);
+		//WarehouseJournal.setClearact();
+		//WarehouseJournal.setCostact(costact);
+		//WarehouseJournal.setWipact(wipact);
+		WarehouseJournal.setOpenstock(transaction.getLinetotal());
+		WarehouseJournal.setPricediff(zero);
+		WarehouseJournal.setTransseq(-1);
+		WarehouseJournal.setInvntact(transaction.getInvntact());
+		WarehouseJournal.setSublinenum(-1);
+		WarehouseJournal.setAppobjline(-1);
+		WarehouseJournal.setExpenses(zero);
+		WarehouseJournal.setOpenexp(zero);
+		WarehouseJournal.setAllocation(zero);
+		WarehouseJournal.setOpenalloc(zero);
+		WarehouseJournal.setExpalloc(zero);
+		WarehouseJournal.setOexpalloc(zero);
+		WarehouseJournal.setOpenpdiff(zero);
+		WarehouseJournal.setNeginvadjs(zero);
+		WarehouseJournal.setOpenneginv(zero);
+		//WarehouseJournal.setNegstckact(negstckact);
+		WarehouseJournal.setBtransval(zero);
+		WarehouseJournal.setVarval(zero);
+		WarehouseJournal.setBexpval(zero);
+		WarehouseJournal.setCogsval(zero);
+		WarehouseJournal.setBnegaval(zero);
+		WarehouseJournal.setIoffincacc(transaction.getAcctcode());
+		WarehouseJournal.setIoffincval(zero);
+		//WarehouseJournal.setDoffdecacc(doffdecacc);
+		WarehouseJournal.setDoffdecval(zero);
+		//WarehouseJournal.setDecacc(decacc);
+		WarehouseJournal.setDecval(zero);
+		WarehouseJournal.setWipval(zero);
+		//WarehouseJournal.setWipvaracc(wipvaracc);
+		WarehouseJournal.setWipvarval(zero);
+		//WarehouseJournal.setIncact(incact);
+		WarehouseJournal.setIncval(zero);
+		//WarehouseJournal.setExpcacc(expcacc);		
 		WarehouseJournal.setMessageid(transaction.getMessageid());
-		WarehouseJournal.setLoctype(transaction.getLoctype());
-		WarehouseJournal.setLoccode(transaction.getLoccode());
+		WarehouseJournal.setLoctype(-1);
+		WarehouseJournal.setLoccode(transaction.getWhscode());
 		WarehouseJournal.setOutqty(transaction.getOutqty());
-		WarehouseJournal.setOpenstock(transaction.getOpenstock());
-		WarehouseJournal.setPricediff(transaction.getPricediff());
-		WarehouseJournal.setIoffincval(transaction.getIoffincval());
-		WarehouseJournal.setDoffdecval(transaction.getDoffdecval());
-		WarehouseJournal.setDecval(transaction.getDecval());
-		WarehouseJournal.setWipval(transaction.getWipval());
-		WarehouseJournal.setWipvarval(transaction.getWipvarval());
-		WarehouseJournal.setIncval(transaction.getIncval());
-		WarehouseJournal.setSumstock(transaction.getSumstock());
-		WarehouseJournal.setOpenqty(transaction.getOpenqty());
-		WarehouseJournal.setPaoffval(transaction.getPaoffval());
-		WarehouseJournal.setOpenpaoff(transaction.getOpenpaoff());
-		WarehouseJournal.setPaval(transaction.getPaval());
-		WarehouseJournal.setOpenpa(transaction.getOpenpa());
+		WarehouseJournal.setPoststatus("N");
+		WarehouseJournal.setSumstock(transaction.getLinetotal());
+		WarehouseJournal.setOpenqty(transaction.getQuantity());
+		//WarehouseJournal.setPaoffacc(paoffacc);
+		WarehouseJournal.setPaoffval(zero);
+		WarehouseJournal.setOpenpaoff(zero);
+		//WarehouseJournal.setPaacc(paacc);
+		WarehouseJournal.setPaval(zero);
+		WarehouseJournal.setOpenpa(zero);		
 
 		return WarehouseJournal;
 	}
@@ -205,7 +226,7 @@ public class transactionEJB {
 		WarehouseJournalLayer.setLayerid(0);
 		WarehouseJournalLayer.setCalcprice(transaction.getPrice());
 		WarehouseJournalLayer.setBalance(transaction.getBalance());
-		WarehouseJournalLayer.setTransvalue(transaction.getSumstock());
+		WarehouseJournalLayer.setTransvalue(transaction.getLinetotal());
 		WarehouseJournalLayer.setLayerinqty(transaction.getInqty());
 		WarehouseJournalLayer.setLayeroutq(transaction.getOutqty());
 		WarehouseJournalLayer.setRevaltotal(zero);
@@ -237,14 +258,13 @@ public class transactionEJB {
 
 		// TODO: ver como quito esta parte ya tienen que venir los articulos
 		// dentro del transaction
-		AdminEJB EJB = new AdminEJB();
-		DBArticle = EJB.getArticlesByKey(transaction.getItemcode());
+		DBArticle = transaction.getArticle();
 		
 		avgPrice = DBArticle.getAvgPrice();
 		onhand = DBArticle.getOnHand();
-		whsCode = transaction.getLoccode();
+		whsCode = transaction.getWhscode();
 		transQuantity = transaction.getQuantity();
-		transValue = transaction.getSumstock();
+		transValue = transaction.getLinetotal();
 
 		for (Object object : DBArticle.getBranchArticles()) {
 			BranchArticlesTO branch = (BranchArticlesTO) object;
@@ -261,7 +281,7 @@ public class transactionEJB {
 		// Documentos Entrada de mercancias GoodReceipt ObjectType = 30
 		// ------------------------------------------------------------------------------------------------------------
 
-		if (transaction.getTranstype() == 30) {
+		if (transaction.getObjtype().equals("30")) {
 			// Existencias
 			// --------------------------------------------------------------------------------------------------------
 			newOnhand = onhand + transQuantity;
