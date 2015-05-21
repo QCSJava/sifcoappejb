@@ -1295,7 +1295,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			branch = admin.getBranchByKey(parameters.getTowhscode());
 			art1.setAccount(branch.getBalinvntac());
 
-			if (branch.getBalinvntac() == null ) {
+			if (branch.getBalinvntac() == null) {
 				throw new Exception("No hay una cuenta de Inventario asignada al almacen");
 			}
 
