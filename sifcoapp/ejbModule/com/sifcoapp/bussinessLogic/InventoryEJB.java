@@ -132,28 +132,27 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		while (iterator.hasNext()) {
 			GoodsReceiptDetailTO articleDetalle = (GoodsReceiptDetailTO) iterator
 					.next();
-			
-			AdminEJB EJB = new AdminEJB();			
+
+			AdminEJB EJB = new AdminEJB();
 
 			DBArticle = EJB.getArticlesByKey(articleDetalle.getItemcode());
-			
-			//Asignar a documento 
+
+			// Asignar a documento
 			articleDetalle.setArticle(DBArticle);
-						
+
 			// Asignación de almacen en cada detalle
 			articleDetalle.setWhscode(parameters.getTowhscode());
 
-			//Asignaciones varias
+			// Asignaciones varias
 			articleDetalle.setDscription(DBArticle.getItemName());
 			articleDetalle.setUnitmsr(DBArticle.getInvntryUom());
-			
+
 			// Calculo de totales
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()
 					* articleDetalle.getPrice());
 			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total = total + articleDetalle.getLinetotal();
-			
-			
+
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -225,15 +224,15 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 		// recorre el Detalle
 		while (iterator1.hasNext()) {
-			
+
 			// Consultar información actualizada desde la base
 			GoodsReceiptDetailTO GoodsReceiptDetail = (GoodsReceiptDetailTO) iterator1
 					.next();
 
 			DBArticle = GoodsReceiptDetail.getArticle();
-			
-			//Asignar articulo al detalle
-			GoodsReceiptDetail.setArticle(DBArticle);		
+
+			// Asignar articulo al detalle
+			GoodsReceiptDetail.setArticle(DBArticle);
 
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación articulo existe
@@ -496,47 +495,47 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			transaction.setNewWhsOnhand(zero);
 			transaction.setNewAvgprice(zero);
 			transaction.setArticle(detail.getArticle());
-			
+
 			_return.add(transaction);
 
 			/*
-			transaction.setTransseq(detail.getTransseq());
-			transaction.setDocentry(detail.getDocentry());
-			transaction.setDocnum(detail.getDocnum());
-			transaction.setDocduedate(detail.getDocduedate());
-			transaction.setDocdate(detail.getDocdate());
-			transaction.setComment(detail.getComment());
-			transaction.setJrnlmemo(detail.getJrnlmemo());
-			transaction.setUsersign(detail.getUsersign());
-			transaction.setRef1(detail.getRef1());
-			transaction.setRef2(detail.getRef2());
-			transaction.setLinenum(detail.getLinenum());
-			transaction.setItemcode(detail.getItemcode());
-			transaction.setDscription(detail.getDscription());
-			transaction.setQuantity(detail.getQuantity());
-			transaction.setPrice(detail.getPrice());
-			transaction.setLinetotal(detail.getLinetotal());
-			transaction.setWhscode(detail.getWhscode());
-			transaction.setAcctcode(detail.getAcctcode());
-			transaction.setOcrcode(detail.getOcrcode());
-			transaction.setVatgroup(detail.getVatgroup());
-			transaction.setPriceafvat(detail.getPriceafvat());
-			transaction.setVatsum(detail.getVatsum());
-			transaction.setObjtype(detail.getObjtype());
-			transaction.setGrssprofit(detail.getGrssprofit());
-			transaction.setTaxcode(detail.getTaxcode());
-			transaction.setVatappld(detail.getVatappld());
-			transaction.setStockprice(detail.getStockprice());
-			transaction.setGtotal(detail.getGtotal());
-			transaction.setInqty(detail.getInqty());
-			transaction.setOutqty(detail.getOutqty());
-			transaction.setMessageid(detail.getMessageid());
-			transaction.setBalance(detail.getBalance());
-			transaction.setNewonhand(detail.getNewonhand());
-			transaction.setNewwhsonhand(detail.getNewwhsonhand());
-			transaction.setNewavgprice(detail.getNewavgprice());*/
+			 * transaction.setTransseq(detail.getTransseq());
+			 * transaction.setDocentry(detail.getDocentry());
+			 * transaction.setDocnum(detail.getDocnum());
+			 * transaction.setDocduedate(detail.getDocduedate());
+			 * transaction.setDocdate(detail.getDocdate());
+			 * transaction.setComment(detail.getComment());
+			 * transaction.setJrnlmemo(detail.getJrnlmemo());
+			 * transaction.setUsersign(detail.getUsersign());
+			 * transaction.setRef1(detail.getRef1());
+			 * transaction.setRef2(detail.getRef2());
+			 * transaction.setLinenum(detail.getLinenum());
+			 * transaction.setItemcode(detail.getItemcode());
+			 * transaction.setDscription(detail.getDscription());
+			 * transaction.setQuantity(detail.getQuantity());
+			 * transaction.setPrice(detail.getPrice());
+			 * transaction.setLinetotal(detail.getLinetotal());
+			 * transaction.setWhscode(detail.getWhscode());
+			 * transaction.setAcctcode(detail.getAcctcode());
+			 * transaction.setOcrcode(detail.getOcrcode());
+			 * transaction.setVatgroup(detail.getVatgroup());
+			 * transaction.setPriceafvat(detail.getPriceafvat());
+			 * transaction.setVatsum(detail.getVatsum());
+			 * transaction.setObjtype(detail.getObjtype());
+			 * transaction.setGrssprofit(detail.getGrssprofit());
+			 * transaction.setTaxcode(detail.getTaxcode());
+			 * transaction.setVatappld(detail.getVatappld());
+			 * transaction.setStockprice(detail.getStockprice());
+			 * transaction.setGtotal(detail.getGtotal());
+			 * transaction.setInqty(detail.getInqty());
+			 * transaction.setOutqty(detail.getOutqty());
+			 * transaction.setMessageid(detail.getMessageid());
+			 * transaction.setBalance(detail.getBalance());
+			 * transaction.setNewonhand(detail.getNewonhand());
+			 * transaction.setNewwhsonhand(detail.getNewwhsonhand());
+			 * transaction.setNewavgprice(detail.getNewavgprice());
+			 */
 
-			
 		}
 		return _return;
 	}
@@ -555,41 +554,32 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			DAO.forceCloseConnection();
 		}
 		return _return;
-		
+
 	}
-	
+
 	public ResultOutTO inv_GoodsReceipt_update(GoodsreceiptTO parameters,
-			int action, Connection conn ) throws EJBException {
+			int action, Connection conn) throws Exception {
 		// Variables
 		ResultOutTO _return = new ResultOutTO();
-		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		GoodsReceiptDAO DAO = new GoodsReceiptDAO(conn);
 		DAO.setIstransaccional(true);
-		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(DAO.getConn());
+		GoodReceiptDetailDAO goodDAO1 = new GoodReceiptDetailDAO(conn);
 		goodDAO1.setIstransaccional(true);
 
-		try {
-			// Actualizar/borrar encabezados
-			_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
+		// Actualizar/borrar encabezados
+		_return.setDocentry(DAO.inv_GoodsReceipt_mtto(parameters, action));
 
-			// Borrar detalles
-			Iterator<GoodsReceiptDetailTO> iterator = parameters
-					.getGoodReceiptDetail().iterator();
-			if (action == Common.MTTODELETE) {
-				while (iterator.hasNext()) {
-					GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
-							.next();
+		// Borrar detalles
+		Iterator<GoodsReceiptDetailTO> iterator = parameters
+				.getGoodReceiptDetail().iterator();
+		if (action == Common.MTTODELETE) {
+			while (iterator.hasNext()) {
+				GoodsReceiptDetailTO detalleReceipt = (GoodsReceiptDetailTO) iterator
+						.next();
 
-					goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
-							Common.MTTODELETE);
-				}
+				goodDAO1.inv_goodReceiptDetail_mtto(detalleReceipt,
+						Common.MTTODELETE);
 			}
-			DAO.forceCommit();
-		} catch (Exception e) {
-			DAO.rollBackConnection();
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			DAO.forceCloseConnection();
 		}
 
 		_return.setCodigoError(0);
@@ -1238,37 +1228,38 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		List list = parameters.getGoodReceiptDetail();
 		List aux = new Vector();
 		List<List> listas = new Vector();
-		List aux1= new Vector(); 
+		List aux1 = new Vector();
 		// recorre la lista de detalles
 		for (Object obj : list) {
 			GoodsReceiptDetailTO good = (GoodsReceiptDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
-			
-			 //comparando lista aux de nodos visitados
-			 for (Object obj2 : aux) {
-					GoodsReceiptDetailTO good2 = (GoodsReceiptDetailTO) obj2;
-					if (cod.equals(good2.getAcctcode())) {
-						ind=true;
-					}
-			 }
-			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
-			// en otra lista
-			 if(ind==false){
-			for (Object obj3 : list) {
-				GoodsReceiptDetailTO good3 = (GoodsReceiptDetailTO) obj3;
-				if (cod.equals(good3.getAcctcode())) {
-					lisHija.add(good3);
+
+			// comparando lista aux de nodos visitados
+			for (Object obj2 : aux) {
+				GoodsReceiptDetailTO good2 = (GoodsReceiptDetailTO) obj2;
+				if (cod.equals(good2.getAcctcode())) {
+					ind = true;
 				}
 			}
-			// guarda en la lista de listas
-			listas.add(lisHija);
-			 }
-			 
-			 aux.add(good);
-				
+			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
+			// en otra lista
+			if (ind == false) {
+				for (Object obj3 : list) {
+					GoodsReceiptDetailTO good3 = (GoodsReceiptDetailTO) obj3;
+					if (cod.equals(good3.getAcctcode())) {
+						lisHija.add(good3);
+					}
+				}
+				// guarda en la lista de listas
+				listas.add(lisHija);
+			}
+
+			aux.add(good);
+
 		}
-		//recorre la lista de listas para encontrar los detalles de  el asiento contable
+		// recorre la lista de listas para encontrar los detalles de el asiento
+		// contable
 		List detail = new Vector();
 		for (List obj1 : listas) {
 			List listaDet = obj1;
@@ -1280,7 +1271,6 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 				acc = newGood.getAcctcode();
 			}
 			// asiento contable
-			
 
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
@@ -1300,8 +1290,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			nuevo.setBaseref(parameters.getRef1());
 			nuevo.setRefdate(parameters.getDocduedate());
 			nuevo.setRef1(parameters.getRef1());
-			//nuevo.setRef2(ref2);
-
+			// nuevo.setRef2(ref2);
 
 			// llenado de los hijos
 			art1.setLine_id(1);
@@ -1314,22 +1303,23 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setAccount(branch.getBalinvntac());
 
 			if (branch.getBalinvntac() == null) {
-				throw new Exception("No hay una cuenta de Inventario asignada al almacen");
+				throw new Exception(
+						"No hay una cuenta de Inventario asignada al almacen");
 			}
 
 			art1.setDebit(sum);
 			art1.setDuedate(parameters.getDocduedate());
 			art1.setShortname(branch.getBalinvntac());
 			art1.setContraact(acc);
-			art1.setLinememo("entrada de mercancias");	
+			art1.setLinememo("entrada de mercancias");
 			art1.setRefdate(parameters.getDocduedate());
 			art1.setRef1(parameters.getRef1());
-			//art1.setRef2();
+			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
 			art1.setTaxdate(parameters.getDocduedate());
-			//art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);	
-			art1.setRellineid(-1);	
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
 			art1.setReltype("N");
 			art1.setObjtype("5");
 			art1.setVatline("N");
@@ -1339,31 +1329,31 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setBalduedeb(sum);
 			art1.setBalduecred(0.0);
 			art1.setIsnet("Y");
-			art1.setTaxtype(0);	
+			art1.setTaxtype(0);
 			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);	
+			art1.setTotalvat(0.0);
 			art1.setWtliable("N");
 			art1.setWtline("N");
 			art1.setPayblock("N");
-			art1.setOrdered("N");	
+			art1.setOrdered("N");
 
 			detail.add(art1);
-			
+
 			art2.setLine_id(2);
 			art2.setAccount(acc);
 			art2.setCredit(sum);
 			art2.setDuedate(parameters.getDocduedate());
 			art2.setShortname(acc);
 			art2.setContraact(branch.getBalinvntac());
-			art2.setLinememo("entrada de mercancias");	
+			art2.setLinememo("entrada de mercancias");
 			art2.setRefdate(parameters.getDocduedate());
 			art2.setRef1(parameters.getRef1());
-			//art2.setRef2();
+			// art2.setRef2();
 			art2.setBaseref(parameters.getRef1());
 			art2.setTaxdate(parameters.getDocduedate());
-			//art1.setFinncpriod(finncpriod);
-			art2.setReltransid(-1);	
-			art2.setRellineid(-1);	
+			// art1.setFinncpriod(finncpriod);
+			art2.setReltransid(-1);
+			art2.setRellineid(-1);
 			art2.setReltype("N");
 			art2.setObjtype("5");
 			art2.setVatline("N");
@@ -1373,20 +1363,20 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setBalduedeb(0.0);
 			art2.setBalduecred(sum);
 			art2.setIsnet("Y");
-			art2.setTaxtype(0);	
+			art2.setTaxtype(0);
 			art2.setTaxpostacc("N");
-			art2.setTotalvat(0.0);	
+			art2.setTotalvat(0.0);
 			art2.setWtliable("N");
 			art2.setWtline("N");
 			art2.setPayblock("N");
 			art2.setOrdered("N");
-			
+
 			detail.add(art2);
-			
+
 		}
 		nuevo.setJournalentryList(detail);
 		return nuevo;
 
-	// #endregion
-}
+		// #endregion
+	}
 }
