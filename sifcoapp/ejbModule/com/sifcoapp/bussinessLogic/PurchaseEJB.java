@@ -98,7 +98,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		try {
 			DAO.setIstransaccional(true);
-			_return = save_TransactionGoodsReceipt(parameters, action,
+			_return = save_TransactionPurchase(parameters, action,
 					DAO.getConn());
 			DAO.forceCommit();
 
@@ -165,6 +165,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		// variables
 		Double total = zero;
+		Double vatsum = zero;
 		ArticlesTO DBArticle = new ArticlesTO();
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -173,23 +174,40 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		@SuppressWarnings("unchecked")
 		Iterator<PurchaseDetailTO> iterator = parameters.getpurchaseDetails()
 				.iterator();
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Valores por defecto encabezado
+		// --------------------------------------------------------------------------------------------------------------------------------
 		while (iterator.hasNext()) {
 			PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator
 					.next();
 
 			AdminEJB EJB = new AdminEJB();
-
 			DBArticle = EJB.getArticlesByKey(articleDetalle.getItemcode());
 
 			// Asignar a documento
 			articleDetalle.setArticle(DBArticle);
 
-			// Asignación de almacen en cada detalle
-			articleDetalle.setWhscode(parameters.getTowhscode());
-
-			// Asignaciones varias
+			// Valores por defecto
+			articleDetalle.setDocentry(parameters.getDocentry());
+			articleDetalle.setTargettype(-1);
+			// articleDetalle.setBaseref("");
+			articleDetalle.setBasetype(-1);
+			articleDetalle.setLinestatus("O");
 			articleDetalle.setDscription(DBArticle.getItemName());
-			articleDetalle.setUnitmsr(DBArticle.getInvntryUom());
+			articleDetalle.setDiscprcnt(zero);
+			articleDetalle.setWhscode(parameters.getTowhscode());
+			// articleDetalle.setAcctcode(acctcode);
+			articleDetalle.setTaxstatus("Y");
+			articleDetalle.setOcrcode(parameters.getTowhscode());
+			articleDetalle.setFactor1(zero);
+			articleDetalle.setObjtype("20");
+			articleDetalle.setGrssprofit(zero);
+			articleDetalle.setVatappld(zero);
+			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
+			articleDetalle.setStockpricestockprice(zero);
+
+			// Calculo de impuesto
+			vatsum = vatsum + articleDetalle.getVatsum();
 
 			// Calculo de totales
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()
@@ -202,17 +220,28 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto encabezado
 		// --------------------------------------------------------------------------------------------------------------------------------
-		parameters.setDoctotal(total);
+
+		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
-		parameters.setDoctype("I");
+		parameters.setObjtype("20");
+		parameters.setVatsum(vatsum);
+		parameters.setDiscsum(zero);
+		parameters.setDoctotal(total);
+		parameters.setRef1(Integer.toString(parameters.getDocnum()));
 		parameters.setJrnlmemo("Facturas de proveedores - "
 				+ parameters.getCardcode());
+		parameters.setReceiptnum(0);
+		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
-		parameters.setDiscsum(zero);
-		parameters.setNret(zero);
-		parameters.setPaidsum(zero);
+		parameters.setCreatetran("Y");
+		// parameters.setSeries(0);
 		parameters.setRounddif(zero);
+		parameters.setRounding("N");
+		// parameters.setCtlaccount(ctlaccount); Aqui deberia de hacerse la
+		// consulta he incluirse la cuenta contables
+		parameters.setPaidsum(zero);
+		parameters.setNret(zero);
 
 		return parameters;
 	}
@@ -397,7 +426,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	}
 
-	public ResultOutTO save_TransactionGoodsReceipt(PurchaseTO purchase,
+	public ResultOutTO save_TransactionPurchase(PurchaseTO purchase,
 			int action, Connection conn) throws Exception {
 
 		// Variables
@@ -503,7 +532,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		return _return;
 	}
-	
+
 	private List fill_transaction(PurchaseTO document) {
 		List _return = new Vector();
 
@@ -670,23 +699,36 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		AdminDAO admin = new AdminDAO();
 
 		BranchTO branch1 = new BranchTO();
-		// buscando la cuenta asignada de cueta de existencias al almacen
+		// buscando la cuenta asignada de cuenta de existencias al almacen
 
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		branch_c = branch1.getBalinvntac();
 		if (branch1.getBalinvntac() == null) {
-			throw new Exception("No hay una cuenta contable asignada");
+			throw new Exception("No hay una cuenta contable de Inventario asignada al almacen");
 		}
 
-		// buscando cuenta asignada para iva y fovial
+		// buscando cuenta asignada para IVA y FOVIAL
 		if (fovc != 0) {
+			admin = new AdminDAO();
 			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("FOV1", 10);
+			Catalog = admin.findCatalogByKey("FOV1", 12);			
+			
+			if (Catalog.getCatvalue2() ==null){
+				throw new Exception ("No tiene cuenta asignada para  impuestos");				
+			}
+			if (Catalog.getCatvalue() ==null){
+				iva_c = Catalog.getCatvalue();				
+			}
 			fovialCotrans_c = Catalog.getCatvalue2();
 			iva_c = Catalog.getCatvalue();
+		
 		} else {
+			admin = new AdminDAO();
 			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("IVA", 10);
+			Catalog = admin.findCatalogByKey("IVA", 12);
+			if (Catalog.getCatvalue2() ==null){
+				throw new Exception ("No tiene cuenta asignada para impuestos");				
+			}
 			iva_c = Catalog.getCatvalue2();
 		}
 		// asiento contable
@@ -701,7 +743,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// LLenado del padre
 		List detail = new Vector();
 		nuevo.setObjtype("5");
-		nuevo.setMemo("por Compra de Repuestos");
+		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
@@ -710,7 +752,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// cuenta del socio de negocio
 		art1.setLine_id(1);
 		art1.setCredit(bussines);
-		;
 		art1.setAccount(buss_c);
 		detail.add(art1);
 		// cuenta asignada al almacen
@@ -733,10 +774,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		nuevo.setJournalentryList(detail);
 		return nuevo;
 	}
-	
-	// -----------------------------------------------------------------------------------------------------------------
-	// -----------------------------------------------------------------------------------------------------------------
 
+	// -----------------------------------------------------------------------------------------------------------------
+	// Consultas compras
+	// -----------------------------------------------------------------------------------------------------------------
 	public List getPurchase(PurchaseInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
@@ -765,7 +806,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 	}
 
-	// ####purchasequantition
+	// -----------------------------------------------------------------------------------------------------------------
+	// MAntenimeinto de Ordenes de compras
+	// -----------------------------------------------------------------------------------------------------------------
+
 	public List getPurchaseQuotation(PurchaseQuotationInTO param)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -795,10 +839,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		return _return;
 	}
-	
-
-
-	
 
 	public ResultOutTO inv_PurchaseQuotation_mtto(
 			PurchaseQuotationTO parameters, int action) throws Exception {
@@ -1369,6 +1409,5 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 
 	}
-
 
 }

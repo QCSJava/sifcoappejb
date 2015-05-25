@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.PurchaseEJBClient;
+import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.purchase.to.*;
 
@@ -113,21 +114,24 @@ public class PurchaseTest {
 		document.setLinenum(1);
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
-		document.setQuantity(10.25);
-		document.setPrice(11.25);
-		document.setLinetotal(0.0);
-		document.setDiscprcnt(0.0000);
+		document.setQuantity(80.0);
+		document.setPrice(0.5);
+		document.setDiscprcnt(0.0);
+		document.setLinetotal(40.0);			
+		document.setPricebefdi(0.5);
+		document.setPriceafvat(0.565);
+		document.setVatsum(5.2);
+		document.setGrssprofit(0.0);
+		document.setTaxcode("IVA");
+		document.setVatappld(0.0);
+		document.setStockpricestockprice(0.0);
+		document.setGtotal(45.2);
 		
-		document.setPricebefdi(0.00000);
-		document.setPriceafvat(0.0000);
-		document.setStockpricestockprice(0.00000);
-		document.setVatappld(0.000000);
-		document.setVatsum(0.0000);
-		document.setGrssprofit(0.000000);
-		document.setGtotal(0.000000);
+		
+
 		prueba.add(document);
 		
-		document1.setLinenum(2);
+		/*document1.setLinenum(2);
 		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
 		document1.setQuantity(10.25);
@@ -140,9 +144,9 @@ public class PurchaseTest {
 		document1.setVatsum(0.0000);
 		document1.setGrssprofit(0.000000);
 		document1.setGtotal(0.000000);
-		document.setDiscprcnt(0.0000);
+		document.setDiscprcnt(0.0000);*/
 		
-		prueba.add(document1);
+		//prueba.add(document1);
 		
 		
 		
@@ -155,16 +159,16 @@ public class PurchaseTest {
 		parameters.setDocduedate(sqlDate);
 		parameters.setTaxdate(sqlDate);
 		parameters.setTowhscode("ALM-001");
-		parameters.setCardcode("C125");
+		parameters.setCardcode("P035");
 		parameters.setDocnum(48);
-		parameters.setUsersign(1);
-		
+		parameters.setUsersign(78);		
 		parameters.setDoctotal(0.0);
-		parameters.setpurchaseDetails(prueba);
 		parameters.setVatsum(0.0);
-		parameters.setCtlaccount("1101020104");
+		parameters.setCtlaccount("210201010121");
+		
+		parameters.setpurchaseDetails(prueba);
 		try {
-			_result = Purchase.inv_Purchase_mtto(parameters,1);
+			_result = Purchase.inv_Purchase_mtto(parameters,Common.MTTOINSERT);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error EJB " + e.getMessage());
@@ -172,6 +176,7 @@ public class PurchaseTest {
 
 		System.out.println("luego de servicio");
 		System.out.println(_result.getCodigoError()+"---"+_result.getDocentry());
+		System.out.println(_result.getMensaje());
 
 	}
 	
