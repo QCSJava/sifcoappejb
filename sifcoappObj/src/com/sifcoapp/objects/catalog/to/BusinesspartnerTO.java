@@ -3,6 +3,7 @@ package com.sifcoapp.objects.catalog.to;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 import java.util.Date;
+import java.util.List;
 
 public class BusinesspartnerTO extends CommonTO {
 
@@ -101,6 +102,127 @@ public class BusinesspartnerTO extends CommonTO {
 	private int usersign;
 	private Date updatedate;
 	private int updatetime;
+    private List BusinesspartnerAcount;
+	public BusinesspartnerTO(String cardcode, String cardname, String cardtype,
+			String groupcode, String cmpprivate, String address,
+			String zipcode, String mailaddres, String mailzipcod,
+			String phone1, String phone2, String fax, String cntctprsn,
+			String notes, Double balance, Double checksbal, Double dnotesbal,
+			Double ordersbal, int groupnum, Double creditline, Double debtline,
+			Double discount, String vatstatus, String lictradnum,
+			int exmatchnum, int inmatchnum, int listnum, Double orderbalsy,
+			String transfered, String baltrnsfrd, int commgrcode,
+			String prevyearac, Double balancesys, String cellular,
+			String e_mail, String picture, String dflaccount, String dflbranch,
+			String bankcode, String addid, String fathercard, String qrygroup1,
+			String qrygroup2, String qrygroup3, String qrygroup4,
+			String qrygroup5, String qrygroup6, String qrygroup7,
+			String qrygroup8, String qrygroup9, String qrygroup10,
+			String validfor, String vatgroup, String objtype,
+			String debpayacct, int docentry, String pymcode, String partdelivr,
+			String paymblock, String wtliable, String ninum, String wtcode,
+			String vatregnum, String industry, String business,
+			String isdomestic, String isresident, String dpmclear,
+			String affiliate, String profession, String dpmintact,
+			int industryc, String intracc, String feeacc, int series,
+			int number, String taxidident, String nodiscount, String typecont,
+			String typesn, String nit, String tipocont, String tiposn,
+			String relatedacc1, String relatedacc2, String relatedacc3,
+			String relatedacc4, int usersign, Date updatedate, int updatetime,
+			List businesspartnerAcount) {
+		super();
+		this.cardcode = cardcode;
+		this.cardname = cardname;
+		this.cardtype = cardtype;
+		this.groupcode = groupcode;
+		this.cmpprivate = cmpprivate;
+		this.address = address;
+		this.zipcode = zipcode;
+		this.mailaddres = mailaddres;
+		this.mailzipcod = mailzipcod;
+		this.phone1 = phone1;
+		this.phone2 = phone2;
+		this.fax = fax;
+		this.cntctprsn = cntctprsn;
+		this.notes = notes;
+		this.balance = balance;
+		this.checksbal = checksbal;
+		this.dnotesbal = dnotesbal;
+		this.ordersbal = ordersbal;
+		this.groupnum = groupnum;
+		this.creditline = creditline;
+		this.debtline = debtline;
+		this.discount = discount;
+		this.vatstatus = vatstatus;
+		this.lictradnum = lictradnum;
+		this.exmatchnum = exmatchnum;
+		this.inmatchnum = inmatchnum;
+		this.listnum = listnum;
+		this.orderbalsy = orderbalsy;
+		this.transfered = transfered;
+		this.baltrnsfrd = baltrnsfrd;
+		this.commgrcode = commgrcode;
+		this.prevyearac = prevyearac;
+		this.balancesys = balancesys;
+		this.cellular = cellular;
+		this.e_mail = e_mail;
+		this.picture = picture;
+		this.dflaccount = dflaccount;
+		this.dflbranch = dflbranch;
+		this.bankcode = bankcode;
+		this.addid = addid;
+		this.fathercard = fathercard;
+		this.qrygroup1 = qrygroup1;
+		this.qrygroup2 = qrygroup2;
+		this.qrygroup3 = qrygroup3;
+		this.qrygroup4 = qrygroup4;
+		this.qrygroup5 = qrygroup5;
+		this.qrygroup6 = qrygroup6;
+		this.qrygroup7 = qrygroup7;
+		this.qrygroup8 = qrygroup8;
+		this.qrygroup9 = qrygroup9;
+		this.qrygroup10 = qrygroup10;
+		this.validfor = validfor;
+		this.vatgroup = vatgroup;
+		this.objtype = objtype;
+		this.debpayacct = debpayacct;
+		this.docentry = docentry;
+		this.pymcode = pymcode;
+		this.partdelivr = partdelivr;
+		this.paymblock = paymblock;
+		this.wtliable = wtliable;
+		this.ninum = ninum;
+		this.wtcode = wtcode;
+		this.vatregnum = vatregnum;
+		this.industry = industry;
+		this.business = business;
+		this.isdomestic = isdomestic;
+		this.isresident = isresident;
+		this.dpmclear = dpmclear;
+		this.affiliate = affiliate;
+		this.profession = profession;
+		this.dpmintact = dpmintact;
+		this.industryc = industryc;
+		this.intracc = intracc;
+		this.feeacc = feeacc;
+		this.series = series;
+		this.number = number;
+		this.taxidident = taxidident;
+		this.nodiscount = nodiscount;
+		this.typecont = typecont;
+		this.typesn = typesn;
+		this.nit = nit;
+		this.tipocont = tipocont;
+		this.tiposn = tiposn;
+		this.relatedacc1 = relatedacc1;
+		this.relatedacc2 = relatedacc2;
+		this.relatedacc3 = relatedacc3;
+		this.relatedacc4 = relatedacc4;
+		this.usersign = usersign;
+		this.updatedate = updatedate;
+		this.updatetime = updatetime;
+		BusinesspartnerAcount = businesspartnerAcount;
+	}
 
 	public BusinesspartnerTO() {
 		super();
@@ -944,6 +1066,14 @@ public class BusinesspartnerTO extends CommonTO {
 
 	public void setUpdatetime(int updatetime) {
 		this.updatetime = updatetime;
+	}
+
+	public List getBusinesspartnerAcount() {
+		return BusinesspartnerAcount;
+	}
+
+	public void setBusinesspartnerAcount(List businesspartnerAcount) {
+		BusinesspartnerAcount = businesspartnerAcount;
 	}
 
 }

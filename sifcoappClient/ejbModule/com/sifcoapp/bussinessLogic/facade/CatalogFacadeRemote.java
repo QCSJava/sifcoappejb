@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Remote;
 
+import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -18,6 +19,13 @@ public interface CatalogFacadeRemote {
 			throws EJBException;
 
 	public BusinesspartnerTO get_businesspartnerBykey(String parameters)
+			throws EJBException;
+	public ResultOutTO inv_cat_bpa_businesspartnerAcount_mtto(
+			BusinesspartnerAcountTO parameters, int accion)throws EJBException;
+
+	public List get_businesspartnerAcount()
+			throws EJBException ;
+	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(BusinesspartnerAcountTO parameters)
 			throws EJBException;
 
 }

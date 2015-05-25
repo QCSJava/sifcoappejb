@@ -212,7 +212,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			articleDetalle.setLinetotal(articleDetalle.getQuantity()
 					* articleDetalle.getPrice());
 			articleDetalle.setOpenqty(articleDetalle.getQuantity());
-			total = total + articleDetalle.getLinetotal();
+			total = total + articleDetalle.getGtotal();
 
 		}
 
@@ -241,7 +241,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// consulta he incluirse la cuenta contables
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
-
+        parameters.setObjtype("20");
 		return parameters;
 	}
 
@@ -450,6 +450,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		_return = inv_purchase_save(purchase, action, conn);
 		purchase.setDocentry(_return.getDocentry());
 		purchase.setDocnum(_return.getDocentry());
+		purchase.setRef1(Integer.toString(purchase.getDocnum()));
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Llenar objeto tipo transacción
@@ -752,22 +753,136 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setLine_id(1);
 		art1.setCredit(bussines);
 		art1.setAccount(buss_c);
+		art1.setDuedate(parameters.getDocduedate());
+		art1.setShortname(buss_c);
+		art1.setContraact(branch_c);
+		art1.setLinememo("Compra  de mercancias");
+		art1.setRefdate(parameters.getDocduedate());
+		art1.setRef1(parameters.getRef1());
+		// ar1.setRef2();
+		art1.setBaseref(parameters.getRef1());
+		art1.setTaxdate(parameters.getDocduedate());
+		// art1.setFinncpriod(finncpriod);
+		art1.setReltransid(-1);
+		art1.setRellineid(-1);
+		art1.setReltype("N");
+		art1.setObjtype("5");
+		art1.setVatline("N");
+		art1.setVatamount(0.0);
+		art1.setClosed("N");
+		art1.setGrossvalue(0.0);
+		art1.setBalduedeb(0.0);
+		art1.setBalduecred(bussines);
+		art1.setIsnet("Y");
+		art1.setTaxtype(0);
+		art1.setTaxpostacc("N");
+		art1.setTotalvat(0.0);
+		art1.setWtliable("N");
+		art1.setWtline("N");
+		art1.setPayblock("N");
+		art1.setOrdered("N");
 		detail.add(art1);
+		
 		// cuenta asignada al almacen
 		art2.setLine_id(2);
 		art2.setAccount(branch_c);
 		art2.setDebit(branch);
+		art2.setDuedate(parameters.getDocduedate());
+		art2.setShortname(branch_c);
+		art2.setContraact(buss_c);
+		art2.setLinememo("Compra  de mercancias");
+		art2.setRefdate(parameters.getDocduedate());
+		art2.setRef1(parameters.getRef1());
+		// art2.setRef2();
+		art2.setBaseref(parameters.getRef1());
+		art2.setTaxdate(parameters.getDocduedate());
+		// art1.setFinncpriod(finncpriod);
+		art2.setReltransid(-1);
+		art2.setRellineid(-1);
+		art2.setReltype("N");
+		art2.setObjtype("5");
+		art2.setVatline("N");
+		art2.setVatamount(0.0);
+		art2.setClosed("N");
+		art2.setGrossvalue(0.0);
+		art2.setBalduedeb(branch);
+		art2.setBalduecred(0.0);
+		art2.setIsnet("Y");
+		art2.setTaxtype(0);
+		art2.setTaxpostacc("N");
+		art2.setTotalvat(0.0);
+		art2.setWtliable("N");
+		art2.setWtline("N");
+		art2.setPayblock("N");
+		art2.setOrdered("N");
 		detail.add(art2);
+		
 		// cuenta de iva
 		art3.setLine_id(3);
 		art3.setDebit(tax);
 		art3.setAccount(iva_c);
+		art3.setDuedate(parameters.getDocduedate());
+		art3.setShortname(iva_c);
+		art3.setContraact(buss_c);
+		art3.setLinememo("Compra de mercancias");
+		art3.setRefdate(parameters.getDocduedate());
+		art3.setRef1(parameters.getRef1());
+		// art2.setRef2();
+		art3.setBaseref(parameters.getRef1());
+		art3.setTaxdate(parameters.getDocduedate());
+		// 3art1.setFinncpriod(finncpriod);
+		art3.setReltransid(-1);
+		art3.setRellineid(-1);
+		art3.setReltype("N");
+		art3.setObjtype("5");
+		art3.setVatline("N");
+		art3.setVatamount(0.0);
+		art3.setClosed("N");
+		art3.setGrossvalue(0.0);
+		art3.setBalduedeb(tax);
+		art3.setBalduecred(0.0);
+		art3.setIsnet("Y");
+		art3.setTaxtype(0);
+		art3.setTaxpostacc("N");
+		art3.setTotalvat(0.0);
+		art3.setWtliable("N");
+		art3.setWtline("N");
+		art3.setPayblock("N");
+		art3.setOrdered("N");
 		detail.add(art3);
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0) {
 			art4.setLine_id(4);
 			art4.setDebit(fovc);
 			art4.setAccount(fovialCotrans_c);
+			art4.setDuedate(parameters.getDocduedate());
+			art4.setShortname(fovialCotrans_c);
+			art4.setContraact(buss_c);
+			art4.setLinememo("Compra de mercancias");
+			art4.setRefdate(parameters.getDocduedate());
+			art4.setRef1(parameters.getRef1());
+			// art2.setRef2();
+			art4.setBaseref(parameters.getRef1());
+			art4.setTaxdate(parameters.getDocduedate());
+			// 4rt1.setFinncpriod(finncpriod);
+			art4.setReltransid(-1);
+			art4.setRellineid(-1);
+			art4.setReltype("N");
+			art4.setObjtype("5");
+			art4.setVatline("N");
+			art4.setVatamount(0.0);
+			art4.setClosed("N");
+			art4.setGrossvalue(0.0);
+			art4.setBalduedeb(fovc);
+			art4.setBalduecred(0.0);
+			art4.setIsnet("Y");
+			art4.setTaxtype(0);
+			art4.setTaxpostacc("N");
+			art4.setTotalvat(0.0);
+			art4.setWtliable("N");
+			art4.setWtline("N");
+			art4.setPayblock("N");
+			art4.setOrdered("N");
 			detail.add(art4);
 		}
 		nuevo.setJournalentryList(detail);

@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import com.sifcoapp.bussinessLogic.CatalogEJBLocal;
 import com.sifcoapp.bussinessLogic.InventoryEJBLocal;
+import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -43,6 +44,23 @@ public class CatalogFacade implements CatalogFacadeRemote {
 			throws EJBException {
 		// TODO Auto-generated method stub
 		return process.get_businesspartnerBykey(parameters);
+	}
+
+	public ResultOutTO inv_cat_bpa_businesspartnerAcount_mtto(
+			BusinesspartnerAcountTO parameters, int accion) throws EJBException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List get_businesspartnerAcount() throws EJBException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(
+			BusinesspartnerAcountTO parameters) throws EJBException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
