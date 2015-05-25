@@ -7,7 +7,6 @@ import java.util.Vector;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
@@ -75,7 +74,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
 		// no aplican.
 		// --------------------------------------------------------------------------------------------------------------------------------
-		parameters = fillGoodReceipt(parameters);
+		parameters = fillPurchase(parameters);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Hacer validaciones:
@@ -161,7 +160,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 	}
 
-	private PurchaseTO fillGoodReceipt(PurchaseTO parameters) {
+	private PurchaseTO fillPurchase(PurchaseTO parameters) {
 
 		// variables
 		Double total = zero;
@@ -220,7 +219,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto encabezado
 		// --------------------------------------------------------------------------------------------------------------------------------
-
+        parameters.setDocnum(parameters.getDocentry());
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
