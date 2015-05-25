@@ -418,7 +418,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -435,7 +435,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -452,7 +452,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -469,7 +469,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -520,7 +520,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -537,7 +537,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en ceunta contable, informar al administrador");
+				throw new Exception ("Error en cuenta contable, informar al administrador");
 
 			}
 			break;

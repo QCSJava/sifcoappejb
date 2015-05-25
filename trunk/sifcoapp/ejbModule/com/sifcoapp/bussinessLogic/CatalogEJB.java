@@ -113,7 +113,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 			throw (EJBException) new EJBException(e);
 
 		}
-		if (partner.getValidfor().toUpperCase().equals("Y")) {
+		if (partner.getValidfor() != null && partner.getValidfor().toUpperCase().equals("Y")) {
 			_return.setCodigoError(0);
 			_return.setMensaje("Socio de Negocio Activo");
 
