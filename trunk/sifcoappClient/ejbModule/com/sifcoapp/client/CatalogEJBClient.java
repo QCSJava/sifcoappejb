@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import com.sifcoapp.bussinessLogic.CatalogEJBRemote;
 import com.sifcoapp.bussinessLogic.facade.CatalogFacadeRemote;
 import com.sifcoapp.clientutility.ClientUtility;
+import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -60,6 +61,28 @@ public class CatalogEJBClient {
 		return lstPeriods;
 	}
 
-	
+	public ResultOutTO inv_cat_bpa_businesspartnerAcount_mtto(BusinesspartnerAcountTO parameters,int accion)throws Exception{
+		
 
+		ResultOutTO _return;
+
+		_return = bean.inv_cat_bpa_businesspartnerAcount_mtto(parameters, accion);
+
+		return _return;
+		
+	}
+
+	public List get_businesspartnerAcount()
+			throws Exception {
+		List lstPeriods = new Vector();
+		lstPeriods = bean.get_businesspartnerAcount();
+		return lstPeriods;
+	}
+	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(BusinesspartnerAcountTO parameters)
+			throws Exception {
+		// TODO Auto-generated method stub
+		BusinesspartnerAcountTO lstPeriods = new BusinesspartnerAcountTO();
+		lstPeriods = bean.get_businesspartnerAcountBykey(parameters);
+		return lstPeriods;
+	}
 }

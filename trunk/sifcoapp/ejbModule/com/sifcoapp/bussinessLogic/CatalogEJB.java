@@ -7,6 +7,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
+import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -121,6 +122,64 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 			_return.setCodigoError(1);
 			_return.setMensaje("Socio de Negocio No Activo");
 
+		}
+
+		return _return;
+	}
+	
+	public ResultOutTO inv_cat_bpa_businesspartnerAcount_mtto(
+			BusinesspartnerAcountTO parameters, int accion) throws EJBException {
+
+		ResultOutTO _return = new ResultOutTO();
+		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
+		DAO.setIstransaccional(true);
+		if (parameters.getBalance() == null) {
+			parameters.setBalance(zero);
+		
+		}
+		try {
+			_return.setDocentry(DAO.inv_cat_bpa_businesspartnerAcount_mtto(parameters, accion));
+			DAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos ingresados correctamente");
+		return _return;
+	
+
+}
+
+	public List get_businesspartnerAcount()
+			throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
+		try {
+			_return = DAO.get_businesspartnerAcount();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
+	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(BusinesspartnerAcountTO parameters)
+			throws EJBException {
+		// TODO Auto-generated method stub
+		BusinesspartnerAcountTO _return = new BusinesspartnerAcountTO();
+		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
+		try {
+			_return = DAO.get_businesspartnerAcountByKey(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
 		}
 
 		return _return;
