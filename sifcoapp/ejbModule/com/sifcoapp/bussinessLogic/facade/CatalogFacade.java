@@ -49,18 +49,18 @@ public class CatalogFacade implements CatalogFacadeRemote {
 	public ResultOutTO inv_cat_bpa_businesspartnerAcount_mtto(
 			BusinesspartnerAcountTO parameters, int accion) throws EJBException {
 		// TODO Auto-generated method stub
-		return null;
+		return process.inv_cat_bpa_businesspartnerAcount_mtto(parameters, accion);
 	}
 
 	public List get_businesspartnerAcount() throws EJBException {
 		// TODO Auto-generated method stub
-		return null;
+		return process.get_businesspartnerAcount();
 	}
 
 	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(
 			BusinesspartnerAcountTO parameters) throws EJBException {
 		// TODO Auto-generated method stub
-		return null;
+		return process.get_businesspartnerAcountBykey(parameters);
 	}
 
 
