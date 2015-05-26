@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.sales.DAO;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -16,7 +17,14 @@ import com.sun.rowset.CachedRowSetImpl;
 
 public class SalesDAO extends CommonDAO{
 	
-	
+	public SalesDAO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public SalesDAO(Connection _conn) {
+		super(_conn);
+		// TODO Auto-generated constructor stub
+	}
 	
 	public  String last_input(int series,String _objtype) throws Exception{
 		List _return = new Vector();
