@@ -66,9 +66,10 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 			while (iterator.hasNext()) {
 				BusinesspartnerAcountTO detalleReceipt = (BusinesspartnerAcountTO) iterator
 						.next();
-
+				BusinesspartnerDAO DAO1 = new BusinesspartnerDAO(DAO.conn);
+				DAO1.setIstransaccional(true);	
 				
-				DAO.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt, Common.MTTOINSERT);
+				DAO1.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt, Common.MTTOINSERT);
 
 			}
 			

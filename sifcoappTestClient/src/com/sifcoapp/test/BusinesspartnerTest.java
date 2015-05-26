@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.sifcoapp.client.CatalogEJBClient;
+import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -91,9 +92,18 @@ public class BusinesspartnerTest {
 		bus.setCardcode("000001");
 		bus.setCardname("cardname");
 		bus.setGroupcode("none");
+		BusinesspartnerAcountTO busi= new BusinesspartnerAcountTO();
+		busi.setBalance(0.0);
+		busi.setAcctcode("12354");
+		busi.setObjtype("1");
+		busi.setCardcode("1234");
 		
+		List ne=new Vector();
+		
+		ne.add(busi);
+		bus.setBusinesspartnerAcount(ne);
 		try {
-			resp= catalog.cat_bpa_businesspartner_mtto(bus,3);
+			resp= catalog.cat_bpa_businesspartner_mtto(bus,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
