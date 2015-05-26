@@ -59,7 +59,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		ResultOutTO _valid = new ResultOutTO();
 		ResultOutTO _return = new ResultOutTO();
-		GoodsReceiptDAO DAO = new GoodsReceiptDAO();
+		PurchaseDAO DAO = new PurchaseDAO();
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Validar acción a realizar

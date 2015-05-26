@@ -302,6 +302,29 @@ public class transactionEJB {
 
 		}
 		
+		if (transaction.getObjtype().equals("10")) {
+			// Existencias
+			// --------------------------------------------------------------------------------------------------------
+			newOnhand = onhand - transQuantity;
+			newWhsOnhand = whsOnhand - transQuantity;
+			// Actualizar objeto princicpal
+			transaction.setNewOnhand(newOnhand);
+			transaction.setNewWhsOnhand(newWhsOnhand);
+			transaction.setInqty(zero);
+			transaction.setOutqty(transQuantity);
+
+			// Costos promedios
+			// --------------------------------------------------------------------------------------------------------
+/*
+			oldTotalArticle = onhand * avgPrice;
+			newTotalArticle = oldTotalArticle + transValue;
+			newAvgPrice = newTotalArticle / newOnhand;*/
+			// Actualizar objeto princicpal
+			transaction.setNewAvgprice(avgPrice);
+			transaction.setBalance(newOnhand);
+
+		}
+		
 		return transaction;
 
 	}

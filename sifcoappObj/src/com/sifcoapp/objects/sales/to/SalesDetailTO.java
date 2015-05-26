@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.sales.to;
 
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 public class SalesDetailTO extends CommonTO{
@@ -39,6 +40,53 @@ public class SalesDetailTO extends CommonTO{
 	private String unitmsr;
 	private Double stockpricestockprice;
 	private Double gtotal;
+	private ArticlesTO article;
+	public SalesDetailTO(int docentry, int linenum, int targettype,
+			String baseref, int basetype, int baseentry, int baseline,
+			String linestatus, String itemcode, String dscription,
+			Double quantity, Double openqty, Double price, Double discprcnt,
+			Double linetotal, String whscode, String acctcode,
+			String taxstatus, Double pricebefdi, String ocrcode,
+			String vatgroup, Double priceafvat, Double factor1, Double vatsum,
+			String objtype, Double grssprofit, String taxcode, Double vatappld,
+			String unitmsr, Double stockpricestockprice, Double gtotal,
+			ArticlesTO article) {
+		super();
+		this.docentry = docentry;
+		this.linenum = linenum;
+		this.targettype = targettype;
+		this.baseref = baseref;
+		this.basetype = basetype;
+		this.baseentry = baseentry;
+		this.baseline = baseline;
+		this.linestatus = linestatus;
+		this.itemcode = itemcode;
+		this.dscription = dscription;
+		this.quantity = quantity;
+		this.openqty = openqty;
+		this.price = price;
+		this.discprcnt = discprcnt;
+		this.linetotal = linetotal;
+		this.whscode = whscode;
+		this.acctcode = acctcode;
+		this.taxstatus = taxstatus;
+		this.pricebefdi = pricebefdi;
+		this.ocrcode = ocrcode;
+		this.vatgroup = vatgroup;
+		this.priceafvat = priceafvat;
+		this.factor1 = factor1;
+		this.vatsum = vatsum;
+		this.objtype = objtype;
+		this.grssprofit = grssprofit;
+		this.taxcode = taxcode;
+		this.vatappld = vatappld;
+		this.unitmsr = unitmsr;
+		this.stockpricestockprice = stockpricestockprice;
+		this.gtotal = gtotal;
+		this.article = article;
+	}
+
+	
 	
 	public SalesDetailTO() {
 		super();
@@ -334,6 +382,18 @@ public class SalesDetailTO extends CommonTO{
 
 	public void setGtotal(Double gtotal) {
 		this.gtotal = gtotal;
+	}
+
+
+
+	public ArticlesTO getArticle() {
+		return article;
+	}
+
+
+
+	public void setArticle(ArticlesTO article) {
+		this.article = article;
 	}
 
 }

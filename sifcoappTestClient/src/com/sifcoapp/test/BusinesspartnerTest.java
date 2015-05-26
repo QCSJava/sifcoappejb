@@ -89,14 +89,15 @@ public class BusinesspartnerTest {
 	public static void businesspartner_mtto(){
 		ResultOutTO resp=null;
 		BusinesspartnerTO bus= new BusinesspartnerTO();
-		bus.setCardcode("000001");
+		bus.setCardcode("222555");
 		bus.setCardname("cardname");
 		bus.setGroupcode("none");
 		BusinesspartnerAcountTO busi= new BusinesspartnerAcountTO();
 		busi.setBalance(0.0);
-		busi.setAcctcode("12354");
+		busi.setAcctcode("111");
 		busi.setObjtype("1");
-		busi.setCardcode("1234");
+		busi.setCardcode("222");
+		
 		
 		List ne=new Vector();
 		
