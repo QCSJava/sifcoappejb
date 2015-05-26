@@ -5,6 +5,11 @@ import com.sifcoapp.objects.common.to.CommonTO;
 public class BusinesspartnerAcountTO extends CommonTO{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8455457895546529126L;
+
 	public BusinesspartnerAcountTO() {
 		super();
 		// TODO Auto-generated constructor stub

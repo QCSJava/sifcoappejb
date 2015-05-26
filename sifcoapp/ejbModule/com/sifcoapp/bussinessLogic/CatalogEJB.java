@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -10,7 +11,9 @@ import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
+import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
 
 @Stateless
 public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
@@ -57,6 +60,19 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 
 		try {
 			DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
+			
+			Iterator<BusinesspartnerAcountTO> iterator = parameters.getBusinesspartnerAcount()
+					.iterator();
+			while (iterator.hasNext()) {
+				BusinesspartnerAcountTO detalleReceipt = (BusinesspartnerAcountTO) iterator
+						.next();
+
+				
+				DAO.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt, Common.MTTOINSERT);
+
+			}
+			
+			
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

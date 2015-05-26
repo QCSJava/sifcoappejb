@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
@@ -166,7 +167,18 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		Double total = zero;
 		Double vatsum = zero;
 		ArticlesTO DBArticle = new ArticlesTO();
+		AdminDAO admin = new AdminDAO();
+        
+		BranchTO branch1 = new BranchTO();
+		// buscando la cuenta asignada de cuenta de existencias al almacen
 
+		try {
+			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String branch_c = branch1.getBalinvntac();
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto detalle
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -185,7 +197,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			// Asignar a documento
 			articleDetalle.setArticle(DBArticle);
-
+            articleDetalle.setAcctcode(branch_c);
 			// Valores por defecto
 			articleDetalle.setDocentry(parameters.getDocentry());
 			articleDetalle.setTargettype(-1);
@@ -527,6 +539,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// -----------------------------------------------------------------------------------
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
+		
 		purchase.setTransid(res_jour.getDocentry());
 		_return = inv_Purchase_update(purchase, Common.MTTOUPDATE, conn);
 
