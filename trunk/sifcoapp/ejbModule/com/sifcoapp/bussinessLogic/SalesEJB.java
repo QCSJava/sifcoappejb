@@ -254,7 +254,7 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setTaxstatus("Y");
 			articleDetalle.setOcrcode(parameters.getTowhscode());
 			articleDetalle.setFactor1(zero);
-			articleDetalle.setObjtype("20");
+			articleDetalle.setObjtype("10");
 			articleDetalle.setGrssprofit(zero);
 			articleDetalle.setVatappld(zero);
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
@@ -278,12 +278,12 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
-		parameters.setObjtype("20");
+		parameters.setObjtype("10");
 		parameters.setVatsum(vatsum);
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
-		parameters.setJrnlmemo("Facturas de proveedores - "
+		parameters.setJrnlmemo("Facturas de venta a clientes - "
 				+ parameters.getCardcode());
 		parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
@@ -565,14 +565,14 @@ public class SalesEJB implements SalesEJBRemote {
 			List lisHija = new Vector();
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
-			admin = new AdminDAO();
-			arti = admin.getArticlesByKey(good.getItemcode());
+			
+			arti = good.getArticle();
 			branch = branch + (arti.getAvgPrice() * good.getQuantity());
 			sale = sale + good.getLinetotal();
 			double impuesto = good.getLinetotal() * 0.13;
 			fovc = fovc + (good.getVatsum() - impuesto);
 			tax = tax + impuesto;
-			bussines = bussines + (fovc + tax + good.getLinetotal());
+			bussines = bussines + ((good.getVatsum() - impuesto) + impuesto + good.getLinetotal());
 
 		}
 		// consultando en la base de datos los codigos de cuenta asignados
@@ -1656,178 +1656,6 @@ public class SalesEJB implements SalesEJBRemote {
 
 	}
 
-	public ResultOutTO saveSales(SalesDAO DAO, SalesTO parameters, int action)
-			throws EJBException {
-		ResultOutTO _return = new ResultOutTO();
-
-		SalesDetailDAO goodDAO1 = new SalesDetailDAO(DAO.getConn());
-		goodDAO1.setIstransaccional(true);
-
-		// TODO Auto-generated method stub
-
-		Iterator<SalesDetailTO> iterator2 = parameters.getSalesDetails()
-				.iterator();
-
-		while (iterator2.hasNext()) {
-			SalesDetailTO articleDetalle = (SalesDetailTO) iterator2.next();
-			articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
-			articleDetalle.setOpenqty(articleDetalle.getQuantity());
-			articleDetalle.setFactor1(articleDetalle.getQuantity());
-		}
-		parameters.setDiscsum(0.00);
-		parameters.setNret(0.00);
-		parameters.setPaidsum(0.00);
-		parameters.setRounddif(0.00);
-		try {
-			_return.setDocentry(DAO.inv_Sales_mtto(parameters, action));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		Iterator<SalesDetailTO> iterator = parameters.getSalesDetails()
-				.iterator();
-		while (iterator.hasNext()) {
-			SalesDetailTO articleDetalle = (SalesDetailTO) iterator.next();
-			// Para articulos nuevos
-			articleDetalle.setDocentry(_return.getDocentry());
-			if (action == Common.MTTOINSERT) {
-				try {
-					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
-							Common.MTTOINSERT);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-			if (action == Common.MTTODELETE) {
-				try {
-					goodDAO1.inv_SalesDetail_mtto(articleDetalle,
-							Common.MTTODELETE);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos almacenados con exito");
-		return _return;
-
-	}
-
-	public ResultOutTO fill_journal(SalesTO parameter) throws Exception {
-		String cod_acount_branch;
-		String cod_acount_cient;
-		double total;
-		double IVA;
-		double Cotrans;
-		double fovial;
-
-		return null;
-	}
-
-	public JournalEntryTO fill_JournalEntry(PurchaseTO parameters)
-			throws Exception {
-
-		String buss_c;
-		String branch_c;
-		String iva_c;
-		String fovialCotrans_c = null;
-		double bussines = 0;
-		double branch = 0;
-		double tax = 0;
-		double fovc = 0;
-
-		JournalEntryTO nuevo = new JournalEntryTO();
-		ResultOutTO _result = new ResultOutTO();
-		boolean ind = false;
-		Double total = zero;
-		List list = parameters.getpurchaseDetails();
-		List aux = new Vector();
-		List<List> listas = new Vector();
-		List aux1 = new Vector();
-		// recorre la lista de detalles
-		for (Object obj : list) {
-			PurchaseDetailTO good = (PurchaseDetailTO) obj;
-			String cod = good.getAcctcode();
-			List lisHija = new Vector();
-			// calculando los impuestos y saldo de las cuentas
-			// --------------------------------------------------------------------------------
-			branch = branch + good.getLinetotal();
-			double impuesto = good.getLinetotal() * 0.13;
-			fovc = fovc + (good.getVatsum() - impuesto);
-			tax = tax + impuesto;
-			bussines = bussines + good.getGtotal();
-
-		}
-		// consultando en la base de datos los codigos de cuenta asignados
-		// cuenta de bussines partner
-		buss_c = parameters.getCtlaccount();
-		// buscar la cuenta asignada al almacen
-		AdminDAO admin = new AdminDAO();
-		BranchTO branch1 = new BranchTO();
-		// buscando la cuenta asignada de cueta de existencias al almacen
-		branch1 = admin.getBranchByKey(parameters.getTowhscode());
-		branch_c = branch1.getBalinvntac();
-		if (branch1.getBalinvntac() == null) {
-			throw new Exception("No hay una cuenta contable asignada");
-		}
-		// buscando cuenta asignada para iva y fovial
-		if (fovc != 0) {
-			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("FOV1", 10);
-			fovialCotrans_c = Catalog.getCatvalue2();
-			iva_c = Catalog.getCatvalue();
-		} else {
-			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("IVA", 10);
-			iva_c = Catalog.getCatvalue2();
-		}
-		// asiento contable
-
-		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
-		JournalEntryLinesTO art3 = new JournalEntryLinesTO();
-		JournalEntryLinesTO art4 = new JournalEntryLinesTO();
-		// --------------------------------------------------------------------------------------------------------------------------------------------------------
-		// llenado del asiento contable
-		// --------------------------------------------------------------------------------------------------------------------------------------------------------
-		// LLenado del padre
-		List detail = new Vector();
-		nuevo.setObjtype("5");
-		nuevo.setMemo("por Compra de Repuestos");
-		nuevo.setUsersign(parameters.getUsersign());
-		nuevo.setLoctotal(bussines);
-		nuevo.setSystotal(bussines);
-		// llenado de los
-		// hijos---------------------------------------------------------------------------------------------------
-		// cuenta del socio de negocio
-		art1.setLine_id(1);
-		art1.setCredit(bussines);
-		;
-		art1.setAccount(buss_c);
-		detail.add(art1);
-		// cuenta asignada al almacen
-		art2.setLine_id(2);
-		art2.setAccount(branch_c);
-		art2.setDebit(branch);
-		detail.add(art2);
-		// cuenta de iva
-		art3.setLine_id(3);
-		art3.setDebit(tax);
-		art3.setAccount(iva_c);
-		detail.add(art3);
-		// cuenta de cotrans y fovial si se aplica el impuesto
-		if (fovc != 0) {
-			art4.setLine_id(4);
-			art4.setDebit(fovc);
-			art4.setAccount(fovialCotrans_c);
-			detail.add(art4);
-		}
-		nuevo.setJournalentryList(detail);
-		return nuevo;
-	}
+	
+	
 }
