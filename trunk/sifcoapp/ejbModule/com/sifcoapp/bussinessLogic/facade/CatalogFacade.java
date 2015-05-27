@@ -52,9 +52,9 @@ public class CatalogFacade implements CatalogFacadeRemote {
 		return process.inv_cat_bpa_businesspartnerAcount_mtto(parameters, accion);
 	}
 
-	public List get_businesspartnerAcount() throws EJBException {
+	public List get_businesspartnerAcount(String code) throws EJBException {
 		// TODO Auto-generated method stub
-		return process.get_businesspartnerAcount();
+		return process.get_businesspartnerAcount(code);
 	}
 
 	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(

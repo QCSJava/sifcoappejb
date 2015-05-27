@@ -361,6 +361,8 @@ public class BusinesspartnerDAO extends CommonDAO {
 					partner.setUsersign(rowsetActual.getInt(88));
 					partner.setUpdatedate(rowsetActual.getDate(89));
 					partner.setUpdatetime(rowsetActual.getInt(90));
+					
+					partner.setBusinesspartnerAcount(get_businesspartnerAcount(rowsetActual.getString(1)));
 
 					_return = partner;
 				}
@@ -388,12 +390,12 @@ public class BusinesspartnerDAO extends CommonDAO {
 		return v_resp;
 	}
 
-	public List get_businesspartnerAcount() throws Exception {
+	public List get_businesspartnerAcount(String code) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_businesspartneracount()}");
-
+		this.setDbObject("{call sp_get_businesspartneracount(?)}");
+          this.setString(1,"_cardcode",code);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");

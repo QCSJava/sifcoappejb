@@ -172,13 +172,13 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 
 }
 
-	public List get_businesspartnerAcount()
+	public List get_businesspartnerAcount(String code)
 			throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
 		try {
-			_return = DAO.get_businesspartnerAcount();
+			_return = DAO.get_businesspartnerAcount(code);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);

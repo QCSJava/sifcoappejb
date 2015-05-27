@@ -72,10 +72,10 @@ public class CatalogEJBClient {
 		
 	}
 
-	public List get_businesspartnerAcount()
+	public List get_businesspartnerAcount(String code)
 			throws Exception {
 		List lstPeriods = new Vector();
-		lstPeriods = bean.get_businesspartnerAcount();
+		lstPeriods = bean.get_businesspartnerAcount(code);
 		return lstPeriods;
 	}
 	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(BusinesspartnerAcountTO parameters)
