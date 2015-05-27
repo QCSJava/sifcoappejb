@@ -23,7 +23,7 @@ public interface CatalogFacadeRemote {
 	public ResultOutTO inv_cat_bpa_businesspartnerAcount_mtto(
 			BusinesspartnerAcountTO parameters, int accion)throws EJBException;
 
-	public List get_businesspartnerAcount()
+	public List get_businesspartnerAcount(String code)
 			throws EJBException ;
 	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(BusinesspartnerAcountTO parameters)
 			throws EJBException;
