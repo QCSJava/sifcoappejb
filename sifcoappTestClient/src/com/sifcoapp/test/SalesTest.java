@@ -112,8 +112,8 @@ public class SalesTest {
 		document.setLinenum(1);
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
-		document.setQuantity(0.00);
-		document.setPrice(0.25);
+		document.setQuantity(2.0);
+		document.setPrice(3.56);
 		document.setWhscode("ALM-001");
 		document.setDiscprcnt(0.0000);
 		document.setLinetotal(0.0000);
@@ -124,12 +124,13 @@ public class SalesTest {
 		document.setVatsum(0.0000);
 		document.setGrssprofit(0.000000);
 		document.setGtotal(0.000000);
+		document.setObjtype("10");
 		prueba.add(document);
 
 		document1.setLinenum(2);
 		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
-		document1.setQuantity(0.00);
+		document1.setQuantity(2.0);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
 		
@@ -141,6 +142,7 @@ public class SalesTest {
 		document1.setVatsum(0.0000);
 		document1.setGrssprofit(0.000000);
 		document1.setGtotal(0.000000);
+		document1.setObjtype("10");
 		prueba.add(document1);
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
 		  long lnMilisegundos = utilDate.getTime();
@@ -152,14 +154,15 @@ public class SalesTest {
 		parameters.setTaxdate(sqlDate);
 		parameters.setSeries(2);
 		parameters.setUsersign(1);
-		parameters.setCardcode("000000001");
+		parameters.setCardcode("00001");
 		parameters.setDoctotal(2.35588);
 		parameters.setDiscsum(0.00000);
 		parameters.setNret(0.00000);
 		parameters.setPaidsum(0.0000);
 		parameters.setRounddif(0.00000);
-		parameters.setObjtype("30");
+		parameters.setObjtype("10");
 		parameters.setVatsum(0.000000);
+		parameters.setCtlaccount("210201010121");
 
 		parameters.setSalesDetails(prueba);
 

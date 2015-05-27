@@ -159,7 +159,7 @@ public class PurchaseTest {
 		parameters.setDocduedate(sqlDate);
 		parameters.setTaxdate(sqlDate);
 		parameters.setTowhscode("ALM-001");
-		parameters.setCardcode("C125");
+		parameters.setCardcode("P125");
 		parameters.setDocnum(48);
 		parameters.setUsersign(78);		
 		parameters.setDoctotal(0.0);
