@@ -286,6 +286,21 @@ public class AdminEJB implements AdminEJBRemote {
 			if (parameters.getOnHand() == null) {
 				parameters.setOnHand(zero);
 			}
+			
+			ArticlesPriceTO art = new ArticlesPriceTO();
+			ArticlesPriceTO art2 = new ArticlesPriceTO();
+			art.setItemcode(parameters.getItemCode());
+			art.setPrice(0.0);
+			art.setPricelist(1);
+			art.setFactor(0.0);
+			art.setOvrwritten(true);
+			cat_art1_articlesprice_mtto(art, 1);
+			art2.setItemcode(parameters.getItemCode());
+			art2.setPrice(0.0);
+			art2.setPricelist(1);
+			art2.setFactor(0.0);
+			art2.setOvrwritten(true);
+			cat_art1_articlesprice_mtto(art2, 1);
 
 			adminDAO.cat_articles_mtto(parameters, action);
 			adminDAO.forceCommit();
