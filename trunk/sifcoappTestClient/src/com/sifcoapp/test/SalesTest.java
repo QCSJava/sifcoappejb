@@ -130,7 +130,7 @@ public class SalesTest {
 		document1.setLinenum(2);
 		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
-		document1.setQuantity(2.0);
+		document1.setQuantity(6.0);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
 		
@@ -141,7 +141,7 @@ public class SalesTest {
 		document1.setVatappld(0.000000);
 		document1.setVatsum(0.0000);
 		document1.setGrssprofit(0.000000);
-		document1.setGtotal(0.000000);
+		document1.setGtotal(6.275);
 		document1.setObjtype("10");
 		prueba.add(document1);
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
@@ -155,14 +155,15 @@ public class SalesTest {
 		parameters.setSeries(2);
 		parameters.setUsersign(1);
 		parameters.setCardcode("00001");
-		parameters.setDoctotal(2.35588);
+		parameters.setDoctotal(10000.00);
 		parameters.setDiscsum(0.00000);
 		parameters.setNret(0.00000);
 		parameters.setPaidsum(0.0000);
 		parameters.setRounddif(0.00000);
 		parameters.setObjtype("10");
+		parameters.setPeymethod("2");
 		parameters.setVatsum(0.000000);
-		parameters.setCtlaccount("210201010121");
+		parameters.setCtlaccount("110602");
 
 		parameters.setSalesDetails(prueba);
 

@@ -93,6 +93,7 @@ public class JournalEntryLinesDAO extends CommonDAO{
 					journal.setBplname(rowsetActual.getString(50));
 					journal.setVatregnum(rowsetActual.getString(51));
 					journal.setSledgerf(rowsetActual.getString(52));
+					journal.setAcctname(rowsetActual.getString(53));
 
 					_return.add(journal);
 				}

@@ -402,8 +402,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			throw new Exception(
 					"La cuenta contable no existe o no es posteable");
 		}
-		// ------------------------------------------------------------------------------------------------------------------
-
+		// -----------------------------------------------------------------------------------------------------------
 		switch (account1.getGroupmask()) {
 		// ------------------------------------------------------------------------------------------------------------------
 		// 1- Activo
@@ -543,7 +542,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			break;
 
 		default:
-			throw new Exception ("Error en ceunta contable, informar al administrador");
+			throw new Exception ("Error en cuenta contable, informar al administrador");
 		}
 
 

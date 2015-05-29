@@ -174,7 +174,18 @@ public class TransactionDAO extends CommonDAO {
 		this.setString(3, "whscode", transaction.getWhscode());
 
 		lstResultSet = this.runUpdate();
-		
+     //actualiza lista de precios con el ultimo precio del costo promedio
+		if(transaction.getObjtype().equals("20")){
+		this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
+
+	
+		this.setDouble(1, "price", transaction.getNewAvgprice());
+		this.setString(2, "itemcode", transaction.getItemcode());
+		this.setInt(3, "pricelist",1);
+
+		lstResultSet = this.runUpdate();
+       }
+      
 		_return.setCodigoError(lstResultSet);
 		_return.setMensaje("Datos actualizados correctamente");
 		return _return;

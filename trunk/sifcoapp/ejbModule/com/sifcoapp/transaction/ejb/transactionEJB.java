@@ -240,6 +240,7 @@ public class transactionEJB {
 		List brachArticles = new Vector();
 		ResultOutTO _return = new ResultOutTO();
 		ArticlesTO DBArticle = new ArticlesTO();
+		ArticlesTO purchArt = new ArticlesTO();
 
 		// Variables para los calculos
 		double avgPrice = 0.0;
@@ -264,6 +265,7 @@ public class transactionEJB {
 		whsCode = transaction.getWhscode();
 		transQuantity = transaction.getQuantity();
 		transValue = transaction.getLinetotal();
+		purchArt=transaction.getArticle();
 
 		for (Object object : DBArticle.getBranchArticles()) {
 			BranchArticlesTO branch = (BranchArticlesTO) object;
@@ -276,10 +278,10 @@ public class transactionEJB {
 
 		// ------------------------------------------------------------------------------------------------------------
 		// Documentos Entrada de mercancias GoodReceipt ObjectType = 30
-		// Documentos Compra de mercancias Purchase ObjectType = 20
+		
 		// ------------------------------------------------------------------------------------------------------------
 
-		if (transaction.getObjtype().equals("30")||transaction.getObjtype().equals("20")) {
+		if (transaction.getObjtype().equals("30")) {
 			// Existencias
 			// --------------------------------------------------------------------------------------------------------
 			newOnhand = onhand + transQuantity;
@@ -301,11 +303,38 @@ public class transactionEJB {
 			transaction.setBalance(newTotalArticle);
 
 		}
+		//-------------------------------------------------------------------------------------------------------
+		//calculos de existencias de compras
+		//-------------------------------------------------------------------------------------------------------
+		if (transaction.getObjtype().equals("20")) {
+			// Existencias
+			// --------------------------------------------------------------------------------------------------------
+			
+			newOnhand = onhand + (transQuantity*DBArticle.getNumInBuy());
+			newWhsOnhand = whsOnhand + (transQuantity*DBArticle.getNumInBuy());
+			// Actualizar objeto princicpal
+			transaction.setNewOnhand(newOnhand);
+			transaction.setNewWhsOnhand(newWhsOnhand);
+			transaction.setInqty(transQuantity);
+			transaction.setOutqty(zero);
+
+			// Costos promedios
+			// --------------------------------------------------------------------------------------------------------
+
+			oldTotalArticle = onhand * avgPrice;
+			newTotalArticle = oldTotalArticle + transValue;
+			newAvgPrice = newTotalArticle / newOnhand;
+			// Actualizar objeto princicpal
+			transaction.setNewAvgprice(newAvgPrice);
+			transaction.setBalance(newTotalArticle);
+
+		}
 		
 		if (transaction.getObjtype().equals("10")) {
 			// Existencias
 			// --------------------------------------------------------------------------------------------------------
-			newOnhand = onhand - transQuantity;
+			//multiplicando por el factor de unidadades de ventas
+			newOnhand = onhand - (transQuantity*DBArticle.getNumInSale());
 			newWhsOnhand = whsOnhand - transQuantity;
 			// Actualizar objeto princicpal
 			transaction.setNewOnhand(newOnhand);
@@ -315,10 +344,11 @@ public class transactionEJB {
 
 			// Costos promedios
 			// --------------------------------------------------------------------------------------------------------
-/*
-			oldTotalArticle = onhand * avgPrice;
-			newTotalArticle = oldTotalArticle + transValue;
-			newAvgPrice = newTotalArticle / newOnhand;*/
+			/*
+			 * oldTotalArticle = onhand * avgPrice; newTotalArticle =
+			 * oldTotalArticle + transValue; newAvgPrice = newTotalArticle /
+			 * newOnhand;
+			 */
 			// Actualizar objeto princicpal
 			transaction.setNewAvgprice(avgPrice);
 			transaction.setBalance(newOnhand);

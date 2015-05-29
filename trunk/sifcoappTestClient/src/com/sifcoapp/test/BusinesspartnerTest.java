@@ -58,7 +58,7 @@ public class BusinesspartnerTest {
 
 		BusinesspartnerTO lstPeriods= new BusinesspartnerTO();
 		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
-	 List lstPeriods3 = null;
+	 BusinesspartnerTO lstPeriods3 = null;
 		BusinesspartnerTO nuevo = new BusinesspartnerTO();
 		
 		
@@ -72,17 +72,18 @@ public class BusinesspartnerTest {
 				+ lstPeriods.getAddid());
 		/**/
 		try {
-			lstPeriods3 = catalog.get_businesspartner(lstPeriods2);
+			lstPeriods3 = catalog.get_businesspartnerBykey("P125");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Iterator<BusinesspartnerTO> iterator = lstPeriods3.iterator();
+		System.out.println(lstPeriods3.getCardcode()+"  "+lstPeriods3.getCardname()+ " - "
+				);
+		Iterator<BusinesspartnerAcountTO> iterator = lstPeriods3.getBusinesspartnerAcount().iterator();
 		while (iterator.hasNext()) {
-			BusinesspartnerTO periodo = (BusinesspartnerTO) iterator.next();
-			System.out.println(periodo.getCardcode()+"  "+periodo.getGroupcode()+ " - "
-					+ periodo.getNit() + " - "
-					+ periodo.getAddid());
+			BusinesspartnerAcountTO periodo = (BusinesspartnerAcountTO) iterator.next();
+			System.out.println(periodo.getCardcode()+"  "+periodo.getAcctcode()+ " - "
+					);
 		}
 	}
 	

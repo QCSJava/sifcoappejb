@@ -60,12 +60,8 @@ public class JournalEntryLinesTO extends CommonTO{
 	private String bplname;
 	private String vatregnum;
 	private String sledgerf;
+	private String acctname;
 	
-	public JournalEntryLinesTO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 	public JournalEntryLinesTO(int transid, int line_id, String account,
 			Double debit, Double credit, Date duedate, String shortname,
 			String contraact, String linememo, String ref3line,
@@ -79,7 +75,8 @@ public class JournalEntryLinesTO extends CommonTO{
 			String stornoacc, Double balduedeb, Double balduecred,
 			String isnet, int taxtype, String taxpostacc, Double totalvat,
 			String wtliable, String wtline, String payblock, String matchref,
-			String ordered, String bplname, String vatregnum, String sledgerf) {
+			String ordered, String bplname, String vatregnum, String sledgerf,
+			String acctname) {
 		super();
 		this.transid = transid;
 		this.line_id = line_id;
@@ -133,7 +130,15 @@ public class JournalEntryLinesTO extends CommonTO{
 		this.bplname = bplname;
 		this.vatregnum = vatregnum;
 		this.sledgerf = sledgerf;
+		this.acctname = acctname;
 	}
+
+	public JournalEntryLinesTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	
 
 	public int getTransid() {
 		return transid;
@@ -549,6 +554,14 @@ public class JournalEntryLinesTO extends CommonTO{
 
 	public void setSledgerf(String sledgerf) {
 		this.sledgerf = sledgerf;
+	}
+
+	public String getAcctname() {
+		return acctname;
+	}
+
+	public void setAcctname(String acctname) {
+		this.acctname = acctname;
 	}
 
 }

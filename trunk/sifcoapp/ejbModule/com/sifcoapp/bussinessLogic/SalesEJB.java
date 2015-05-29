@@ -274,6 +274,10 @@ public class SalesEJB implements SalesEJBRemote {
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto encabezado
 		// --------------------------------------------------------------------------------------------------------------------------------
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+		parameters.setDocduedate(sqlDate);
 		parameters.setDocnum(parameters.getDocentry());
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
@@ -296,7 +300,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// consulta he incluirse la cuenta contables
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
-		parameters.setObjtype("20");
+
 		return parameters;
 	}
 
@@ -565,14 +569,16 @@ public class SalesEJB implements SalesEJBRemote {
 			List lisHija = new Vector();
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
-			
+
 			arti = good.getArticle();
 			branch = branch + (arti.getAvgPrice() * good.getQuantity());
 			sale = sale + good.getLinetotal();
 			double impuesto = good.getLinetotal() * 0.13;
 			fovc = fovc + (good.getVatsum() - impuesto);
 			tax = tax + impuesto;
-			bussines = bussines + ((good.getVatsum() - impuesto) + impuesto + good.getLinetotal());
+			bussines = bussines
+					+ ((good.getVatsum() - impuesto) + impuesto + good
+							.getLinetotal());
 
 		}
 		// consultando en la base de datos los codigos de cuenta asignados
@@ -620,7 +626,7 @@ public class SalesEJB implements SalesEJBRemote {
 		AccountingDAO accDAO = new AccountingDAO();
 		acc = accDAO.getAccAssignment();
 		V_local = acc.getLinkact_1();
-		costo_venta=acc.getCogm_act();
+		costo_venta = acc.getCogm_act();
 
 		// asiento contable
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
@@ -637,24 +643,24 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setObjtype("5");
 		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
-		nuevo.setLoctotal(bussines);
-		nuevo.setSystotal(bussines);
+		nuevo.setLoctotal(bussines+branch);
+		nuevo.setSystotal(bussines+branch);
 		// llenado de los
 		// hijos---------------------------------------------------------------------------------------------------
 		// cuenta del socio de negocio
 		art1.setLine_id(1);
-		art1.setCredit(0.0);
+		
 		art1.setDebit(bussines);
 		art1.setAccount(buss_c);
-		art1.setDuedate(parameters.getDocduedate());
+		art1.setDuedate(parameters.getDocdate());
 		art1.setShortname(buss_c);
 		art1.setContraact(V_local);
 		art1.setLinememo("venta de mercancias");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
 		art1.setBaseref(parameters.getRef1());
-		art1.setTaxdate(parameters.getDocduedate());
+		art1.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);
@@ -664,8 +670,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setVatamount(0.0);
 		art1.setClosed("N");
 		art1.setGrossvalue(0.0);
-		art1.setBalduedeb(0.0);
-		art1.setBalduecred(bussines);
+		art1.setBalduedeb(bussines);
+		art1.setBalduecred(0.0);
 		art1.setIsnet("Y");
 		art1.setTaxtype(0);
 		art1.setTaxpostacc("N");
@@ -679,17 +685,17 @@ public class SalesEJB implements SalesEJBRemote {
 		// cuenta asignada al almacen
 		art2.setLine_id(2);
 		art2.setAccount(branch_c);
-		art2.setDebit(0.0);
+		
 		art2.setCredit(branch);
-		art2.setDuedate(parameters.getDocduedate());
+		art2.setDuedate(parameters.getDocdate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
 		art2.setLinememo("venta  de mercancias");
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
-		art2.setTaxdate(parameters.getDocduedate());
+		art2.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art2.setReltransid(-1);
 		art2.setRellineid(-1);
@@ -699,8 +705,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setVatamount(0.0);
 		art2.setClosed("N");
 		art2.setGrossvalue(0.0);
-		art2.setBalduedeb(branch);
-		art2.setBalduecred(0.0);
+		art2.setBalduedeb(0.0);
+		art2.setBalduecred(branch);
 		art2.setIsnet("Y");
 		art2.setTaxtype(0);
 		art2.setTaxpostacc("N");
@@ -713,7 +719,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		// cuenta de iva
 		art3.setLine_id(3);
-		art3.setDebit(0.0);
+		
 		art3.setCredit(tax);
 		art3.setAccount(iva_c);
 		art3.setDuedate(parameters.getDocduedate());
@@ -734,8 +740,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art3.setVatamount(0.0);
 		art3.setClosed("N");
 		art3.setGrossvalue(0.0);
-		art3.setBalduedeb(tax);
-		art3.setBalduecred(0.0);
+		art3.setBalduedeb(0.0);
+		art3.setBalduecred(tax);
 		art3.setIsnet("Y");
 		art3.setTaxtype(0);
 		art3.setTaxpostacc("N");
@@ -750,7 +756,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// -----------------------------
 
 		art4.setLine_id(4);
-		art4.setDebit(0.0);
+		
 		art4.setCredit(sale);
 		art4.setAccount(V_local);
 		art4.setDuedate(parameters.getDocduedate());
@@ -771,8 +777,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art4.setVatamount(0.0);
 		art4.setClosed("N");
 		art4.setGrossvalue(0.0);
-		art4.setBalduedeb(tax);
-		art4.setBalduecred(0.0);
+		art4.setBalduedeb(0.0);
+		art4.setBalduecred(sale);
 		art4.setIsnet("Y");
 		art4.setTaxtype(0);
 		art4.setTaxpostacc("N");
@@ -788,7 +794,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		art5.setLine_id(5);
 		art5.setDebit(branch);
-		art5.setCredit(0.0);
+	
 		art5.setAccount(costo_venta);
 		art5.setDuedate(parameters.getDocduedate());
 		art5.setShortname(costo_venta);
@@ -808,7 +814,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setVatamount(0.0);
 		art5.setClosed("N");
 		art5.setGrossvalue(0.0);
-		art5.setBalduedeb(tax);
+		art5.setBalduedeb(branch);
 		art5.setBalduecred(0.0);
 		art5.setIsnet("Y");
 		art5.setTaxtype(0);
@@ -822,7 +828,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0) {
 			art6.setLine_id(6);
-			art6.setDebit(0.0);
+			
 			art6.setCredit(fovc);
 			art6.setAccount(fovialCotrans_c);
 			art6.setDuedate(parameters.getDocduedate());
@@ -843,8 +849,8 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setVatamount(0.0);
 			art6.setClosed("N");
 			art6.setGrossvalue(0.0);
-			art6.setBalduedeb(fovc);
-			art6.setBalduecred(0.0);
+			art6.setBalduedeb(0.0);
+			art6.setBalduecred(fovc);
 			art6.setIsnet("Y");
 			art6.setTaxtype(0);
 			art6.setTaxpostacc("N");
@@ -927,6 +933,29 @@ public class SalesEJB implements SalesEJBRemote {
 			_return.setMensaje("el socio de negocio no esta activo para esta transaccion");
 			return _return;
 		}
+		// ------------------------------------------------------------------------------------------------------------
+		// Validacion del limite de credito
+		// ------------------------------------------------------------------------------------------------------------
+
+		AdminDAO ad = new AdminDAO();
+		CatalogTO cat = new CatalogTO();
+		try {
+			cat = ad.findCatalogByKey(parameters.getPeymethod(), 8);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (!cat.getCatvalue3().equals("N")) {
+			
+			_return = Businesspartner.validate_limit(parameters);
+			if (_return.getCodigoError() != 0) {
+				_return.setCodigoError(1);
+
+				return _return;
+			}
+		}
+
 		// recorre el detalle de la venta por articulo
 		Iterator<SalesDetailTO> iterator1 = parameters.getSalesDetails()
 				.iterator();
@@ -1046,7 +1075,9 @@ public class SalesEJB implements SalesEJBRemote {
 						.next();
 				if (code.equals(articleDetalle2.getItemcode())) {
 					// suma los elementos encontrados del mismo codigo
-					stocks = stocks + articleDetalle2.getQuantity();
+					stocks = stocks
+							+ (articleDetalle2.getQuantity() * DBArticle
+									.getNumInSale());
 				}
 			}
 
@@ -1656,6 +1687,4 @@ public class SalesEJB implements SalesEJBRemote {
 
 	}
 
-	
-	
 }

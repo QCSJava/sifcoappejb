@@ -7,6 +7,8 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import com.sifcoapp.objects.accounting.dao.AccountingDAO;
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
@@ -14,6 +16,8 @@ import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
+import com.sifcoapp.objects.sales.to.SalesTO;
+import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 
 @Stateless
 public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
@@ -138,6 +142,50 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		} else {
 			_return.setCodigoError(1);
 			_return.setMensaje("Socio de Negocio No Activo");
+
+		}
+
+		return _return;
+	}
+	public ResultOutTO validate_limit(SalesTO parameters)
+			throws EJBException {
+
+		ResultOutTO _return = new ResultOutTO();
+		AccountTO acc= new AccountTO();
+		BusinesspartnerTO partner = new BusinesspartnerTO();
+		BusinesspartnerDAO DAO1 = new BusinesspartnerDAO();
+		AccountingDAO DAO = new AccountingDAO();
+		
+		try {
+			acc = DAO.getAccountByKey(parameters.getCtlaccount());
+			partner=DAO1.get_businesspartnerByKey(parameters.getCardcode());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+
+		}
+		
+		double credit=acc.getCurrtotal()+parameters.getDoctotal();
+		if(partner.getCreditline()==null){
+			_return.setCodigoError(1);
+			_return.setMensaje("No posee limite de credito Asignado");
+			return _return;
+
+		}
+		if(partner.getCreditline()==-1){
+			_return.setCodigoError(0);
+			_return.setMensaje("No posee limite de credito");
+			return _return;
+
+		}
+		
+		if (credit<=partner.getCreditline()) {
+			_return.setCodigoError(0);
+			_return.setMensaje("No sobre pasa el credito permitido");
+
+		} else {
+			_return.setCodigoError(1);
+			_return.setMensaje("sobrepasa el credito perrmitido");
 
 		}
 
