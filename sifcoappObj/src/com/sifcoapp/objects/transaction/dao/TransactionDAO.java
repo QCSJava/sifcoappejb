@@ -36,7 +36,6 @@ import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 import com.sun.rowset.CachedRowSetImpl;
 
-
 public class TransactionDAO extends CommonDAO {
 
 	public TransactionDAO() {
@@ -165,27 +164,38 @@ public class TransactionDAO extends CommonDAO {
 		this.setString(3, "itemcode", transaction.getItemcode());
 
 		lstResultSet = this.runUpdate();
-       
+
 		this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
 
-		
 		this.setDouble(1, "onhand", transaction.getNewWhsOnhand());
 		this.setString(2, "itemcode", transaction.getItemcode());
 		this.setString(3, "whscode", transaction.getWhscode());
 
 		lstResultSet = this.runUpdate();
-     //actualiza lista de precios con el ultimo precio del costo promedio
-		if(transaction.getObjtype().equals("20")){
-		this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
+		// actualiza lista de precios con el ultimo precio del costo promedio
+		// para la lista de el ultimo precio predeterminado
 
-	
-		this.setDouble(1, "price", transaction.getNewAvgprice());
-		this.setString(2, "itemcode", transaction.getItemcode());
-		this.setInt(3, "pricelist",1);
+		if (transaction.getObjtype().equals("20")) {
+			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
 
-		lstResultSet = this.runUpdate();
-       }
-      
+			this.setDouble(1, "price", transaction.getNewAvgprice());
+			this.setString(2, "itemcode", transaction.getItemcode());
+			this.setInt(3, "pricelist", 2);
+
+			lstResultSet = this.runUpdate();
+
+			// Actualiza el precio de la lista ultimo precio de compra
+
+			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
+
+			this.setDouble(1, "price", transaction.getPrice());
+			this.setString(2, "itemcode", transaction.getItemcode());
+			this.setInt(3, "pricelist", 1);
+
+			lstResultSet = this.runUpdate();
+
+		}
+
 		_return.setCodigoError(lstResultSet);
 		_return.setMensaje("Datos actualizados correctamente");
 		return _return;

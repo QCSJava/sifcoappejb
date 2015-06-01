@@ -29,7 +29,7 @@ import com.sifcoapp.objects.inventory.dao.TransfersDetailDAO;
 import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
-
+@Stateless
 public class ParameterEJB implements ParameterEJBRemote {
 	Double zero = 0.00;
 

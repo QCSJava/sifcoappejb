@@ -168,7 +168,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		Double vatsum = zero;
 		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO admin = new AdminDAO();
-        
+
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
 
@@ -197,7 +197,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			// Asignar a documento
 			articleDetalle.setArticle(DBArticle);
-            articleDetalle.setAcctcode(branch_c);
+			articleDetalle.setAcctcode(branch_c);
 			// Valores por defecto
 			articleDetalle.setDocentry(parameters.getDocentry());
 			articleDetalle.setTargettype(-1);
@@ -231,7 +231,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto encabezado
 		// --------------------------------------------------------------------------------------------------------------------------------
-        parameters.setDocnum(parameters.getDocentry());
+		parameters.setDocnum(parameters.getDocentry());
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
@@ -253,7 +253,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// consulta he incluirse la cuenta contables
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
-        parameters.setObjtype("20");
+		parameters.setObjtype("20");
 		return parameters;
 	}
 
@@ -539,7 +539,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// -----------------------------------------------------------------------------------
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
-		
+
 		purchase.setTransid(res_jour.getDocentry());
 		_return = inv_Purchase_update(purchase, Common.MTTOUPDATE, conn);
 
@@ -717,30 +717,31 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		branch_c = branch1.getBalinvntac();
 		if (branch1.getBalinvntac() == null) {
-			throw new Exception("No hay una cuenta contable de Inventario asignada al almacen");
+			throw new Exception(
+					"No hay una cuenta contable de Inventario asignada al almacen");
 		}
 
 		// buscando cuenta asignada para IVA y FOVIAL
 		if (fovc != 0) {
 			admin = new AdminDAO();
 			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("FOV1", 12);			
-			
-			if (Catalog.getCatvalue2() ==null){
-				throw new Exception ("No tiene cuenta asignada para  impuestos");				
+			Catalog = admin.findCatalogByKey("FOV1", 12);
+
+			if (Catalog.getCatvalue2() == null) {
+				throw new Exception("No tiene cuenta asignada para  impuestos");
 			}
-			if (Catalog.getCatvalue() ==null){
-				iva_c = Catalog.getCatvalue();				
+			if (Catalog.getCatvalue() == null) {
+				iva_c = Catalog.getCatvalue();
 			}
 			fovialCotrans_c = Catalog.getCatvalue2();
 			iva_c = Catalog.getCatvalue();
-		
+
 		} else {
 			admin = new AdminDAO();
 			CatalogTO Catalog = new CatalogTO();
 			Catalog = admin.findCatalogByKey("IVA", 12);
-			if (Catalog.getCatvalue2() ==null){
-				throw new Exception ("No tiene cuenta asignada para impuestos");				
+			if (Catalog.getCatvalue2() == null) {
+				throw new Exception("No tiene cuenta asignada para impuestos");
 			}
 			iva_c = Catalog.getCatvalue2();
 		}
@@ -795,7 +796,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setPayblock("N");
 		art1.setOrdered("N");
 		detail.add(art1);
-		
+
 		// cuenta asignada al almacen
 		art2.setLine_id(2);
 		art2.setAccount(branch_c);
@@ -829,7 +830,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setPayblock("N");
 		art2.setOrdered("N");
 		detail.add(art2);
-		
+
 		// cuenta de iva
 		art3.setLine_id(3);
 		art3.setDebit(tax);
@@ -930,6 +931,20 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			throw (EJBException) new EJBException(e);
 		}
 
+		return _return;
+	}
+
+	public List getPurchaseDetail(int docentry) throws Exception {
+		// TODO Auto-generated method stub
+		List _return;
+		PurchaseDetailDAO DAO = new PurchaseDetailDAO();
+
+		try {
+			_return = DAO.getpurchaseDetail(docentry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
 		return _return;
 	}
 
@@ -1043,21 +1058,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 	}
 
-	public List getPurchaseDetail(int docentry) throws Exception {
-		// TODO Auto-generated method stub
-		List _return;
-		PurchaseDetailDAO DAO = new PurchaseDetailDAO();
-
-		try {
-			_return = DAO.getpurchaseDetail(docentry);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-		return _return;
-	}
-
-	public List getSupplier(SupplierInTO param) throws Exception {
+	//-----------------------------------------------------------------------------------------------------------------
+	//
+	//-----------------------------------------------------------------------------------------------------------------
+public List getSupplier(SupplierInTO param) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
 		SupplierDAO DAO = new SupplierDAO();
