@@ -65,49 +65,87 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 
 		try {
 			DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
-			
-			Iterator<BusinesspartnerAcountTO> iterator = parameters.getBusinesspartnerAcount()
-					.iterator();
+
+			Iterator<BusinesspartnerAcountTO> iterator = parameters
+					.getBusinesspartnerAcount().iterator();
 			while (iterator.hasNext()) {
 				BusinesspartnerAcountTO detalleReceipt = (BusinesspartnerAcountTO) iterator
 						.next();
 				BusinesspartnerDAO DAO1 = new BusinesspartnerDAO(DAO.conn);
-				DAO1.setIstransaccional(true);	
-				
-				DAO1.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt, Common.MTTOINSERT);
-//----------------------------------------------------------------------------------------------------------------------------------------------------
-		if (accion == Common.MTTOUPDATE) {
-			boolean encontrado= false;
-				Iterator<BusinesspartnerAcountTO> iterator2 = parameters.getBusinesspartnerAcount()
-						.iterator();
-                      List bAcc= new Vector();
-                      bAcc=get_businesspartnerAcount(parameters.getCardcode());
-				
+				DAO1.setIstransaccional(true);
+
+				DAO1.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt,
+						Common.MTTOINSERT);
+			}
+			// ----------------------------------------------------------------------------------------------------------------------------------------------------
+			// para actualizar campos del business partner
+			// ----------------------------------------------------------------------------------------------------------------------------------------------------
+			if (accion == Common.MTTOUPDATE) {
+				BusinesspartnerDAO DAO1 = new BusinesspartnerDAO(DAO.conn);
+				DAO1.setIstransaccional(true);
+				boolean encontrado = false;
+				List bAcc = new Vector();
+				List aux = new Vector();
+
+				// -------------------------------------------------------------------------------------------------------
+				// llenado de la lista auxiliar con la lista resultado de la
+				// consulta de la base
+				// -------------------------------------------------------------------------------------------------------
+				bAcc = get_businesspartnerAcount(parameters.getCardcode());
+				Iterator<BusinesspartnerAcountTO> iter2 = bAcc.iterator();
+				while (iter2.hasNext()) {
+					BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) iter2
+							.next();
+					aux.add(bus);
+				}
+
+				// -------------------------------------------------------------------------------------------------------
+				// recorre las listas para comparar si ya existe el codigo de
+				// cuenta dentro de la tabla businesspartnerAcount
+				// -------------------------------------------------------------------------------------------------------
+				Iterator<BusinesspartnerAcountTO> iterator2 = parameters
+						.getBusinesspartnerAcount().iterator();
+
 				while (iterator2.hasNext()) {
 					BusinesspartnerAcountTO business = (BusinesspartnerAcountTO) iterator2
 							.next();
-					
-					Iterator<BusinesspartnerAcountTO> iterator3= parameters.getBusinesspartnerAcount()
+
+					Iterator<BusinesspartnerAcountTO> iterator3 = bAcc
 							.iterator();
-	                    while (iterator3.hasNext()) {
+					while (iterator3.hasNext()) {
 						BusinesspartnerAcountTO business2 = (BusinesspartnerAcountTO) iterator3
 								.next();
-					
-					
-					if (business.getAcctcode().equals(business2.getAcctcode()))
-					{
-						
-					}else{
-						DAO1.inv_cat_bpa_businesspartnerAcount_mtto(business, Common.MTTOINSERT);
-					
+						// compara si ya existe el codigo de la cuenta si existe
+						// encontrado = true;y elimina el elemento de la lista
+						// auxiliar
+						if (business.getAcctcode().equals(
+								business2.getAcctcode()) &&business.getAcctype()==business2.getAcctype()) {
+							encontrado = true;
+							aux.remove(business2);
+						}
+
 					}
-				}
+
+					if (encontrado) {
+						DAO1.inv_cat_bpa_businesspartnerAcount_mtto(business,
+								Common.MTTOUPDATE);
+
+					} else {
+						DAO1.inv_cat_bpa_businesspartnerAcount_mtto(business,
+								Common.MTTOINSERT);
+					}
+				}// fin del while (iterator2.hasNext())
 				
-		}
-		
-			}
-			
-			}
+				//Eliminar todos los datos que no fueron tomados en la actualizacion de la tabla
+				Iterator<BusinesspartnerAcountTO> iter3 = aux.iterator();
+				while (iter3.hasNext()) {
+					BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) iter3
+							.next();
+					DAO1.inv_cat_bpa_businesspartnerAcount_mtto(bus,
+							Common.MTTODELETE);
+				}
+
+			}// finalizacion del if superior if (accion == Common.MTTOUPDATE)
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -122,6 +160,8 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		return _return;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------------------------------------------------------------------
 	public List get_businesspartner(BusinesspartnerInTO parameters)
 			throws EJBException {
 		// TODO Auto-generated method stub
@@ -165,7 +205,8 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 			throw (EJBException) new EJBException(e);
 
 		}
-		if (partner.getValidfor() != null && partner.getValidfor().toUpperCase().equals("Y")) {
+		if (partner.getValidfor() != null
+				&& partner.getValidfor().toUpperCase().equals("Y")) {
 			_return.setCodigoError(0);
 			_return.setMensaje("Socio de Negocio Activo");
 
@@ -177,39 +218,39 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 
 		return _return;
 	}
-	public ResultOutTO validate_limit(SalesTO parameters)
-			throws EJBException {
+
+	public ResultOutTO validate_limit(SalesTO parameters) throws EJBException {
 
 		ResultOutTO _return = new ResultOutTO();
-		AccountTO acc= new AccountTO();
+		AccountTO acc = new AccountTO();
 		BusinesspartnerTO partner = new BusinesspartnerTO();
 		BusinesspartnerDAO DAO1 = new BusinesspartnerDAO();
 		AccountingDAO DAO = new AccountingDAO();
-		
+
 		try {
 			acc = DAO.getAccountByKey(parameters.getCtlaccount());
-			partner=DAO1.get_businesspartnerByKey(parameters.getCardcode());
+			partner = DAO1.get_businesspartnerByKey(parameters.getCardcode());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 
 		}
-		
-		double credit=acc.getCurrtotal()+parameters.getDoctotal();
-		if(partner.getCreditline()==null){
+
+		double credit = acc.getCurrtotal() + parameters.getDoctotal();
+		if (partner.getCreditline() == null) {
 			_return.setCodigoError(1);
 			_return.setMensaje("No posee limite de credito Asignado");
 			return _return;
 
 		}
-		if(partner.getCreditline()==-1){
+		if (partner.getCreditline() == -1) {
 			_return.setCodigoError(0);
 			_return.setMensaje("No posee limite de credito");
 			return _return;
 
 		}
-		
-		if (credit<=partner.getCreditline()) {
+
+		if (credit <= partner.getCreditline()) {
 			_return.setCodigoError(0);
 			_return.setMensaje("No sobre pasa el credito permitido");
 
@@ -221,7 +262,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 
 		return _return;
 	}
-	
+
 	public ResultOutTO inv_cat_bpa_businesspartnerAcount_mtto(
 			BusinesspartnerAcountTO parameters, int accion) throws EJBException {
 
@@ -230,10 +271,11 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		DAO.setIstransaccional(true);
 		if (parameters.getBalance() == null) {
 			parameters.setBalance(zero);
-		
+
 		}
 		try {
-			_return.setDocentry(DAO.inv_cat_bpa_businesspartnerAcount_mtto(parameters, accion));
+			_return.setDocentry(DAO.inv_cat_bpa_businesspartnerAcount_mtto(
+					parameters, accion));
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -246,12 +288,10 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos ingresados correctamente");
 		return _return;
-	
 
-}
+	}
 
-	public List get_businesspartnerAcount(String code)
-			throws EJBException {
+	public List get_businesspartnerAcount(String code) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
@@ -265,8 +305,8 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		return _return;
 	}
 
-	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(BusinesspartnerAcountTO parameters)
-			throws EJBException {
+	public BusinesspartnerAcountTO get_businesspartnerAcountBykey(
+			BusinesspartnerAcountTO parameters) throws EJBException {
 		// TODO Auto-generated method stub
 		BusinesspartnerAcountTO _return = new BusinesspartnerAcountTO();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();

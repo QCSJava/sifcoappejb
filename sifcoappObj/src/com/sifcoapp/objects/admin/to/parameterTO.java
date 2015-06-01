@@ -10,7 +10,17 @@ public class parameterTO extends CommonTO {
 	 * 
 	 */
 	private static final long serialVersionUID = 1259249841414588622L;
+	/**
+	 * 
+	 */
+	
 	private int parametercode;
+	private String parametername;
+	private String value1;
+	private String value2;
+	private String value3;
+	private int usersign;
+
 	public int getParametercode() {
 		return parametercode;
 	}
@@ -61,11 +71,7 @@ public class parameterTO extends CommonTO {
 		this.value3 = value3;
 		this.usersign = usersign;
 	}
-	private String parametername;
-	private String value1;
-	private String value2;
-	private String value3;
-	private int usersign;
+	
 
 	
 
