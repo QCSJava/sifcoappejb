@@ -81,18 +81,21 @@ public class ParameterDAO extends CommonDAO{
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-
+		
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {
 				while (rowsetActual.next()) {
 					parameterTO parameter = new parameterTO();
+					
 					parameter.setParametercode(rowsetActual.getInt(1));
 					parameter.setParametername(rowsetActual.getString(2));
 					parameter.setValue1(rowsetActual.getString(3));
 					parameter.setValue2(rowsetActual.getString(4));
 					parameter.setValue3(rowsetActual.getString(5));
 					parameter.setUsersign(rowsetActual.getInt(6));
+					
+					
 					_return.add(parameter);
 				}
 				rowsetActual.close();
