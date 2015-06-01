@@ -71,7 +71,7 @@ public class ParameterDAO extends CommonDAO{
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_parameter()}");
+		this.setDbObject("{?= call sp_get_parameter()}");
 
 		lstResultSet = this.runQuery();
 

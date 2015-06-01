@@ -10,7 +10,7 @@ public class BusinesspartnerTO extends CommonTO {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6266904645558998389L;
+
 
 	private String cardcode;
 	private String cardname;
