@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
@@ -74,10 +75,39 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 				DAO1.setIstransaccional(true);	
 				
 				DAO1.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt, Common.MTTOINSERT);
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+		if (accion == Common.MTTOUPDATE) {
+			boolean encontrado= false;
+				Iterator<BusinesspartnerAcountTO> iterator2 = parameters.getBusinesspartnerAcount()
+						.iterator();
+                      List bAcc= new Vector();
+                      bAcc=get_businesspartnerAcount(parameters.getCardcode());
+				
+				while (iterator2.hasNext()) {
+					BusinesspartnerAcountTO business = (BusinesspartnerAcountTO) iterator2
+							.next();
+					
+					Iterator<BusinesspartnerAcountTO> iterator3= parameters.getBusinesspartnerAcount()
+							.iterator();
+	                    while (iterator3.hasNext()) {
+						BusinesspartnerAcountTO business2 = (BusinesspartnerAcountTO) iterator3
+								.next();
+					
+					
+					if (business.getAcctcode().equals(business2.getAcctcode()))
+					{
+						
+					}else{
+						DAO1.inv_cat_bpa_businesspartnerAcount_mtto(business, Common.MTTOINSERT);
+					
+					}
+				}
+				
+		}
+		
 			}
 			
-			
+			}
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
