@@ -95,9 +95,9 @@ public class BusinesspartnerTest {
 		bus.setGroupcode("none");
 		BusinesspartnerAcountTO busi= new BusinesspartnerAcountTO();
 		busi.setBalance(0.0);
-		busi.setAcctcode("111");
+		busi.setAcctcode("222555");
 		busi.setObjtype("1");
-		busi.setCardcode("222");
+		busi.setCardcode("004");
 		
 		
 		List ne=new Vector();

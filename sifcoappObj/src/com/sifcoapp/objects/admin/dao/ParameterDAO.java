@@ -56,7 +56,7 @@ public class ParameterDAO extends CommonDAO{
 		this.setString(2,"_parametername ", parameter.getParametername());
 		this.setString(3,"_value1 ", parameter.getValue1());
 		this.setString(4,"_value2 ", parameter.getValue2());
-		this.setDate(5,"_value3 ", parameter.getValue3());
+		this.setString(5,"_value3 ", parameter.getValue3());
 		this.setInt(6,"_usersign ", parameter.getUsersign());
 		this.setInt(7,"_action ", action);
     
@@ -65,6 +65,7 @@ public class ParameterDAO extends CommonDAO{
 		return v_resp;
 		
 	}
+	
 	
 	public List getParameter() throws Exception {
 		List _return = new Vector();
