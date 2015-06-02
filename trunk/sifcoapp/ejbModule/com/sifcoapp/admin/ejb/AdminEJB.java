@@ -289,6 +289,7 @@ public class AdminEJB implements AdminEJBRemote {
 			if (parameters.getOnHand() == null) {
 				parameters.setOnHand(zero);
 			}
+			
 			ArticlesPriceTO art = new ArticlesPriceTO();
 			ArticlesPriceTO art2 = new ArticlesPriceTO();
 			art.setItemcode(parameters.getItemCode());
