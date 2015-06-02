@@ -2,6 +2,7 @@ package com.sifcoapp.admin.ejb;
 
 //fyrtyrtyrtyrt
 
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -25,6 +26,8 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.TransfersDAO;
 import com.sifcoapp.objects.inventory.dao.TransfersDetailDAO;
 import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
+import com.sifcoapp.objects.sales.DAO.SalesDAO;
+import com.sifcoapp.objects.sales.to.SalesTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 
@@ -190,7 +193,7 @@ public class AdminEJB implements AdminEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
-		AdminDAO adminDAO2 = new AdminDAO();
+		AdminDAO adminDAO2 = new AdminDAO(adminDAO.getConn());
 		adminDAO2.setIstransaccional(true);
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
 				.iterator();
@@ -286,18 +289,16 @@ public class AdminEJB implements AdminEJBRemote {
 			if (parameters.getOnHand() == null) {
 				parameters.setOnHand(zero);
 			}
-			
 			ArticlesPriceTO art = new ArticlesPriceTO();
 			ArticlesPriceTO art2 = new ArticlesPriceTO();
 			art.setItemcode(parameters.getItemCode());
 			art.setPrice(0.0);
 			art.setPricelist(1);
 			art.setFactor(0.0);
+			art.setOvrwritten(true);
 			art.setAddprice1(0.0);
 			art.setAddprice2(0.0);
-			art.setOvrwritten(true);
-			
-			cat_art1_articlesprice_mtto(art, 1);
+			cat_art1_articlesprice_mtto(art, 1,adminDAO.getConn());
 			art2.setItemcode(parameters.getItemCode());
 			art2.setPrice(0.0);
 			art2.setPricelist(2);
@@ -305,8 +306,7 @@ public class AdminEJB implements AdminEJBRemote {
 			art2.setOvrwritten(true);
 			art2.setAddprice1(0.0);
 			art2.setAddprice2(0.0);
-			
-			cat_art1_articlesprice_mtto(art2, 1);
+			cat_art1_articlesprice_mtto(art2, 1,adminDAO.getConn());
 
 			adminDAO.cat_articles_mtto(parameters, action);
 			adminDAO.forceCommit();
@@ -315,8 +315,9 @@ public class AdminEJB implements AdminEJBRemote {
 			adminDAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
-			adminDAO2.forceCloseConnection();
+			
 			adminDAO.forceCloseConnection();
+			
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
@@ -583,24 +584,32 @@ public class AdminEJB implements AdminEJBRemote {
 	}
 
 	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters,
-			int action) throws EJBException {
+			int action)
+			throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+		AdminDAO DAO = new AdminDAO();
+		try {
+			_return = cat_art1_articlesprice_mtto(parameters, action, DAO.getConn());
+			DAO.forceCommit();
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+			DAO.forceCloseConnection();
+		}
+		return _return;
+
+	}
+	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters,
+			int action,Connection conn) throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
 
-		AdminDAO adminDAO = new AdminDAO();
+		AdminDAO adminDAO = new AdminDAO(conn);
 		adminDAO.setIstransaccional(true);
 
-		try {
-			adminDAO.cat_art1_articlesprice_mtto(parameters, action);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			adminDAO.rollBackConnection();
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			adminDAO.forceCloseConnection();
-		}
+		adminDAO.cat_art1_articlesprice_mtto(parameters, action);
+			
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
