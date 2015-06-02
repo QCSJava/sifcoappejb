@@ -58,7 +58,7 @@ public class ParameterEJB implements ParameterEJBRemote {
 				
 			}else{
 				_return.setCodigoError(0);
-				_return.setMensaje("No es posible ingresar los datos al sistema");
+				_return.setMensaje("datos  ingresados los datos al sistema");
 			    _return.setDocentry(i);
 			}
 			return _return;

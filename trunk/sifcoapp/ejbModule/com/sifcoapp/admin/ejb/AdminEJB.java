@@ -293,13 +293,19 @@ public class AdminEJB implements AdminEJBRemote {
 			art.setPrice(0.0);
 			art.setPricelist(1);
 			art.setFactor(0.0);
+			art.setAddprice1(0.0);
+			art.setAddprice2(0.0);
 			art.setOvrwritten(true);
+			
 			cat_art1_articlesprice_mtto(art, 1);
 			art2.setItemcode(parameters.getItemCode());
 			art2.setPrice(0.0);
-			art2.setPricelist(1);
+			art2.setPricelist(2);
 			art2.setFactor(0.0);
 			art2.setOvrwritten(true);
+			art2.setAddprice1(0.0);
+			art2.setAddprice2(0.0);
+			
 			cat_art1_articlesprice_mtto(art2, 1);
 
 			adminDAO.cat_articles_mtto(parameters, action);

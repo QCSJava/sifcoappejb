@@ -35,6 +35,8 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		ResultOutTO _return = new ResultOutTO();
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
 		DAO.setIstransaccional(true);
+		
+		
 		if (parameters.getBalancesys() == null) {
 			parameters.setBalancesys(zero);
 		}
@@ -64,6 +66,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		}
 
 		try {
+				if (accion == Common.MTTOINSERT) {
 			DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
 
 			Iterator<BusinesspartnerAcountTO> iterator = parameters
@@ -77,6 +80,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 				DAO1.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt,
 						Common.MTTOINSERT);
 			}
+				}
 			// ----------------------------------------------------------------------------------------------------------------------------------------------------
 			// para actualizar campos del business partner
 			// ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -127,8 +131,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 					}
 
 					if (encontrado) {
-						DAO1.inv_cat_bpa_businesspartnerAcount_mtto(business,
-								Common.MTTOUPDATE);
+						System.out.println("encontrado");
 
 					} else {
 						DAO1.inv_cat_bpa_businesspartnerAcount_mtto(business,
