@@ -214,7 +214,7 @@ public class AdminTest {
 
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO parameters = new ArticlesTO();
-		parameters.setItemCode("00ddd1-sfs");
+		parameters.setItemCode("00-sfs");
 		// parameters.setUserSign(2);
 		parameters.setItemType("S");
 		// parameters.setNumInBuy(54.2);
@@ -229,14 +229,14 @@ public class AdminTest {
 		BranchArticlesTO branch1 = new BranchArticlesTO();
 		branch1.setIsasociated(true);
 		// branch1.setIscommited(100.2);
-		branch1.setItemcode("00ddd1-sfs");
+		branch1.setItemcode("00-sfs");
 		// branch1.setLocked("Y");
 
 		branch1.setWhscode("alm-36");
 		BranchArticlesTO branch2 = new BranchArticlesTO();
 		branch2.setIsasociated(true);
 		// branch1.setIscommited(100.2);
-		branch2.setItemcode("00ddd1-sfs");
+		branch2.setItemcode("00-sfs");
 		// branch1.setLocked("Y");
 		branch2.setIscommited(56.5);
 		branch2.setWhscode("alm-55");
@@ -276,7 +276,7 @@ public class AdminTest {
 		// Common.MTTODELETE);
 
 		System.out.println("luego de servicio");
-		System.out.println(_result);
+		System.out.println(_result.getMensaje());
 
 	}
 
@@ -307,7 +307,7 @@ public class AdminTest {
 	public static void getArticlesByKey() {
 		ArticlesTO article = null;
 
-		String code = "2780";
+		String code = "00ddd1-sfs";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
