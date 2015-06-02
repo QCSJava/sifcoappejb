@@ -123,7 +123,7 @@ public class BankreconciliationauxDAO extends CommonDAO{
 
 	
 
-	public int bankreconciliationaux(bankreconciliationauxTO parameters, int action)
+	public int bankreconciliationaux_mtto(bankreconciliationauxTO parameters, int action)
 			throws Exception {
 		List v_resp;
 		// this.seObject("{call sp_inv_gre0_good lkkkk(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");

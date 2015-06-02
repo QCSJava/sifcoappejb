@@ -90,12 +90,12 @@ public class BusinesspartnerTest {
 	public static void businesspartner_mtto(){
 		ResultOutTO resp=null;
 		BusinesspartnerTO bus= new BusinesspartnerTO();
-		bus.setCardcode("222555");
-		bus.setCardname("cardname");
+		bus.setCardcode("004");
+		bus.setCardname("hhhhhh");
 		bus.setGroupcode("none");
 		BusinesspartnerAcountTO busi= new BusinesspartnerAcountTO();
 		busi.setBalance(0.0);
-		busi.setAcctcode("222555");
+		busi.setAcctcode("4106011204");
 		busi.setObjtype("1");
 		busi.setCardcode("004");
 		
@@ -105,7 +105,7 @@ public class BusinesspartnerTest {
 		ne.add(busi);
 		bus.setBusinesspartnerAcount(ne);
 		try {
-			resp= catalog.cat_bpa_businesspartner_mtto(bus,1);
+			resp= catalog.cat_bpa_businesspartner_mtto(bus,2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
