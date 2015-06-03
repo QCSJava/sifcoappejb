@@ -30,7 +30,7 @@ public class CatalogFacade implements CatalogFacadeRemote {
 	public ResultOutTO cat_bpa_businesspartner_mtto(
 			BusinesspartnerTO parameters, int accion) throws Exception {
 		// TODO Auto-generated method stub
-		return process.cat_bpa_businesspartner_mtto(
+ 		return process.cat_bpa_businesspartner_mtto(
 				parameters,  accion);
 	}
 

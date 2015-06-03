@@ -89,20 +89,29 @@ public class BusinesspartnerTest {
 	
 	public static void businesspartner_mtto(){
 		ResultOutTO resp=null;
+		List ne=new Vector();
 		BusinesspartnerTO bus= new BusinesspartnerTO();
 		bus.setCardcode("004");
 		bus.setCardname("hhhhhh");
 		bus.setGroupcode("none");
 		BusinesspartnerAcountTO busi= new BusinesspartnerAcountTO();
+		BusinesspartnerAcountTO busin= new BusinesspartnerAcountTO();
 		busi.setBalance(0.0);
-		busi.setAcctcode("4106011204");
+		busi.setAcctcode("41060112204");
 		busi.setObjtype("1");
 		busi.setCardcode("004");
-		
-		
-		List ne=new Vector();
-		
 		ne.add(busi);
+		
+		busin.setBalance(0.0);
+		busin.setAcctype(2);
+		busin.setAcctcode("4jjjdsdsgj");
+		busin.setObjtype("1");
+		busin.setCardcode("004");
+		ne.add(busin);
+		
+		
+		
+		
 		bus.setBusinesspartnerAcount(ne);
 		try {
 			resp= catalog.cat_bpa_businesspartner_mtto(bus,2);

@@ -98,6 +98,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 				bAcc = get_businesspartnerAcount(parameters.getCardcode());
 				Iterator<BusinesspartnerAcountTO> iter2 = bAcc.iterator();
 				while (iter2.hasNext()) {
+					
 					BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) iter2
 							.next();
 					aux.add(bus);
@@ -113,7 +114,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 				while (iterator2.hasNext()) {
 					BusinesspartnerAcountTO business = (BusinesspartnerAcountTO) iterator2
 							.next();
-
+					encontrado = false;
 					Iterator<BusinesspartnerAcountTO> iterator3 = bAcc
 							.iterator();
 					while (iterator3.hasNext()) {
