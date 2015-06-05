@@ -3,6 +3,7 @@
  */
 package com.sifcoapp.objects.inventory.to;
 
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 /**
@@ -34,6 +35,7 @@ public class TransfersDetailTO extends CommonTO {
 	private String objtype;
 	private String unitmsr;
 	private String fromwhscode;
+	private ArticlesTO article;
 	
 	public TransfersDetailTO() {
 		super();
@@ -45,7 +47,7 @@ public class TransfersDetailTO extends CommonTO {
 			String itemcode, String dscription, Double quantity,
 			Double openqty, Double price, Double linetotal, String whscode,
 			String acctcode, String usebaseun, String objtype, String unitmsr,
-			String fromwhscode) {
+			String fromwhscode,ArticlesTO article) {
 		super();
 		this.docentry = docentry;
 		this.linenum = linenum;
@@ -66,6 +68,7 @@ public class TransfersDetailTO extends CommonTO {
 		this.objtype = objtype;
 		this.unitmsr = unitmsr;
 		this.fromwhscode = fromwhscode;
+		this.article=article;
 	}
 
 	public int getDocentry() {
@@ -218,6 +221,14 @@ public class TransfersDetailTO extends CommonTO {
 
 	public void setFromwhscode(String fromwhscode) {
 		this.fromwhscode = fromwhscode;
+	}
+
+	public ArticlesTO getArticle() {
+		return article;
+	}
+
+	public void setArticle(ArticlesTO article) {
+		this.article = article;
 	}
 
 	

@@ -3,6 +3,7 @@
  */
 package com.sifcoapp.objects.inventory.to;
 
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 /**
@@ -33,6 +34,35 @@ public class GoodsIssuesDetailTO extends CommonTO {
 	private String usebaseun;
 	private String objtype;
 	private String unitmsr;
+	public GoodsIssuesDetailTO(int docentry, int linenum, int targettype,
+			int trgetentry, String baseref, int basetype, String linestatus,
+			String itemcode, String dscription, Double quantity,
+			Double openqty, Double price, Double linetotal, String whscode,
+			String acctcode, String usebaseun, String objtype, String unitmsr,
+			ArticlesTO article) {
+		super();
+		this.docentry = docentry;
+		this.linenum = linenum;
+		this.targettype = targettype;
+		this.trgetentry = trgetentry;
+		this.baseref = baseref;
+		this.basetype = basetype;
+		this.linestatus = linestatus;
+		this.itemcode = itemcode;
+		this.dscription = dscription;
+		this.quantity = quantity;
+		this.openqty = openqty;
+		this.price = price;
+		this.linetotal = linetotal;
+		this.whscode = whscode;
+		this.acctcode = acctcode;
+		this.usebaseun = usebaseun;
+		this.objtype = objtype;
+		this.unitmsr = unitmsr;
+		this.article = article;
+	}
+
+	private ArticlesTO article;
 
 	public int getDocentry() {
 		return docentry;
@@ -185,30 +215,13 @@ public class GoodsIssuesDetailTO extends CommonTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public GoodsIssuesDetailTO(int docentry, int linenum, int targettype,
-			int trgetentry, String baseref, int basetype, String linestatus,
-			String itemcode, String dscription, Double quantity,
-			Double openqty, Double price, Double linetotal, String whscode,
-			String acctcode, String usebaseun, String objtype, String unitmsr) {
-		super();
-		this.docentry = docentry;
-		this.linenum = linenum;
-		this.targettype = targettype;
-		this.trgetentry = trgetentry;
-		this.baseref = baseref;
-		this.basetype = basetype;
-		this.linestatus = linestatus;
-		this.itemcode = itemcode;
-		this.dscription = dscription;
-		this.quantity = quantity;
-		this.openqty = openqty;
-		this.price = price;
-		this.linetotal = linetotal;
-		this.whscode = whscode;
-		this.acctcode = acctcode;
-		this.usebaseun = usebaseun;
-		this.objtype = objtype;
-		this.unitmsr = unitmsr;
+	public ArticlesTO getArticle() {
+		return article;
 	}
 
+	public void setArticle(ArticlesTO article) {
+		this.article = article;
+	}
+
+	
 }

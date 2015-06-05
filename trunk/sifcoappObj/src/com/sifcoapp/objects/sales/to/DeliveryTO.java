@@ -63,6 +63,7 @@ public class DeliveryTO extends CommonTO{
 	private int usersign;
 	private Date createdate;
 	private int createtime;
+	private String Fromwhscode;
 	List deliveryDetails;
 	public DeliveryTO() {
 		super();
@@ -80,7 +81,7 @@ public class DeliveryTO extends CommonTO{
 			String ctlaccount, String bplname, String vatregnum,
 			Double paidsum, String towhscode, Double nret, String namenp,
 			int quedan, Date fechreciva, Date fquedan, int usersign,
-			Date createdate, int createtime, List deliveryDetails) {
+			Date createdate, int createtime,  String Fromwhscode,List deliveryDetails) {
 		super();
 		this.docentry = docentry;
 		this.docnum = docnum;
@@ -126,6 +127,7 @@ public class DeliveryTO extends CommonTO{
 		this.usersign = usersign;
 		this.createdate = createdate;
 		this.createtime = createtime;
+		this.Fromwhscode=Fromwhscode;
 		this.deliveryDetails = deliveryDetails;
 	}
 
@@ -400,6 +402,14 @@ public class DeliveryTO extends CommonTO{
 
 	public void setDeliveryDetails(List deliveryDetails) {
 		this.deliveryDetails = deliveryDetails;
+	}
+
+	public String getFromwhscode() {
+		return Fromwhscode;
+	}
+
+	public void setFromwhscode(String fromwhscode) {
+		Fromwhscode = fromwhscode;
 	}
 
 }
