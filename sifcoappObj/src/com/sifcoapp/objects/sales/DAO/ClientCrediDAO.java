@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.sales.DAO;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -11,7 +12,14 @@ import com.sifcoapp.objects.sales.to.*;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class ClientCrediDAO extends CommonDAO{
-	
+	public ClientCrediDAO() {
+		super();
+	}
+
+	public ClientCrediDAO(Connection _conn) {
+		super(_conn);
+	}
+
 	public List getClientCredi(ClientCrediInTO param) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;

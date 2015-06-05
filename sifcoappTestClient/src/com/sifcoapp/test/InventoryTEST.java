@@ -281,32 +281,46 @@ public class InventoryTEST {
 		GoodsissuesTO parameters = new GoodsissuesTO();
 
 		List prueba = new Vector();
-		GoodsIssuesDetailTO document = new GoodsIssuesDetailTO();
-		GoodsIssuesDetailTO document1 = new GoodsIssuesDetailTO();
+		GoodsIssuesDetailTO art = new GoodsIssuesDetailTO();
+		GoodsIssuesDetailTO art2 = new GoodsIssuesDetailTO();
+		
+		Date fecha = new Date();
+		//parameters.setDocnum(26);
+		parameters.setObjtype("30");
+		parameters.setUsersign(1);
+		parameters.setComments("Prueba inicial");
+		parameters.setDocdate(fecha);
+		parameters.setDocduedate(fecha);
+		List detalle = new Vector();
+		art.setLinenum(1);
+		art.setAcctcode("410102");
+		art.setObjtype("30");
+		art.setWhscode("ALM-001");
+		art.setItemcode("001-004-545-6114");
+		art.setPrice(7.378);
+		art.setQuantity(2.0);
+		art.setLinetotal(14.756);
+		art.setObjtype("30");
+		detalle.add(art);
+		art2.setLinenum(2);
+		art2.setAcctcode("410102");
+		art2.setObjtype("30");
+		art2.setWhscode("ALM-001");
+		art2.setItemcode("001-021");
+		art2.setPrice(0.0813);
+		art2.setQuantity(1.0);
+		art2.setLinetotal(0.0813);
+		art2.setObjtype("30");
+		detalle.add(art2);
+		
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+      
+		parameters.setGoodIssuesDetail(detalle);
+		parameters.setDocdate(sqlDate);
+		parameters.setTowhscode("ALM-001");
 
-		// document.setDocentry(1);
-		document.setLinenum(1);
-		document.setItemcode("ART-001");
-		document.setDscription("Articulo de prueba");
-		document.setQuantity(10.25);
-		// document.setOpenqty(10.25);
-		document.setPrice(11.25);
-		document.setLinetotal(100.00);
-		prueba.add(document);
-		// document1.setDocentry(1);
-		document1.setLinenum(2);
-		document1.setItemcode("ART-001");
-		document1.setDscription("Articulo de prueba");
-		document1.setQuantity(10.25);
-		// document1.setOpenqty(10.25);
-		document1.setPrice(11.25);
-		// document1.setLinetotal(100.00);
-		prueba.add(document1);
-		parameters.setDocnum(485);
-		// parameters.setUsersign(1);
-		// parameters.setDocentry(26);
-		// parameters.setDoctotal(15.5);
-		parameters.setGoodIssuesDetail(prueba);
 		try {
 			_result = Inventory.inv_goodsissues_mtto(parameters, 1);
 		} catch (Exception e) {

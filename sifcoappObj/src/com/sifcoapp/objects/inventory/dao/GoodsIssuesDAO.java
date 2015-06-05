@@ -5,6 +5,7 @@ import com.sifcoapp.objects.inventory.dao.GoodReceiptDetailDAO;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sun.rowset.CachedRowSetImpl;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -13,6 +14,14 @@ import java.util.Vector;
 
 public class GoodsIssuesDAO extends CommonDAO{
 	
+	public GoodsIssuesDAO() {
+		super();
+	}
+
+	public GoodsIssuesDAO(Connection _conn) {
+		super(_conn);
+	}
+
 	//Retorna de goodsisuues registros por filtro
 	public List getGoodsissues(GoodsissuesInTO param) throws Exception {
 		List _return = new Vector();

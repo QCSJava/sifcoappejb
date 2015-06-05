@@ -195,6 +195,15 @@ public class TransactionDAO extends CommonDAO {
 			lstResultSet = this.runUpdate();
 
 		}
+		if (transaction.getObjtype().equals("30")) {
+			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
+
+			this.setDouble(1, "price", transaction.getNewAvgprice());
+			this.setString(2, "itemcode", transaction.getItemcode());
+			this.setInt(3, "pricelist", 2);
+
+			lstResultSet = this.runUpdate();
+		}
 
 		_return.setCodigoError(lstResultSet);
 		_return.setMensaje("Datos actualizados correctamente");

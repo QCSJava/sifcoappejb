@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.sales.to;
 
+import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 public class ClientCrediDetailTO extends CommonTO{
@@ -39,6 +40,7 @@ public class ClientCrediDetailTO extends CommonTO{
 	private String unitmsr;
 	private Double stockpricestockprice;
 	private Double gtotal;
+	private ArticlesTO article;
 	
 	public ClientCrediDetailTO() {
 		super();
@@ -53,7 +55,7 @@ public class ClientCrediDetailTO extends CommonTO{
 			String taxstatus, Double pricebefdi, String ocrcode,
 			String vatgroup, Double priceafvat, Double factor1, Double vatsum,
 			String objtype, Double grssprofit, String taxcode, Double vatappld,
-			String unitmsr, Double stockpricestockprice, Double gtotal) {
+			String unitmsr, Double stockpricestockprice, Double gtotal,ArticlesTO article) {
 		super();
 		this.docentry = docentry;
 		this.linenum = linenum;
@@ -86,6 +88,7 @@ public class ClientCrediDetailTO extends CommonTO{
 		this.unitmsr = unitmsr;
 		this.stockpricestockprice = stockpricestockprice;
 		this.gtotal = gtotal;
+		this.article=article;
 	}
 
 	public int getDocentry() {
@@ -334,6 +337,14 @@ public class ClientCrediDetailTO extends CommonTO{
 
 	public void setGtotal(Double gtotal) {
 		this.gtotal = gtotal;
+	}
+
+	public ArticlesTO getArticle() {
+		return article;
+	}
+
+	public void setArticle(ArticlesTO article) {
+		this.article = article;
 	}
 
 }
