@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.catalogos.Common;
@@ -365,4 +366,19 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		return _return;
 	}
 
+	public int update_conciliate(JournalEntryLinesTO journalentrylines) throws Exception {
+
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE cat_jdt1_journalentrylines SET extrmatch=?, mthdate = ? WHERE transid =? and line_id = ?");
+		this.setInt(1, "extrmatch", new Integer(journalentrylines.getExtrmatch()));
+		this.setDate(2, "acctmthdatecode", journalentrylines.getMthdate());
+		this.setInt(3, "transid", new Integer(journalentrylines.getTransid()));
+		this.setInt(4, "line_id", new Integer(journalentrylines.getLine_id()));
+		
+
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
+	}
 }
