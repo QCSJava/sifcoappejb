@@ -129,8 +129,8 @@ public class BankreconciliationauxDAO extends CommonDAO {
 	public int bankreconciliationaux_mtto(bankreconciliationauxTO parameters,
 			int action) throws Exception {
 		List v_resp;
-		// this.seObject("{call sp_inv_gre0_good lkkkk(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{? = call sp_cat_journalentry_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		// this.seObject("{? = call sp_fin_cba2_bankreconciliationaux(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{? = call sp_fin_cba2_bankreconciliationaux(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setInt(2, "_transid", new Integer(parameters.getTransid()));
 		this.setInt(3, "_batchnum", new Integer(parameters.getBatchnum()));
 		this.setString(4, "_btfstatus", parameters.getBtfstatus());
@@ -331,64 +331,59 @@ public class BankreconciliationauxDAO extends CommonDAO {
 
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
-			try {
-				while (rowsetActual.next()) {
+			while (rowsetActual.next()) {
 
-					bankreconciliationauxTO journal = new bankreconciliationauxTO();
-					journal.setTransid(rowsetActual.getInt(1));
-					journal.setBatchnum(rowsetActual.getInt(2));
-					journal.setBtfstatus(rowsetActual.getString(3));
-					journal.setTranstype(rowsetActual.getString(4));
-					journal.setBaseref(rowsetActual.getString(5));
-					journal.setRefdate(rowsetActual.getDate(6));
-					journal.setMemo(rowsetActual.getString(7));
-					journal.setIntrnmatch(rowsetActual.getInt(8));
-					journal.setExtrmatch(rowsetActual.getInt(9));
-					journal.setRef1(rowsetActual.getString(10));
-					journal.setRef2(rowsetActual.getString(11));
-					journal.setLoctotal(rowsetActual.getDouble(12));
-					journal.setSystotal(rowsetActual.getDouble(13));
-					journal.setTranscode(rowsetActual.getString(14));
-					journal.setTransrate(rowsetActual.getDouble(15));
-					journal.setBtfline(rowsetActual.getInt(16));
-					journal.setDuedate(rowsetActual.getDate(17));
-					journal.setTaxdate(rowsetActual.getDate(18));
-					journal.setFinncpriod(rowsetActual.getInt(19));
-					journal.setRefndrprt(rowsetActual.getString(20));
-					journal.setObjtype(rowsetActual.getString(21));
-					journal.setIndicator(rowsetActual.getString(22));
-					journal.setAdjtran(rowsetActual.getString(23));
-					journal.setStornodate(rowsetActual.getDate(24));
-					journal.setStornototr(rowsetActual.getInt(25));
-					journal.setAutostorno(rowsetActual.getString(26));
-					journal.setVatdate(rowsetActual.getDate(27));
-					journal.setSeries(rowsetActual.getInt(28));
-					journal.setNumber(rowsetActual.getInt(29));
-					journal.setAutovat(rowsetActual.getString(30));
-					journal.setDocseries(rowsetActual.getInt(31));
-					journal.setPrinted(rowsetActual.getString(32));
-					journal.setDoctype(rowsetActual.getString(33));
-					journal.setCreator(rowsetActual.getString(34));
-					journal.setSeqcode(rowsetActual.getInt(35));
-					journal.setSerial(rowsetActual.getInt(36));
-					journal.setAutowt(rowsetActual.getString(37));
-					journal.setWtapplied(rowsetActual.getDouble(38));
-					journal.setBaseamnt(rowsetActual.getDouble(39));
-					journal.setBasevtat(rowsetActual.getDouble(40));
-					journal.setBasetrans(rowsetActual.getInt(41));
-					journal.setRef3(rowsetActual.getString(42));
-					journal.setDeferedtax(rowsetActual.getString(43));
-					journal.setAgrno(rowsetActual.getInt(44));
-					journal.setSeqnum(rowsetActual.getInt(45));
-					journal.setRptperiod(rowsetActual.getString(46));
-					journal.setUsersign(rowsetActual.getInt(47));
-					_return.add(journal);
-				}
-				rowsetActual.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				bankreconciliationauxTO journal = new bankreconciliationauxTO();
+				journal.setTransid(rowsetActual.getInt(1));
+				journal.setBatchnum(rowsetActual.getInt(2));
+				journal.setBtfstatus(rowsetActual.getString(3));
+				journal.setTranstype(rowsetActual.getString(4));
+				journal.setBaseref(rowsetActual.getString(5));
+				journal.setRefdate(rowsetActual.getDate(6));
+				journal.setMemo(rowsetActual.getString(7));
+				journal.setIntrnmatch(rowsetActual.getInt(8));
+				journal.setExtrmatch(rowsetActual.getInt(9));
+				journal.setRef1(rowsetActual.getString(10));
+				journal.setRef2(rowsetActual.getString(11));
+				journal.setLoctotal(rowsetActual.getDouble(12));
+				journal.setSystotal(rowsetActual.getDouble(13));
+				journal.setTranscode(rowsetActual.getString(14));
+				journal.setTransrate(rowsetActual.getDouble(15));
+				journal.setBtfline(rowsetActual.getInt(16));
+				journal.setDuedate(rowsetActual.getDate(17));
+				journal.setTaxdate(rowsetActual.getDate(18));
+				journal.setFinncpriod(rowsetActual.getInt(19));
+				journal.setRefndrprt(rowsetActual.getString(20));
+				journal.setObjtype(rowsetActual.getString(21));
+				journal.setIndicator(rowsetActual.getString(22));
+				journal.setAdjtran(rowsetActual.getString(23));
+				journal.setStornodate(rowsetActual.getDate(24));
+				journal.setStornototr(rowsetActual.getInt(25));
+				journal.setAutostorno(rowsetActual.getString(26));
+				journal.setVatdate(rowsetActual.getDate(27));
+				journal.setSeries(rowsetActual.getInt(28));
+				journal.setNumber(rowsetActual.getInt(29));
+				journal.setAutovat(rowsetActual.getString(30));
+				journal.setDocseries(rowsetActual.getInt(31));
+				journal.setPrinted(rowsetActual.getString(32));
+				journal.setDoctype(rowsetActual.getString(33));
+				journal.setCreator(rowsetActual.getString(34));
+				journal.setSeqcode(rowsetActual.getInt(35));
+				journal.setSerial(rowsetActual.getInt(36));
+				journal.setAutowt(rowsetActual.getString(37));
+				journal.setWtapplied(rowsetActual.getDouble(38));
+				journal.setBaseamnt(rowsetActual.getDouble(39));
+				journal.setBasevtat(rowsetActual.getDouble(40));
+				journal.setBasetrans(rowsetActual.getInt(41));
+				journal.setRef3(rowsetActual.getString(42));
+				journal.setDeferedtax(rowsetActual.getString(43));
+				journal.setAgrno(rowsetActual.getInt(44));
+				journal.setSeqnum(rowsetActual.getInt(45));
+				journal.setRptperiod(rowsetActual.getString(46));
+				journal.setUsersign(rowsetActual.getInt(47));
+				_return.add(journal);
 			}
+			rowsetActual.close();
 
 		}
 		return _return;

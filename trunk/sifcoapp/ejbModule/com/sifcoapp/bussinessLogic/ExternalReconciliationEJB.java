@@ -21,6 +21,7 @@ import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.transaction.to.TransactionTo;
 
 @Stateless
 public class ExternalReconciliationEJB implements
@@ -142,7 +143,6 @@ public class ExternalReconciliationEJB implements
 		BankreconciliationauxDAO DAO1 = new BankreconciliationauxDAO();
 
 		try {
-
 			_return.setAccToConciliate(DAO.getJournalEntryDetail_nc(parameters));
 			_return.setAuxiliaryDoc(DAO1
 					.getBankreconciliationaux_nc(parameters));
@@ -153,6 +153,68 @@ public class ExternalReconciliationEJB implements
 		}
 
 		return _return;
+	}
+
+	public ResultOutTO get_UpdateExternalReconciliation(
+			ExternalReconciliationTO parameters) throws EJBException {
+
+		ResultOutTO _return = new ResultOutTO();
+		
+		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
+		DAO.setIstransaccional(true);
+		BankreconciliationauxDAO DAO1 = new BankreconciliationauxDAO(
+				DAO.getConn());
+		DAO1.setIstransaccional(true);
+		try {
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Generar numero aleatorio para conciliación
+			// --------------------------------------------------------------------------------------------------------------------------------
+			int idC = new java.util.Date().getMonth()
+					+ new java.util.Date().getHours();
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Actualizar detalles asientos contrables
+			// --------------------------------------------------------------------------------------------------------------------------------
+
+			for (Object object : parameters.getAccToConciliate()) {
+				JournalEntryLinesTO ivt = (JournalEntryLinesTO) object;
+				if (ivt.getExtrmatch() == 1) {
+					if (ivt.getDuedate() == null) {
+						java.util.Date utilDate = new java.util.Date();
+						ivt.setDuedate(utilDate);
+					}
+					ivt.setExtrmatch(idC);				
+					DAO.update_conciliate(ivt);
+				}				
+			}
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Actualizar Documentos auxiliares
+			// --------------------------------------------------------------------------------------------------------------------------------
+
+			for (Object object : parameters.getAuxiliaryDoc()) {
+				bankreconciliationauxTO ivt = (bankreconciliationauxTO) object;
+				if (ivt.getExtrmatch() == 1) {
+					if (ivt.getDuedate() == null) {
+						java.util.Date utilDate = new java.util.Date();
+						ivt.setDuedate(utilDate);
+					}
+					ivt.setExtrmatch(idC);
+					DAO1.bankreconciliationaux_mtto(ivt, Common.MTTOUPDATE);
+				}
+			}
+
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos guardados con exito");
+			return _return;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+			DAO.forceCloseConnection();
+		}
 	}
 
 }

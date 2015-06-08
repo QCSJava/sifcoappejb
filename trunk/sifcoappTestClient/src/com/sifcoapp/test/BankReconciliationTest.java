@@ -76,6 +76,7 @@ public class BankReconciliationTest {
 					+ cuenta.getLinememo() + " - " + cuenta.getTransid()
 					+ " - " + cuenta.getDebit());
 		}
+
 		
 		Iterator<bankreconciliationauxTO> iterator1 = conciliate.getAuxiliaryDoc().iterator();
 		while (iterator1.hasNext()) {
@@ -95,14 +96,21 @@ public class BankReconciliationTest {
 
 
 		nuevo.setBatchnum(1);
-		nuevo.setExtrmatch(10);
 		nuevo.setTranscode("10");
+		java.util.Date utilDate = new java.util.Date(); //fecha actual
+		nuevo.setRefdate(utilDate);
+		nuevo.setRef1("110605");
+		nuevo.setLoctotal(10.5);
+		nuevo.setMemo("Prueba entrada");
+		nuevo.setIndicator("D");
 
 
 		_result = catalog.bankreconciliationaux_mtto(nuevo,Common.MTTOINSERT);
 
 		System.out.println(_result.getMensaje());
 	}
+	
+	
 	
 	/*public static void getColecturiaConcept() {
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
