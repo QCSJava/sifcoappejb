@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
-public class JournalEntryLinesTO extends CommonTO{
-	
+public class JournalEntryLinesTO extends CommonTO {
+
 	private static final long serialVersionUID = -8123142545837530500L;
 
 	private int transid;
@@ -14,6 +14,8 @@ public class JournalEntryLinesTO extends CommonTO{
 	private Double debit;
 	private Double credit;
 	private Date duedate;
+	private int intrnmatch;
+	private int extrmatch;
 	private String shortname;
 	private String contraact;
 	private String linememo;
@@ -61,7 +63,7 @@ public class JournalEntryLinesTO extends CommonTO{
 	private String vatregnum;
 	private String sledgerf;
 	private String acctname;
-	
+
 	public JournalEntryLinesTO(int transid, int line_id, String account,
 			Double debit, Double credit, Date duedate, String shortname,
 			String contraact, String linememo, String ref3line,
@@ -138,8 +140,6 @@ public class JournalEntryLinesTO extends CommonTO{
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 	public int getTransid() {
 		return transid;
 	}
@@ -186,6 +186,22 @@ public class JournalEntryLinesTO extends CommonTO{
 
 	public void setDuedate(Date duedate) {
 		this.duedate = duedate;
+	}
+
+	public int getIntrnmatch() {
+		return intrnmatch;
+	}
+
+	public void setIntrnmatch(int intrnmatch) {
+		this.intrnmatch = intrnmatch;
+	}
+
+	public int getExtrmatch() {
+		return extrmatch;
+	}
+
+	public void setExtrmatch(int extrmatch) {
+		this.extrmatch = extrmatch;
 	}
 
 	public String getShortname() {

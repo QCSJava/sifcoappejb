@@ -801,7 +801,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		ResultOutTO res_whjl = new ResultOutTO();
 		ResultOutTO res_jour = new ResultOutTO();
 		ResultOutTO res_UpdateOnhand = new ResultOutTO();
-		GoodsIssuesDAO DAO = new GoodsIssuesDAO(conn);
+		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		transactionEJB trans = new transactionEJB();
 		JournalEntryTO journal = new JournalEntryTO();
 
@@ -1005,7 +1005,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			int action, Connection conn) throws Exception {
 		// Variables
 		ResultOutTO _return = new ResultOutTO();
-		GoodsIssuesDAO DAO = new GoodsIssuesDAO(conn);
+		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		DAO.setIstransaccional(true);
 		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO(conn);
 		goodDAO1.setIstransaccional(true);
@@ -1035,7 +1035,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			int action, Connection conn) throws Exception {
 		// Variables
 		ResultOutTO _return = new ResultOutTO();
-		GoodsIssuesDAO DAO = new GoodsIssuesDAO(conn);
+		GoodsIssuesDAO DAO = new GoodsIssuesDAO();
 		DAO.setIstransaccional(true);
 		GoodsissuesDetailDAO goodDAO1 = new GoodsissuesDetailDAO(conn);
 		goodDAO1.setIstransaccional(true);
@@ -2283,6 +2283,10 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		List aux = new Vector();
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
+		
+		
+		
+		
 		// recorre la lista de detalles
 		for (Object obj : list) {
 			GoodsReceiptDetailTO good = (GoodsReceiptDetailTO) obj;
@@ -2331,21 +2335,33 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
 			// llenado del asiento contable
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
-			// // nuevo.setBatchnum(1);
 			// LLenado del padre
 
-			nuevo.setObjtype("5");
+			nuevo.setBtfstatus("O");
+			nuevo.setTranstype(parameters.getObjtype());
+			nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
+			nuevo.setRefdate(parameters.getDocdate());
 			nuevo.setMemo(parameters.getJrnlmemo());
-			nuevo.setUsersign(parameters.getUsersign());
+			nuevo.setRef1(Integer.toString(parameters.getDocnum()));
+			nuevo.setRef2(parameters.getRef1());
 			nuevo.setLoctotal(sum);
 			nuevo.setSystotal(sum);
-			nuevo.setBtfstatus("O");
-			nuevo.setTranstype("5");
-			nuevo.setBaseref(parameters.getRef1());
-			nuevo.setRefdate(parameters.getDocduedate());
-			nuevo.setRef1(parameters.getRef1());
-			// nuevo.setRef2(ref2);
-
+			nuevo.setTransrate(0.0);
+			nuevo.setDuedate(parameters.getDocduedate());
+			nuevo.setTaxdate(parameters.getDocdate());
+			nuevo.setFinncpriod(0);
+			nuevo.setUsersign(parameters.getUsersign());
+			nuevo.setRefndrprt("N");							
+			nuevo.setObjtype("5");
+			nuevo.setAdjtran("N");
+			nuevo.setAutostorno("N");
+			nuevo.setSeries(0);
+			nuevo.setAutovat("N");
+			nuevo.setDocseries(0);
+			nuevo.setPrinted("N");
+			nuevo.setAutowt("N");
+			nuevo.setDeferedtax("N");
+			
 			// llenado de los hijos
 			art1.setLine_id(1);
 			// buscar la cuenta asignada al almacen
