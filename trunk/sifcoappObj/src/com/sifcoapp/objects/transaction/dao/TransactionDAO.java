@@ -156,6 +156,7 @@ public class TransactionDAO extends CommonDAO {
 
 		ResultOutTO _return = new ResultOutTO();
 		int lstResultSet = 0;
+		// si es una nota de remision 
 		if (transaction.getObjtype().equals("12")) {
 
 			this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
@@ -185,6 +186,8 @@ public class TransactionDAO extends CommonDAO {
 			// para la lista de el ultimo precio predeterminado
 		}
 		// -----------------------------------------------------------------------------------------------------------------------------------------
+		// actualizacion de listas de precios
+		// compra de mercancia
 		if (transaction.getObjtype().equals("20")) {
 			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
 
@@ -205,7 +208,18 @@ public class TransactionDAO extends CommonDAO {
 			lstResultSet = this.runUpdate();
 
 		}
+		// entrada de inventario
 		if (transaction.getObjtype().equals("30")) {
+			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
+
+			this.setDouble(1, "price", transaction.getNewAvgprice());
+			this.setString(2, "itemcode", transaction.getItemcode());
+			this.setInt(3, "pricelist", 2);
+
+			lstResultSet = this.runUpdate();
+		}
+		// nota de credito de ventas
+		if (transaction.getObjtype().equals("11")) {
 			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
 
 			this.setDouble(1, "price", transaction.getNewAvgprice());

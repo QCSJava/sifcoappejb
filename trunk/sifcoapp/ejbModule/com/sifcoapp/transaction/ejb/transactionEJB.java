@@ -456,9 +456,8 @@ public class transactionEJB {
 			/**/
 			oldTotalArticle = onhand * avgPrice;
 			newTotalArticle = oldTotalArticle + transValue;
-			/*
-			 * newAvgPrice = newTotalArticle / newOnhand;
-			 */
+			 newAvgPrice = newTotalArticle / newOnhand;
+			
 			// Actualizar objeto princicpal
 			transaction.setNewAvgprice(avgPrice);
 			transaction.setBalance(newTotalArticle);
