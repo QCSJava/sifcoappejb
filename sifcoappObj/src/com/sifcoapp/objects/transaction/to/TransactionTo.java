@@ -50,6 +50,7 @@ public class TransactionTo extends CommonTO {
 	private Double newAvgprice;
 	private String invntact;
 	private ArticlesTO article;
+	private String whscodein;
 
 	public TransactionTo() {
 		super();
@@ -358,6 +359,14 @@ public class TransactionTo extends CommonTO {
 
 	public void setArticle(ArticlesTO article) {
 		this.article = article;
+	}
+
+	public String getWhscodein() {
+		return whscodein;
+	}
+
+	public void setWhscodein(String whscodein) {
+		this.whscodein = whscodein;
 	}
 
 }

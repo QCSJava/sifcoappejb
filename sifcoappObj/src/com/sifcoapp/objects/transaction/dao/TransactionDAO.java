@@ -156,25 +156,35 @@ public class TransactionDAO extends CommonDAO {
 
 		ResultOutTO _return = new ResultOutTO();
 		int lstResultSet = 0;
+		if (transaction.getObjtype().equals("12")) {
 
-		this.setDbObject("UPDATE cat_art0_articles SET avgprice=?, onhand=? WHERE itemcode=?");
+			this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
 
-		this.setDouble(1, "avgprice", transaction.getNewAvgprice());
-		this.setDouble(2, "onhand", transaction.getNewOnhand());
-		this.setString(3, "itemcode", transaction.getItemcode());
+			this.setDouble(1, "onhand", transaction.getNewWhsOnhand());
+			this.setString(2, "itemcode", transaction.getItemcode());
+			this.setString(3, "whscode", transaction.getWhscode());
+			lstResultSet = this.runUpdate();
+		} else {
+			this.setDbObject("UPDATE cat_art0_articles SET avgprice=?, onhand=? WHERE itemcode=?");
 
-		lstResultSet = this.runUpdate();
+			this.setDouble(1, "avgprice", transaction.getNewAvgprice());
+			this.setDouble(2, "onhand", transaction.getNewOnhand());
+			this.setString(3, "itemcode", transaction.getItemcode());
 
-		this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
+			lstResultSet = this.runUpdate();
 
-		this.setDouble(1, "onhand", transaction.getNewWhsOnhand());
-		this.setString(2, "itemcode", transaction.getItemcode());
-		this.setString(3, "whscode", transaction.getWhscode());
+			this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
 
-		lstResultSet = this.runUpdate();
-		// actualiza lista de precios con el ultimo precio del costo promedio
-		// para la lista de el ultimo precio predeterminado
+			this.setDouble(1, "onhand", transaction.getNewWhsOnhand());
+			this.setString(2, "itemcode", transaction.getItemcode());
+			this.setString(3, "whscode", transaction.getWhscode());
 
+			lstResultSet = this.runUpdate();
+			// actualiza lista de precios con el ultimo precio del costo
+			// promedio
+			// para la lista de el ultimo precio predeterminado
+		}
+		// -----------------------------------------------------------------------------------------------------------------------------------------
 		if (transaction.getObjtype().equals("20")) {
 			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
 
