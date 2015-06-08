@@ -9,15 +9,18 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
 import com.sifcoapp.admin.ejb.AdminEJB;
+import com.sifcoapp.admin.ejb.ParameterEJB;
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
+import com.sifcoapp.objects.admin.dao.ParameterDAO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
+import com.sifcoapp.objects.admin.to.parameterTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.GoodsReceiptDAO;
@@ -1641,7 +1644,8 @@ public class SalesEJB implements SalesEJBRemote {
 		Iterator<ClientCrediDetailTO> iterator = parameters.getclientDetails()
 				.iterator();
 		while (iterator.hasNext()) {
-			ClientCrediDetailTO salesdetalle = (ClientCrediDetailTO) iterator.next();
+			ClientCrediDetailTO salesdetalle = (ClientCrediDetailTO) iterator
+					.next();
 
 			salesdetalle.setDocentry(_return.getDocentry());
 			goodDAO1.inv_ClientCrediDetail_mtto(salesdetalle, Common.MTTOINSERT);
@@ -2147,7 +2151,7 @@ public class SalesEJB implements SalesEJBRemote {
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------------------------------------------------------------------
-	//consultas de nota de credito
+	// consultas de nota de credito
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public List getClientCredi(ClientCrediInTO param) throws Exception {
 		// TODO Auto-generated method stub
@@ -2191,9 +2195,6 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// nota de remision 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------------------------------------------------------------------
 	// nota de remision
 	// --------------------------------------------------------------------------------------------------------------------------------------------
@@ -2315,12 +2316,15 @@ public class SalesEJB implements SalesEJBRemote {
 		Double vatsum = zero;
 		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO admin = new AdminDAO();
+		ParameterDAO parameter= new ParameterDAO();
 
 		BranchTO branch1 = new BranchTO();
+		parameterTO param= new parameterTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
 
 		try {
 			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+			param= parameter.getParameterbykey(6);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2386,7 +2390,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
-		parameters.setObjtype("10");
+		parameters.setObjtype("10"); 
 		parameters.setVatsum(vatsum);
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
@@ -2404,6 +2408,8 @@ public class SalesEJB implements SalesEJBRemote {
 		// consulta he incluirse la cuenta contables
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
+		parameters.setFromwhscode(parameters.getTowhscode());
+		parameters.setTowhscode(param.getValue1());
 
 		return parameters;
 	}
@@ -2439,7 +2445,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// Llenar objeto tipo transacción
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		transactions = fill_transaction(Delivery);
+		transactions = fill_transaction(Delivery, conn);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Calculo de existencias y costos
@@ -2517,7 +2523,7 @@ public class SalesEJB implements SalesEJBRemote {
 		return _return;
 	}
 
-	private List fill_transaction(DeliveryTO document) {
+	private List fill_transaction(DeliveryTO document, Connection conn) {
 		List _return = new Vector();
 
 		Iterator<DeliveryDetailTO> iterator = document.getDeliveryDetails()
@@ -2542,7 +2548,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setQuantity(detail.getQuantity());
 			transaction.setPrice(detail.getPrice());
 			transaction.setLinetotal(detail.getLinetotal());
-			transaction.setWhscode(detail.getWhscode());
+			transaction.setWhscode(document.getTowhscode());
 			transaction.setAcctcode(detail.getAcctcode());
 			transaction.setOcrcode(document.getCardcode());
 			transaction.setVatgroup(detail.getVatgroup());
@@ -2554,7 +2560,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setVatappld(detail.getVatappld());
 			transaction.setStockprice(detail.getPrice());
 			transaction.setGtotal(detail.getGtotal());
-			transaction.setInqty(zero);
+			transaction.setInqty(detail.getQuantity());
 			transaction.setOutqty(zero);
 			transaction.setMessageid(0);
 			transaction.setBalance(zero);
@@ -2565,43 +2571,45 @@ public class SalesEJB implements SalesEJBRemote {
 
 			_return.add(transaction);
 
-			/*
-			 * transaction.setTransseq(detail.getTransseq());
-			 * transaction.setDocentry(detail.getDocentry());
-			 * transaction.setDocnum(detail.getDocnum());
-			 * transaction.setDocduedate(detail.getDocduedate());
-			 * transaction.setDocdate(detail.getDocdate());
-			 * transaction.setComment(detail.getComment());
-			 * transaction.setJrnlmemo(detail.getJrnlmemo());
-			 * transaction.setUsersign(detail.getUsersign());
-			 * transaction.setRef1(detail.getRef1());
-			 * transaction.setRef2(detail.getRef2());
-			 * transaction.setLinenum(detail.getLinenum());
-			 * transaction.setItemcode(detail.getItemcode());
-			 * transaction.setDscription(detail.getDscription());
-			 * transaction.setQuantity(detail.getQuantity());
-			 * transaction.setPrice(detail.getPrice());
-			 * transaction.setLinetotal(detail.getLinetotal());
-			 * transaction.setWhscode(detail.getWhscode());
-			 * transaction.setAcctcode(detail.getAcctcode());
-			 * transaction.setOcrcode(detail.getOcrcode());
-			 * transaction.setVatgroup(detail.getVatgroup());
-			 * transaction.setPriceafvat(detail.getPriceafvat());
-			 * transaction.setVatsum(detail.getVatsum());
-			 * transaction.setObjtype(detail.getObjtype());
-			 * transaction.setGrssprofit(detail.getGrssprofit());
-			 * transaction.setTaxcode(detail.getTaxcode());
-			 * transaction.setVatappld(detail.getVatappld());
-			 * transaction.setStockprice(detail.getStockprice());
-			 * transaction.setGtotal(detail.getGtotal());
-			 * transaction.setInqty(detail.getInqty());
-			 * transaction.setOutqty(detail.getOutqty());
-			 * transaction.setMessageid(detail.getMessageid());
-			 * transaction.setBalance(detail.getBalance());
-			 * transaction.setNewonhand(detail.getNewonhand());
-			 * transaction.setNewwhsonhand(detail.getNewwhsonhand());
-			 * transaction.setNewavgprice(detail.getNewavgprice());
-			 */
+			TransactionTo transaction2 = new TransactionTo();
+			transaction2.setTransseq(0);
+			transaction2.setDocentry(document.getDocentry());
+			transaction2.setDocnum(Integer.toString(document.getDocnum()));
+			transaction2.setDocduedate(document.getDocduedate());
+			transaction2.setDocdate(document.getDocdate());
+			transaction2.setComment(document.getComments());
+			transaction2.setJrnlmemo(document.getJrnlmemo());
+			transaction2.setUsersign(document.getUsersign());
+			transaction2.setRef1(Integer.toString(document.getDocnum()));
+			transaction2.setRef2(document.getRef1());
+			transaction2.setLinenum(detail.getLinenum());
+			transaction2.setItemcode(detail.getItemcode());
+			transaction2.setDscription(detail.getDscription());
+			transaction2.setQuantity(detail.getQuantity());
+			transaction2.setPrice(detail.getPrice());
+			transaction2.setLinetotal(detail.getLinetotal());
+			transaction2.setWhscode(document.getFromwhscode());
+			transaction2.setAcctcode(detail.getAcctcode());
+			transaction2.setOcrcode(document.getCardcode());
+			transaction2.setVatgroup(detail.getVatgroup());
+			transaction2.setPriceafvat(detail.getPriceafvat());
+			transaction2.setVatsum(detail.getVatsum());
+			transaction2.setObjtype(detail.getObjtype());
+			transaction2.setGrssprofit(detail.getGrssprofit());
+			transaction2.setTaxcode(detail.getTaxcode());
+			transaction2.setVatappld(detail.getVatappld());
+			transaction2.setStockprice(detail.getPrice());
+			transaction2.setGtotal(detail.getGtotal());
+			transaction2.setInqty(zero);
+			transaction2.setOutqty(detail.getQuantity());
+			transaction2.setMessageid(0);
+			transaction2.setBalance(zero);
+			transaction2.setNewOnhand(zero);
+			transaction2.setNewWhsOnhand(zero);
+			transaction2.setNewAvgprice(zero);
+			transaction2.setArticle(detail.getArticle());
+
+			_return.add(transaction2);
 
 		}
 		return _return;
@@ -2816,9 +2824,6 @@ public class SalesEJB implements SalesEJBRemote {
 
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//consultas nota de remision
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public JournalEntryTO fill_JournalEntry(DeliveryTO parameters)
 			throws Exception {
 		JournalEntryTO nuevo = new JournalEntryTO();
@@ -2983,6 +2988,7 @@ public class SalesEJB implements SalesEJBRemote {
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------
+	// consultas nota de remision
 	// --------------------------------------------------------------------------------------------------------------------------------------------
 
 	public List getDelivery(DeliveryInTO param) throws Exception {

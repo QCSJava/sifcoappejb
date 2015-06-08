@@ -70,24 +70,24 @@ public class ParameterTest {
 
 
 	public static void getparameter() {
-		List resp = null;
+		parameterTO branch = new parameterTO();
 
 		String name = null;
 		String code = null;
 
 		try {
-			resp = AdminEJBService.getParameter();
+			branch = AdminEJBService.getParameterbykey(6);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		Iterator<parameterTO> iterator = resp.iterator();
-		while (iterator.hasNext()) {
-			parameterTO branch = (parameterTO) iterator.next();
+		//Iterator<parameterTO> iterator = resp.iterator();
+		//while (iterator.hasNext()) {
+			//parameterTO branch = (parameterTO) iterator.next();
 			System.out.println(branch.getParametercode()+ " - "
-					+ branch.getParametername());
-		}
+					+ branch.getParametername()+ branch.getValue1());
+		//}
 	}
 
 }
