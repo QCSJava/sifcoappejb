@@ -1,5 +1,6 @@
 package com.sifcoapp.objects.purchase.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ListIterator;
@@ -11,7 +12,14 @@ import com.sifcoapp.objects.purchase.to.*;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class SupplierDAO extends CommonDAO{
-	
+	public SupplierDAO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public SupplierDAO(Connection _conn) {
+		super(_conn);
+		// TODO Auto-generated constructor stub
+	}
 	public List getSupplier(SupplierInTO param) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
