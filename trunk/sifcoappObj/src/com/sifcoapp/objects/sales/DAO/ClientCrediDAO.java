@@ -265,7 +265,7 @@ public class ClientCrediDAO extends CommonDAO{
 		this.setString(10,"_cardcode", parameters.getCardcode());
 		this.setString(11,"_numatcard", parameters.getNumatcard());
 		this.setString(12,"_cardname", parameters.getCardname());
-		this.setString(13,"_vatsum", parameters.getVatsum());
+		this.setDouble(13,"_vatsum",parameters.getVatsum());
 		this.setDouble(14,"_discsum",new Double(parameters.getDiscsum()));
 		this.setDouble(15,"_doctotal", new Double(parameters.getDoctotal()));
 		this.setString(16,"_ref1", parameters.getRef1());

@@ -344,11 +344,15 @@ public class SalesEJB implements SalesEJBRemote {
 		transactions = fill_transaction(Sales);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Calculo de existencias y costos
+		// Calculo y actualizacion de existencias y costos
 		// --------------------------------------------------------------------------------------------------------------------------------
 		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
 			ivt = trans.calculate(ivt);
+			// ------------------------------------------------------------------------------------------------------------------------------------
+			TransactionDAO transDAO = new TransactionDAO(conn);
+			transDAO.setIstransaccional(true);
+			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -393,12 +397,12 @@ public class SalesEJB implements SalesEJBRemote {
 		// Actualizacion de existencia articulos y almacenes
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		for (Object object : transactions) {
-			TransactionDAO transDAO = new TransactionDAO(conn);
-			transDAO.setIstransaccional(true);
-			TransactionTo ivt = (TransactionTo) object;
-			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
-		}
+		/*
+		 * for (Object object : transactions) { TransactionDAO transDAO = new
+		 * TransactionDAO(conn); transDAO.setIstransaccional(true);
+		 * TransactionTo ivt = (TransactionTo) object; res_UpdateOnhand =
+		 * transDAO.Update_Onhand_articles(ivt); }
+		 */
 
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
@@ -651,6 +655,24 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines + branch);
 		nuevo.setSystotal(bussines + branch);
+		nuevo.setObjtype("5");
+		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype("5");
+		nuevo.setBaseref(parameters.getRef1());
+		nuevo.setRefdate(parameters.getDocduedate());
+		nuevo.setRef1(parameters.getRef1());
+		nuevo.setRefndrprt("N");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setAutovat("N");
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+
 		// llenado de los
 		// hijos---------------------------------------------------------------------------------------------------
 		// cuenta del socio de negocio
@@ -1135,82 +1157,6 @@ public class SalesEJB implements SalesEJBRemote {
 	// nota de credito
 	// -----------------------------------------------------------------------------------------------------------------------------------------------
 
-	public ResultOutTO inv_ClientCredi_mtto1(ClientCrediTO parameters,
-			int action) throws Exception {
-		// TODO Auto-generated method stub
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Set el codigo de almacen del padre al detalle
-		// --------------------------------------------------------------------------------------------------------------------------------
-		Iterator<ClientCrediDetailTO> iterator1 = parameters.getclientDetails()
-				.iterator();
-		while (iterator1.hasNext()) {
-
-			ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator1
-					.next();
-			articleDetalle.setWhscode(parameters.getTowhscode());
-		}
-		// validaciones
-		ResultOutTO _return = new ResultOutTO();
-		_return = validateClientCredi(parameters);
-		System.out.println(_return.getCodigoError());
-		if (_return.getCodigoError() != 0) {
-			return _return;
-		}
-
-		ClientCrediDAO DAO = new ClientCrediDAO();
-		DAO.setIstransaccional(true);
-		ClientCrediDetailDAO goodDAO1 = new ClientCrediDetailDAO(DAO.getConn());
-		goodDAO1.setIstransaccional(true);
-		try {
-			Iterator<ClientCrediDetailTO> iterator2 = parameters
-					.getclientDetails().iterator();
-			while (iterator2.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator2
-						.next();
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
-				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-
-				articleDetalle.setFactor1(articleDetalle.getQuantity());
-
-			}
-			parameters.setDiscsum(0.00);
-			parameters.setNret(0.00);
-			parameters.setPaidsum(0.00);
-			parameters.setRounddif(0.00);
-			_return.setDocentry(DAO.inv_ClientCredi_mtto(parameters, action));
-
-			Iterator<ClientCrediDetailTO> iterator = parameters
-					.getclientDetails().iterator();
-			while (iterator.hasNext()) {
-				ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator
-						.next();
-				// Para articulos nuevos
-				articleDetalle.setDocentry(_return.getDocentry());
-				if (action == Common.MTTOINSERT) {
-
-					goodDAO1.inv_ClientCrediDetail_mtto(articleDetalle,
-							Common.MTTOINSERT);
-				}
-				if (action == Common.MTTODELETE) {
-					goodDAO1.inv_ClientCrediDetail_mtto(articleDetalle,
-							Common.MTTODELETE);
-				}
-			}
-			DAO.forceCommit();
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			DAO.rollBackConnection();
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			DAO.forceCloseConnection();
-		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
-		return _return;
-	}
-
 	public ResultOutTO inv_ClientCredi_mtto(ClientCrediTO parameters, int action)
 			throws EJBException {
 
@@ -1258,7 +1204,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		try {
 			DAO.setIstransaccional(true);
-			_return = save_TransactionClientCrediDetail(parameters, action,
+			_return = save_TransactionClientCredi(parameters, action,
 					DAO.getConn());
 			DAO.forceCommit();
 
@@ -1372,7 +1318,7 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setTaxstatus("Y");
 			articleDetalle.setOcrcode(parameters.getTowhscode());
 			articleDetalle.setFactor1(zero);
-			articleDetalle.setObjtype("10");
+			articleDetalle.setObjtype("11");
 			articleDetalle.setGrssprofit(zero);
 			articleDetalle.setVatappld(zero);
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
@@ -1400,12 +1346,12 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
-		parameters.setObjtype("10");
+		parameters.setObjtype("11");
 		parameters.setVatsum(vatsum);
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
-		parameters.setJrnlmemo("Nota De Remision  - "
+		parameters.setJrnlmemo("Nota de Credito  - "
 				+ parameters.getCardcode());
 		parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
@@ -1422,9 +1368,8 @@ public class SalesEJB implements SalesEJBRemote {
 		return parameters;
 	}
 
-	public ResultOutTO save_TransactionClientCrediDetail(
-			ClientCrediTO clientcredi, int action, Connection conn)
-			throws Exception {
+	public ResultOutTO save_TransactionClientCredi(ClientCrediTO clientcredi,
+			int action, Connection conn) throws Exception {
 
 		// Variables
 		List transactions = new Vector();
@@ -1457,11 +1402,14 @@ public class SalesEJB implements SalesEJBRemote {
 		transactions = fill_transaction(clientcredi);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Calculo de existencias y costos
+		// Calculo y actualizacion de existencias y costos
 		// --------------------------------------------------------------------------------------------------------------------------------
 		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
 			ivt = trans.calculate(ivt);
+			TransactionDAO transDAO = new TransactionDAO(conn);
+			transDAO.setIstransaccional(true);
+			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -1506,13 +1454,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// Actualizacion de existencia articulos y almacenes
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		for (Object object : transactions) {
-			TransactionDAO transDAO = new TransactionDAO(conn);
-			transDAO.setIstransaccional(true);
-			TransactionTo ivt = (TransactionTo) object;
-			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
-		}
-
+		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -1848,7 +1790,7 @@ public class SalesEJB implements SalesEJBRemote {
 		List aux1 = new Vector();
 		// recorre la lista de detalles
 		for (Object obj : list) {
-			SalesDetailTO good = (SalesDetailTO) obj;
+			ClientCrediDetailTO good = (ClientCrediDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
 			// calculando los impuestos y saldo de las cuentas
@@ -1929,6 +1871,23 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines + branch);
 		nuevo.setSystotal(bussines + branch);
+		nuevo.setObjtype("5");
+		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype("5");
+		nuevo.setBaseref(parameters.getRef1());
+		nuevo.setRefdate(parameters.getDocduedate());
+		nuevo.setRef1(parameters.getRef1());
+		nuevo.setRefndrprt("N");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setAutovat("N");
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
 		// llenado de los
 		// hijos---------------------------------------------------------------------------------------------------
 		// cuenta del socio de negocio
@@ -1954,7 +1913,6 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setClosed("N");
 		art1.setGrossvalue(0.0);
 		art1.setBalduecred(bussines);
-
 		art1.setIsnet("Y");
 		art1.setTaxtype(0);
 		art1.setTaxpostacc("N");
@@ -1969,7 +1927,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setLine_id(2);
 		art2.setAccount(branch_c);
 		art2.setDebit(branch);
-
+		art2.setCredit(null);
 		art2.setDuedate(parameters.getDocdate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
@@ -1988,6 +1946,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setVatamount(0.0);
 		art2.setClosed("N");
 		art2.setGrossvalue(0.0);
+
 		art2.setBalduedeb(branch);
 		art2.setIsnet("Y");
 		art2.setTaxtype(0);
@@ -2117,7 +2076,7 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setDuedate(parameters.getDocduedate());
 			art6.setShortname(fovialCotrans_c);
 			art6.setContraact(buss_c);
-			art6.setLinememo("Compra de mercancias");
+			art6.setLinememo("nota de credito");
 			art6.setRefdate(parameters.getDocduedate());
 			art6.setRef1(parameters.getRef1());
 			// art2.setRef2();
@@ -2316,15 +2275,15 @@ public class SalesEJB implements SalesEJBRemote {
 		Double vatsum = zero;
 		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO admin = new AdminDAO();
-		ParameterDAO parameter= new ParameterDAO();
+		ParameterDAO parameter = new ParameterDAO();
 
 		BranchTO branch1 = new BranchTO();
-		parameterTO param= new parameterTO();
+		parameterTO param = new parameterTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
 
 		try {
 			branch1 = admin.getBranchByKey(parameters.getTowhscode());
-			param= parameter.getParameterbykey(6);
+			param = parameter.getParameterbykey(6);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2362,7 +2321,7 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setTaxstatus("Y");
 			articleDetalle.setOcrcode(parameters.getTowhscode());
 			articleDetalle.setFactor1(zero);
-			articleDetalle.setObjtype("10");
+			articleDetalle.setObjtype("12");
 			articleDetalle.setGrssprofit(zero);
 			articleDetalle.setVatappld(zero);
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
@@ -2390,7 +2349,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
-		parameters.setObjtype("10"); 
+		parameters.setObjtype("10");
 		parameters.setVatsum(vatsum);
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
@@ -2448,11 +2407,14 @@ public class SalesEJB implements SalesEJBRemote {
 		transactions = fill_transaction(Delivery, conn);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Calculo de existencias y costos
+		// Calculo actualizacion de existencias y costos
 		// --------------------------------------------------------------------------------------------------------------------------------
 		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
 			ivt = trans.calculate(ivt);
+			TransactionDAO transDAO = new TransactionDAO(conn);
+			transDAO.setIstransaccional(true);
+			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -2493,17 +2455,7 @@ public class SalesEJB implements SalesEJBRemote {
 					conn);
 		}
 
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Actualizacion de existencia articulos y almacenes
-		// --------------------------------------------------------------------------------------------------------------------------------
-
-		for (Object object : transactions) {
-			TransactionDAO transDAO = new TransactionDAO(conn);
-			transDAO.setIstransaccional(true);
-			TransactionTo ivt = (TransactionTo) object;
-			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
-		}
-
+		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -2816,6 +2768,50 @@ public class SalesEJB implements SalesEJBRemote {
 						+ DeliveryDetail.getLinenum());
 				return _return;
 			}
+                
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen destino bloqueado
+			// ------------------------------------------------------------------------------------------------------------
+
+			_return = EJB.validate_branchActiv(parameters.getTowhscode());
+
+			if (_return.getCodigoError() != 0) {
+				_return.setCodigoError(1);
+				_return.setMensaje("El Almacen no esta activo");
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				return _return;
+			}
+
+			// ------------------------------------------------------------------------------------------------------------
+			// Validación almacen bloqueado para el articulo
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			branch = DBArticle.getBranchArticles();
+
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				System.out.println(branch1.getWhscode());
+				System.out.println(parameters.getTowhscode());
+				if (branch1.getWhscode().equals(parameters.getTowhscode())) {
+					if (branch1.getWhscode() != null
+							&& branch1.getLocked().toUpperCase().equals("F")) {
+						valid = true;
+					}
+				}
+			}
+
+			if (!valid) {
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo "
+						+ DeliveryDetail.getItemcode()
+						+ " "
+						+ DeliveryDetail.getDscription()
+						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ DeliveryDetail.getLinenum());
+				return _return;
+			}
 
 		}
 		_return.setCodigoError(0);
@@ -2871,7 +2867,7 @@ public class SalesEJB implements SalesEJBRemote {
 			Double sum = zero;
 			String acc = null;
 			for (Object obj2 : listaDet) {
-				GoodsIssuesDetailTO newGood = (GoodsIssuesDetailTO) obj2;
+				DeliveryDetailTO newGood = (DeliveryDetailTO) obj2;
 				sum = sum + (newGood.getQuantity() * newGood.getPrice());
 				acc = newGood.getAcctcode();
 			}
@@ -2891,10 +2887,19 @@ public class SalesEJB implements SalesEJBRemote {
 			nuevo.setLoctotal(sum);
 			nuevo.setSystotal(sum);
 			nuevo.setBtfstatus("O");
-			nuevo.setTranstype("5");
+			nuevo.setTranstype(parameters.getObjtype());
 			nuevo.setBaseref(parameters.getRef1());
-			nuevo.setRefdate(parameters.getDocduedate());
+			nuevo.setRefdate(parameters.getDocdate());
 			nuevo.setRef1(parameters.getRef1());
+			nuevo.setDuedate(parameters.getDocduedate());
+			nuevo.setTaxdate(parameters.getTaxdate());
+			nuevo.setRefndrprt("N");
+			nuevo.setAdjtran("N");
+			nuevo.setAutostorno("N");
+			nuevo.setAutovat("N");
+			nuevo.setPrinted("N");
+			nuevo.setAutowt("N");
+			nuevo.setDeferedtax("N");
 			// nuevo.setRef2(ref2);
 
 			// llenado de los hijos
@@ -2945,8 +2950,10 @@ public class SalesEJB implements SalesEJBRemote {
 			detail.add(art1);
 
 			art2.setLine_id(2);
-			branch = admin.getBranchByKey(parameters.getTowhscode());
-			art2.setAccount(branch.getBalinvntac());
+			admin = new AdminDAO();
+			BranchTO branch1 = new BranchTO();
+			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+			art2.setAccount(branch1.getBalinvntac());
 
 			art2.setDebit(sum);
 			art2.setDuedate(parameters.getDocduedate());

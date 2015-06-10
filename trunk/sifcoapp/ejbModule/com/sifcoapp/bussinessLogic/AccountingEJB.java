@@ -412,6 +412,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			if (action.equals("D")) {
 				saldo = Account.getCurrtotal() + account1.getCurrtotal();
 				account1.setCurrtotal(saldo);
+				int i = update_currtotal(account1, conn);
 			} else if (action.equals("C")) {
 				saldo = account1.getCurrtotal() - Account.getCurrtotal();
 				account1.setCurrtotal(saldo);
@@ -456,14 +457,14 @@ public class AccountingEJB implements AccountingEJBRemote {
 			}
 			break;
 		// ------------------------------------------------------------------------------------------------------------------
-		// 4- Cuentas de Ingreso
+		// 4- Cuentas de costos y gastos
 		// ------------------------------------------------------------------------------------------------------------------
 		case 4:
-			if (action.equals("C")) {
+			if (action.equals("D")) {
 				saldo = Account.getCurrtotal() + account1.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
-			} else if (action.equals("D")) {
+			} else if (action.equals("C")) {
 				saldo = account1.getCurrtotal() - Account.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
@@ -473,14 +474,14 @@ public class AccountingEJB implements AccountingEJBRemote {
 			}
 			break;
 		// ------------------------------------------------------------------------------------------------------------------
-		// 5- Cuentas de Costos
+		// 5- Cuentas de Ingresos 
 		// ------------------------------------------------------------------------------------------------------------------
 		case 5:
-			if (action.equals("D")) {
+			if (action.equals("C")) {
 				saldo = Account.getCurrtotal() + account1.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
-			} else if (action.equals("C")) {
+			} else if (action.equals("D")) {
 				saldo = account1.getCurrtotal() - Account.getCurrtotal();
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
@@ -548,7 +549,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		_return.setCodigoError(0);
 		_return.setMensaje("cuenta actualizada correctamente");
-		return null;
+		return _return;
 
 	}
 
