@@ -140,7 +140,8 @@ public class BusinesspartnerTest {
 		
 		
 		//bus.setBusinesspartnerAcount(ne);
-			lstPeriods3.setDebpayacct("1101010101");
+			lstPeriods3.setDebpayacct("1102010112");
+			lstPeriods3.setValidfor("Y");
 		try {
 			resp= catalog.cat_bpa_businesspartner_mtto(lstPeriods3,2);
 		} catch (Exception e) {

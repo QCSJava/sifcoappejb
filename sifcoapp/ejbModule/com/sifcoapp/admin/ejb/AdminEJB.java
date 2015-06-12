@@ -28,6 +28,7 @@ import com.sifcoapp.objects.inventory.dao.TransfersDetailDAO;
 import com.sifcoapp.objects.inventory.to.TransfersDetailTO;
 import com.sifcoapp.objects.sales.DAO.SalesDAO;
 import com.sifcoapp.objects.sales.to.SalesTO;
+import com.sifcoapp.objects.transaction.dao.TransactionDAO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
 
@@ -191,10 +192,17 @@ public class AdminEJB implements AdminEJBRemote {
 	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action)
 			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
+		ArticlesTO article= new ArticlesTO();
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
 		AdminDAO adminDAO2 = new AdminDAO(adminDAO.getConn());
 		adminDAO2.setIstransaccional(true);
+		TransactionDAO trans = new TransactionDAO(adminDAO.getConn());
+		trans.setIstransaccional(true);
+		AdminDAO adminDAO3 = new AdminDAO(adminDAO.getConn());
+		adminDAO3.setIstransaccional(true);
+		
+		
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
 				.iterator();
 		List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
@@ -256,7 +264,19 @@ public class AdminEJB implements AdminEJBRemote {
 					art2.setAddprice2(0.0);
 					cat_art1_articlesprice_mtto(art2, 1,adminDAO.getConn());
 				}
+			
+			
 				if (action == Common.MTTOUPDATE) {
+					article=adminDAO3.getArticlesByKey(parameters.getItemCode());
+					if(!article.getInvntItem().endsWith(parameters.getInvntItem())){
+						int registros=trans.getwarehosejournal(parameters.getItemCode());
+					if(registros>0){
+					    _return.setMensaje("error de actualizacion el producto"+"-"+parameters.getItemCode()+"-"+ "continene"+":"+registros+"-"+"ingresados");
+						_return.setCodigoError(1);
+						return _return;
+					}
+					}
+					
 					if (branch.isIsasociated()) {
 						int update = 0;
 						Iterator<BranchArticlesTO> iterator2 = consult
