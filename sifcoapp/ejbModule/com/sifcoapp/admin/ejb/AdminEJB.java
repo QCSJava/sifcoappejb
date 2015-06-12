@@ -233,7 +233,28 @@ public class AdminEJB implements AdminEJBRemote {
 				if (action == Common.MTTOINSERT && branch.isIsasociated()) {
 
 					adminDAO2.cat_brancharticles_mtto(branch, action);
-
+					
+					//------------------------------------------------------------------------------------------------------------------------------------------------------
+					//ingreso de lista de precios por defectos
+					//------------------------------------------------------------------------------------------------------------------------------------------------------
+					ArticlesPriceTO art = new ArticlesPriceTO();
+					ArticlesPriceTO art2 = new ArticlesPriceTO();
+					art.setItemcode(parameters.getItemCode());
+					art.setPrice(0.0);
+					art.setPricelist(1);
+					art.setFactor(0.0);
+					art.setOvrwritten(true);
+					art.setAddprice1(0.0);
+					art.setAddprice2(0.0);
+					cat_art1_articlesprice_mtto(art, 1,adminDAO.getConn());
+					art2.setItemcode(parameters.getItemCode());
+					art2.setPrice(0.0);
+					art2.setPricelist(2);
+					art2.setFactor(0.0);
+					art2.setOvrwritten(true);
+					art2.setAddprice1(0.0);
+					art2.setAddprice2(0.0);
+					cat_art1_articlesprice_mtto(art2, 1,adminDAO.getConn());
 				}
 				if (action == Common.MTTOUPDATE) {
 					if (branch.isIsasociated()) {
@@ -290,24 +311,7 @@ public class AdminEJB implements AdminEJBRemote {
 				parameters.setOnHand(zero);
 			}
 			
-			ArticlesPriceTO art = new ArticlesPriceTO();
-			ArticlesPriceTO art2 = new ArticlesPriceTO();
-			art.setItemcode(parameters.getItemCode());
-			art.setPrice(0.0);
-			art.setPricelist(1);
-			art.setFactor(0.0);
-			art.setOvrwritten(true);
-			art.setAddprice1(0.0);
-			art.setAddprice2(0.0);
-			cat_art1_articlesprice_mtto(art, 1,adminDAO.getConn());
-			art2.setItemcode(parameters.getItemCode());
-			art2.setPrice(0.0);
-			art2.setPricelist(2);
-			art2.setFactor(0.0);
-			art2.setOvrwritten(true);
-			art2.setAddprice1(0.0);
-			art2.setAddprice2(0.0);
-			cat_art1_articlesprice_mtto(art2, 1,adminDAO.getConn());
+			
 
 			adminDAO.cat_articles_mtto(parameters, action);
 			adminDAO.forceCommit();

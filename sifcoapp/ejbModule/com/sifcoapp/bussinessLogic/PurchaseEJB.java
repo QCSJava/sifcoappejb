@@ -408,10 +408,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(PurchaseDetail.getWhscode());
+				
 				if (branch1.getWhscode().equals(PurchaseDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
+					if (branch1.isIsasociated()
+							&& branch1.getLocked() != null
 							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
 					}
@@ -1209,12 +1209,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(PurchaseQuotationDetail.getWhscode());
+				
 				if (branch1.getWhscode().equals(
 						PurchaseQuotationDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
-							&& branch1.getLocked().toUpperCase().equals("F")) {
+					if (branch1.isIsasociated()
+							&& branch1.getLocked() != null
+							&& branch1.getLocked().toUpperCase().equals("F")){
 						valid = true;
 					}
 				}
@@ -1947,82 +1947,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO inv_Supplier_mtto1(SupplierTO parameters, int action)
-			throws Exception {
-		// TODO Auto-generated method stub
-		ResultOutTO _return = new ResultOutTO();
-
-		// pasar el codigo de almacen a los hijos
-		Iterator<SupplierDetailTO> iterator3 = parameters.getsupplierDetails()
-				.iterator();
-		while (iterator3.hasNext()) {
-
-			SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator3
-					.next();
-			articleDetalle.setWhscode(parameters.getTowhscode());
-		}
-		// -------------------------------------------------------------------------------------------------------------------------------
-		// validaciones-------------------------------------------------------------------------------------------------------------------
-		_return = validate_inv_supplier_mtto(parameters);
-		System.out.println(_return.getCodigoError());
-		if (_return.getCodigoError() != 0) {
-			return _return;
-		}
-
-		SupplierDAO DAO = new SupplierDAO();
-		DAO.setIstransaccional(true);
-		SupplierDetailDAO goodDAO1 = new SupplierDetailDAO(DAO.getConn());
-		goodDAO1.setIstransaccional(true);
-		try {
-			Iterator<SupplierDetailTO> iterator2 = parameters
-					.getsupplierDetails().iterator();
-			while (iterator2.hasNext()) {
-				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator2
-						.next();
-
-				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
-				articleDetalle.setOpenqty(articleDetalle.getQuantity());
-
-				articleDetalle.setFactor1(articleDetalle.getQuantity());
-
-			}
-			;
-			parameters.setDiscsum(0.00);
-			parameters.setNret(0.00);
-			parameters.setPaidsum(0.00);
-			parameters.setRounddif(0.00);
-			_return.setDocentry(DAO.inv_Supplier_mtto(parameters, action));
-
-			Iterator<SupplierDetailTO> iterator = parameters
-					.getsupplierDetails().iterator();
-			while (iterator.hasNext()) {
-				SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator
-						.next();
-				// Para articulos nuevos
-				articleDetalle.setDocentry(_return.getDocentry());
-				if (action == Common.MTTOINSERT) {
-					goodDAO1.inv_SupplierDetail_mtto(articleDetalle,
-							Common.MTTOINSERT);
-				}
-				if (action == Common.MTTODELETE) {
-					goodDAO1.inv_SupplierDetail_mtto(articleDetalle,
-							Common.MTTODELETE);
-				}
-			}
-			DAO.forceCommit();
-			_return.setCodigoError(0);
-			_return.setMensaje("Datos guardados correctamente");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			DAO.forceCloseConnection();
-		}
-
-		return _return;
-	}
-
+	
 	public List getSupplierDetail(int docentry) throws Exception {
 		// TODO Auto-generated method stub
 		List _return;
@@ -2188,11 +2113,11 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(SupplierDetail.getWhscode());
+				
 				if (branch1.getWhscode().equals(SupplierDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
-							&& branch1.getLocked().toUpperCase().equals("F")) {
+					if (branch1.isIsasociated()
+							&& branch1.getLocked() != null
+							&& branch1.getLocked().toUpperCase().equals("F")){
 						valid = true;
 					}
 				}

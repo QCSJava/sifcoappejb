@@ -189,7 +189,7 @@ public class TransactionDAO extends CommonDAO {
 		// -----------------------------------------------------------------------------------------------------------------------------------------
 		// actualizacion de listas de precios
 		// compra de mercancia
-		if (transaction.getObjtype().equals("20")&&transaction.getObjtype().equals("21")) {
+		if (transaction.getObjtype().equals("20")||transaction.getObjtype().equals("21")) {
 			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
 
 			this.setDouble(1, "price", transaction.getNewAvgprice());

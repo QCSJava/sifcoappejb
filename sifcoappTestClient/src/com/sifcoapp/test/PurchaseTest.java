@@ -115,7 +115,7 @@ public class PurchaseTest {
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
 		document.setQuantity(80.0);
-		document.setPrice(0.5);
+		document.setPrice(0.9);
 		document.setDiscprcnt(0.0);
 		document.setLinetotal(40.0);			
 		document.setPricebefdi(0.5);
@@ -165,6 +165,7 @@ public class PurchaseTest {
 		parameters.setDoctotal(0.0);
 		parameters.setVatsum(0.0);
 		parameters.setCtlaccount("210201010121");
+		parameters.setObjtype("20");
 		
 		parameters.setpurchaseDetails(prueba);
 		try {

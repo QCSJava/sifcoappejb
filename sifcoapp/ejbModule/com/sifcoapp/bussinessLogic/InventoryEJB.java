@@ -22,6 +22,7 @@ import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.*;
 import com.sifcoapp.objects.inventory.to.*;
+import com.sifcoapp.objects.sales.to.DeliveryDetailTO;
 import com.sifcoapp.objects.transaction.dao.TransactionDAO;
 import com.sifcoapp.objects.transaction.to.InventoryLogTO;
 import com.sifcoapp.objects.transaction.to.TransactionTo;
@@ -282,7 +283,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			}
 
 			// ------------------------------------------------------------------------------------------------------------
-			// Validación articulo de compra
+			// Validación articulo de inventario
 			// ------------------------------------------------------------------------------------------------------------
 			valid = false;
 			if (DBArticle.getInvntItem() != null
@@ -310,12 +311,9 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(GoodsReceiptDetail.getWhscode());
-
 				if (branch1.getWhscode()
 						.equals(GoodsReceiptDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
+					if (branch1.isIsasociated()
 							&& branch1.getLocked() != null
 							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
@@ -1202,11 +1200,11 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(GoodsIssuesDetail.getWhscode());
+				
 				if (branch1.getWhscode().equals(GoodsIssuesDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
-							&& branch1.getLocked().toUpperCase().equals("F")) {
+					if (branch1.isIsasociated()
+							&& branch1.getLocked() != null
+							&& branch1.getLocked().toUpperCase().equals("F")){
 						valid = true;
 					}
 				}
@@ -1223,6 +1221,51 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 						+ GoodsIssuesDetail.getLinenum());
 				return _return;
 			}
+			// ------------------------------------------------------------------------------------------------------------
+						// Validaciones de Existencia
+						// ------------------------------------------------------------------------------------------------------------
+						valid = false;
+
+						Double stocks = 0.000;
+						Iterator<GoodsIssuesDetailTO> iterator2 = parameters.getGoodIssuesDetail()
+								.iterator();
+						// recorre de nuevo el detalle comparando el primer elemento con los
+						// demas
+						while (iterator2.hasNext()) {
+							GoodsIssuesDetailTO articleDetalle2 = (GoodsIssuesDetailTO) iterator2
+									.next();
+							if (code.equals(articleDetalle2.getItemcode())) {
+								// suma los elementos encontrados del mismo codigo
+								stocks = stocks
+										+ (articleDetalle2.getQuantity() * DBArticle
+												.getNumInSale());
+							}
+						}
+
+						branch = DBArticle.getBranchArticles();
+						Double Quantity = 0.0;
+						for (Object object : branch) {
+							BranchArticlesTO branch1 = (BranchArticlesTO) object;
+							if (branch1.getWhscode().equals(parameters.getFromwhscode())) {
+								System.out.println("sumatoria" + stocks + "base"
+										+ branch1.getOnhand());
+								if (stocks <= branch1.getOnhand()) {
+									valid = true;
+								}
+							}
+
+						}
+						if (!valid) {
+							_return.setLinenum(GoodsIssuesDetail.getLinenum());
+							_return.setCodigoError(1);
+							_return.setMensaje("El articulo " + GoodsIssuesDetail.getItemcode()
+									+ " " + GoodsIssuesDetail.getDscription()
+									+ " Recae en un Inventario Negativo. linea :"
+									+ GoodsIssuesDetail.getLinenum());
+							return _return;
+						}
+
+			
 
 		}
 		_return.setCodigoError(0);
@@ -2182,11 +2225,11 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(TransfersDetail.getWhscode());
+				
 				if (branch1.getWhscode().equals(TransfersDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
-							&& branch1.getLocked().toUpperCase().equals("F")) {
+					if (branch1.isIsasociated()
+							&& branch1.getLocked() != null
+							&& branch1.getLocked().toUpperCase().equals("F")){
 						valid = true;
 					}
 				}
@@ -2200,6 +2243,49 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 						+ " "
 						+ TransfersDetail.getDscription()
 						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ TransfersDetail.getLinenum());
+				return _return;
+			}
+			// ------------------------------------------------------------------------------------------------------------
+			// Validaciones de Existencia
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			Double stocks = 0.000;
+			Iterator<TransfersDetailTO> iterator2 = parameters.getTransfersDetail()
+					.iterator();
+			// recorre de nuevo el detalle comparando el primer elemento con los
+			// demas
+			while (iterator2.hasNext()) {
+				TransfersDetailTO articleDetalle2 = (TransfersDetailTO) iterator2
+						.next();
+				if (code.equals(articleDetalle2.getItemcode())) {
+					// suma los elementos encontrados del mismo codigo
+					stocks = stocks
+							+ (articleDetalle2.getQuantity() * DBArticle
+									.getNumInSale());
+				}
+			}
+
+			branch = DBArticle.getBranchArticles();
+			Double Quantity = 0.0;
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				if (branch1.getWhscode().equals(parameters.getFromwhscode())) {
+					System.out.println("sumatoria" + stocks + "base"
+							+ branch1.getOnhand());
+					if (stocks <= branch1.getOnhand()) {
+						valid = true;
+					}
+				}
+
+			}
+			if (!valid) {
+				_return.setLinenum(TransfersDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo " + TransfersDetail.getItemcode()
+						+ " " + TransfersDetail.getDscription()
+						+ " Recae en un Inventario Negativo. linea :"
 						+ TransfersDetail.getLinenum());
 				return _return;
 			}

@@ -444,7 +444,7 @@ public class SalesTest {
 
 		System.out.println("luego de servicio");
 		System.out.println(_result.getCodigoError() + "---"
-				+ _result.getDocentry());
+				+ _result.getDocentry()+ _result.getMensaje());
 
 	}
 }
