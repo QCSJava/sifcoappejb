@@ -72,7 +72,7 @@ public class BusinesspartnerTest {
 				+ lstPeriods.getAddid());
 		/**/
 		try {
-			lstPeriods3 = catalog.get_businesspartnerBykey("P125");
+			lstPeriods3 = catalog.get_businesspartnerBykey("00001");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -109,12 +109,40 @@ public class BusinesspartnerTest {
 		busin.setCardcode("004");
 		ne.add(busin);
 		
+		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
+		 BusinesspartnerTO lstPeriods3 = null;
+			BusinesspartnerTO nuevo = new BusinesspartnerTO();
+			
+			
+			//nuevo.setCardname("P");
+			//nuevo.setSeries(42);
+			/*
+			String nuevo="T";
+			lstPeriods = catalog.get_businesspartnerBykey(nuevo);
+			System.out.println(lstPeriods.getGroupcode()+ " - "
+					+ lstPeriods.getNit() + " - "
+					+ lstPeriods.getAddid());
+			/**/
+			try {
+				lstPeriods3 = catalog.get_businesspartnerBykey("00001");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(lstPeriods3.getCardcode()+"  "+lstPeriods3.getCardname()+ " - "
+					);
+			Iterator<BusinesspartnerAcountTO> iterator = lstPeriods3.getBusinesspartnerAcount().iterator();
+			while (iterator.hasNext()) {
+				BusinesspartnerAcountTO periodo = (BusinesspartnerAcountTO) iterator.next();
+				System.out.println(periodo.getCardcode()+"  "+periodo.getAcctcode()+ " - "
+						);
+			}
 		
 		
-		
-		bus.setBusinesspartnerAcount(ne);
+		//bus.setBusinesspartnerAcount(ne);
+			lstPeriods3.setDebpayacct("1101010101");
 		try {
-			resp= catalog.cat_bpa_businesspartner_mtto(bus,2);
+			resp= catalog.cat_bpa_businesspartner_mtto(lstPeriods3,2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

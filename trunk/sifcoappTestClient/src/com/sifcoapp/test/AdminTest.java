@@ -239,10 +239,10 @@ public class AdminTest {
 		
 		article.setValidFor("Y");
 		ResultOutTO _result = new ResultOutTO();
-		ArticlesTO parameters = new ArticlesTO();
-		parameters.setItemCode("00-00-01");
-		parameters.setValidFor("N");
-		// parameters.setUserSign(2);
+		//ArticlesTO parameters = new ArticlesTO();
+		//parameters.setItemCode("00-00-01");
+		//parameters.setValidFor("N");
+		//// parameters.setUserSign(2);
 		
 		// parameters.setNumInBuy(54.2);
 		// parameters.setNumInSale(12.23);
@@ -349,7 +349,7 @@ public class AdminTest {
 			while (iterator.hasNext()) {
 				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
 				System.out.println(branch.isIsasociated() + " - "
-						+ branch.getWhscode() + " - " + branch.getWhsname());
+						+ branch.getWhscode() + " - " + branch.getWhsname() + " - "+ branch.getOnhand());
 			}
 			
 		} catch (Exception e) {
