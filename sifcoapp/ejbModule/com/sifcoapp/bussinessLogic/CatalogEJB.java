@@ -84,18 +84,37 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 			// ----------------------------------------------------------------------------------------------------------------------------------------------------
 			// para actualizar campos del business partner
 			// ----------------------------------------------------------------------------------------------------------------------------------------------------
-			if (accion == Common.MTTOUPDATE) {
+			
+				if (accion == Common.MTTOUPDATE) {
+				
+//-----------------------------------------------------------------------------------------------------------------------------
+				DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
+				
+				
+
+				Iterator<BusinesspartnerAcountTO> iterator = parameters
+						.getBusinesspartnerAcount().iterator();
+				while (iterator.hasNext()) {
+					BusinesspartnerAcountTO detalleReceipt = (BusinesspartnerAcountTO) iterator
+							.next();
+					BusinesspartnerDAO DAO2 = new BusinesspartnerDAO(DAO.conn);
+					DAO2.setIstransaccional(true);
+
+					DAO2.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt,
+							Common.MTTOUPDATE);
+				}
+				
+				// -------------------------------------------------------------------------------------------------------
+				// llenado de la lista auxiliar con la lista resultado de la
+				// consulta de la base
+				// -------------------------------------------------------------------------------------------------------
 				BusinesspartnerDAO DAO1 = new BusinesspartnerDAO(DAO.conn);
 				DAO1.setIstransaccional(true);
 				boolean encontrado = false;
 				List bAcc = new Vector();
 				List aux = new Vector();
-
-				// -------------------------------------------------------------------------------------------------------
-				// llenado de la lista auxiliar con la lista resultado de la
-				// consulta de la base
-				// -------------------------------------------------------------------------------------------------------
 				bAcc = get_businesspartnerAcount(parameters.getCardcode());
+				
 				Iterator<BusinesspartnerAcountTO> iter2 = bAcc.iterator();
 				while (iter2.hasNext()) {
 					
@@ -103,11 +122,12 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 							.next();
 					aux.add(bus);
 				}
-
+				
 				// -------------------------------------------------------------------------------------------------------
 				// recorre las listas para comparar si ya existe el codigo de
 				// cuenta dentro de la tabla businesspartnerAcount
 				// -------------------------------------------------------------------------------------------------------
+				
 				Iterator<BusinesspartnerAcountTO> iterator2 = parameters
 						.getBusinesspartnerAcount().iterator();
 
@@ -149,8 +169,10 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 							Common.MTTODELETE);
 				}
 
-			}// finalizacion del if superior if (accion == Common.MTTOUPDATE)
-			DAO.forceCommit();
+			//if si no tiene listas en businessparnert acount
+				// finalizacion del if superior if (accion == Common.MTTOUPDATE)
+			}
+				DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
