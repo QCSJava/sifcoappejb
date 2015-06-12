@@ -34,7 +34,8 @@ public class BankReconciliationTest {
 		String v_method = args[0];
 
 		try {
-			BankReconciliationTest.class.getMethod(args[0], null).invoke(null, null);
+			BankReconciliationTest.class.getMethod(args[0], null).invoke(null,
+					null);
 			// testPeriods();
 
 		} catch (IllegalAccessException e) {
@@ -59,9 +60,8 @@ public class BankReconciliationTest {
 
 		ExternalReconciliationTO conciliate = new ExternalReconciliationTO();
 		conciliate.setAccount("110605");
-		java.util.Date utilDate = new java.util.Date(); //fecha actual
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		conciliate.setRefDate(utilDate);
-		
 
 		try {
 			conciliate = catalog.get_newExternalReconciliation(conciliate);
@@ -69,7 +69,8 @@ public class BankReconciliationTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Iterator<JournalEntryLinesTO> iterator = conciliate.getAccToConciliate().iterator();
+		Iterator<JournalEntryLinesTO> iterator = conciliate
+				.getAccToConciliate().iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO cuenta = (JournalEntryLinesTO) iterator.next();
 			System.out.println(cuenta.getAccount() + "  "
@@ -77,59 +78,75 @@ public class BankReconciliationTest {
 					+ " - " + cuenta.getDebit());
 		}
 
-		
-		Iterator<bankreconciliationauxTO> iterator1 = conciliate.getAuxiliaryDoc().iterator();
+		Iterator<bankreconciliationauxTO> iterator1 = conciliate
+				.getAuxiliaryDoc().iterator();
 		while (iterator1.hasNext()) {
-			bankreconciliationauxTO cuenta = (bankreconciliationauxTO) iterator1.next();
-			System.out.println(cuenta.getRef1() + "  "
-					+ cuenta.getMemo() + " - " + cuenta.getTransid()
-					+ " - " + cuenta.getLoctotal());
+			bankreconciliationauxTO cuenta = (bankreconciliationauxTO) iterator1
+					.next();
+			System.out.println(cuenta.getRef1() + "  " + cuenta.getMemo()
+					+ " - " + cuenta.getTransid() + " - "
+					+ cuenta.getLoctotal());
 		}
 	}
 
-	
-	
+	public static void conliciacion_update () throws Exception {
+		ResultOutTO _result = new ResultOutTO();
+
+		ExternalReconciliationTO conciliate = new ExternalReconciliationTO();
+		conciliate.setAccount("110605");
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		conciliate.setRefDate(utilDate);
+
+		try {
+			conciliate = catalog.get_newExternalReconciliation(conciliate);
+			
+			JournalEntryLinesTO cuenta= (JournalEntryLinesTO) conciliate.getAccToConciliate().get(0);
+			cuenta.setExtrmatch(1);
+			
+			bankreconciliationauxTO cuenta2= (bankreconciliationauxTO) conciliate.getAuxiliaryDoc().get(0);
+			cuenta2.setExtrmatch(1);
+
+			_result = catalog.UpdateExternalReconciliation(conciliate);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println(_result.getMensaje());
+	}
+
 	public static void aux_mtto() throws Exception {
 		ResultOutTO _result = new ResultOutTO();
 
 		bankreconciliationauxTO nuevo = new bankreconciliationauxTO();
 
-
 		nuevo.setBatchnum(1);
 		nuevo.setTranscode("10");
-		java.util.Date utilDate = new java.util.Date(); //fecha actual
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		nuevo.setRefdate(utilDate);
 		nuevo.setRef1("110605");
 		nuevo.setLoctotal(10.5);
 		nuevo.setMemo("Prueba entrada");
 		nuevo.setIndicator("D");
 
-
-		_result = catalog.bankreconciliationaux_mtto(nuevo,Common.MTTOINSERT);
+		_result = catalog.bankreconciliationaux_mtto(nuevo, Common.MTTOINSERT);
 
 		System.out.println(_result.getMensaje());
 	}
-	
-	
-	
-	/*public static void getColecturiaConcept() {
-		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
-		List lstPeriods3 = null;
-		// nuevo.setDocentry(1);
 
-		try {
-			lstPeriods3 = catalog.get_ges_colecturiaConcept();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
-		while (iterator.hasNext()) {
-			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
-			System.out.println(periodo.getAcctcode() + "  "
-					+ periodo.getLinenum() + " - " + periodo.getObjtype()
-					+ " - " + periodo.getDscription());
-		}
-	}*/
+	/*
+	 * public static void getColecturiaConcept() { ColecturiaConceptTO
+	 * lstPeriods = new ColecturiaConceptTO(); List lstPeriods3 = null; //
+	 * nuevo.setDocentry(1);
+	 * 
+	 * try { lstPeriods3 = catalog.get_ges_colecturiaConcept(); } catch
+	 * (Exception e) { // TODO Auto-generated catch block e.printStackTrace(); }
+	 * Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator(); while
+	 * (iterator.hasNext()) { ColecturiaConceptTO periodo =
+	 * (ColecturiaConceptTO) iterator.next();
+	 * System.out.println(periodo.getAcctcode() + "  " + periodo.getLinenum() +
+	 * " - " + periodo.getObjtype() + " - " + periodo.getDscription()); } }
+	 */
 
 }
