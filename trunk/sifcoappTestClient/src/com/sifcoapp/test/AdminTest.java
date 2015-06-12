@@ -212,12 +212,38 @@ public class AdminTest {
 
 	public static void articles_mtto() {
 
+		ArticlesTO article = null;
+
+		String code = "001-004-545-6114";
+
+		try {
+			article = AdminEJBService.getArticlesByKey(code);
+			//System.out.println(article.getPrice(42));
+			
+			System.out.println(article.getItemCode() + " - "
+					+ article.getItemName());
+			System.out.println("Almacenes asociados");
+
+			Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
+					.iterator();
+			while (iterator.hasNext()) {
+				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
+				System.out.println(branch.isIsasociated() + " - "
+						+ branch.getWhscode() + " - " + branch.getWhsname());
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
+		
+		article.setValidFor("Y");
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO parameters = new ArticlesTO();
-		parameters.setItemCode("0011-sfs");
-		parameters.setItemName("prueba de insercion ");
+		parameters.setItemCode("00-00-01");
+		parameters.setValidFor("N");
 		// parameters.setUserSign(2);
-		parameters.setItemType("S");
+		
 		// parameters.setNumInBuy(54.2);
 		// parameters.setNumInSale(12.23);
 		// parameters.setOnHand(2.5);
@@ -227,20 +253,20 @@ public class AdminTest {
 
 		List branch = new Vector();
 
-		BranchArticlesTO branch1 = new BranchArticlesTO();
-		branch1.setIsasociated(true);
+		//BranchArticlesTO branch1 = new BranchArticlesTO();
+		//branch1.setIsasociated(true);
 		// branch1.setIscommited(100.2);
-		branch1.setItemcode("0011-sfs");
+		//branch1.setItemcode("0011-sfs");
 		// branch1.setLocked("Y");
 
-		branch1.setWhscode("alm-36");
-		BranchArticlesTO branch2 = new BranchArticlesTO();
-		branch2.setIsasociated(true);
+		//.setWhscode("alm-36");
+		//BranchArticlesTO branch2 = new BranchArticlesTO();
+		//branch2.setIsasociated(true);
 		// branch1.setIscommited(100.2);
-		branch2.setItemcode("0011-sfs");
+		//branch2.setItemcode("0011-sfs");
 		// branch1.setLocked("Y");
-		branch2.setIscommited(56.5);
-		branch2.setWhscode("alm-55");
+		//branch2.setIscommited(56.5);
+		//branch2.setWhscode("alm-55");
 		// branch1.setMinstock(1.0);
 		// branch1.setMaxstock(10.2);
 		// branch1.setMinstock(1.2);
@@ -248,17 +274,17 @@ public class AdminTest {
 		// branch1.setOnhand1(10.2);
 		// branch1.setOnorder(2.5);
 		// branch1.setMinorder(20.2);
-		branch.add(branch1);
-		branch.add(branch2);
+		//branch.add(branch1);
+		//branch.add(branch2);
 
-		parameters.setBranchArticles(branch);
+		//parameters.setBranchArticles(branch);
 
 		// parameters.setValidFrom((Date)"23/23/23" );
 
 		// Agregar
 
 		try {
-			_result = AdminEJBService.cat_articles_mtto(parameters,1);
+			_result = AdminEJBService.cat_articles_mtto(article,2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -308,7 +334,7 @@ public class AdminTest {
 	public static void getArticlesByKey() {
 		ArticlesTO article = null;
 
-		String code = "00ddd1-sfs";
+		String code = "001-004-545-6114";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);

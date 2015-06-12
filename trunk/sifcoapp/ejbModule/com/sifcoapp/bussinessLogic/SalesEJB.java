@@ -1066,10 +1066,9 @@ public class SalesEJB implements SalesEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(salesDetail.getWhscode());
+
 				if (branch1.getWhscode().equals(salesDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
+					if (branch1.isIsasociated() && branch1.getLocked() != null
 							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
 					}
@@ -1351,8 +1350,8 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
-		parameters.setJrnlmemo("Nota de Credito  - "
-				+ parameters.getCardcode());
+		parameters
+				.setJrnlmemo("Nota de Credito  - " + parameters.getCardcode());
 		parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
@@ -1454,7 +1453,6 @@ public class SalesEJB implements SalesEJBRemote {
 		// Actualizacion de existencia articulos y almacenes
 		// --------------------------------------------------------------------------------------------------------------------------------
 
-		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -1734,10 +1732,9 @@ public class SalesEJB implements SalesEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(ClientCrediDetail.getWhscode());
+
 				if (branch1.getWhscode().equals(ClientCrediDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
+					if (branch1.isIsasociated() && branch1.getLocked() != null
 							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
 					}
@@ -2455,7 +2452,6 @@ public class SalesEJB implements SalesEJBRemote {
 					conn);
 		}
 
-		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -2615,7 +2611,18 @@ public class SalesEJB implements SalesEJBRemote {
 		// validaciones
 		// validaciones del documento
 		// ------------------------------------------------------------------------------------------------------------
-		// Validación almacen bloqueado
+		// Validación almacen origen bloqueado
+		// ------------------------------------------------------------------------------------------------------------
+
+		_return = EJB1.validate_branchActiv(parameters.getFromwhscode());
+
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El Almacen no esta activo");
+			return _return;
+		}
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación almacen destino bloqueado
 		// ------------------------------------------------------------------------------------------------------------
 
 		_return = EJB1.validate_branchActiv(parameters.getTowhscode());
@@ -2747,10 +2754,9 @@ public class SalesEJB implements SalesEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(DeliveryDetail.getWhscode());
+
 				if (branch1.getWhscode().equals(DeliveryDetail.getWhscode())) {
-					if (branch1.getWhscode() != null
+					if (branch1.isIsasociated() && branch1.getLocked() != null
 							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
 					}
@@ -2768,10 +2774,11 @@ public class SalesEJB implements SalesEJBRemote {
 						+ DeliveryDetail.getLinenum());
 				return _return;
 			}
-                
+
 			// ------------------------------------------------------------------------------------------------------------
 			// Validación almacen destino bloqueado
 			// ------------------------------------------------------------------------------------------------------------
+			EJB = new AdminEJB();
 
 			_return = EJB.validate_branchActiv(parameters.getTowhscode());
 
@@ -2791,10 +2798,8 @@ public class SalesEJB implements SalesEJBRemote {
 
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
-				System.out.println(branch1.getWhscode());
-				System.out.println(parameters.getTowhscode());
 				if (branch1.getWhscode().equals(parameters.getTowhscode())) {
-					if (branch1.getWhscode() != null
+					if (branch1.isIsasociated() && branch1.getLocked() != null
 							&& branch1.getLocked().toUpperCase().equals("F")) {
 						valid = true;
 					}
@@ -2808,7 +2813,50 @@ public class SalesEJB implements SalesEJBRemote {
 						+ DeliveryDetail.getItemcode()
 						+ " "
 						+ DeliveryDetail.getDscription()
-						+ " No esta asignado o esta bloquedo para el almacen indicado. linea :"
+						+ " No esta asignado o esta bloquedo para el almacen de destino indicado. linea :"
+						+ DeliveryDetail.getLinenum());
+				return _return;
+			}
+			// ------------------------------------------------------------------------------------------------------------
+			// Validaciones de Existencia
+			// ------------------------------------------------------------------------------------------------------------
+			valid = false;
+
+			Double stocks = 0.000;
+			Iterator<DeliveryDetailTO> iterator2 = parameters.getDeliveryDetails()
+					.iterator();
+			// recorre de nuevo el detalle comparando el primer elemento con los
+			// demas
+			while (iterator2.hasNext()) {
+				DeliveryDetailTO articleDetalle2 = (DeliveryDetailTO) iterator2
+						.next();
+				if (code.equals(articleDetalle2.getItemcode())) {
+					// suma los elementos encontrados del mismo codigo
+					stocks = stocks
+							+ (articleDetalle2.getQuantity() * DBArticle
+									.getNumInSale());
+				}
+			}
+
+			branch = DBArticle.getBranchArticles();
+			Double Quantity = 0.0;
+			for (Object object : branch) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) object;
+				if (branch1.getWhscode().equals(parameters.getFromwhscode())) {
+					System.out.println("sumatoria" + stocks + "base"
+							+ branch1.getOnhand());
+					if (stocks <= branch1.getOnhand()) {
+						valid = true;
+					}
+				}
+
+			}
+			if (!valid) {
+				_return.setLinenum(DeliveryDetail.getLinenum());
+				_return.setCodigoError(1);
+				_return.setMensaje("El articulo " + DeliveryDetail.getItemcode()
+						+ " " + DeliveryDetail.getDscription()
+						+ " Recae en un Inventario Negativo. linea :"
 						+ DeliveryDetail.getLinenum());
 				return _return;
 			}
