@@ -155,8 +155,7 @@ public class ExternalReconciliationEJB implements
 		return _return;
 	}
 
-	public ResultOutTO get_UpdateExternalReconciliation(
-			ExternalReconciliationTO parameters) throws EJBException {
+	public ResultOutTO UpdateExternalReconciliation(ExternalReconciliationTO parameters) throws EJBException {
 
 		ResultOutTO _return = new ResultOutTO();
 		
@@ -179,7 +178,7 @@ public class ExternalReconciliationEJB implements
 			for (Object object : parameters.getAccToConciliate()) {
 				JournalEntryLinesTO ivt = (JournalEntryLinesTO) object;
 				if (ivt.getExtrmatch() == 1) {
-					if (ivt.getDuedate() == null) {
+					if (ivt.getMthdate() == null) {
 						java.util.Date utilDate = new java.util.Date();
 						ivt.setDuedate(utilDate);
 					}

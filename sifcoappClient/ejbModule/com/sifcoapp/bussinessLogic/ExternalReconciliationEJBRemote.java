@@ -21,5 +21,6 @@ public interface ExternalReconciliationEJBRemote {
 	public ResultOutTO bankreconciliationaux_mtto(bankreconciliationauxTO parameter,int action)throws EJBException;
 	public List getBankreconciliationaux(bankreconciliationauxInTO parameters)throws EJBException;
 	public ExternalReconciliationTO get_newExternalReconciliation(ExternalReconciliationTO parameters)throws EJBException;
+	public ResultOutTO UpdateExternalReconciliation(ExternalReconciliationTO parameters) throws EJBException;
 	
 }
