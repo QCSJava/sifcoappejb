@@ -156,9 +156,12 @@ public class TransactionDAO extends CommonDAO {
 
 		ResultOutTO _return = new ResultOutTO();
 		int lstResultSet = 0;
-		
-		// si es una nota de remision 
-		if (transaction.getObjtype().equals("12")||transaction.getObjtype().equals("32")) {
+		ArticlesTO articles = new ArticlesTO();
+		articles = transaction.getArticle();
+
+		// si es una nota de remision
+		if (transaction.getObjtype().equals("12")
+				|| transaction.getObjtype().equals("32")) {
 
 			this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
 
@@ -166,7 +169,8 @@ public class TransactionDAO extends CommonDAO {
 			this.setString(2, "itemcode", transaction.getItemcode());
 			this.setString(3, "whscode", transaction.getWhscode());
 			lstResultSet = this.runUpdate();
-		} else {
+		} else if (!articles.getInvntItem().toUpperCase().equals("N")) {
+
 			this.setDbObject("UPDATE cat_art0_articles SET avgprice=?, onhand=? WHERE itemcode=?");
 
 			this.setDouble(1, "avgprice", transaction.getNewAvgprice());
@@ -189,7 +193,8 @@ public class TransactionDAO extends CommonDAO {
 		// -----------------------------------------------------------------------------------------------------------------------------------------
 		// actualizacion de listas de precios
 		// compra de mercancia
-		if (transaction.getObjtype().equals("20")||transaction.getObjtype().equals("21")) {
+		if (transaction.getObjtype().equals("20")
+				|| transaction.getObjtype().equals("21")) {
 			this.setDbObject("UPDATE cat_art1_articlesprice SET price=? WHERE itemcode=? and pricelist=?");
 
 			this.setDouble(1, "price", transaction.getNewAvgprice());
@@ -235,4 +240,41 @@ public class TransactionDAO extends CommonDAO {
 		return _return;
 	}
 
+	public int getwarehosejournal(String code)throws Exception{
+		List lstResult = new Vector();
+		List lstResultSet = null;
+           int i=0;
+		this.setDbObject("select count(*) from adm_wjl0_warehousejournal where itemcode=?");
+
+		this.setString(1, "itemcode",code);
+	
+		lstResultSet = this.runQueryPrepared();
+		
+		System.out.println("return psg");
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					i=rowsetActual.getInt(1);
+
+					}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("numero de registros" + "-" + i);
+		return i;
+		
+	}
 }
