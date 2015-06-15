@@ -391,24 +391,24 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		//s.setDbObject("{call sp_gis1_goodsissuedetail_m(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_entrylines(?,?,?,?)}");
 	
-		this.setString(3, "_account", parameters.getAccount());
+		this.setString(1, "_account", parameters.getAccount());
 		
-		this.setInt(1, "_transid", new Integer(parameters.getTransid()));
+		this.setInt(2, "_transid", new Integer(parameters.getTransid()));
 			
 		if (parameters.getRefdate() == null) {
-			this.setDate(12, "_refdate", parameters.getRefdate());
+			this.setDate(3, "_refdate", parameters.getRefdate());
 		} else {
 			java.sql.Date fecha = new java.sql.Date(parameters.getRefdate()
 					.getTime());
-			this.setDate(12, "_refdate", fecha);
+			this.setDate(3, "_refdate", fecha);
 		}
 		
 		if (parameters.getTaxdate() == null) {
-			this.setDate(16, "_taxdate", parameters.getTaxdate());
+			this.setDate(4, "_taxdate", parameters.getTaxdate());
 		} else {
 			java.sql.Date fecha = new java.sql.Date(parameters.getTaxdate()
 					.getTime());
-			this.setDate(16, "_taxdate", fecha);
+			this.setDate(4, "_taxdate", fecha);
 		}
 		
 		
