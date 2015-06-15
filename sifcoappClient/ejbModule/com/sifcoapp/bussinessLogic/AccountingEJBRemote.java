@@ -10,6 +10,7 @@ import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
@@ -63,5 +64,7 @@ public interface AccountingEJBRemote {
 	public List getrecurringPostingExecute() throws EJBException;
 	
 	public ResultOutTO validate_exist_accperiod(Date parameters)throws EJBException;
+	public List getEntryDetail(JournalEntryLinesInTO parameters)
+			throws Exception;
 	
 }

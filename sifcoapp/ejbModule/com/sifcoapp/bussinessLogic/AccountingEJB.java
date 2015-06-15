@@ -17,6 +17,7 @@ import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
@@ -317,7 +318,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				.getJournalentryList().iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator.next();
-             
+
 			// ------------------------------------------------------------------------------------------------------------
 			// Valores por defecto del detalle
 			// ------------------------------------------------------------------------------------------------------------
@@ -402,7 +403,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			throw new Exception(
 					"La cuenta contable no existe o no es posteable");
 		}
-		// -----------------------------------------------------------------------------------------------------------
+
 		switch (account1.getGroupmask()) {
 		// ------------------------------------------------------------------------------------------------------------------
 		// 1- Activo
@@ -418,7 +419,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -435,7 +437,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -452,7 +455,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -469,12 +473,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
 		// ------------------------------------------------------------------------------------------------------------------
-		// 5- Cuentas de Ingresos 
+		// 5- Cuentas de Ingresos
 		// ------------------------------------------------------------------------------------------------------------------
 		case 5:
 			if (action.equals("C")) {
@@ -486,7 +491,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -503,7 +509,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -520,7 +527,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
@@ -537,15 +545,16 @@ public class AccountingEJB implements AccountingEJBRemote {
 				account1.setCurrtotal(saldo);
 				int i = update_currtotal(account1, conn);
 			} else {
-				throw new Exception ("Error en cuenta contable, informar al administrador");
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
 			}
 			break;
 
 		default:
-			throw new Exception ("Error en cuenta contable, informar al administrador");
+			throw new Exception(
+					"Error en cuenta contable, informar al administrador");
 		}
-
 
 		_return.setCodigoError(0);
 		_return.setMensaje("cuenta actualizada correctamente");
@@ -779,4 +788,282 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public List getEntryDetail(JournalEntryLinesInTO parameters)
+			throws Exception {
+		List journal = new Vector();
+		String action = " ";
+		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
+		AccountTO account1 = new AccountTO();
+		//consultamos la cuenta para saber el groupmask para realizar los calculos
+		account1 = getAccountByKey(parameters.getAccount());
+		double saldo = parameters.getTotalvat();
+		journal = DAO.getEntryDetail(parameters);
+
+		// -----------------------------------------------------------------------------------------------------------
+		switch (account1.getGroupmask()) {
+		// ------------------------------------------------------------------------------------------------------------------
+		// 1- Activo
+		// ------------------------------------------------------------------------------------------------------------------
+
+		case 1:
+			Iterator<JournalEntryLinesTO> iterator = journal.iterator();
+			while (iterator.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "C";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "D";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 2- Pasivo
+		// ------------------------------------------------------------------------------------------------------------------
+		case 2:
+			Iterator<JournalEntryLinesTO> iterator5 = journal.iterator();
+			while (iterator5.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator5
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "D";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "C";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 3-Capital
+		// ------------------------------------------------------------------------------------------------------------------
+		case 3:
+			Iterator<JournalEntryLinesTO> iterator6 = journal.iterator();
+			while (iterator6.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator6
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "D";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "C";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 4- Cuentas de costos y gastos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 4:
+			Iterator<JournalEntryLinesTO> iterator2 = journal.iterator();
+			while (iterator2.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator2
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "C";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "D";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 5- Cuentas de Ingresos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 5:
+			Iterator<JournalEntryLinesTO> iterator7 = journal.iterator();
+			while (iterator7.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator7
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "D";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "C";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 6- Cuentas de Gastos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 6:
+			Iterator<JournalEntryLinesTO> iterator3 = journal.iterator();
+			while (iterator3.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator3
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "C";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "D";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// Otros Ingresos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 7:
+			Iterator<JournalEntryLinesTO> iterator8 = journal.iterator();
+			while (iterator8.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator8
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "D";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "C";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+		// ------------------------------------------------------------------------------------------------------------------
+		// 8 - Otros Gastos
+		// ------------------------------------------------------------------------------------------------------------------
+		case 8:
+			Iterator<JournalEntryLinesTO> iterator4 = journal.iterator();
+			while (iterator4.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator4
+						.next();
+				// se asigna a la inversa para encontrar el saldo inicial antes
+				// de cada movimiento
+				if (Detalle.getDebit() > 0.0) {
+					action = "C";
+
+				}
+				if (Detalle.getCredit() > 0.0) {
+					action = "D";
+				}
+
+				if (action.equals("D")) {
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
+
+				} else if (action.equals("C")) {
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
+				} else {
+					throw new Exception(
+							"Error en cuenta contable, informar al administrador");
+
+				}
+			}
+			break;
+
+		default:
+			throw new Exception(
+					"Error en cuenta contable, informar al administrador");
+		}
+
+		return journal;
+	}
 }
