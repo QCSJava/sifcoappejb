@@ -381,4 +381,107 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		return lstResultSet;
 	}
+	
+	public List getEntryDetail(JournalEntryLinesInTO parameters)
+			throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+		//sp_get_entrylines(character varying, integer, date, date);
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		//s.setDbObject("{call sp_gis1_goodsissuedetail_m(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setDbObject("{call sp_get_entrylines(?,?,?,?)}");
+	
+		this.setString(3, "_account", parameters.getAccount());
+		
+		this.setInt(1, "_transid", new Integer(parameters.getTransid()));
+			
+		if (parameters.getRefdate() == null) {
+			this.setDate(12, "_refdate", parameters.getRefdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getRefdate()
+					.getTime());
+			this.setDate(12, "_refdate", fecha);
+		}
+		
+		if (parameters.getTaxdate() == null) {
+			this.setDate(16, "_taxdate", parameters.getTaxdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getTaxdate()
+					.getTime());
+			this.setDate(16, "_taxdate", fecha);
+		}
+		
+		
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		System.out.println("return psg");
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			while (rowsetActual.next()) {
+				JournalEntryLinesTO journal = new JournalEntryLinesTO();
+				journal.setTransid(rowsetActual.getInt(1));
+				journal.setLine_id(rowsetActual.getInt(2));
+				journal.setAccount(rowsetActual.getString(3));
+				journal.setDebit(rowsetActual.getDouble(4));
+				journal.setCredit(rowsetActual.getDouble(5));
+				journal.setDuedate(rowsetActual.getDate(6));
+				journal.setShortname(rowsetActual.getString(7));
+				journal.setContraact(rowsetActual.getString(8));
+				journal.setLinememo(rowsetActual.getString(9));
+				journal.setRef3line(rowsetActual.getString(10));
+				journal.setTranstype(rowsetActual.getString(11));
+				journal.setRefdate(rowsetActual.getDate(12));
+				journal.setRef1(rowsetActual.getString(13));
+				journal.setRef2(rowsetActual.getString(14));
+				journal.setBaseref(rowsetActual.getString(15));
+				journal.setTaxdate(rowsetActual.getDate(16));
+				journal.setMthdate(rowsetActual.getDate(17));
+				journal.setTomthsum(rowsetActual.getDouble(18));
+				journal.setBatchnum(rowsetActual.getInt(19));
+				journal.setFinncpriod(rowsetActual.getInt(20));
+				journal.setReltransid(rowsetActual.getInt(21));
+				journal.setRellineid(rowsetActual.getInt(22));
+				journal.setReltype(rowsetActual.getString(23));
+				journal.setVatgroup(rowsetActual.getString(24));
+				journal.setBasesum(rowsetActual.getDouble(25));
+				journal.setVatrate(rowsetActual.getDouble(26));
+				journal.setIndicator(rowsetActual.getString(27));
+				journal.setObjtype(rowsetActual.getString(28));
+				journal.setVatdate(rowsetActual.getDate(29));
+				journal.setPaymentref(rowsetActual.getString(30));
+				journal.setSysbasesum(rowsetActual.getDouble(31));
+				journal.setVatline(rowsetActual.getString(32));
+				journal.setVatamount(rowsetActual.getDouble(33));
+				journal.setClosed(rowsetActual.getString(34));
+				journal.setGrossvalue(rowsetActual.getDouble(35));
+				journal.setDebcred(rowsetActual.getString(36));
+				journal.setSequencenr(rowsetActual.getInt(37));
+				journal.setStornoacc(rowsetActual.getString(38));
+				journal.setBalduedeb(rowsetActual.getDouble(39));
+				journal.setBalduecred(rowsetActual.getDouble(40));
+				journal.setIsnet(rowsetActual.getString(41));
+				journal.setTaxtype(rowsetActual.getInt(42));
+				journal.setTaxpostacc(rowsetActual.getString(43));
+				journal.setTotalvat(rowsetActual.getDouble(44));
+				journal.setWtliable(rowsetActual.getString(45));
+				journal.setWtline(rowsetActual.getString(46));
+				journal.setPayblock(rowsetActual.getString(47));
+				journal.setMatchref(rowsetActual.getString(48));
+				journal.setOrdered(rowsetActual.getString(49));
+				journal.setBplname(rowsetActual.getString(50));
+				journal.setVatregnum(rowsetActual.getString(51));
+				journal.setSledgerf(rowsetActual.getString(52));
+				journal.setAcctname(rowsetActual.getString(53));
+				journal.setIntrnmatch(rowsetActual.getInt(54));
+				journal.setExtrmatch(rowsetActual.getInt(55));
+
+				_return.add(journal);
+			}
+			rowsetActual.close();
+		}
+		return _return;
+	}
 }

@@ -15,6 +15,7 @@ import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
@@ -207,6 +208,16 @@ public class AccountingEJBClient {
 	public List getrecurringPostingExecute() throws EJBException {
 		List _return = new Vector();
 		_return = bean.getrecurringPostingExecute();
+		return _return;
+	}
+	public List getEntryDetail(JournalEntryLinesInTO parameters) throws EJBException {
+		List _return = new Vector();
+		try {
+			_return = bean.getEntryDetail(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return _return;
 	}
 }
