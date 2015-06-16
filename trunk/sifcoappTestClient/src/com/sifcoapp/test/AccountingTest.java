@@ -1,12 +1,15 @@
 package com.sifcoapp.test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import javax.ejb.EJBException;
+
+
 
 //import sun.awt.shell.Win32ShellFolder2.SystemIcon;
 import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
@@ -17,6 +20,7 @@ import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
@@ -43,7 +47,6 @@ public class AccountingTest {
 		 * 
 		 * System.out.println(lstPeriods);
 		 */
-
 		try {
 			AccountingTest.class.getMethod(args[0], null).invoke(null, null);
 			// testPeriods();
@@ -345,6 +348,32 @@ ResultOutTO _result = new ResultOutTO();
 		while (iterator.hasNext()) {
 			JournalEntryTO acc = (JournalEntryTO) iterator.next();
 			System.out.println(acc.getTransid() + " - " + acc.getBtfstatus());
+		}
+
+	}
+	public static void getEntry() {
+		JournalEntryLinesInTO nuevo = new JournalEntryLinesInTO();
+		List consul = new Vector();
+		nuevo.setTransid(5);
+		// nuevo.setBtfstatus("Y");
+		nuevo.setAccount("210201010121");
+		java.util.Date utilDate = new java.util.Date(); //fecha actual
+		  long lnMilisegundos = utilDate.getTime();
+		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+		nuevo.setTaxdate(sqlDate);
+		Calendar ca=Calendar.getInstance();
+		ca.set(2015, 05, 01);
+			
+		  nuevo.setRefdate(ca.getTime());
+		  nuevo.setTotalvat(203.210649);
+				
+		
+
+		consul = AccountingEJBService.getEntryDetail(nuevo);
+		Iterator<JournalEntryLinesTO> iterator = consul.iterator();
+		while (iterator.hasNext()) {
+			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
+			System.out.println(acc.getTransid() + " - " + acc.getAccount()+acc.getTotalvat() +acc.getDebit()+acc.getCredit());
 		}
 
 	}

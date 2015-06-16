@@ -791,14 +791,26 @@ public class AccountingEJB implements AccountingEJBRemote {
 	public List getEntryDetail(JournalEntryLinesInTO parameters)
 			throws Exception {
 		List journal = new Vector();
+		JournalEntryLinesInTO nuevo= new JournalEntryLinesInTO();
 		String action = " ";
 		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
+		JournalEntryLinesDAO DAO1 = new JournalEntryLinesDAO();
 		AccountTO account1 = new AccountTO();
 		//consultamos la cuenta para saber el groupmask para realizar los calculos
 		account1 = getAccountByKey(parameters.getAccount());
 		double saldo = parameters.getTotalvat();
+		double saldo1 = 0;
+		//salñdo inicial antes de la fecha indicada
 		journal = DAO.getEntryDetail(parameters);
 
+		nuevo=DAO1.getsaldo(parameters);
+		nuevo.setLinememo("saldo inicial a la fecha");
+		journal.add(nuevo);
+		
+		System.out.println("saldo "+nuevo.getTotalvat());
+		System.out.println("debe "+nuevo.getBalduedeb());
+		System.out.println("haber"+nuevo.getBalduecred());
+		
 		// -----------------------------------------------------------------------------------------------------------
 		switch (account1.getGroupmask()) {
 		// ------------------------------------------------------------------------------------------------------------------
@@ -806,6 +818,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------------
 
 		case 1:
+			
 			Iterator<JournalEntryLinesTO> iterator = journal.iterator();
 			while (iterator.hasNext()) {
 				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
@@ -845,20 +858,20 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "D";
+					action = "C";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "C";
+					action = "D";
 				}
 
 				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
+					saldo1 = saldo - Detalle.getCredit();
+					Detalle.setTotalvat(saldo1);
 
 				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
+					saldo1 = saldo + Detalle.getDebit();
+					Detalle.setTotalvat(saldo1);
 				} else {
 					throw new Exception(
 							"Error en cuenta contable, informar al administrador");
@@ -877,19 +890,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "D";
+					action = "C";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "C";
+					action = "D";
 				}
 
 				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
+					saldo = saldo - Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
 				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
+					saldo = saldo + Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -941,19 +954,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "D";
+					action = "C";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "C";
+					action = "D";
 				}
 
 				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
+					saldo = saldo - Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
 				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
+					saldo = saldo + Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -1005,19 +1018,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "D";
+					action = "C";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "C";
+					action = "D";
 				}
 
 				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
+					saldo = saldo - Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
 				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
+					saldo = saldo + Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
