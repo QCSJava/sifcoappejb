@@ -586,8 +586,7 @@ public class SalesEJB implements SalesEJBRemote {
 			double impuesto = good.getLinetotal() * 0.13;
 			fovc = fovc + (good.getVatsum() - impuesto);
 			tax = tax + impuesto;
-			bussines = bussines
-					+ ((good.getVatsum() - impuesto) + impuesto + good
+			bussines = bussines	+ ((good.getVatsum() - impuesto) + impuesto + good
 							.getLinetotal());
 
 		}
@@ -661,9 +660,10 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setDuedate(parameters.getDocdate());
 		nuevo.setTaxdate(parameters.getTaxdate());
 		nuevo.setBtfstatus("O");
-		nuevo.setTranstype("5");
+		nuevo.setTranstype(parameters.getObjtype());
 		nuevo.setBaseref(parameters.getRef1());
 		nuevo.setRefdate(parameters.getDocduedate());
+
 		nuevo.setRef1(parameters.getRef1());
 		nuevo.setRefndrprt("N");
 		nuevo.setAdjtran("N");
@@ -708,6 +708,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setWtline("N");
 		art1.setPayblock("N");
 		art1.setOrdered("N");
+		art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
 
 		// cuenta asignada al almacen
@@ -743,6 +744,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setWtline("N");
 		art2.setPayblock("N");
 		art2.setOrdered("N");
+art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 
 		// cuenta de iva
@@ -778,6 +780,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art3.setWtline("N");
 		art3.setPayblock("N");
 		art3.setOrdered("N");
+		art3.setTranstype(parameters.getObjtype());
 		detail.add(art3);
 		// ------------------------
 		// para la cuenta de ventas
@@ -815,6 +818,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art4.setWtline("N");
 		art4.setPayblock("N");
 		art4.setOrdered("N");
+		art4.setTranstype(parameters.getObjtype());
 		detail.add(art4);
 		// ------------------------
 		// para la cuenta de costo de ventas
@@ -852,6 +856,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setWtline("N");
 		art5.setPayblock("N");
 		art5.setOrdered("N");
+		art5.setTranstype(parameters.getObjtype());
 		detail.add(art5);
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0) {
@@ -887,6 +892,7 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setWtline("N");
 			art6.setPayblock("N");
 			art6.setOrdered("N");
+			art6.setTranstype(parameters.getObjtype());
 			detail.add(art6);
 		}
 		nuevo.setJournalentryList(detail);
@@ -1868,13 +1874,13 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines + branch);
 		nuevo.setSystotal(bussines + branch);
-		nuevo.setObjtype("5");
+		;
 		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());
 		nuevo.setTaxdate(parameters.getTaxdate());
 		nuevo.setBtfstatus("O");
-		nuevo.setTranstype("5");
+		nuevo.setTranstype(parameters.getObjtype());
 		nuevo.setBaseref(parameters.getRef1());
 		nuevo.setRefdate(parameters.getDocduedate());
 		nuevo.setRef1(parameters.getRef1());
@@ -1918,6 +1924,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setWtline("N");
 		art1.setPayblock("N");
 		art1.setOrdered("N");
+		art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
 
 		// cuenta asignada al almacen
@@ -1953,6 +1960,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setWtline("N");
 		art2.setPayblock("N");
 		art2.setOrdered("N");
+		art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 
 		// cuenta de iva
@@ -1988,6 +1996,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art3.setWtline("N");
 		art3.setPayblock("N");
 		art3.setOrdered("N");
+		art3.setTranstype(parameters.getObjtype());
 		detail.add(art3);
 		// ------------------------
 		// para la cuenta de ventas
@@ -2025,6 +2034,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art4.setWtline("N");
 		art4.setPayblock("N");
 		art4.setOrdered("N");
+		art4.setTranstype(parameters.getObjtype());
 		detail.add(art4);
 		// ------------------------
 		// para la cuenta de costo de ventas
@@ -2063,6 +2073,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setWtline("N");
 		art5.setPayblock("N");
 		art5.setOrdered("N");
+		art5.setTranstype(parameters.getObjtype());
 		detail.add(art5);
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0) {
@@ -2098,6 +2109,7 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setWtline("N");
 			art6.setPayblock("N");
 			art6.setOrdered("N");
+			art6.setTranstype(parameters.getObjtype());
 			detail.add(art6);
 		}
 		nuevo.setJournalentryList(detail);
@@ -2948,6 +2960,7 @@ public class SalesEJB implements SalesEJBRemote {
 			nuevo.setPrinted("N");
 			nuevo.setAutowt("N");
 			nuevo.setDeferedtax("N");
+			
 			// nuevo.setRef2(ref2);
 
 			// llenado de los hijos
@@ -2994,6 +3007,7 @@ public class SalesEJB implements SalesEJBRemote {
 			art1.setWtline("N");
 			art1.setPayblock("N");
 			art1.setOrdered("N");
+			art1.setTranstype(parameters.getObjtype());
 
 			detail.add(art1);
 
@@ -3032,6 +3046,8 @@ public class SalesEJB implements SalesEJBRemote {
 			art2.setWtline("N");
 			art2.setPayblock("N");
 			art2.setOrdered("N");
+			art2.setTranstype(parameters.getObjtype());
+
 
 			detail.add(art2);
 

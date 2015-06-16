@@ -387,8 +387,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		List _return = new Vector();
 		List lstResultSet = null;
 		//sp_get_entrylines(character varying, integer, date, date);
-		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		//s.setDbObject("{call sp_gis1_goodsissuedetail_m(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);		//s.setDbObject("{call sp_gis1_goodsissuedetail_m(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
 		this.setDbObject("{call sp_get_entrylines(?,?,?,?)}");
 	
 		this.setString(1, "_account", parameters.getAccount());
@@ -422,6 +421,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			while (rowsetActual.next()) {
 				JournalEntryLinesTO journal = new JournalEntryLinesTO();
+				
 				journal.setTransid(rowsetActual.getInt(1));
 				journal.setLine_id(rowsetActual.getInt(2));
 				journal.setAccount(rowsetActual.getString(3));
@@ -474,14 +474,62 @@ public class JournalEntryLinesDAO extends CommonDAO {
 				journal.setBplname(rowsetActual.getString(50));
 				journal.setVatregnum(rowsetActual.getString(51));
 				journal.setSledgerf(rowsetActual.getString(52));
-				journal.setAcctname(rowsetActual.getString(53));
-				journal.setIntrnmatch(rowsetActual.getInt(54));
-				journal.setExtrmatch(rowsetActual.getInt(55));
-
+				
 				_return.add(journal);
 			}
 			rowsetActual.close();
 		}
 		return _return;
 	}
+	
+	public JournalEntryLinesInTO getsaldo(JournalEntryLinesInTO parameters)throws Exception{
+		List lstResult = new Vector();
+		List lstResultSet = null;
+		JournalEntryLinesInTO journal= new JournalEntryLinesInTO();
+           int i=0;
+		this.setDbObject("SELECT sum (debit),sum(credit),sum (debit)-sum(credit) FROM cat_jdt1_journalentrylines WHERE  account = ? and taxdate < ? ;");
+
+		
+        this.setString(1, "_account", parameters.getAccount());
+					
+		if (parameters.getRefdate() == null) {
+			this.setDate(2, "_taxdate", parameters.getRefdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getRefdate()
+					.getTime());
+			this.setDate(2, "_taxdate", fecha);
+		}
+		lstResultSet = this.runQueryPrepared();
+		
+		System.out.println("return psg");
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					journal.setBalduedeb(rowsetActual.getDouble(1));
+					journal.setBalduecred(rowsetActual.getDouble(2));
+					journal.setTotalvat(rowsetActual.getDouble(3));
+					journal.setRefdate(parameters.getRefdate());
+
+					}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("numero de registros" + "-" + i);
+		return journal;
+		
+	}
+
 }
