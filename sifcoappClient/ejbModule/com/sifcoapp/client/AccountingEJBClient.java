@@ -14,8 +14,10 @@ import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
+import com.sifcoapp.objects.accounting.to.EntryTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
+import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
@@ -214,6 +216,16 @@ public class AccountingEJBClient {
 		List _return = new Vector();
 		try {
 			_return = bean.getEntryDetail(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return _return;
+	}
+	public JournalEntryLinesTO  getsaldo(EntryTO parameters)throws EJBException{
+		JournalEntryLinesTO _return = new JournalEntryLinesTO();
+		try {
+			_return = bean.getsaldo(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -9,6 +9,9 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+
+
+
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryLinesDAO;
@@ -16,6 +19,7 @@ import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.BudgetTO;
+import com.sifcoapp.objects.accounting.to.EntryTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
@@ -791,25 +795,24 @@ public class AccountingEJB implements AccountingEJBRemote {
 	public List getEntryDetail(JournalEntryLinesInTO parameters)
 			throws Exception {
 		List journal = new Vector();
-		JournalEntryLinesInTO nuevo= new JournalEntryLinesInTO();
+		JournalEntryLinesTO nuevo= new JournalEntryLinesTO();
 		String action = " ";
 		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
 		JournalEntryLinesDAO DAO1 = new JournalEntryLinesDAO();
 		AccountTO account1 = new AccountTO();
 		//consultamos la cuenta para saber el groupmask para realizar los calculos
 		account1 = getAccountByKey(parameters.getAccount());
-		double saldo = parameters.getTotalvat();
+		
 		double saldo1 = 0;
 		//salñdo inicial antes de la fecha indicada
 		journal = DAO.getEntryDetail(parameters);
-
-		nuevo=DAO1.getsaldo(parameters);
+		EntryTO entrada= new EntryTO();
+        entrada.setAcctcode(parameters.getAccount());
+        entrada.setRefdate(parameters.getRefdate());
+		nuevo=DAO1.getsaldo(entrada);
+		double saldo = nuevo.getTotalvat();
 		nuevo.setLinememo("saldo inicial a la fecha");
-		journal.add(nuevo);
 		
-		System.out.println("saldo "+nuevo.getTotalvat());
-		System.out.println("debe "+nuevo.getBalduedeb());
-		System.out.println("haber"+nuevo.getBalduecred());
 		
 		// -----------------------------------------------------------------------------------------------------------
 		switch (account1.getGroupmask()) {
@@ -826,19 +829,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo = saldo - Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
-				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo = saldo + Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -858,19 +861,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo1 = saldo - Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo1 = saldo + Detalle.getCredit();
 					Detalle.setTotalvat(saldo1);
 
-				} else if (action.equals("C")) {
-					saldo1 = saldo + Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo1 = saldo - Detalle.getDebit();
 					Detalle.setTotalvat(saldo1);
 				} else {
 					throw new Exception(
@@ -890,19 +893,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo = saldo - Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo = saldo + Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
-				} else if (action.equals("C")) {
-					saldo = saldo + Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo = saldo - Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -922,19 +925,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo = saldo - Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
-				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo = saldo + Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -954,19 +957,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo = saldo - Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo = saldo + Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
-				} else if (action.equals("C")) {
-					saldo = saldo + Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo = saldo - Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -986,19 +989,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo = saldo - Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
-				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo = saldo + Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -1018,19 +1021,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo = saldo - Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo = saldo +Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
-				} else if (action.equals("C")) {
-					saldo = saldo + Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo = saldo - Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -1050,19 +1053,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// se asigna a la inversa para encontrar el saldo inicial antes
 				// de cada movimiento
 				if (Detalle.getDebit() > 0.0) {
-					action = "C";
+					action = "D";
 
 				}
 				if (Detalle.getCredit() > 0.0) {
-					action = "D";
+					action = "C";
 				}
 
-				if (action.equals("D")) {
-					saldo = saldo + Detalle.getCredit();
+				if (action.equals("C")) {
+					saldo = saldo - Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
-				} else if (action.equals("C")) {
-					saldo = saldo - Detalle.getDebit();
+				} else if (action.equals("D")) {
+					saldo = saldo + Detalle.getDebit();
 					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
@@ -1076,7 +1079,21 @@ public class AccountingEJB implements AccountingEJBRemote {
 			throw new Exception(
 					"Error en cuenta contable, informar al administrador");
 		}
-
+		journal.add(nuevo);
+		
 		return journal;
+	}
+	
+	public JournalEntryLinesTO  getsaldo(EntryTO parameters)throws EJBException {
+		JournalEntryLinesTO _return = new JournalEntryLinesTO() ;
+
+		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
+		try {
+			_return = DAO.getsaldo(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
 	}
 }

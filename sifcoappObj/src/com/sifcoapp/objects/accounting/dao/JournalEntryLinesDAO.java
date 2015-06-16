@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 import com.sifcoapp.objects.accounting.to.AccountTO;
+import com.sifcoapp.objects.accounting.to.EntryTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesInTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.catalogos.Common;
@@ -482,15 +483,15 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		return _return;
 	}
 	
-	public JournalEntryLinesInTO getsaldo(JournalEntryLinesInTO parameters)throws Exception{
+	public JournalEntryLinesTO getsaldo(EntryTO parameters)throws Exception{
 		List lstResult = new Vector();
 		List lstResultSet = null;
-		JournalEntryLinesInTO journal= new JournalEntryLinesInTO();
+		JournalEntryLinesTO journal= new JournalEntryLinesTO();
            int i=0;
 		this.setDbObject("SELECT sum (debit),sum(credit),sum (debit)-sum(credit) FROM cat_jdt1_journalentrylines WHERE  account = ? and taxdate < ? ;");
 
 		
-        this.setString(1, "_account", parameters.getAccount());
+        this.setString(1, "_account", parameters.getAcctcode());
 					
 		if (parameters.getRefdate() == null) {
 			this.setDate(2, "_taxdate", parameters.getRefdate());

@@ -1335,16 +1335,30 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			// // nuevo.setBatchnum(1);
 			// LLenado del padre
 
-			nuevo.setObjtype("5");
+			nuevo.setBtfstatus("O");
+			nuevo.setTranstype(parameters.getObjtype());
+			nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
+			nuevo.setRefdate(parameters.getDocdate());
 			nuevo.setMemo(parameters.getJrnlmemo());
-			nuevo.setUsersign(parameters.getUsersign());
+			nuevo.setRef1(Integer.toString(parameters.getDocnum()));
+			nuevo.setRef2(parameters.getRef1());
 			nuevo.setLoctotal(sum);
 			nuevo.setSystotal(sum);
-			nuevo.setBtfstatus("O");
-			nuevo.setTranstype("5");
-			nuevo.setBaseref(parameters.getRef1());
-			nuevo.setRefdate(parameters.getDocduedate());
-			nuevo.setRef1(parameters.getRef1());
+			nuevo.setTransrate(0.0);
+			nuevo.setDuedate(parameters.getDocduedate());
+			nuevo.setTaxdate(parameters.getDocdate());
+			nuevo.setFinncpriod(0);
+			nuevo.setUsersign(parameters.getUsersign());
+			nuevo.setRefndrprt("N");							
+			nuevo.setObjtype("5");
+			nuevo.setAdjtran("N");
+			nuevo.setAutostorno("N");
+			nuevo.setSeries(0);
+			nuevo.setAutovat("N");
+			nuevo.setDocseries(0);
+			nuevo.setPrinted("N");
+			nuevo.setAutowt("N");
+			nuevo.setDeferedtax("N");
 			// nuevo.setRef2(ref2);
 
 			// llenado de los hijos
@@ -1391,7 +1405,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setWtline("N");
 			art1.setPayblock("N");
 			art1.setOrdered("N");
-
+            art1.setTranstype(parameters.getObjtype());
 			detail.add(art1);
 
 			art2.setLine_id(2);
@@ -1426,7 +1440,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setWtline("N");
 			art2.setPayblock("N");
 			art2.setOrdered("N");
-
+            art2.setTranstype(parameters.getObjtype());
 			detail.add(art2);
 
 		}
@@ -1944,17 +1958,30 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
 			// // nuevo.setBatchnum(1);
 			// LLenado del padre
-
-			nuevo.setObjtype("5");
+			nuevo.setBtfstatus("O");
+			nuevo.setTranstype(parameters.getObjtype());
+			nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
+			nuevo.setRefdate(parameters.getDocdate());
 			nuevo.setMemo(parameters.getJrnlmemo());
-			nuevo.setUsersign(parameters.getUsersign());
+			nuevo.setRef1(Integer.toString(parameters.getDocnum()));
+			nuevo.setRef2(parameters.getRef1());
 			nuevo.setLoctotal(sum);
 			nuevo.setSystotal(sum);
-			nuevo.setBtfstatus("O");
-			nuevo.setTranstype("5");
-			nuevo.setBaseref(parameters.getRef1());
-			nuevo.setRefdate(parameters.getDocduedate());
-			nuevo.setRef1(parameters.getRef1());
+			nuevo.setTransrate(0.0);
+			nuevo.setDuedate(parameters.getDocduedate());
+			nuevo.setTaxdate(parameters.getDocdate());
+			nuevo.setFinncpriod(0);
+			nuevo.setUsersign(parameters.getUsersign());
+			nuevo.setRefndrprt("N");							
+			nuevo.setObjtype("5");
+			nuevo.setAdjtran("N");
+			nuevo.setAutostorno("N");
+			nuevo.setSeries(0);
+			nuevo.setAutovat("N");
+			nuevo.setDocseries(0);
+			nuevo.setPrinted("N");
+			nuevo.setAutowt("N");
+			nuevo.setDeferedtax("N");
 			// nuevo.setRef2(ref2);
 
 			// llenado de los hijos
@@ -2001,7 +2028,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setWtline("N");
 			art1.setPayblock("N");
 			art1.setOrdered("N");
-
+            art1.setTranstype(parameters.getObjtype());
 			detail.add(art1);
 
 			art2.setLine_id(2);
@@ -2037,7 +2064,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setWtline("N");
 			art2.setPayblock("N");
 			art2.setOrdered("N");
-
+            art2.setTranstype(parameters.getObjtype());
 			detail.add(art2);
 
 		}
@@ -2436,7 +2463,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setWtline("N");
 			art1.setPayblock("N");
 			art1.setOrdered("N");
-
+            art1.setTranstype(parameters.getObjtype());
 			detail.add(art1);
 
 			art2.setLine_id(2);
@@ -2470,7 +2497,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setWtline("N");
 			art2.setPayblock("N");
 			art2.setOrdered("N");
-
+            art2.setTranstype(parameters.getObjtype()); 
 			detail.add(art2);
 
 		}
