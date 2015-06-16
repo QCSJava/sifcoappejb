@@ -249,15 +249,15 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setAcctcode(branch_c);
 			// Valores por defecto
 			articleDetalle.setDocentry(parameters.getDocentry());
-			articleDetalle.setTargettype(-1);
+			//articleDetalle.setTargettype(-1);
 			// articleDetalle.setBaseref("");
-			articleDetalle.setBasetype(-1);
+			//articleDetalle.setBasetype(-1);
 			articleDetalle.setLinestatus("O");
 			articleDetalle.setDscription(DBArticle.getItemName());
 			articleDetalle.setDiscprcnt(zero);
 			articleDetalle.setWhscode(parameters.getTowhscode());
 			// articleDetalle.setAcctcode(acctcode);
-			articleDetalle.setTaxstatus("Y");
+			//articleDetalle.setTaxstatus("Y");
 			articleDetalle.setOcrcode(parameters.getTowhscode());
 			articleDetalle.setFactor1(zero);
 			articleDetalle.setObjtype("10");
@@ -654,7 +654,7 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines + branch);
 		nuevo.setSystotal(bussines + branch);
-		nuevo.setObjtype("5");
+		
 		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());

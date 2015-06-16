@@ -354,7 +354,7 @@ ResultOutTO _result = new ResultOutTO();
 	public static void getEntry() {
 		JournalEntryLinesInTO nuevo = new JournalEntryLinesInTO();
 		List consul = new Vector();
-		nuevo.setTransid(5);
+		nuevo.setTransid(10);
 		// nuevo.setBtfstatus("Y");
 		nuevo.setAccount("210201010121");
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
@@ -373,7 +373,7 @@ ResultOutTO _result = new ResultOutTO();
 		Iterator<JournalEntryLinesTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
-			System.out.println(acc.getTransid() + " - " + acc.getAccount()+acc.getTotalvat() +acc.getDebit()+acc.getCredit());
+			System.out.println(acc.getTransid() + " - " + acc.getAccount()+" "+acc.getTotalvat() +" "+acc.getDebit()+" "+acc.getCredit());
 		}
 
 	}

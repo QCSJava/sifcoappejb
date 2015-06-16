@@ -761,6 +761,23 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
+		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(parameters.getObjtype());
+		nuevo.setBaseref(parameters.getRef1());
+		nuevo.setRefdate(parameters.getDocduedate());
+        nuevo.setRef1(parameters.getRef1());
+		nuevo.setRefndrprt("N");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setAutovat("N");
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+
 		// llenado de los
 		// hijos---------------------------------------------------------------------------------------------------
 		// cuenta del socio de negocio
@@ -795,6 +812,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setWtline("N");
 		art1.setPayblock("N");
 		art1.setOrdered("N");
+		art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
 
 		// cuenta asignada al almacen
@@ -829,6 +847,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setWtline("N");
 		art2.setPayblock("N");
 		art2.setOrdered("N");
+		art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 
 		// cuenta de iva
@@ -863,6 +882,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art3.setWtline("N");
 		art3.setPayblock("N");
 		art3.setOrdered("N");
+		art3.setTranstype(parameters.getObjtype());
 		detail.add(art3);
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0) {
@@ -897,6 +917,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art4.setWtline("N");
 			art4.setPayblock("N");
 			art4.setOrdered("N");
+			art4.setTranstype(parameters.getObjtype());
 			detail.add(art4);
 		}
 		nuevo.setJournalentryList(detail);
@@ -1769,6 +1790,22 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
+		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(parameters.getObjtype());
+		nuevo.setBaseref(parameters.getRef1());
+		nuevo.setRefdate(parameters.getDocduedate());
+        nuevo.setRef1(parameters.getRef1());
+		nuevo.setRefndrprt("N");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setAutovat("N");
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
 		// llenado de los
 		// hijos---------------------------------------------------------------------------------------------------
 		// cuenta del socio de negocio
@@ -1804,6 +1841,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setWtline("N");
 		art1.setPayblock("N");
 		art1.setOrdered("N");
+		art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
 
 		// cuenta asignada al almacen
@@ -1838,6 +1876,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setWtline("N");
 		art2.setPayblock("N");
 		art2.setOrdered("N");
+		art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 
 		// cuenta de iva
@@ -1873,6 +1912,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art3.setWtline("N");
 		art3.setPayblock("N");
 		art3.setOrdered("N");
+		art3.setTranstype(parameters.getObjtype());
 		detail.add(art3);
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0) {
@@ -1908,6 +1948,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art4.setWtline("N");
 			art4.setPayblock("N");
 			art4.setOrdered("N");
+			art4.setTranstype(parameters.getObjtype());
 			detail.add(art4);
 		}
 		nuevo.setJournalentryList(detail);
