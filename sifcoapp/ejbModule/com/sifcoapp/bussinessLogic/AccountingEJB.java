@@ -869,12 +869,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 				}
 
 				if (action.equals("C")) {
-					saldo1 = saldo + Detalle.getCredit();
-					Detalle.setTotalvat(saldo1);
+					saldo = saldo + Detalle.getCredit();
+					Detalle.setTotalvat(saldo);
 
 				} else if (action.equals("D")) {
-					saldo1 = saldo - Detalle.getDebit();
-					Detalle.setTotalvat(saldo1);
+					saldo = saldo - Detalle.getDebit();
+					Detalle.setTotalvat(saldo);
 				} else {
 					throw new Exception(
 							"Error en cuenta contable, informar al administrador");

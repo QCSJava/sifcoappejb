@@ -556,12 +556,12 @@ public class SalesEJB implements SalesEJBRemote {
 		String V_local;
 		String costo_venta;
 		String fovialCotrans_c = null;
-		double bussines = 0;
-		double branch = 0;
-		double tax = 0;
-		double fovc = 0;
-		double sale = 0;
-		double costo = 0;
+		double bussines = 0.0;
+		double branch = 0.0;
+		double tax = 0.0;
+		double fovc = 0.0;
+		double sale = 0.0;
+		double costo = 0.0;
 		AdminDAO admin = new AdminDAO();
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
@@ -583,11 +583,14 @@ public class SalesEJB implements SalesEJBRemote {
 			arti = good.getArticle();
 			branch = branch + (arti.getAvgPrice() * good.getQuantity());
 			sale = sale + good.getLinetotal();
+		//calculando el iva validando si el producto esta exento o de iva
+			if (good.getTaxstatus().equals("Y")){
 			double impuesto = good.getLinetotal() * 0.13;
 			fovc = fovc + (good.getVatsum() - impuesto);
 			tax = tax + impuesto;
 			bussines = bussines	+ ((good.getVatsum() - impuesto) + impuesto + good
 							.getLinetotal());
+}
 
 		}
 		// consultando en la base de datos los codigos de cuenta asignados

@@ -252,8 +252,9 @@ ResultOutTO _result = new ResultOutTO();
 	public static void cat_Acc0_account_mtto() throws Exception {
 		int _return = 8;
 		AccountTO acc = new AccountTO();
-		acc.setAcctcode("101013");
-		acc.setAcctname("Pasivos Corrientes");
+		acc.setAcctcode("1102700106");
+		acc.setAcctname("cuenta por cobrar Equipo 01");
+	
 		acc.setCurrtotal(42.5);
 		acc.setEndtotal(56.2);
 
@@ -373,7 +374,7 @@ ResultOutTO _result = new ResultOutTO();
 		Iterator<JournalEntryLinesTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
-			System.out.println(acc.getTransid() + " - " + acc.getAccount()+" "+acc.getTotalvat() +" "+acc.getDebit()+" "+acc.getCredit());
+			System.out.println(acc.getTransid() + "-" + acc.getAccount()+"-"+acc.getTotalvat() +"-"+acc.getDebit()+"-"+acc.getCredit());
 		}
 
 	}
