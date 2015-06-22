@@ -104,7 +104,6 @@ public class SalesTest {
 	public static void Sales_mtto() {
 		ResultOutTO _result = new ResultOutTO();
 		SalesTO parameters = new SalesTO();
-
 		List prueba = new Vector();
 		SalesDetailTO document = new SalesDetailTO();
 		SalesDetailTO document1 = new SalesDetailTO();
@@ -125,6 +124,8 @@ public class SalesTest {
 		document.setGrssprofit(0.000000);
 		document.setGtotal(0.000000);
 		document.setObjtype("10");
+		document.setTaxstatus("N");
+		
 		prueba.add(document);
 
 		document1.setLinenum(2);
@@ -143,6 +144,7 @@ public class SalesTest {
 		document1.setGrssprofit(0.000000);
 		document1.setGtotal(6.275);
 		document1.setObjtype("10");
+		document1.setTaxstatus("N");
 		prueba.add(document1);
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
 		  long lnMilisegundos = utilDate.getTime();
@@ -164,6 +166,8 @@ public class SalesTest {
 		parameters.setPeymethod("2");
 		parameters.setVatsum(0.000000);
 		parameters.setCtlaccount("110602");
+		parameters.setPeymethod("1");
+		
 
 		parameters.setSalesDetails(prueba);
 
