@@ -293,7 +293,7 @@ public class InventoryTEST {
 		parameters.setDocduedate(fecha);
 		List detalle = new Vector();
 		art.setLinenum(1);
-		art.setAcctcode("410102");
+		art.setAcctcode("1103030111");
 		art.setObjtype("30");
 		art.setWhscode("ALM-001");
 		art.setItemcode("001-004-545-6114");
@@ -319,7 +319,7 @@ public class InventoryTEST {
       
 		parameters.setGoodIssuesDetail(detalle);
 		parameters.setDocdate(sqlDate);
-		parameters.setTowhscode("ALM-001");
+		parameters.setFromwhscode("ALM-001");
 
 		try {
 			_result = Inventory.inv_goodsissues_mtto(parameters, 1);

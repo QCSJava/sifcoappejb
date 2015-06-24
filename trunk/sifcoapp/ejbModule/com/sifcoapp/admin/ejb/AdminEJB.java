@@ -267,9 +267,12 @@ public class AdminEJB implements AdminEJBRemote {
 			
 			
 				if (action == Common.MTTOUPDATE) {
+					adminDAO3 = new AdminDAO(adminDAO.getConn());
+					adminDAO3.setIstransaccional(true);
 					article=adminDAO3.getArticlesByKey(parameters.getItemCode());
-					if(!article.getInvntItem().endsWith(parameters.getInvntItem())){
+					if(!article.getInvntItem().equals(parameters.getInvntItem())){
 						int registros=trans.getwarehosejournal(parameters.getItemCode());
+						System.out.println("registros"+registros);
 					if(registros>0){
 					    _return.setMensaje("error de actualizacion el producto"+"-"+parameters.getItemCode()+"-"+ "continene"+":"+registros+"-"+"ingresados");
 						_return.setCodigoError(1);
