@@ -223,6 +223,7 @@ public class AdminTest {
 			System.out.println(article.getItemCode() + " - "
 					+ article.getItemName());
 			System.out.println("Almacenes asociados");
+			System.out.println(article.getValidFor());
 
 			Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
 					.iterator();
