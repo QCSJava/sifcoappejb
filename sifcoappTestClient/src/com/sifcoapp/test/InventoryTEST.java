@@ -139,7 +139,7 @@ public class InventoryTEST {
 		GoodsReceiptDetailTO art2 = new GoodsReceiptDetailTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
 		Date fecha = new Date();
-		//parameters.setDocnum(26);
+		// parameters.setDocnum(26);
 		parameters.setObjtype("30");
 		parameters.setUsersign(1);
 		parameters.setComments("Prueba inicial");
@@ -166,11 +166,11 @@ public class InventoryTEST {
 		art2.setLinetotal(0.0813);
 		art2.setObjtype("30");
 		detalle.add(art2);
-		
+
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-      
+
 		parameters.setGoodReceiptDetail(detalle);
 		parameters.setDocdate(sqlDate);
 		parameters.setTowhscode("ALM-001");
@@ -185,7 +185,7 @@ public class InventoryTEST {
 
 		System.out.println("luego de servicio");
 		System.out.println(_result.getCodigoError() + "-"
-				+ _result.getDocentry()+ "-"+ _result.getMensaje());
+				+ _result.getDocentry() + "-" + _result.getMensaje());
 
 	}
 
@@ -283,9 +283,9 @@ public class InventoryTEST {
 		List prueba = new Vector();
 		GoodsIssuesDetailTO art = new GoodsIssuesDetailTO();
 		GoodsIssuesDetailTO art2 = new GoodsIssuesDetailTO();
-		
+
 		Date fecha = new Date();
-		//parameters.setDocnum(26);
+		// parameters.setDocnum(26);
 		parameters.setObjtype("30");
 		parameters.setUsersign(1);
 		parameters.setComments("Prueba inicial");
@@ -312,11 +312,11 @@ public class InventoryTEST {
 		art2.setLinetotal(0.0813);
 		art2.setObjtype("30");
 		detalle.add(art2);
-		
+
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-      
+
 		parameters.setGoodIssuesDetail(detalle);
 		parameters.setDocdate(sqlDate);
 		parameters.setFromwhscode("ALM-001");
@@ -396,34 +396,38 @@ public class InventoryTEST {
 
 		ResultOutTO _result = new ResultOutTO();
 		TransfersTO parameters = new TransfersTO();
-
+		TransfersDetailTO art = new TransfersDetailTO();
 		List prueba = new Vector();
 		TransfersDetailTO document = new TransfersDetailTO();
 		TransfersDetailTO document1 = new TransfersDetailTO();
 
 		// document.setDocentry(1);
-		document.setLinenum(1);
-		document.setItemcode("ART-001");
-		document.setDscription("Articulo de prueba");
-		document.setQuantity(10.25);
-		document.setOpenqty(10.25);
-		document.setPrice(11.25);
-		document.setLinetotal(100.00);
-		prueba.add(document);
-		// document1.setDocentry(1);
-		document1.setLinenum(2);
-		document1.setItemcode("ART-001");
-		document1.setDscription("Articulo de prueba");
-		document1.setQuantity(10.25);
-		document1.setOpenqty(10.25);
-		document1.setPrice(11.25);
-		document1.setLinetotal(100.00);
-		prueba.add(document1);
-		parameters.setDocnum(485);
-		// parameters.setUsersign(1);
-		parameters.setDocentry(26);
-		parameters.setDoctotal(15.5);
+		art.setLinenum(1);
+
+		art.setObjtype("30");
+		art.setWhscode("ALM-001");
+		art.setItemcode("001-004-545-6114");
+		art.setPrice(1.07);
+		art.setQuantity(2.0);
+		art.setLinetotal(2.14);
+
+		prueba.add(art);
+
+		Date fecha = new Date();
+		// parameters.setDocnum(26);
+		parameters.setObjtype("30");
+		parameters.setUsersign(1);
+		parameters.setComments("Prueba inicial");
+		parameters.setDocdate(fecha);
+		parameters.setDocduedate(fecha);
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+
 		parameters.setTransfersDetail(prueba);
+		parameters.setDocdate(sqlDate);
+		parameters.setTowhscode("ALM-001");
+		parameters.setFromwhscode("ALM-002");
 		try {
 			_result = Inventory.inv_transfers_mtto(parameters, 1);
 		} catch (Exception e) {
@@ -480,17 +484,18 @@ public class InventoryTEST {
 					+ periodo.getSeries() + " - " + periodo.getDocentry());
 		}
 	}
-	public  static void  fill_JournalEntry(){
-		
+
+	public static void fill_JournalEntry() {
+
 		JournalEntryTO _result = new JournalEntryTO();
 		GoodsReceiptDetailTO art = new GoodsReceiptDetailTO();
 		GoodsReceiptDetailTO art2 = new GoodsReceiptDetailTO();
 		GoodsreceiptTO parameters = new GoodsreceiptTO();
-		//parameters.setDocnum(26);
+		// parameters.setDocnum(26);
 		parameters.setObjtype("30");
 		parameters.setUsersign(1);
 		List detalle = new Vector();
-		//1
+		// 1
 		art.setLinenum(1);
 		art.setAcctcode("1101");
 		art.setObjtype("30");
@@ -501,7 +506,7 @@ public class InventoryTEST {
 		art.setLinetotal(14.756);
 		art.setObjtype("30");
 		detalle.add(art);
-		//2
+		// 2
 		art2.setLinenum(2);
 		art2.setAcctcode("1101");
 		art2.setObjtype("30");
@@ -512,15 +517,15 @@ public class InventoryTEST {
 		art2.setLinetotal(0.0813);
 		art2.setObjtype("30");
 		detalle.add(art2);
-		
+
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-      
+
 		parameters.setGoodReceiptDetail(detalle);
 		parameters.setDocdate(sqlDate);
 		parameters.setTowhscode("ALM-001");
-		
+
 		try {
 			_result = Inventory.fill_JournalEntry(parameters);
 		} catch (Exception e) {
@@ -529,13 +534,13 @@ public class InventoryTEST {
 		}
 
 		System.out.println("luego de servicio");
-		Iterator<JournalEntryLinesTO> iterator = _result.getJournalentryList().iterator();
+		Iterator<JournalEntryLinesTO> iterator = _result.getJournalentryList()
+				.iterator();
 		while (iterator.hasNext()) {
-			JournalEntryLinesTO periodo = (JournalEntryLinesTO) iterator
-					.next();
-			System.out.println(periodo.getDebit()+ " - "
-					+ periodo.getCredit() + " - " + periodo.getAccount());
+			JournalEntryLinesTO periodo = (JournalEntryLinesTO) iterator.next();
+			System.out.println(periodo.getDebit() + " - " + periodo.getCredit()
+					+ " - " + periodo.getAccount());
 		}
-		
+
 	}
 }

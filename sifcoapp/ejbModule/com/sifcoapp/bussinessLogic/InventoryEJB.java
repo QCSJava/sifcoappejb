@@ -1645,11 +1645,14 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		transactions = fill_transaction(tranfers);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Calculo de existencias y costos
+		// Calculo de existencias y costos, actualizacion de inventarios y listas de precios 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
 			ivt = trans.calculate(ivt);
+			TransactionDAO transDAO = new TransactionDAO(conn);
+			transDAO.setIstransaccional(true);
+			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -1690,16 +1693,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 					conn);
 		}
 
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Actualizacion de existencia articulos y almacenes
-		// --------------------------------------------------------------------------------------------------------------------------------
-
-		for (Object object : transactions) {
-			TransactionDAO transDAO = new TransactionDAO(conn);
-			transDAO.setIstransaccional(true);
-			TransactionTo ivt = (TransactionTo) object;
-			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
-		}
+		
+		
 
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
@@ -1900,51 +1895,9 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		boolean ind = false;
 		Double total = zero;
 		List list = parameters.getTransfersDetail();
-		List aux = new Vector();
-		List<List> listas = new Vector();
-		List aux1 = new Vector();
-		// recorre la lista de detalles
-		for (Object obj : list) {
-			TransfersDetailTO good = (TransfersDetailTO) obj;
-			String cod = good.getAcctcode();
-			List lisHija = new Vector();
-
-			// comparando lista aux de nodos visitados
-			for (Object obj2 : aux) {
-				TransfersDetailTO good2 = (TransfersDetailTO) obj2;
-				if (cod.equals(good2.getAcctcode())) {
-					ind = true;
-				}
-			}
-			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
-			// en otra lista
-			if (ind == false) {
-				for (Object obj3 : list) {
-					TransfersDetailTO good3 = (TransfersDetailTO) obj3;
-					if (cod.equals(good3.getAcctcode())) {
-						lisHija.add(good3);
-					}
-				}
-				// guarda en la lista de listas
-				listas.add(lisHija);
-			}
-
-			aux.add(good);
-
-		}
-		// recorre la lista de listas para encontrar los detalles de el asiento
-		// contable
-		List detail = new Vector();
-		for (List obj1 : listas) {
-			List listaDet = obj1;
-			Double sum = zero;
-			String acc = null;
-			for (Object obj2 : listaDet) {
-				TransfersDetailTO newGood = (TransfersDetailTO) obj2;
-				sum = sum + (newGood.getQuantity() * newGood.getPrice());
-				acc = newGood.getAcctcode();
-			}
-			// asiento contable
+		List detail= new Vector();
+	
+		// asiento contable
 
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
@@ -1960,8 +1913,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			nuevo.setMemo(parameters.getJrnlmemo());
 			nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 			nuevo.setRef2(parameters.getRef1());
-			nuevo.setLoctotal(sum);
-			nuevo.setSystotal(sum);
+			nuevo.setLoctotal(parameters.getDoctotal());
+			nuevo.setSystotal(parameters.getDoctotal());
 			nuevo.setTransrate(0.0);
 			nuevo.setDuedate(parameters.getDocduedate());
 			nuevo.setTaxdate(parameters.getDocdate());
@@ -1981,23 +1934,34 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 			// llenado de los hijos
 			art1.setLine_id(1);
-			// buscar la cuenta asignada al almacen
+			// buscar la cuenta asignada al almacen origen 
 			AdminDAO admin = new AdminDAO();
 			BranchTO branch = new BranchTO();
 			// buscando la cuenta asignada de cuenta de existencias al almacen
-
 			branch = admin.getBranchByKey(parameters.getFromwhscode());
 			art1.setAccount(branch.getBalinvntac());
-
-			if (branch.getBalinvntac() == null) {
+          if (branch.getBalinvntac() == null) {
 				throw new Exception(
 						"No hay una cuenta de Inventario asignada al almacen");
 			}
+		
+			
+			
+			// buscando la cuenta asignada de cuenta de existencias al almacen destino
+		    admin = new AdminDAO();
+			BranchTO branch1 = new BranchTO();
+			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+			if (branch1.getBalinvntac() == null) {
+				throw new Exception(
+						"No hay una cuenta de Inventario asignada al almacen");
+			}
+			
+			
 
-			art1.setCredit(sum);
+			art1.setCredit(parameters.getDoctotal());
 			art1.setDuedate(parameters.getDocduedate());
 			art1.setShortname(branch.getBalinvntac());
-			art1.setContraact(acc);
+			art1.setContraact(branch1.getBalinvntac());
 			art1.setLinememo("entrada de mercancias");
 			art1.setRefdate(parameters.getDocduedate());
 			art1.setRef1(parameters.getRef1());
@@ -2014,7 +1978,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setClosed("N");
 			art1.setGrossvalue(0.0);
 			art1.setBalduedeb(0.0);
-			art1.setBalduecred(sum);
+			art1.setBalduecred(parameters.getDoctotal());
 			art1.setIsnet("Y");
 			art1.setTaxtype(0);
 			art1.setTaxpostacc("N");
@@ -2026,13 +1990,14 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art1.setTranstype(parameters.getObjtype());
 			detail.add(art1);
 
+			
 			art2.setLine_id(2);
-			branch = admin.getBranchByKey(parameters.getTowhscode());
-			art2.setAccount(branch.getBalinvntac());
+			
+			art2.setAccount(branch1.getBalinvntac());
 
-			art2.setDebit(sum);
+			art2.setDebit(parameters.getDoctotal());
 			art2.setDuedate(parameters.getDocduedate());
-			art2.setShortname(acc);
+			art2.setShortname(branch1.getBalinvntac());
 			art2.setContraact(branch.getBalinvntac());
 			art2.setLinememo("entrada de mercancias");
 			art2.setRefdate(parameters.getDocduedate());
@@ -2049,7 +2014,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setVatamount(0.0);
 			art2.setClosed("N");
 			art2.setGrossvalue(0.0);
-			art2.setBalduedeb(sum);
+			art2.setBalduedeb(parameters.getDoctotal());
 			art2.setBalduecred(0.0);
 			art2.setIsnet("Y");
 			art2.setTaxtype(0);
@@ -2062,7 +2027,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setTranstype(parameters.getObjtype());
 			detail.add(art2);
 
-		}
+		
 		nuevo.setJournalentryList(detail);
 		return nuevo;
 
@@ -2332,6 +2297,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		boolean ind = false;
 		Double total = zero;
 		String acc = null;
+		int n=1;
 		List list = parameters.getGoodReceiptDetail();
 		List aux = new Vector();
 		List<List> listas = new Vector();
@@ -2394,7 +2360,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			// llenado de los hijos
 			
 
-			art2.setLine_id(2);
+			art2.setLine_id(n);
 			art2.setAccount(acc);
 			art2.setCredit(sum);
 			art2.setDuedate(parameters.getDocduedate());
@@ -2427,12 +2393,13 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setOrdered("N");
 			art2.setTranstype(parameters.getObjtype());
 			detail.add(art2);
+			n++;
 
 		}
 		
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 
-		art1.setLine_id(1);
+		art1.setLine_id(n);
 		// buscar la cuenta asignada al almacen
 		
 		art1.setAccount(branch.getBalinvntac());
