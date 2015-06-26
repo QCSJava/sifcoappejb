@@ -389,7 +389,7 @@ public class transactionEJB {
 			// --------------------------------------------------------------------------------------------------------
 			// multiplicando por el factor de unidadades de ventas
 			newOnhand = onhand - (transQuantity * DBArticle.getNumInSale());
-			newWhsOnhand = whsOnhand - transQuantity;
+			newWhsOnhand = whsOnhand - (transQuantity * DBArticle.getNumInSale());
 			// Actualizar objeto princicpal
 			transaction.setNewOnhand(newOnhand);
 			transaction.setNewWhsOnhand(newWhsOnhand);

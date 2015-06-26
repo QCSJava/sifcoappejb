@@ -78,6 +78,7 @@ public class BankEJBClient {
 		lstPeriods = bean.get_ges_colecturia(parameters);
 		return lstPeriods;
 	}
+	
 
 	public ColecturiaTO get_ges_colecturiaByKey(int parameters)
 			throws Exception {
@@ -92,6 +93,13 @@ public class BankEJBClient {
 		// TODO Auto-generated method stub
 		List lstPeriods = new Vector();
 		lstPeriods = bean.get_ges_colecturiaConcept();
+		return lstPeriods;
+	}
+	public List get_ges_colecturiaConcept1(String Code)
+			throws Exception {
+		// TODO Auto-generated method stub
+		List lstPeriods = new Vector();
+		lstPeriods = bean.get_ges_colecturiaConcept1( Code);
 		return lstPeriods;
 	}
 	public ResultOutTO ges_ges_col2_colecturiaConcepts_mtto(ColecturiaConceptTO parameters, int action)throws Exception{
