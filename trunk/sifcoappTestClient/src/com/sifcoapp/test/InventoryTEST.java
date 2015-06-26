@@ -404,7 +404,7 @@ public class InventoryTEST {
 		// document.setDocentry(1);
 		art.setLinenum(1);
 
-		art.setObjtype("30");
+		art.setObjtype("32");
 		art.setWhscode("ALM-001");
 		art.setItemcode("001-004-545-6114");
 		art.setPrice(1.07);
@@ -415,7 +415,7 @@ public class InventoryTEST {
 
 		Date fecha = new Date();
 		// parameters.setDocnum(26);
-		parameters.setObjtype("30");
+		parameters.setObjtype("32");
 		parameters.setUsersign(1);
 		parameters.setComments("Prueba inicial");
 		parameters.setDocdate(fecha);
@@ -426,8 +426,8 @@ public class InventoryTEST {
 
 		parameters.setTransfersDetail(prueba);
 		parameters.setDocdate(sqlDate);
-		parameters.setTowhscode("ALM-001");
-		parameters.setFromwhscode("ALM-002");
+		parameters.setTowhscode("ALM-002");
+		parameters.setFromwhscode("ALM-001");
 		try {
 			_result = Inventory.inv_transfers_mtto(parameters, 1);
 		} catch (Exception e) {

@@ -393,17 +393,7 @@ public class SalesEJB implements SalesEJBRemote {
 					conn);
 		}
 
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Actualizacion de existencia articulos y almacenes
-		// --------------------------------------------------------------------------------------------------------------------------------
-
-		/*
-		 * for (Object object : transactions) { TransactionDAO transDAO = new
-		 * TransactionDAO(conn); transDAO.setIstransaccional(true);
-		 * TransactionTo ivt = (TransactionTo) object; res_UpdateOnhand =
-		 * transDAO.Update_Onhand_articles(ivt); }
-		 */
-
+		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -3087,6 +3077,8 @@ public class SalesEJB implements SalesEJBRemote {
 		ResultOutTO _result = new ResultOutTO();
 		boolean ind = false;
 		Double total = zero;
+		Double sum=zero;
+		String acc=null;
 		List list = parameters.getDeliveryDetails();
 		List aux = new Vector();
 		List<List> listas = new Vector();
@@ -3125,13 +3117,14 @@ public class SalesEJB implements SalesEJBRemote {
 		List detail = new Vector();
 		for (List obj1 : listas) {
 			List listaDet = obj1;
-			Double sum = zero;
-			String acc = null;
+			 sum = zero;
+		    acc = null;
 			for (Object obj2 : listaDet) {
 				DeliveryDetailTO newGood = (DeliveryDetailTO) obj2;
 				sum = sum + (newGood.getQuantity() * newGood.getPrice());
 				acc = newGood.getAcctcode();
 			}
+		}
 			// asiento contable
 
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
@@ -3139,31 +3132,8 @@ public class SalesEJB implements SalesEJBRemote {
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
 			// llenado del asiento contable
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
-			// // nuevo.setBatchnum(1);
-			// LLenado del padre
-
-			nuevo.setObjtype("5");
-			nuevo.setMemo(parameters.getJrnlmemo());
-			nuevo.setUsersign(parameters.getUsersign());
-			nuevo.setLoctotal(sum);
-			nuevo.setSystotal(sum);
-			nuevo.setBtfstatus("O");
-			nuevo.setTranstype(parameters.getObjtype());
-			nuevo.setBaseref(parameters.getRef1());
-			nuevo.setRefdate(parameters.getDocdate());
-			nuevo.setRef1(parameters.getRef1());
-			nuevo.setDuedate(parameters.getDocduedate());
-			nuevo.setTaxdate(parameters.getTaxdate());
-			nuevo.setRefndrprt("N");
-			nuevo.setAdjtran("N");
-			nuevo.setAutostorno("N");
-			nuevo.setAutovat("N");
-			nuevo.setPrinted("N");
-			nuevo.setAutowt("N");
-			nuevo.setDeferedtax("N");
-
-			// nuevo.setRef2(ref2);
-
+		
+			
 			// llenado de los hijos
 			art1.setLine_id(1);
 			// buscar la cuenta asignada al almacen
@@ -3178,12 +3148,18 @@ public class SalesEJB implements SalesEJBRemote {
 				throw new Exception(
 						"No hay una cuenta de Inventario asignada al almacen");
 			}
+			//-----------------------------------------------------------------------------------------------------------------------------------------------
+			art2.setLine_id(2);
+			admin = new AdminDAO();
+			BranchTO branch1 = new BranchTO();
+			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+			art2.setAccount(branch1.getBalinvntac());
 
 			art1.setCredit(sum);
 			art1.setDuedate(parameters.getDocduedate());
 			art1.setShortname(branch.getBalinvntac());
-			art1.setContraact(acc);
-			art1.setLinememo("entrada de mercancias");
+			art1.setContraact(branch1.getBalinvntac());
+			art1.setLinememo("nota  de remision ");
 			art1.setRefdate(parameters.getDocduedate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
@@ -3212,17 +3188,12 @@ public class SalesEJB implements SalesEJBRemote {
 
 			detail.add(art1);
 
-			art2.setLine_id(2);
-			admin = new AdminDAO();
-			BranchTO branch1 = new BranchTO();
-			branch1 = admin.getBranchByKey(parameters.getTowhscode());
-			art2.setAccount(branch1.getBalinvntac());
-
+			
 			art2.setDebit(sum);
 			art2.setDuedate(parameters.getDocduedate());
-			art2.setShortname(acc);
+			art2.setShortname(branch1.getBalinvntac());
 			art2.setContraact(branch.getBalinvntac());
-			art2.setLinememo("entrada de mercancias");
+			art2.setLinememo("nota de remision ");
 			art2.setRefdate(parameters.getDocduedate());
 			art2.setRef1(parameters.getRef1());
 			// art2.setRef2();
@@ -3251,7 +3222,26 @@ public class SalesEJB implements SalesEJBRemote {
 
 			detail.add(art2);
 
-		}
+		
+		nuevo.setObjtype("5");
+		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setLoctotal(sum);
+		nuevo.setSystotal(sum);
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(parameters.getObjtype());
+		nuevo.setBaseref(parameters.getRef1());
+		nuevo.setRefdate(parameters.getDocdate());
+		nuevo.setRef1(parameters.getRef1());
+		nuevo.setDuedate(parameters.getDocduedate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setRefndrprt("N");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setAutovat("N");
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
 		nuevo.setJournalentryList(detail);
 		return nuevo;
 

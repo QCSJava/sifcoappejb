@@ -160,8 +160,7 @@ public class TransactionDAO extends CommonDAO {
 		articles = transaction.getArticle();
 
 		// si es una nota de remision
-		if (transaction.getObjtype().equals("12")
-				|| transaction.getObjtype().equals("32")) {
+		if (transaction.getObjtype().equals("12")|| transaction.getObjtype().equals("32")) {
 
 			this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
 
@@ -186,10 +185,11 @@ public class TransactionDAO extends CommonDAO {
 			this.setString(3, "whscode", transaction.getWhscode());
 
 			lstResultSet = this.runUpdate();
-			// actualiza lista de precios con el ultimo precio del costo
-			// promedio
-			// para la lista de el ultimo precio predeterminado
+			
 		}
+		
+		
+		
 		// -----------------------------------------------------------------------------------------------------------------------------------------
 		// actualizacion de listas de precios
 		// compra de mercancia

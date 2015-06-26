@@ -100,5 +100,56 @@ public class ColecturiaConceptDAO extends CommonDAO {
 			}
 		}
 		return _return;
+		
+	}
+	public List get_ges_colecturiaConcept1(String Code) throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{sp_get_businesspartnerconcept(?) }");
+		this.setString(1, "_cardcode", Code);
+		
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
+					colecturia.setLinenum(rowsetActual.getInt(1));
+					colecturia.setLinestatus(rowsetActual.getString(2));
+					colecturia.setObjtype(rowsetActual.getString(3));
+					colecturia.setDscription(rowsetActual.getString(4));
+					colecturia.setAcctcode(rowsetActual.getString(5));
+					colecturia.setAcctcode2(rowsetActual.getString(6));
+					colecturia.setAcctcode3(rowsetActual.getString(7));
+					colecturia.setCtlaccount(rowsetActual.getString(8));
+					colecturia.setOcrcode(rowsetActual.getString(9));
+					colecturia.setTransid(rowsetActual.getInt(10));
+					colecturia.setConfirmed(rowsetActual.getString(11));
+					colecturia.setPeymethod(rowsetActual.getString(12));
+					colecturia.setPaidsum(rowsetActual.getDouble(13));
+					colecturia.setVatsum(rowsetActual.getDouble(14));
+					colecturia.setDocsubtype(rowsetActual.getString(15));
+					colecturia.setValue1(rowsetActual.getString(16));
+					colecturia.setValue2(rowsetActual.getString(17));
+					colecturia.setValue3(rowsetActual.getString(18));
+
+					_return.add(colecturia);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
 	}
 }

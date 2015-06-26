@@ -230,6 +230,18 @@ public class BankEJB implements BankEJBRemote {
 		}
 		return _return;
 	}
+	public List get_ges_colecturiaConcept1(String Code) throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
+		try {
+			_return = DAO.get_ges_colecturiaConcept1(Code);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
 
 	public ResultOutTO ges_ges_col2_colecturiaConcepts_mtto(
 			ColecturiaConceptTO parameters, int action) throws EJBException {
