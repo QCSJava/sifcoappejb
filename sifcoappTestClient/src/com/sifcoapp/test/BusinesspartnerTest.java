@@ -90,41 +90,14 @@ public class BusinesspartnerTest {
 	public static void businesspartner_mtto(){
 		ResultOutTO resp=null;
 		List ne=new Vector();
-		BusinesspartnerTO bus= new BusinesspartnerTO();
-		bus.setCardcode("004");
-		bus.setCardname("hhhhhh");
-		bus.setGroupcode("none");
-		BusinesspartnerAcountTO busi= new BusinesspartnerAcountTO();
-		BusinesspartnerAcountTO busin= new BusinesspartnerAcountTO();
-		busi.setBalance(0.0);
-		busi.setAcctcode("41060112204");
-		busi.setObjtype("1");
-		busi.setCardcode("004");
-		ne.add(busi);
-		
-		busin.setBalance(0.0);
-		busin.setAcctype(2);
-		busin.setAcctcode("4jjjdsdsgj");
-		busin.setObjtype("1");
-		busin.setCardcode("004");
-		ne.add(busin);
-		
+	
 		BusinesspartnerInTO lstPeriods2= new BusinesspartnerInTO();
 		 BusinesspartnerTO lstPeriods3 = null;
 			BusinesspartnerTO nuevo = new BusinesspartnerTO();
 			
 			
-			//nuevo.setCardname("P");
-			//nuevo.setSeries(42);
-			/*
-			String nuevo="T";
-			lstPeriods = catalog.get_businesspartnerBykey(nuevo);
-			System.out.println(lstPeriods.getGroupcode()+ " - "
-					+ lstPeriods.getNit() + " - "
-					+ lstPeriods.getAddid());
-			/**/
 			try {
-				lstPeriods3 = catalog.get_businesspartnerBykey("00001");
+				lstPeriods3 = catalog.get_businesspartnerBykey("004");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -140,8 +113,16 @@ public class BusinesspartnerTest {
 		
 		
 		//bus.setBusinesspartnerAcount(ne);
-			lstPeriods3.setDebpayacct("1102010112");
-			lstPeriods3.setValidfor("Y");
+			
+			List aux=lstPeriods3.getBusinesspartnerAcount();
+			BusinesspartnerAcountTO nuevo1= new BusinesspartnerAcountTO();
+			nuevo1.setAcctcode("110102010104");
+			nuevo1.setCardcode("004");
+			nuevo1.setBalance(0.0);
+			nuevo1.setAcctype(17);
+			aux.add(nuevo1);
+			lstPeriods3.setBusinesspartnerAcount(aux);
+			
 		try {
 			resp= catalog.cat_bpa_businesspartner_mtto(lstPeriods3,2);
 		} catch (Exception e) {
