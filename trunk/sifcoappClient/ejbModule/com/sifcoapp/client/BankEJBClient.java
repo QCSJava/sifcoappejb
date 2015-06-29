@@ -99,7 +99,7 @@ public class BankEJBClient {
 			throws Exception {
 		// TODO Auto-generated method stub
 		List lstPeriods = new Vector();
-		lstPeriods = bean.get_ges_colecturiaConcept1( Code);
+		lstPeriods = bean.get_ges_colecturiaConcept1(Code);
 		return lstPeriods;
 	}
 	public ResultOutTO ges_ges_col2_colecturiaConcepts_mtto(ColecturiaConceptTO parameters, int action)throws Exception{
