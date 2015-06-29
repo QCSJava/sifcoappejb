@@ -102,14 +102,15 @@ public class ColecturiaConceptDAO extends CommonDAO {
 		return _return;
 		
 	}
-	public List get_ges_colecturiaConcept1(String Code) throws Exception {
+	
+	
+	public List get_ges_colecturiaConcept1(String code) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{sp_get_businesspartnerconcept(?) }");
-		this.setString(1, "_cardcode", Code);
-		
+		this.setDbObject("{call sp_get_businesspartnerconcept(?)}");
+		this.setString(1, "_cardcode", code);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 
@@ -138,7 +139,7 @@ public class ColecturiaConceptDAO extends CommonDAO {
 					colecturia.setPaidsum(rowsetActual.getDouble(13));
 					colecturia.setVatsum(rowsetActual.getDouble(14));
 					colecturia.setDocsubtype(rowsetActual.getString(15));
-					colecturia.setValue1(rowsetActual.getString(16));
+					colecturia.setValue1(rowsetActual.getDouble(16)+"");
 					colecturia.setValue2(rowsetActual.getString(17));
 					colecturia.setValue3(rowsetActual.getString(18));
 

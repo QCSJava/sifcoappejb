@@ -231,5 +231,24 @@ public class BankTest {
 					+ " - " + periodo.getDscription());
 		}
 	}
+	public static void getColecturiaConcept1() {
+		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
+		List lstPeriods3 = null;
+		// nuevo.setDocentry(1);
+
+		try {
+			lstPeriods3 = catalog.get_ges_colecturiaConcept1("004");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
+		while (iterator.hasNext()) {
+			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
+			System.out.println(periodo.getValue1() + "  "
+					+ periodo.getLinenum() + " - " + periodo.getObjtype()
+					+ " - " + periodo.getDscription());
+		}
+	}
 
 }
