@@ -9,9 +9,6 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
-
-
-
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryLinesDAO;
@@ -27,6 +24,8 @@ import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
+import com.sifcoapp.objects.admin.dao.ParameterDAO;
+import com.sifcoapp.objects.admin.to.parameterTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
@@ -720,6 +719,39 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public List getrecurringPosting_user(RecurringPostingsInTO parameters)
+			throws EJBException {
+		// TODO Auto-generated method stub
+		List _return = new Vector();
+		ParameterDAO parameter = new ParameterDAO();
+		parameterTO param = new parameterTO();
+		// cosulta en la tabla parametros para comparar si el usuario es
+		// administrador
+		try {
+			param = parameter.getParameterbykey(8);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// si es administrador llama al metodo getrecurringPosting() para
+		// mostrar todos los recurringPosting
+		if (parameters.getUsersign() == param.getUsersign()) {
+
+			_return = getrecurringPosting(parameters);
+		} else {
+
+			AccountingDAO DAO = new AccountingDAO();
+			try {
+				_return = DAO.getrecurringPosting_user(parameters);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw (EJBException) new EJBException(e);
+			}
+		}
+		return _return;
+
+	}
+
 	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,
 			int _instance) throws EJBException {
 		// TODO Auto-generated method stub
@@ -795,25 +827,25 @@ public class AccountingEJB implements AccountingEJBRemote {
 	public List getEntryDetail(JournalEntryLinesInTO parameters)
 			throws Exception {
 		List journal = new Vector();
-		JournalEntryLinesTO nuevo= new JournalEntryLinesTO();
+		JournalEntryLinesTO nuevo = new JournalEntryLinesTO();
 		String action = " ";
 		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
 		JournalEntryLinesDAO DAO1 = new JournalEntryLinesDAO();
 		AccountTO account1 = new AccountTO();
-		//consultamos la cuenta para saber el groupmask para realizar los calculos
+		// consultamos la cuenta para saber el groupmask para realizar los
+		// calculos
 		account1 = getAccountByKey(parameters.getAccount());
-		
+
 		double saldo1 = 0;
-		//salñdo inicial antes de la fecha indicada
+		// salñdo inicial antes de la fecha indicada
 		journal = DAO.getEntryDetail(parameters);
-		EntryTO entrada= new EntryTO();
-        entrada.setAcctcode(parameters.getAccount());
-        entrada.setRefdate(parameters.getRefdate());
-		nuevo=DAO1.getsaldo(entrada);
+		EntryTO entrada = new EntryTO();
+		entrada.setAcctcode(parameters.getAccount());
+		entrada.setRefdate(parameters.getRefdate());
+		nuevo = DAO1.getsaldo(entrada);
 		double saldo = nuevo.getTotalvat();
 		nuevo.setLinememo("saldo inicial a la fecha");
-		
-		
+
 		// -----------------------------------------------------------------------------------------------------------
 		switch (account1.getGroupmask()) {
 		// ------------------------------------------------------------------------------------------------------------------
@@ -821,7 +853,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// ------------------------------------------------------------------------------------------------------------------
 
 		case 1:
-			
+
 			Iterator<JournalEntryLinesTO> iterator = journal.iterator();
 			while (iterator.hasNext()) {
 				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
@@ -1029,7 +1061,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				}
 
 				if (action.equals("C")) {
-					saldo = saldo +Detalle.getCredit();
+					saldo = saldo + Detalle.getCredit();
 					Detalle.setTotalvat(saldo);
 
 				} else if (action.equals("D")) {
@@ -1080,12 +1112,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 					"Error en cuenta contable, informar al administrador");
 		}
 		journal.add(nuevo);
-		
+
 		return journal;
 	}
-	
-	public JournalEntryLinesTO  getsaldo(EntryTO parameters)throws EJBException {
-		JournalEntryLinesTO _return = new JournalEntryLinesTO() ;
+
+	public JournalEntryLinesTO getsaldo(EntryTO parameters) throws EJBException {
+		JournalEntryLinesTO _return = new JournalEntryLinesTO();
 
 		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
 		try {

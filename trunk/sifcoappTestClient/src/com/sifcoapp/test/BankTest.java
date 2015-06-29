@@ -16,6 +16,7 @@ import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.sales.to.SalesTO;
 
 public class BankTest {
 
@@ -237,7 +238,7 @@ public class BankTest {
 		// nuevo.setDocentry(1);
 
 		try {
-			lstPeriods3 = catalog.get_ges_colecturiaConcept1("004");
+			lstPeriods3 = catalog.get_ges_colecturiaConcept1("00001");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -245,7 +246,15 @@ public class BankTest {
 		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
 			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
-			System.out.println(periodo.getValue1() + "  "
+			if(periodo.getObjtype().equals("Y")){
+				
+				Iterator<SalesTO> iterator1 = periodo.getFacturas().iterator();
+				while (iterator1.hasNext()) {
+					SalesTO sale = (SalesTO) iterator1.next();
+					System.out.println("Lista de facturas de venta"+"-"+sale.getCardcode());
+			}
+			}
+			System.out.println("lista de conceptos" +"-"+periodo.getValue1() + "  "
 					+ periodo.getLinenum() + " - " + periodo.getObjtype()
 					+ " - " + periodo.getDscription());
 		}
