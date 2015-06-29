@@ -21,6 +21,7 @@ public class RecurringPostingsInTO extends CommonTO  {
 	private String ref2;
 	private String memo;
 	private String ref3;
+	private int usersign;
 
 
 	public RecurringPostingsInTO() {
@@ -30,7 +31,7 @@ public class RecurringPostingsInTO extends CommonTO  {
 
 
 	public RecurringPostingsInTO(String rcurcode, String rcurdesc, String ref1,
-			String ref2, String memo, String ref3) {
+			String ref2, String memo, String ref3,int usersign) {
 		super();
 		this.rcurcode = rcurcode;
 		this.rcurdesc = rcurdesc;
@@ -38,6 +39,7 @@ public class RecurringPostingsInTO extends CommonTO  {
 		this.ref2 = ref2;
 		this.memo = memo;
 		this.ref3 = ref3;
+		this.usersign=usersign;
 	}
 
 
@@ -98,6 +100,16 @@ public class RecurringPostingsInTO extends CommonTO  {
 
 	public void setRef3(String ref3) {
 		this.ref3 = ref3;
+	}
+
+
+	public int getUsersign() {
+		return usersign;
+	}
+
+
+	public void setUsersign(int usersign) {
+		this.usersign = usersign;
 	}
 
 	

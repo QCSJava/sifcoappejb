@@ -38,6 +38,7 @@ import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sifcoapp.objects.purchase.dao.PurchaseDetailDAO;
 import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
 import com.sifcoapp.objects.sales.to.SalesDetailTO;
+import com.sifcoapp.objects.sales.to.SalesInTO;
 import com.sifcoapp.objects.sales.to.SalesTO;
 
 @Stateless
@@ -230,16 +231,33 @@ public class BankEJB implements BankEJBRemote {
 		}
 		return _return;
 	}
+
 	public List get_ges_colecturiaConcept1(String Code) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
+		ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
+		List facturas = new Vector();
+		SalesInTO aux = new SalesInTO();
+		aux.setCardcode(Code);
+		SalesEJB sales = new SalesEJB();
+		try {
+			facturas = sales.getSales(aux);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// cosulta del colecturia concept con su saldo de la cuenta
 		try {
 			_return = DAO.get_ges_colecturiaConcept1(Code);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		colecturia.setObjtype("Y");
+		colecturia.setFacturas(facturas);
+		_return.add(colecturia);
 		return _return;
 	}
 
@@ -558,14 +576,13 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setAutowt("N");
 		nuevo.setDeferedtax("N");
 		nuevo.setJournalentryList(detail);
-		//---------------------------------------------------------------------------------------------------------------------------------------------------------
-		//metodo para reagrupar cuentas del mismo codigo 
-		//---------------------------------------------------------------------------------------------------------------------------------------------------------
-		JournalEntryTO journal= new JournalEntryTO();
-		journal=fill_JournalEntry_Unir(nuevo);
-		//---------------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		// metodo para reagrupar cuentas del mismo codigo
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		JournalEntryTO journal = new JournalEntryTO();
+		journal = fill_JournalEntry_Unir(nuevo);
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 		return journal;
 
 	}
@@ -578,7 +595,7 @@ public class BankEJB implements BankEJBRemote {
 		Double total = zero;
 		Double sum_debe = 0.0;
 		Double sum_credit = 0.0;
-		int n=1;
+		int n = 1;
 		// copiando la lista de los detalles de el asiento contable
 		List list = parameters.getJournalentryList();
 		// --------------------------------------------------------
@@ -623,13 +640,13 @@ public class BankEJB implements BankEJBRemote {
 			List listaDet = obj1;
 			Double sum = zero;
 			String acc = null;
-			String c_acc= null;
+			String c_acc = null;
 			for (Object obj2 : listaDet) {
 				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
 				sum_debe = sum_debe + oldjournal.getDebit();
 				sum_credit = sum_credit + oldjournal.getCredit();
 				acc = oldjournal.getAccount();
-				c_acc=oldjournal.getContraact();
+				c_acc = oldjournal.getContraact();
 			}
 
 			// asiento contable
@@ -652,7 +669,7 @@ public class BankEJB implements BankEJBRemote {
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
 			// llenado del asiento contable
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
-			
+
 			art1.setLine_id(n);
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
@@ -709,9 +726,8 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setAutowt("N");
 		nuevo.setDeferedtax("N");
 		nuevo.setJournalentryList(detail);
-		
+
 		return nuevo;
 
-		
 	}
 }

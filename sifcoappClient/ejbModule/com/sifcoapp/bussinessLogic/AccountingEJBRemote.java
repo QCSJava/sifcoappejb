@@ -61,6 +61,8 @@ public interface AccountingEJBRemote {
 	
 	public List getrecurringPosting(RecurringPostingsInTO parameters) throws EJBException;
 	
+	public List getrecurringPosting_user(RecurringPostingsInTO parameters) throws EJBException;
+	
 	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,int _instance) throws EJBException;
 	
 	public List getrecurringPostingExecute() throws EJBException;

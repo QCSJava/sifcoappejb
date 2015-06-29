@@ -1059,6 +1059,61 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	
+	public List getrecurringPosting_user(RecurringPostingsInTO parameters)
+			throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_recurringpostings_by_user(?)}");
+		this.setInt(1, "_usersign", parameters.getUsersign());
+
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					RecurringPostingsTO Diary = new RecurringPostingsTO();
+					Diary.setRcurcode(rowsetActual.getString(1));
+					Diary.setRcurdesc(rowsetActual.getString(2));
+					Diary.setFrequency(rowsetActual.getString(3));
+					Diary.setRemind(rowsetActual.getInt(4));
+					Diary.setLastposted(rowsetActual.getDate(5));
+					Diary.setNextdeu(rowsetActual.getDate(6));
+					Diary.setEntrycount(rowsetActual.getInt(7));
+					Diary.setVolume(rowsetActual.getDouble(8));
+					Diary.setVolcurr(rowsetActual.getString(9));
+					Diary.setFinancvol(rowsetActual.getDouble(10));
+					Diary.setRef1(rowsetActual.getString(11));
+					Diary.setRef2(rowsetActual.getString(12));
+					Diary.setTranscode(rowsetActual.getString(13));
+					Diary.setMemo(rowsetActual.getString(14));
+					Diary.setLimitrtrns(rowsetActual.getString(15));
+					Diary.setReturns(rowsetActual.getInt(16));
+					Diary.setLimitdate(rowsetActual.getDate(17));
+					Diary.setInstance(rowsetActual.getInt(18));
+					Diary.setAutovat(rowsetActual.getString(19));
+					Diary.setManagewtax(rowsetActual.getString(20));
+					Diary.setRef3(rowsetActual.getString(21));
+					Diary.setDeferedtax(rowsetActual.getString(22));
+					Diary.setUsersign(rowsetActual.getInt(23));
+					Diary.setUpdatedate(rowsetActual.getDate(24));
+					Diary.setUpdatetime(rowsetActual.getInt(25));
+
+					_return.add(Diary);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 
 	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,
 			int _instance) throws Exception {

@@ -2,6 +2,7 @@ package com.sifcoapp.objects.bank.to;
 
 import com.sifcoapp.objects.common.to.CommonTO;
 
+import java.util.List;
 import java.util.Date;
 
 public class ColecturiaConceptTO extends CommonTO {
@@ -29,6 +30,7 @@ public class ColecturiaConceptTO extends CommonTO {
 	private String value1;
 	private String value2;
 	private String value3;
+	private List Facturas;
 
 	public ColecturiaConceptTO() {
 		super();
@@ -39,7 +41,7 @@ public class ColecturiaConceptTO extends CommonTO {
 			String dscription, String acctcode, String acctcode2,
 			String acctcode3, String ctlaccount, String ocrcode, int transid,
 			String confirmed, String peymethod, Double paidsum, Double vatsum,
-			String docsubtype, String value1, String value2, String value3) {
+			String docsubtype, String value1, String value2, String value3,List Facturas) {
 		super();
 		this.linenum = linenum;
 		this.linestatus = linestatus;
@@ -203,6 +205,14 @@ public class ColecturiaConceptTO extends CommonTO {
 
 	public void setValue3(String value3) {
 		this.value3 = value3;
+	}
+
+	public List getFacturas() {
+		return Facturas;
+	}
+
+	public void setFacturas(List facturas) {
+		Facturas = facturas;
 	}
 
 }

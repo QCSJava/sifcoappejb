@@ -197,7 +197,12 @@ public class AccountingEJBClient {
 		_return = bean.getrecurringPosting(parameters);
 		return _return;
 	}
-
+	public List getrecurringPosting_user(RecurringPostingsInTO parameters)
+			throws EJBException {
+		List _return = new Vector();
+		_return = bean.getrecurringPosting_user(parameters);
+		return _return;
+	}
 	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,
 			int _instance) throws EJBException {
 		RecurringPostingsTO _return = new RecurringPostingsTO();
