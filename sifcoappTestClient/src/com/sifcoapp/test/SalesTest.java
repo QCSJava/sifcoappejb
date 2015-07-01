@@ -56,6 +56,7 @@ public class SalesTest {
 
 		List lstPeriods = new Vector();
 		SalesInTO nuevo = new SalesInTO();
+		nuevo.setCardcode("00001");
 		
 		try {
 			
@@ -70,7 +71,7 @@ public class SalesTest {
 		while (iterator.hasNext()) {
 			SalesTO periodo = (SalesTO) iterator.next();
 			System.out.println(periodo.getDocnum() + " - "
-					+ periodo.getSeries() + " - " + periodo.getDocentry());
+					+ periodo.getJrnlmemo() + " - " + periodo.getDocentry());
 		}
 	}
 

@@ -476,6 +476,9 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
 			ivt = trans.calculate(ivt);
+			TransactionDAO transDAO = new TransactionDAO(conn);
+			transDAO.setIstransaccional(true);
+			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -516,17 +519,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 					conn);
 		}
 
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Actualizacion de existencia articulos y almacenes
-		// --------------------------------------------------------------------------------------------------------------------------------
-
-		for (Object object : transactions) {
-			TransactionDAO transDAO = new TransactionDAO(conn);
-			transDAO.setIstransaccional(true);
-			TransactionTo ivt = (TransactionTo) object;
-			res_UpdateOnhand = transDAO.Update_Onhand_articles(ivt);
-		}
-
+		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
