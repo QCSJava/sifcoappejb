@@ -2052,6 +2052,9 @@ public class SalesEJB implements SalesEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
+		admin = new AdminDAO();
+		CatalogTO Catalog1 = new CatalogTO();
+		Catalog1 = admin.findCatalogByKey("IVA", 10);
 		for (Object obj : list) {
 			ClientCrediDetailTO good = (ClientCrediDetailTO) obj;
 			String cod = good.getAcctcode();
@@ -2062,7 +2065,8 @@ public class SalesEJB implements SalesEJBRemote {
 			arti = good.getArticle();
 			branch = branch + (arti.getAvgPrice() * good.getQuantity());
 			sale = sale + good.getLinetotal();
-			double impuesto = good.getLinetotal() * 0.13;
+			double impuesto = good.getLinetotal()
+					* (Double.parseDouble(Catalog1.getCatvalue()) / 100);
 			fovc = fovc + (good.getVatsum() - impuesto);
 			tax = tax + impuesto;
 			bussines = bussines
