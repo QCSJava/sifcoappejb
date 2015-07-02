@@ -292,6 +292,7 @@ public class BankEJB implements BankEJBRemote {
 		List aux = new Vector();
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
+		AdminDAO admin = new AdminDAO();
 		// consulta para encontrar todas las cuentas asignadas para el asiento
 		// contable
 		// cuenta de pasivo administrativo
@@ -300,7 +301,7 @@ public class BankEJB implements BankEJBRemote {
 		aux = bDAO.get_businesspartnerAcount(parameters.getCardcode());
 
 		ParameterDAO DAO = new ParameterDAO();
-		cuentas = DAO.getParameterbykey(7);
+		cuentas = DAO.getParameterbykey(10);
 
 		// recorre la lista de listas para encontrar los detalles de el asiento
 		// contable
@@ -318,7 +319,8 @@ public class BankEJB implements BankEJBRemote {
 			String business = null;
 			for (Object obj : aux) {
 				BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) obj;
-				if (bus.getAcctype() == count) {
+				//pendiente de confirmar si 
+				if (bus.getAcctype() == colecturia_c.getLinenum()) {
 					business = bus.getAcctcode();
 				}
 			}
@@ -371,8 +373,8 @@ public class BankEJB implements BankEJBRemote {
 			// consulta para encontrar la cuenta asignada para el IVA tomando
 			// como
 			// venta iva debito
-
-			AdminDAO admin = new AdminDAO();
+			admin = new AdminDAO();
+			
 			CatalogTO Catalog = new CatalogTO();
 			Catalog = admin.findCatalogByKey("IVA", 10);
 			if (Catalog.getCatvalue2() == null) {
@@ -422,8 +424,9 @@ public class BankEJB implements BankEJBRemote {
 			//
 			detail.add(art2);
 
+			//falta condicion de cuando llevar 
 			// ----------------------------------------------------------------------------------------------------------------------------------
-			// calculo del iva y del ingreso administrativo
+			// calculo del iva y del ingreso administrativo segundo asiento contable 
 			// ----------------------------------------------------------------------------------------------------------------------------------
 			Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
 			ingreso = sum / (1 + iva);
@@ -545,6 +548,99 @@ public class BankEJB implements BankEJBRemote {
 			art5.setOrdered("N");
 			// 5.setTranstype(parameters.getObjtype());
 			detail.add(art5);
+			n++;
+			
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+			// asiento contable de pago a bancos cuando sea neceasrio
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------	
+			
+			// codigo de cuenta del socio de negocio
+						JournalEntryLinesTO art6 = new JournalEntryLinesTO();
+						art1.setLine_id(n);
+						art1.setAccount(cuentas.getValue1());
+						//art1.setCredit(sum);
+						art6.setDebit(sum);
+						art1.setDuedate(parameters.getDocduedate());
+						art1.setShortname(business);
+						art1.setContraact(colecturia_c.getAcctcode());
+						art1.setLinememo("pago de colecturia");
+						art1.setRefdate(parameters.getDocduedate());
+						art1.setRef1(parameters.getRef1());
+						// art1.setRef2();
+						art1.setBaseref(parameters.getRef1());
+						art1.setTaxdate(parameters.getDocduedate());
+						// art1.setFinncpriod(finncpriod);
+						art1.setReltransid(-1);
+						art1.setRellineid(-1);
+						art1.setReltype("N");
+						art1.setObjtype("5");
+						art1.setVatline("N");
+						art1.setVatamount(0.0);
+						art1.setClosed("N");
+						art1.setGrossvalue(0.0);
+						art1.setBalduedeb(0.0);
+						art1.setBalduecred(art1.getCredit());
+						art1.setIsnet("Y");
+						art1.setTaxtype(0);
+						art1.setTaxpostacc("N");
+						art1.setTotalvat(0.0);
+						art1.setWtliable("N");
+						art1.setWtline("N");
+						art1.setPayblock("N");
+						art1.setOrdered("N");
+						art1.setTranstype(colecturia_c.getObjtype());
+						detail.add(art1);
+
+						n++;
+
+						JournalEntryLinesTO art7 = new JournalEntryLinesTO();
+
+						// ----------------------------------------------------------------------------------------------------------------------------------
+						// cuenta de efectivo y caja
+						// ----------------------------------------------------------------------------------------------------------------------------------
+
+						art2.setLine_id(n);
+						art2.setAccount(colecturia_c.getAcctcode());
+						//art2.setDebit(sum);
+						art2.setCredit(sum);
+						art2.setDuedate(parameters.getDocduedate());
+						art2.setShortname(colecturia_c.getAcctcode());
+						art2.setContraact(business);
+						art2.setLinememo("pago de colecturia ");
+						art2.setRefdate(parameters.getDocduedate());
+						art2.setRef1(parameters.getRef1());
+						// art2.setRef2();
+						art2.setBaseref(parameters.getRef1());
+						art2.setTaxdate(parameters.getDocduedate());
+						// art1.setFinncpriod(finncpriod);
+						art2.setReltransid(-1);
+						art2.setRellineid(-1);
+						art2.setReltype("N");
+						art2.setObjtype("5");
+						art2.setVatline("N");
+						art2.setVatamount(0.0);
+						art2.setClosed("N");
+						art2.setGrossvalue(0.0);
+						art2.setBalduedeb(sum);
+						art2.setBalduecred(0.0);
+						art2.setIsnet("Y");
+						art2.setTaxtype(0);
+						art2.setTaxpostacc("N");
+						art2.setTotalvat(0.0);
+						art2.setWtliable("N");
+						art2.setWtline("N");
+						art2.setPayblock("N");
+						art2.setOrdered("N");
+						art2.setTranstype(colecturia_c.getObjtype());
+						n = n + 1;
+						//
+						detail.add(art2);
+
+						// ----------------------------------------------------------------------------------------------------------------------------------
+						//termina asiento contable para traspaso de efectivo a banco
+						// ----------------------------------------------------------------------------------------------------------------------------------
+
+			
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// llenado del asiento contable
@@ -656,6 +752,7 @@ public class BankEJB implements BankEJBRemote {
 			// encontrando el saldo si es deudor o acreedor
 			// -----------------------------------------------------------------------------------
 			Double saldo = sum_debe - sum_credit;
+			if(saldo!=0){
 			if (saldo > 0) {
 				art1.setDebit(saldo);
 				art1.setBalduedeb(saldo);
@@ -666,6 +763,12 @@ public class BankEJB implements BankEJBRemote {
 				art1.setBalduecred(saldo);
 				art1.setBalduedeb(0.0);
 			}
+			}else{
+				art1.setDebit(0.0);
+				art1.setBalduedeb(saldo);
+				art1.setBalduecred(0.0);
+			}
+			
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
 			// llenado del asiento contable
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -730,4 +833,8 @@ public class BankEJB implements BankEJBRemote {
 		return nuevo;
 
 	}
+
+
+
+
 }

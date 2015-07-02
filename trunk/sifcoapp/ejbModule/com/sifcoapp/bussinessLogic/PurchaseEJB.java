@@ -1572,6 +1572,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// variables
 		Double total = zero;
 		Double vatsum = zero;
+		int baseentry=0;
 		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO admin = new AdminDAO();
 
@@ -1631,6 +1632,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 					* articleDetalle.getPrice());
 			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total = total + articleDetalle.getGtotal();
+			baseentry=articleDetalle.getBaseentry();
 
 		}
 
@@ -1660,6 +1662,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
 		parameters.setObjtype("20");
+        parameters.setReceiptnum(baseentry);
 		return parameters;
 	}
 
