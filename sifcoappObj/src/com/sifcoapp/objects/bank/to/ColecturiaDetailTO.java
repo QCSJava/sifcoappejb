@@ -27,7 +27,9 @@ public class ColecturiaDetailTO extends CommonTO {
 	private String value1;
 	private String value2;
 	private String value3;
-
+	private String taxstatus;
+	private String aditional_account;
+	
 	public ColecturiaDetailTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -38,7 +40,7 @@ public class ColecturiaDetailTO extends CommonTO {
 			String acctcode2, String acctcode3, String ctlaccount,
 			String ocrcode, int transid, String confirmed, String peymethod,
 			Double paidsum, Double vatsum, String docsubtype, String value1,
-			String value2, String value3) {
+			String value2, String value3,String taxstatus,String aditional_account) {
 		super();
 		this.docentry = docentry;
 		this.linenum = linenum;
@@ -59,6 +61,8 @@ public class ColecturiaDetailTO extends CommonTO {
 		this.value1 = value1;
 		this.value2 = value2;
 		this.value3 = value3;
+		this.taxstatus=taxstatus;
+		this.aditional_account=aditional_account;
 	}
 
 	public int getDocentry() {
@@ -211,6 +215,22 @@ public class ColecturiaDetailTO extends CommonTO {
 
 	public void setValue3(String value3) {
 		this.value3 = value3;
+	}
+
+	public String getTaxstatus() {
+		return taxstatus;
+	}
+
+	public void setTaxstatus(String taxstatus) {
+		this.taxstatus = taxstatus;
+	}
+
+	public String getAditional_account() {
+		return aditional_account;
+	}
+
+	public void setAditional_account(String aditional_account) {
+		this.aditional_account = aditional_account;
 	}
 
 }

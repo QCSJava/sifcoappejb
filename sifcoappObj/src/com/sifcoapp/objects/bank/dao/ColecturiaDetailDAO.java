@@ -47,7 +47,9 @@ public class ColecturiaDetailDAO extends CommonDAO {
 		this.setString(17, "_value1,", parameters.getValue1());
 		this.setString(18, "_value2,", parameters.getValue2());
 		this.setString(19, "_value3,", parameters.getValue3());
-		this.setInt(20, "_action", new Integer(action));
+		this.setString(20, "_taxstatus,", parameters.getTaxstatus());
+		this.setString(21, "_aditional_account,", parameters.getAditional_account());
+		this.setInt(22, "_action", new Integer(action));
 		v_resp = this.runQuery();
 		return this.getInt();
 	}

@@ -425,12 +425,13 @@ public class BankEJB implements BankEJBRemote {
 			detail.add(art2);
 
 			//falta condicion de cuando llevar 
+			if(colecturia_c.getAditional_account().equals("Y")){
+			
+			
 			// ----------------------------------------------------------------------------------------------------------------------------------
 			// calculo del iva y del ingreso administrativo segundo asiento contable 
 			// ----------------------------------------------------------------------------------------------------------------------------------
-			Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
-			ingreso = sum / (1 + iva);
-			Double t_iva = ingreso * iva;
+			
 			JournalEntryLinesTO art3 = new JournalEntryLinesTO();
 			// ----------------------------------------------------------------------------------------------------------------------------------
 			// pasivo administrativo
@@ -469,10 +470,17 @@ public class BankEJB implements BankEJBRemote {
 			// at2.setTranstype(parameters.getObjtype());
 			n = n + 1;
 			detail.add(art3);
+			
+			if(colecturia_c.getTaxstatus().equals("Y")){
 			// ----------------------------------------------------------------------------------------------------------------------------------
 			// iva debito fiscal
 			// ----------------------------------------------------------------------------------------------------------------------------------
-			JournalEntryLinesTO art4 = new JournalEntryLinesTO();
+			
+				Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
+				ingreso = sum / (1 + iva);
+				Double t_iva = ingreso * iva;
+				
+				JournalEntryLinesTO art4 = new JournalEntryLinesTO();
 
 			art4.setLine_id(n);
 			art4.setAccount(iva_c);
@@ -482,7 +490,7 @@ public class BankEJB implements BankEJBRemote {
 			art4.setDuedate(parameters.getDocduedate());
 			art4.setShortname(iva_c);
 			art4.setContraact(colecturia_c.getAcctcode2());
-			art4.setLinememo("entrada de mercancias");
+			art4.setLinememo("pago de colecturia");
 			art4.setRefdate(parameters.getDocduedate());
 			art4.setRef1(parameters.getRef1());
 			// rt2.setRef2();
@@ -510,6 +518,10 @@ public class BankEJB implements BankEJBRemote {
 			// t2.setTranstype(parameters.getObjtype());
 			n = n + 1;
 			detail.add(art4);
+			}else{
+				
+				ingreso = sum;
+			}
 			// ----------------------------------------------------------------------------------------------------------------------------------
 			// ingreso administrativo
 			// ----------------------------------------------------------------------------------------------------------------------------------
@@ -521,7 +533,7 @@ public class BankEJB implements BankEJBRemote {
 			art5.setDuedate(parameters.getDocduedate());
 			art5.setShortname(colecturia_c.getAcctcode3());
 			art5.setContraact(colecturia_c.getAcctcode2());
-			art5.setLinememo("entrada de mercancias");
+			art5.setLinememo("pago de colecturia");
 			art5.setRefdate(parameters.getDocduedate());
 			art5.setRef1(parameters.getRef1());
 			// art2.setRef2();
@@ -550,96 +562,8 @@ public class BankEJB implements BankEJBRemote {
 			detail.add(art5);
 			n++;
 			
-			// --------------------------------------------------------------------------------------------------------------------------------------------------------
-			// asiento contable de pago a bancos cuando sea neceasrio
-			// --------------------------------------------------------------------------------------------------------------------------------------------------------	
 			
-			// codigo de cuenta del socio de negocio
-						JournalEntryLinesTO art6 = new JournalEntryLinesTO();
-						art1.setLine_id(n);
-						art1.setAccount(cuentas.getValue1());
-						//art1.setCredit(sum);
-						art6.setDebit(sum);
-						art1.setDuedate(parameters.getDocduedate());
-						art1.setShortname(business);
-						art1.setContraact(colecturia_c.getAcctcode());
-						art1.setLinememo("pago de colecturia");
-						art1.setRefdate(parameters.getDocduedate());
-						art1.setRef1(parameters.getRef1());
-						// art1.setRef2();
-						art1.setBaseref(parameters.getRef1());
-						art1.setTaxdate(parameters.getDocduedate());
-						// art1.setFinncpriod(finncpriod);
-						art1.setReltransid(-1);
-						art1.setRellineid(-1);
-						art1.setReltype("N");
-						art1.setObjtype("5");
-						art1.setVatline("N");
-						art1.setVatamount(0.0);
-						art1.setClosed("N");
-						art1.setGrossvalue(0.0);
-						art1.setBalduedeb(0.0);
-						art1.setBalduecred(art1.getCredit());
-						art1.setIsnet("Y");
-						art1.setTaxtype(0);
-						art1.setTaxpostacc("N");
-						art1.setTotalvat(0.0);
-						art1.setWtliable("N");
-						art1.setWtline("N");
-						art1.setPayblock("N");
-						art1.setOrdered("N");
-						art1.setTranstype(colecturia_c.getObjtype());
-						detail.add(art1);
-
-						n++;
-
-						JournalEntryLinesTO art7 = new JournalEntryLinesTO();
-
-						// ----------------------------------------------------------------------------------------------------------------------------------
-						// cuenta de efectivo y caja
-						// ----------------------------------------------------------------------------------------------------------------------------------
-
-						art2.setLine_id(n);
-						art2.setAccount(colecturia_c.getAcctcode());
-						//art2.setDebit(sum);
-						art2.setCredit(sum);
-						art2.setDuedate(parameters.getDocduedate());
-						art2.setShortname(colecturia_c.getAcctcode());
-						art2.setContraact(business);
-						art2.setLinememo("pago de colecturia ");
-						art2.setRefdate(parameters.getDocduedate());
-						art2.setRef1(parameters.getRef1());
-						// art2.setRef2();
-						art2.setBaseref(parameters.getRef1());
-						art2.setTaxdate(parameters.getDocduedate());
-						// art1.setFinncpriod(finncpriod);
-						art2.setReltransid(-1);
-						art2.setRellineid(-1);
-						art2.setReltype("N");
-						art2.setObjtype("5");
-						art2.setVatline("N");
-						art2.setVatamount(0.0);
-						art2.setClosed("N");
-						art2.setGrossvalue(0.0);
-						art2.setBalduedeb(sum);
-						art2.setBalduecred(0.0);
-						art2.setIsnet("Y");
-						art2.setTaxtype(0);
-						art2.setTaxpostacc("N");
-						art2.setTotalvat(0.0);
-						art2.setWtliable("N");
-						art2.setWtline("N");
-						art2.setPayblock("N");
-						art2.setOrdered("N");
-						art2.setTranstype(colecturia_c.getObjtype());
-						n = n + 1;
-						//
-						detail.add(art2);
-
-						// ----------------------------------------------------------------------------------------------------------------------------------
-						//termina asiento contable para traspaso de efectivo a banco
-						// ----------------------------------------------------------------------------------------------------------------------------------
-
+		}
 			
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------

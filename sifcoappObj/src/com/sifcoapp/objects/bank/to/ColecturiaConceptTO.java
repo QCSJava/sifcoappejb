@@ -31,6 +31,8 @@ public class ColecturiaConceptTO extends CommonTO {
 	private String value2;
 	private String value3;
 	private List Facturas;
+	private String taxstatus;
+	private String aditional_account;
 
 	public ColecturiaConceptTO() {
 		super();
@@ -41,7 +43,7 @@ public class ColecturiaConceptTO extends CommonTO {
 			String dscription, String acctcode, String acctcode2,
 			String acctcode3, String ctlaccount, String ocrcode, int transid,
 			String confirmed, String peymethod, Double paidsum, Double vatsum,
-			String docsubtype, String value1, String value2, String value3,List Facturas) {
+			String docsubtype, String value1, String value2, String value3,List Facturas,String taxstatus,String aditional_account ) {
 		super();
 		this.linenum = linenum;
 		this.linestatus = linestatus;
@@ -61,6 +63,8 @@ public class ColecturiaConceptTO extends CommonTO {
 		this.value1 = value1;
 		this.value2 = value2;
 		this.value3 = value3;
+		this.taxstatus=taxstatus;
+		this.aditional_account=aditional_account;
 	}
 
 	public int getLinenum() {
@@ -213,6 +217,22 @@ public class ColecturiaConceptTO extends CommonTO {
 
 	public void setFacturas(List facturas) {
 		Facturas = facturas;
+	}
+
+	public String getTaxstatus() {
+		return taxstatus;
+	}
+
+	public void setTaxstatus(String taxstatus) {
+		this.taxstatus = taxstatus;
+	}
+
+	public String getAditional_account() {
+		return aditional_account;
+	}
+
+	public void setAditional_account(String aditional_account) {
+		this.aditional_account = aditional_account;
 	}
 
 }
