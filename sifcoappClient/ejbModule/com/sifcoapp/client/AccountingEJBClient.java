@@ -63,19 +63,20 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
-	public ResultOutTO validate_exist_accperiod(Date parameters) throws Exception {
+	public ResultOutTO validate_exist_accperiod(Date parameters)
+			throws Exception {
 
 		ResultOutTO _return = new ResultOutTO();
 
-		_return = bean.validate_exist_accperiod( parameters);
+		_return = bean.validate_exist_accperiod(parameters);
 
 		return _return;
 	}
 
-	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters, int action)
-			throws Exception {
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters,
+			int action) throws Exception {
 		// TODO Auto-generated method stub
-		ResultOutTO _return= new ResultOutTO();
+		ResultOutTO _return = new ResultOutTO();
 
 		_return = bean.cat_accAssignment_mtto(parameters, action);
 
@@ -197,12 +198,14 @@ public class AccountingEJBClient {
 		_return = bean.getrecurringPosting(parameters);
 		return _return;
 	}
+
 	public List getrecurringPosting_user(RecurringPostingsInTO parameters)
 			throws EJBException {
 		List _return = new Vector();
 		_return = bean.getrecurringPosting_user(parameters);
 		return _return;
 	}
+
 	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,
 			int _instance) throws EJBException {
 		RecurringPostingsTO _return = new RecurringPostingsTO();
@@ -217,7 +220,9 @@ public class AccountingEJBClient {
 		_return = bean.getrecurringPostingExecute();
 		return _return;
 	}
-	public List getEntryDetail(JournalEntryLinesInTO parameters) throws EJBException {
+
+	public List getEntryDetail(JournalEntryLinesInTO parameters)
+			throws EJBException {
 		List _return = new Vector();
 		try {
 			_return = bean.getEntryDetail(parameters);
@@ -227,7 +232,8 @@ public class AccountingEJBClient {
 		}
 		return _return;
 	}
-	public JournalEntryLinesTO  getsaldo(EntryTO parameters)throws EJBException{
+
+	public JournalEntryLinesTO getsaldo(EntryTO parameters) throws EJBException {
 		JournalEntryLinesTO _return = new JournalEntryLinesTO();
 		try {
 			_return = bean.getsaldo(parameters);
@@ -237,4 +243,28 @@ public class AccountingEJBClient {
 		}
 		return _return;
 	}
+
+	// --------------------------------------------------------------
+	// --elementos de prueba-----------------------------------------
+	public JournalEntryTO getpruebaByKey(int transid) throws EJBException {
+		JournalEntryTO _return = new JournalEntryTO();
+
+		_return = bean.getpruebaByKey(transid);
+
+		return _return;
+	}
+	
+	public ResultOutTO journal_entry_new(JournalEntryTO parameters, int action)
+			throws EJBException {
+		ResultOutTO _return = null;
+		try {
+			_return = bean.journal_entry_new(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return _return;
+	}
+
+
 }

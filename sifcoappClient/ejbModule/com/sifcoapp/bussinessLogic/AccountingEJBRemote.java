@@ -72,4 +72,10 @@ public interface AccountingEJBRemote {
 			throws Exception;
 	public JournalEntryLinesTO  getsaldo(EntryTO parameters)throws EJBException;
 	
+	//-------------------------------------------------------------------
+	//elementos de prueba
+	//---------------------------------------------------------------------
+	public JournalEntryTO getpruebaByKey(int transid) throws EJBException;
+	
+	public ResultOutTO journal_entry_new(JournalEntryTO parameters,int action) throws Exception;
 }
