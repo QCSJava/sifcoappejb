@@ -112,20 +112,34 @@ public class BankTest {
 	public static void colecturia_mtto() {
 		ResultOutTO resp = null;
 		ColecturiaTO bus = new ColecturiaTO();
-		bus.setDocentry(1);
+		
 		bus.setCardcode("000001");
 		bus.setCardname("Prueba");
 		bus.setDoctotal(10.1);
+		
+		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
+		List lstPeriods4= null;
+		// nuevo.setDocentry(1);
 
-		ColecturiaDetailTO detalle = new ColecturiaDetailTO();
-
+		try {
+			lstPeriods4 = catalog.get_ges_colecturiaConcept1("00001");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List prueba = new Vector();
+		Iterator<ColecturiaDetailTO> iterator = lstPeriods4.iterator();
+		while (iterator.hasNext()) {
+			ColecturiaDetailTO periodo = (ColecturiaDetailTO) iterator.next();
+			prueba.add(periodo);
+		}
+		ColecturiaDetailTO detalle = new ColecturiaDetailTO();
+		
 
-		detalle.setLinenum(1);
-		detalle.setAcctcode("23434");
-		detalle.setDscription("asdafsdf");
+		
 
-		prueba.add(detalle);
+		
+		
 
 		bus.setColecturiaDetail(prueba);
 
@@ -232,6 +246,8 @@ public class BankTest {
 					+ " - " + periodo.getDscription());
 		}
 	}
+	
+	
 	public static void getColecturiaConcept1() {
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods3 = null;
@@ -243,6 +259,7 @@ public class BankTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		double fac=0.0;
 		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
 			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
@@ -252,11 +269,15 @@ public class BankTest {
 				while (iterator1.hasNext()) {
 					SalesTO sale = (SalesTO) iterator1.next();
 					System.out.println("Lista de facturas de venta"+"-"+sale.getCardcode());
+					fac=fac+sale.getDoctotal();
 			}
 			}
 			System.out.println("lista de conceptos" +"-"+periodo.getValue1() + "  "
 					+ periodo.getLinenum() + " - " + periodo.getObjtype()
 					+ " - " + periodo.getDscription());
+			
+			System.out.println("total facturas"+"----"+fac);
+			
 		}
 	}
 

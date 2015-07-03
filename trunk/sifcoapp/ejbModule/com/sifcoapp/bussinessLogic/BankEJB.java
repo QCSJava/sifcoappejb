@@ -325,7 +325,7 @@ public class BankEJB implements BankEJBRemote {
 				}
 			}
 
-			sum = Double.parseDouble(colecturia_c.getValue2());
+			sum = colecturia_c.getPaidsum();
 			acc = colecturia_c.getAcctcode();
 			linememo = colecturia_c.getDscription();
 
@@ -663,6 +663,12 @@ public class BankEJB implements BankEJBRemote {
 			String c_acc = null;
 			for (Object obj2 : listaDet) {
 				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
+				if(oldjournal.getDebit()==null){
+					oldjournal.setDebit(0.0);
+				}
+				if(oldjournal.getCredit()==0){
+					oldjournal.setCredit(0.0);
+				}
 				sum_debe = sum_debe + oldjournal.getDebit();
 				sum_credit = sum_credit + oldjournal.getCredit();
 				acc = oldjournal.getAccount();

@@ -28,7 +28,7 @@ public class ColecturiaConceptDAO extends CommonDAO {
 			ColecturiaConceptTO parameters, int action) throws Exception {
 		List v_resp;
 		// s.setDbObject("{call sp_ges_col0_colecturiaconcept_mtto(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_ges_col2_colecturiaconcept_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_ges_col2_colecturiaconcept_mtto(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		this.setInt(1, "_linenum,", parameters.getLinenum());
 		this.setString(2, "_linestatus,", parameters.getLinestatus());
 		this.setString(3, "_objtype,", parameters.getObjtype());
