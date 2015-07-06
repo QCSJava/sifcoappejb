@@ -113,7 +113,7 @@ public class BankTest {
 		ResultOutTO resp = null;
 		ColecturiaTO bus = new ColecturiaTO();
 		
-		bus.setCardcode("000001");
+		bus.setCardcode("00001");
 		bus.setCardname("Prueba");
 		bus.setDoctotal(10.1);
 		
@@ -128,19 +128,40 @@ public class BankTest {
 			e.printStackTrace();
 		}
 		List prueba = new Vector();
-		Iterator<ColecturiaDetailTO> iterator = lstPeriods4.iterator();
+		Iterator<ColecturiaConceptTO> iterator = lstPeriods4.iterator();
 		while (iterator.hasNext()) {
-			ColecturiaDetailTO periodo = (ColecturiaDetailTO) iterator.next();
-			prueba.add(periodo);
+			
+			
+			ColecturiaConceptTO concept = (ColecturiaConceptTO) iterator.next();
+			
+			ColecturiaDetailTO colecturia = new ColecturiaDetailTO();
+			
+			//colecturia.setDocentry(concept.getTransid());
+			colecturia.setLinenum(concept.getLinenum());
+			colecturia.setLinestatus(concept.getLinestatus());
+			colecturia.setObjtype(concept.getObjtype());
+			colecturia.setDscription(concept.getDscription());
+			colecturia.setAcctcode(concept.getAcctcode());
+			colecturia.setAcctcode2(concept.getAcctcode());
+			colecturia.setAcctcode3(concept.getAcctcode());
+			colecturia.setCtlaccount(concept.getCtlaccount());
+			colecturia.setOcrcode(concept.getOcrcode());
+			colecturia.setTransid(concept.getTransid());
+			colecturia.setConfirmed(concept.getConfirmed());
+			colecturia.setPeymethod(concept.getPeymethod());
+			colecturia.setPaidsum(10.00);
+			colecturia.setVatsum(concept.getVatsum());
+			colecturia.setDocsubtype(concept.getDocsubtype());
+			colecturia.setValue1(concept.getValue1());
+			colecturia.setValue2(concept.getValue2());
+			colecturia.setValue3(concept.getValue3());
+			colecturia.setTaxstatus("Y");
+            colecturia.setAditional_account("Y");
+			
+			
+			prueba.add(colecturia);
 		}
-		ColecturiaDetailTO detalle = new ColecturiaDetailTO();
 		
-
-		
-
-		
-		
-
 		bus.setColecturiaDetail(prueba);
 
 		try {

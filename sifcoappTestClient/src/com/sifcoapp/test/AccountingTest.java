@@ -483,5 +483,26 @@ ResultOutTO _result = new ResultOutTO();
 		// }
 	}
 	// pruebas de insercion de cuentas
+	public static void getprueba_by_key() {
+		ResultOutTO nuevo=new ResultOutTO();
+		List consul = new Vector();
+		JournalEntryTO result = new JournalEntryTO();
+		int trans = 14;
+		result = AccountingEJBService.getpruebaByKey(trans);
+		System.out.println(result.getBtfstatus() + result.getTransid());
+		consul = result.getJournalentryList();
+		Iterator<JournalEntryLinesTO> iterator = consul.iterator();
+		while (iterator.hasNext()) {
+			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
+			System.out.println(acc.getTransid() + " - " + acc.getLine_id());
+		}
+	
+		nuevo = AccountingEJBService.journal_entry_new(result,
+				Common.MTTOINSERT);
 
+		System.out.println(nuevo.getMensaje());
+	
+	}
+	
+	
 }
