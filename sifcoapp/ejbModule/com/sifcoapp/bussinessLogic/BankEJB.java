@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -7,6 +8,7 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import com.sifcoapp.admin.ejb.ParameterEJB;
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
@@ -134,6 +136,10 @@ public class BankEJB implements BankEJBRemote {
 		ColecturiaDetailDAO DAO1 = new ColecturiaDetailDAO(DAO.getConn());
 		DAO.setIstransaccional(true);
 		DAO1.setIstransaccional(true);
+		List sale=new Vector();
+		parameterTO parameter = new parameterTO();
+		ParameterEJB ejb = new ParameterEJB();
+		parameter = ejb.getParameterbykey(9);
 
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
@@ -165,12 +171,20 @@ public class BankEJB implements BankEJBRemote {
 					DAO1.ges_ges_col0_colecturiadetail_mtto(detail,
 							Common.MTTODELETE);
 				}
+				
+				if (detail.getLinenum() == Integer.parseInt(parameter.getValue1())) {
+					sale=detail.getFacturas();
+
+				}
 			}
 			journal = fill_JournalEntry(parameters);
 			AccountingEJB account = new AccountingEJB();
 			res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT,
 					DAO.getConn());
 
+		ResultOutTO nuevo=new ResultOutTO();
+		nuevo=actualizar_sale(sale, DAO.getConn());
+			
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -255,9 +269,23 @@ public class BankEJB implements BankEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-		colecturia.setObjtype("Y");
-		colecturia.setFacturas(facturas);
-		_return.add(colecturia);
+		//filtra las facturas 
+		facturas=filtro_consulta( facturas);
+		
+		parameterTO parameter = new parameterTO();
+		ParameterEJB ejb = new ParameterEJB();
+		parameter = ejb.getParameterbykey(9);
+
+		Iterator<ColecturiaConceptTO> iterator = _return.iterator();
+		while (iterator.hasNext()) {
+			ColecturiaConceptTO concept = (ColecturiaConceptTO) iterator.next();
+			if (concept.getLinenum() == Integer.parseInt(parameter.getValue1())) {
+				concept.setFacturas(facturas);
+
+			}
+
+		}
+
 		return _return;
 	}
 
@@ -319,7 +347,7 @@ public class BankEJB implements BankEJBRemote {
 			String business = null;
 			for (Object obj : aux) {
 				BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) obj;
-				//pendiente de confirmar si 
+				// pendiente de confirmar si
 				if (bus.getAcctype() == colecturia_c.getLinenum()) {
 					business = bus.getAcctcode();
 				}
@@ -374,7 +402,7 @@ public class BankEJB implements BankEJBRemote {
 			// como
 			// venta iva debito
 			admin = new AdminDAO();
-			
+
 			CatalogTO Catalog = new CatalogTO();
 			Catalog = admin.findCatalogByKey("IVA", 10);
 			if (Catalog.getCatvalue2() == null) {
@@ -424,147 +452,146 @@ public class BankEJB implements BankEJBRemote {
 			//
 			detail.add(art2);
 
-			//falta condicion de cuando llevar 
-			if(colecturia_c.getAditional_account().equals("Y")){
-			
-			
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			// calculo del iva y del ingreso administrativo segundo asiento contable 
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			
-			JournalEntryLinesTO art3 = new JournalEntryLinesTO();
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			// pasivo administrativo
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			art3.setLine_id(n);
-			art3.setAccount(colecturia_c.getAcctcode2());
-			art3.setDebit(sum);
-			art3.setDuedate(parameters.getDocduedate());
-			art3.setShortname(colecturia_c.getAcctcode2());
-			art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
-			art3.setLinememo("pago de colecturia");
-			art3.setRefdate(parameters.getDocduedate());
-			art3.setRef1(parameters.getRef1());
-			// art2.setRef2();
-			art3.setBaseref(parameters.getRef1());
-			art3.setTaxdate(parameters.getDocduedate());
-			// art1.setFinncpriod(finncpriod);
-			art3.setReltransid(-1);
-			art3.setRellineid(-1);
-			art3.setReltype("N");
-			art3.setObjtype("5");
-			art3.setVatline("N");
-			art3.setVatamount(0.0);
-			art3.setClosed("N");
-			art3.setGrossvalue(0.0);
-			art3.setBalduedeb(sum);
-			art3.setBalduecred(0.0);
-			art3.setIsnet("Y");
-			art3.setTaxtype(0);
-			art3.setTaxpostacc("N");
-			art3.setTotalvat(0.0);
-			art3.setWtliable("N");
-			art3.setWtline("N");
-			art3.setPayblock("N");
-			art3.setOrdered("N");
-			// at2.setTranstype(parameters.getObjtype());
-			n = n + 1;
-			detail.add(art3);
-			
-			if(colecturia_c.getTaxstatus().equals("Y")){
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			// iva debito fiscal
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			
-				Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
-				ingreso = sum / (1 + iva);
-				Double t_iva = ingreso * iva;
-				
-				JournalEntryLinesTO art4 = new JournalEntryLinesTO();
+			// falta condicion de cuando llevar
+			if (colecturia_c.getAditional_account().equals("Y")) {
 
-			art4.setLine_id(n);
-			art4.setAccount(iva_c);
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				// calculo del iva y del ingreso administrativo segundo asiento
+				// contable
+				// ----------------------------------------------------------------------------------------------------------------------------------
 
-			art4.setCredit(t_iva);
+				JournalEntryLinesTO art3 = new JournalEntryLinesTO();
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				// pasivo administrativo
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				art3.setLine_id(n);
+				art3.setAccount(colecturia_c.getAcctcode2());
+				art3.setDebit(sum);
+				art3.setDuedate(parameters.getDocduedate());
+				art3.setShortname(colecturia_c.getAcctcode2());
+				art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
+				art3.setLinememo("pago de colecturia");
+				art3.setRefdate(parameters.getDocduedate());
+				art3.setRef1(parameters.getRef1());
+				// art2.setRef2();
+				art3.setBaseref(parameters.getRef1());
+				art3.setTaxdate(parameters.getDocduedate());
+				// art1.setFinncpriod(finncpriod);
+				art3.setReltransid(-1);
+				art3.setRellineid(-1);
+				art3.setReltype("N");
+				art3.setObjtype("5");
+				art3.setVatline("N");
+				art3.setVatamount(0.0);
+				art3.setClosed("N");
+				art3.setGrossvalue(0.0);
+				art3.setBalduedeb(sum);
+				art3.setBalduecred(0.0);
+				art3.setIsnet("Y");
+				art3.setTaxtype(0);
+				art3.setTaxpostacc("N");
+				art3.setTotalvat(0.0);
+				art3.setWtliable("N");
+				art3.setWtline("N");
+				art3.setPayblock("N");
+				art3.setOrdered("N");
+				// at2.setTranstype(parameters.getObjtype());
+				n = n + 1;
+				detail.add(art3);
 
-			art4.setDuedate(parameters.getDocduedate());
-			art4.setShortname(iva_c);
-			art4.setContraact(colecturia_c.getAcctcode2());
-			art4.setLinememo("pago de colecturia");
-			art4.setRefdate(parameters.getDocduedate());
-			art4.setRef1(parameters.getRef1());
-			// rt2.setRef2();
-			art4.setBaseref(parameters.getRef1());
-			art4.setTaxdate(parameters.getDocduedate());
-			// art1.setFinncpriod(finncpriod);
-			art4.setReltransid(-1);
-			art4.setRellineid(-1);
-			art4.setReltype("N");
-			art4.setObjtype("5");
-			art4.setVatline("N");
-			art4.setVatamount(0.0);
-			art4.setClosed("N");
-			art4.setGrossvalue(0.0);
-			art4.setBalduedeb(0.0);
-			art4.setBalduecred(t_iva);
-			art4.setIsnet("Y");
-			art4.setTaxtype(0);
-			art4.setTaxpostacc("N");
-			art4.setTotalvat(0.0);
-			art4.setWtliable("N");
-			art4.setWtline("N");
-			art4.setPayblock("N");
-			art4.setOrdered("N");
-			// t2.setTranstype(parameters.getObjtype());
-			n = n + 1;
-			detail.add(art4);
-			}else{
-				
-				ingreso = sum;
+				if (colecturia_c.getTaxstatus().equals("Y")) {
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					// iva debito fiscal
+					// ----------------------------------------------------------------------------------------------------------------------------------
+
+					Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
+					ingreso = sum / (1 + iva);
+					Double t_iva = ingreso * iva;
+
+					JournalEntryLinesTO art4 = new JournalEntryLinesTO();
+
+					art4.setLine_id(n);
+					art4.setAccount(iva_c);
+
+					art4.setCredit(t_iva);
+
+					art4.setDuedate(parameters.getDocduedate());
+					art4.setShortname(iva_c);
+					art4.setContraact(colecturia_c.getAcctcode2());
+					art4.setLinememo("pago de colecturia");
+					art4.setRefdate(parameters.getDocduedate());
+					art4.setRef1(parameters.getRef1());
+					// rt2.setRef2();
+					art4.setBaseref(parameters.getRef1());
+					art4.setTaxdate(parameters.getDocduedate());
+					// art1.setFinncpriod(finncpriod);
+					art4.setReltransid(-1);
+					art4.setRellineid(-1);
+					art4.setReltype("N");
+					art4.setObjtype("5");
+					art4.setVatline("N");
+					art4.setVatamount(0.0);
+					art4.setClosed("N");
+					art4.setGrossvalue(0.0);
+					art4.setBalduedeb(0.0);
+					art4.setBalduecred(t_iva);
+					art4.setIsnet("Y");
+					art4.setTaxtype(0);
+					art4.setTaxpostacc("N");
+					art4.setTotalvat(0.0);
+					art4.setWtliable("N");
+					art4.setWtline("N");
+					art4.setPayblock("N");
+					art4.setOrdered("N");
+					// t2.setTranstype(parameters.getObjtype());
+					n = n + 1;
+					detail.add(art4);
+				} else {
+
+					ingreso = sum;
+				}
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				// ingreso administrativo
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				JournalEntryLinesTO art5 = new JournalEntryLinesTO();
+
+				art5.setLine_id(n);
+				art5.setAccount(colecturia_c.getAcctcode3());
+				art5.setCredit(ingreso);
+				art5.setDuedate(parameters.getDocduedate());
+				art5.setShortname(colecturia_c.getAcctcode3());
+				art5.setContraact(colecturia_c.getAcctcode2());
+				art5.setLinememo("pago de colecturia");
+				art5.setRefdate(parameters.getDocduedate());
+				art5.setRef1(parameters.getRef1());
+				// art2.setRef2();
+				art5.setBaseref(parameters.getRef1());
+				art5.setTaxdate(parameters.getDocduedate());
+				// art1.setFinncpriod(finncpriod);
+				art5.setReltransid(-1);
+				art5.setRellineid(-1);
+				art5.setReltype("N");
+				art5.setObjtype("5");
+				art5.setVatline("N");
+				art5.setVatamount(0.0);
+				art5.setClosed("N");
+				art5.setGrossvalue(0.0);
+				art5.setBalduedeb(0.0);
+				art5.setBalduecred(ingreso);
+				art5.setIsnet("Y");
+				art5.setTaxtype(0);
+				art5.setTaxpostacc("N");
+				art5.setTotalvat(0.0);
+				art5.setWtliable("N");
+				art5.setWtline("N");
+				art5.setPayblock("N");
+				art5.setOrdered("N");
+				// 5.setTranstype(parameters.getObjtype());
+				detail.add(art5);
+				n++;
+
 			}
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			// ingreso administrativo
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			JournalEntryLinesTO art5 = new JournalEntryLinesTO();
 
-			art5.setLine_id(n);
-			art5.setAccount(colecturia_c.getAcctcode3());
-			art5.setCredit(ingreso);
-			art5.setDuedate(parameters.getDocduedate());
-			art5.setShortname(colecturia_c.getAcctcode3());
-			art5.setContraact(colecturia_c.getAcctcode2());
-			art5.setLinememo("pago de colecturia");
-			art5.setRefdate(parameters.getDocduedate());
-			art5.setRef1(parameters.getRef1());
-			// art2.setRef2();
-			art5.setBaseref(parameters.getRef1());
-			art5.setTaxdate(parameters.getDocduedate());
-			// art1.setFinncpriod(finncpriod);
-			art5.setReltransid(-1);
-			art5.setRellineid(-1);
-			art5.setReltype("N");
-			art5.setObjtype("5");
-			art5.setVatline("N");
-			art5.setVatamount(0.0);
-			art5.setClosed("N");
-			art5.setGrossvalue(0.0);
-			art5.setBalduedeb(0.0);
-			art5.setBalduecred(ingreso);
-			art5.setIsnet("Y");
-			art5.setTaxtype(0);
-			art5.setTaxpostacc("N");
-			art5.setTotalvat(0.0);
-			art5.setWtliable("N");
-			art5.setWtline("N");
-			art5.setPayblock("N");
-			art5.setOrdered("N");
-			// 5.setTranstype(parameters.getObjtype());
-			detail.add(art5);
-			n++;
-			
-			
-		}
-			
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// llenado del asiento contable
@@ -663,10 +690,10 @@ public class BankEJB implements BankEJBRemote {
 			String c_acc = null;
 			for (Object obj2 : listaDet) {
 				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
-				if(oldjournal.getDebit()==null){
+				if (oldjournal.getDebit() == null) {
 					oldjournal.setDebit(0.0);
 				}
-				if(oldjournal.getCredit()==0){
+				if (oldjournal.getCredit() == null) {
 					oldjournal.setCredit(0.0);
 				}
 				sum_debe = sum_debe + oldjournal.getDebit();
@@ -682,28 +709,29 @@ public class BankEJB implements BankEJBRemote {
 			// encontrando el saldo si es deudor o acreedor
 			// -----------------------------------------------------------------------------------
 			Double saldo = sum_debe - sum_credit;
-			if(saldo!=0){
-			if (saldo > 0) {
-				art1.setDebit(saldo);
-				art1.setBalduedeb(saldo);
-				art1.setBalduecred(0.0);
+			if (saldo != 0) {
+				if (saldo > 0) {
+					art1.setDebit(saldo);
+					art1.setBalduedeb(saldo);
+					art1.setBalduecred(0.0);
+				} else {
+					saldo = saldo * -1;
+					art1.setCredit(saldo);
+					art1.setBalduecred(saldo);
+					art1.setBalduedeb(0.0);
+				}
 			} else {
-				saldo = saldo * -1;
-				art1.setCredit(saldo);
-				art1.setBalduecred(saldo);
-				art1.setBalduedeb(0.0);
-			}
-			}else{
 				art1.setDebit(0.0);
 				art1.setBalduedeb(saldo);
 				art1.setBalduecred(0.0);
 			}
-			
+
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
 			// llenado del asiento contable
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 			art1.setLine_id(n);
+			art1.setAccount(acc);
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
@@ -732,6 +760,7 @@ public class BankEJB implements BankEJBRemote {
 			art1.setOrdered("N");
 			art1.setTranstype(parameters.getTranstype());
 			detail.add(art1);
+			n++;
 
 		}
 		nuevo.setBtfstatus("O");
@@ -764,7 +793,42 @@ public class BankEJB implements BankEJBRemote {
 
 	}
 
+	public List filtro_consulta(List sales) throws EJBException {
+		List lista = new Vector();
+		Iterator<SalesTO> iterator = sales.iterator();
+		while (iterator.hasNext()) {
+			SalesTO sale = (SalesTO) iterator.next();
+			if (sale.getSeries() != 0 && sale.getSeries() == 3
+					&& !sale.getCanceled().equals("Y")
+					&& !sale.getDocstatus().equals("C")) {
+				lista.add(sale);
+			}
 
+		}
 
+		return lista;
+
+	}
+
+	public ResultOutTO actualizar_sale(List sales ,Connection conn) throws EJBException {
+		List lista = new Vector();
+		ResultOutTO _return= new ResultOutTO();
+		SalesEJB ejb= new SalesEJB();
+		Iterator<SalesTO> iterator = sales.iterator();
+		while (iterator.hasNext()) {
+			SalesTO sale = (SalesTO) iterator.next();
+			sale.setDocstatus("C");
+			sale.setPaidsum(sale.getDoctotal());
+			try {
+				_return = ejb.inv_Sales_update(sale, Common.MTTOUPDATE, conn);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}		
+		
+		return _return;
+
+	}
 
 }

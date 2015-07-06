@@ -3,6 +3,7 @@ package com.sifcoapp.objects.bank.to;
 import com.sifcoapp.objects.common.to.CommonTO;
 
 import java.util.Date;
+import java.util.List;
 
 public class ColecturiaDetailTO extends CommonTO {
 
@@ -29,7 +30,16 @@ public class ColecturiaDetailTO extends CommonTO {
 	private String value3;
 	private String taxstatus;
 	private String aditional_account;
+    private List facturas;
 	
+	public List getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(List facturas) {
+		this.facturas = facturas;
+	}
+
 	public ColecturiaDetailTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -40,7 +50,7 @@ public class ColecturiaDetailTO extends CommonTO {
 			String acctcode2, String acctcode3, String ctlaccount,
 			String ocrcode, int transid, String confirmed, String peymethod,
 			Double paidsum, Double vatsum, String docsubtype, String value1,
-			String value2, String value3,String taxstatus,String aditional_account) {
+			String value2, String value3,String taxstatus,String aditional_account,List facturas) {
 		super();
 		this.docentry = docentry;
 		this.linenum = linenum;
@@ -63,6 +73,7 @@ public class ColecturiaDetailTO extends CommonTO {
 		this.value3 = value3;
 		this.taxstatus=taxstatus;
 		this.aditional_account=aditional_account;
+		this.facturas=facturas;
 	}
 
 	public int getDocentry() {
