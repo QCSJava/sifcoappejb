@@ -142,8 +142,8 @@ public class BankTest {
 			colecturia.setObjtype(concept.getObjtype());
 			colecturia.setDscription(concept.getDscription());
 			colecturia.setAcctcode(concept.getAcctcode());
-			colecturia.setAcctcode2(concept.getAcctcode());
-			colecturia.setAcctcode3(concept.getAcctcode());
+			colecturia.setAcctcode2(concept.getAcctcode2());
+			colecturia.setAcctcode3(concept.getAcctcode3());
 			colecturia.setCtlaccount(concept.getCtlaccount());
 			colecturia.setOcrcode(concept.getOcrcode());
 			colecturia.setTransid(concept.getTransid());
@@ -267,7 +267,6 @@ public class BankTest {
 					+ " - " + periodo.getDscription());
 		}
 	}
-	
 	
 	public static void getColecturiaConcept1() {
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
