@@ -328,18 +328,23 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			AccountTO account = new AccountTO();
 
-			if (Detalle.getDebit() == null) {
+			if (Detalle.getDebit() == null || Detalle.getDebit() == zero ) {
 				Detalle.setDebit(zero);
+				Detalle.setDebcred("C");
+				account.setCurrtotal(Detalle.getCredit());
+				
 			} else {
+				Detalle.setCredit(zero);
 				Detalle.setDebcred("D");
 				account.setCurrtotal(Detalle.getDebit());
 			}
-			if (Detalle.getCredit() == null) {
+			/*if (Detalle.getCredit() == null) {
 				Detalle.setCredit(zero);
 			} else {
 				Detalle.setDebcred("C");
 				account.setCurrtotal(Detalle.getCredit());
-			}
+			}*/
+			
 			if (Detalle.getTomthsum() == null) {
 				Detalle.setTomthsum(zero);
 			}
