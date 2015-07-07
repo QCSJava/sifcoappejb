@@ -357,18 +357,13 @@ public class JournalEntryDAO extends CommonDAO {
 		return this.getInt();
 	}
 
-	public JournalEntryTO getpruebaByKey(int transid) {
+	public JournalEntryTO getpruebaByKey(int transid) throws Exception  {
 		JournalEntryTO _return = new JournalEntryTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_prueba_by_key(?)}");
 		this.setInt(1, "_docentry", new Integer(transid));
-		try {
-			lstResultSet = this.runQuery();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	    lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
 		ListIterator liRowset = null;
