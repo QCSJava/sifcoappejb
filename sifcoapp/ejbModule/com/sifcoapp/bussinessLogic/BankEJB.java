@@ -183,7 +183,7 @@ public class BankEJB implements BankEJBRemote {
 					DAO.getConn());
 
 		ResultOutTO nuevo=new ResultOutTO();
-		if(sale.equals(null)){
+		if(sale!=null){
 		nuevo=actualizar_sale(sale, DAO.getConn());
 		
 		}
