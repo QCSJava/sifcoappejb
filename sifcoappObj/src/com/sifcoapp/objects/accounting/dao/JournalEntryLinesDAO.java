@@ -488,17 +488,17 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		List lstResultSet = null;
 		JournalEntryLinesTO journal= new JournalEntryLinesTO();
            int i=0;
-		this.setDbObject("SELECT sum (debit),sum(credit),sum (debit)-sum(credit) FROM cat_jdt1_journalentrylines WHERE  account = ? and taxdate < ? ;");
+		this.setDbObject("SELECT sum (debit),sum(credit),sum (debit)-sum(credit) FROM cat_jdt1_journalentrylines WHERE  account = ? and refdate < ? ;");
 
 		
         this.setString(1, "_account", parameters.getAcctcode());
 					
 		if (parameters.getRefdate() == null) {
-			this.setDate(2, "_taxdate", parameters.getRefdate());
+			this.setDate(2, "_refdate", parameters.getRefdate());
 		} else {
 			java.sql.Date fecha = new java.sql.Date(parameters.getRefdate()
 					.getTime());
-			this.setDate(2, "_taxdate", fecha);
+			this.setDate(2, "_refdate", fecha);
 		}
 		lstResultSet = this.runQueryPrepared();
 		

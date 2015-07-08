@@ -183,8 +183,10 @@ public class BankEJB implements BankEJBRemote {
 					DAO.getConn());
 
 		ResultOutTO nuevo=new ResultOutTO();
+		if(sale.equals(null)){
 		nuevo=actualizar_sale(sale, DAO.getConn());
-			
+		
+		}
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -316,6 +318,7 @@ public class BankEJB implements BankEJBRemote {
 		Double total = zero;
 		int n = 1;
 		int count = 1;
+		double total_sum=0.0;
 		List list_param = parameters.getColecturiaDetail();
 		List aux = new Vector();
 		List<List> listas = new Vector();
@@ -354,6 +357,7 @@ public class BankEJB implements BankEJBRemote {
 			}
 
 			sum = colecturia_c.getPaidsum();
+			total_sum=total_sum+sum;
 			acc = colecturia_c.getAcctcode();
 			linememo = colecturia_c.getDscription();
 
@@ -605,8 +609,8 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
-		// nuevo.setLoctotal(sum);
-		// nuevo.setSystotal(sum);
+		nuevo.setLoctotal(total_sum);
+		nuevo.setSystotal(total_sum);
 		nuevo.setTransrate(0.0);
 		nuevo.setDuedate(parameters.getDocduedate());
 		nuevo.setTaxdate(parameters.getDocdate());
@@ -688,6 +692,8 @@ public class BankEJB implements BankEJBRemote {
 			Double sum = zero;
 			String acc = null;
 			String c_acc = null;
+			sum_debe=0.0;
+			sum_credit=0.0;
 			for (Object obj2 : listaDet) {
 				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
 				if (oldjournal.getDebit() == null) {
@@ -783,6 +789,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setAutostorno("N");
 		nuevo.setSeries(0);
 		nuevo.setAutovat("N");
+		
 		nuevo.setDocseries(0);
 		nuevo.setPrinted("N");
 		nuevo.setAutowt("N");

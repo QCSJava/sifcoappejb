@@ -358,11 +358,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			AccountTO account = new AccountTO();
 
-			
-		
-			
-			
-		
 			Detalle.setReltransid(-1);
 			Detalle.setRellineid(-1);
 			Detalle.setReltype("N");
