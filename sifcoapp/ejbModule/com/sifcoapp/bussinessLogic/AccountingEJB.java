@@ -283,14 +283,44 @@ public class AccountingEJB implements AccountingEJBRemote {
 			Connection _conn) throws Exception {
 
 		JournalEntryDAO DAO = new JournalEntryDAO(_conn);
+		double debe = 0.0;
+		double haber = 0.0;
+		ResultOutTO _return = new ResultOutTO();
 
 		DAO.setIstransaccional(true);
 		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(_conn);
 		JournalLinesDAO.setIstransaccional(true);
 
+		Iterator<JournalEntryLinesTO> iterator1 = parameters
+				.getJournalentryList().iterator();
+		while (iterator1.hasNext()) {
+			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator1
+					.next();
+
+			if (Detalle.getDebit() != null) {
+				debe = debe + Detalle.getDebit();
+			}
+			if (Detalle.getCredit() != null) {
+				haber = haber + Detalle.getCredit();
+			}
+
+		}
+		
+	//validando que debe y haber sean iguales.....
+		
+		if(debe==haber){
+
 		// Valores por defecto
 		double zero = 0.00;
-		ResultOutTO _return = new ResultOutTO();
+		parameters.setObjtype("5");
+	    parameters.setBtfstatus("O");
+		parameters.setRefndrprt("N");
+		parameters.setAdjtran("N");
+		parameters.setAutostorno("N");
+		parameters.setAutovat("N");
+		parameters.setPrinted("N");
+		parameters.setAutowt("N");
+		parameters.setDeferedtax("N");
 
 		if (parameters.getLoctotal() == null) {
 			parameters.setLoctotal(zero);
@@ -328,23 +358,44 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			AccountTO account = new AccountTO();
 
-			if (Detalle.getDebit() == null || Detalle.getDebit() == zero ) {
+			
+		
+			
+			
+		
+			Detalle.setReltransid(-1);
+			Detalle.setRellineid(-1);
+			Detalle.setReltype("N");
+			Detalle.setObjtype("5");
+			Detalle.setVatline("N");
+			Detalle.setVatamount(0.0);
+			Detalle.setClosed("N");
+			Detalle.setGrossvalue(0.0);
+	        Detalle.setIsnet("Y");
+			Detalle.setTaxtype(0);
+			Detalle.setTaxpostacc("N");
+			Detalle.setTotalvat(0.0);
+			Detalle.setWtliable("N");
+			Detalle.setWtline("N");
+			Detalle.setPayblock("N");
+			Detalle.setOrdered("N");
+		
+			if (Detalle.getDebit() == null || Detalle.getDebit() == zero) {
 				Detalle.setDebit(zero);
 				Detalle.setDebcred("C");
 				account.setCurrtotal(Detalle.getCredit());
-				
+
 			} else {
 				Detalle.setCredit(zero);
 				Detalle.setDebcred("D");
 				account.setCurrtotal(Detalle.getDebit());
 			}
-			/*if (Detalle.getCredit() == null) {
-				Detalle.setCredit(zero);
-			} else {
-				Detalle.setDebcred("C");
-				account.setCurrtotal(Detalle.getCredit());
-			}*/
-			
+			/*
+			 * if (Detalle.getCredit() == null) { Detalle.setCredit(zero); }
+			 * else { Detalle.setDebcred("C");
+			 * account.setCurrtotal(Detalle.getCredit()); }
+			 */
+
 			if (Detalle.getTomthsum() == null) {
 				Detalle.setTomthsum(zero);
 			}
@@ -393,7 +444,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 			update_currtotal(account, Detalle.getDebcred(), _conn);
 
 		}
-
+		}else{
+			_return.setCodigoError(1);
+			_return.setMensaje("error en el almacenamiento de datos");
+			return _return;
+		}
+		
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
@@ -1133,10 +1189,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 		}
 		return _return;
 	}
+
 	// -----------------------------------------------------------
 	// elementos de prueba
 	// -----------------------------------------------------------
-	
+
 	public JournalEntryTO getpruebaByKey(int transid) throws EJBException {
 		JournalEntryTO _return = new JournalEntryTO();
 		JournalEntryDAO DAO = new JournalEntryDAO();
@@ -1149,138 +1206,136 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public ResultOutTO journal_entry_new(JournalEntryTO parameters, int action)throws EJBException	{
-		
-	JournalEntryDAO DAO = new JournalEntryDAO();
+	public ResultOutTO journal_entry_new(JournalEntryTO parameters, int action)
+			throws EJBException {
 
-	     DAO.setIstransaccional(true);
-	JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(DAO.getConn());
-	JournalLinesDAO.setIstransaccional(true);
+		JournalEntryDAO DAO = new JournalEntryDAO();
 
-	// Valores por defecto
-	double zero = 0.00;
-	ResultOutTO _return = new ResultOutTO();
-	try {
-		
-	if (parameters.getLoctotal() == null) {
-		parameters.setLoctotal(zero);
-	}
-	if (parameters.getSystotal() == null) {
-		parameters.setSystotal(zero);
-	}
-	if (parameters.getTransrate() == null) {
-		parameters.setTransrate(zero);
-	}
-	if (parameters.getWtapplied() == null) {
-		parameters.setWtapplied(zero);
-	}
-	if (parameters.getBaseamnt() == null) {
-		parameters.setBaseamnt(zero);
-	}
-	if (parameters.getBasevtat() == null) {
-		parameters.setBasevtat(zero);
-	}
+		DAO.setIstransaccional(true);
+		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(
+				DAO.getConn());
+		JournalLinesDAO.setIstransaccional(true);
 
-	// Guardar encabezado
+		// Valores por defecto
+		double zero = 0.00;
+		ResultOutTO _return = new ResultOutTO();
+		try {
 
-	
-	_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
-		
-	
-	_return.getDocentry();
+			if (parameters.getLoctotal() == null) {
+				parameters.setLoctotal(zero);
+			}
+			if (parameters.getSystotal() == null) {
+				parameters.setSystotal(zero);
+			}
+			if (parameters.getTransrate() == null) {
+				parameters.setTransrate(zero);
+			}
+			if (parameters.getWtapplied() == null) {
+				parameters.setWtapplied(zero);
+			}
+			if (parameters.getBaseamnt() == null) {
+				parameters.setBaseamnt(zero);
+			}
+			if (parameters.getBasevtat() == null) {
+				parameters.setBasevtat(zero);
+			}
 
-	// Guardar detalle
-	Iterator<JournalEntryLinesTO> iterator = parameters
-			.getJournalentryList().iterator();
-	while (iterator.hasNext()) {
-		JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator.next();
+			// Guardar encabezado
 
-		// ------------------------------------------------------------------------------------------------------------
-		// Valores por defecto del detalle
-		// ------------------------------------------------------------------------------------------------------------
+			_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
 
-		AccountTO account = new AccountTO();
+			_return.getDocentry();
 
-		if (Detalle.getDebit() == null) {
-			Detalle.setDebit(zero);
-		} else {
-			Detalle.setDebcred("D");
-			account.setCurrtotal(Detalle.getDebit());
-		}
-		if (Detalle.getCredit() == null) {
-			Detalle.setCredit(zero);
-		} else {
-			Detalle.setDebcred("C");
-			account.setCurrtotal(Detalle.getCredit());
-		}
-		if (Detalle.getTomthsum() == null) {
-			Detalle.setTomthsum(zero);
-		}
-		if (Detalle.getBasesum() == null) {
-			Detalle.setBasesum(zero);
-		}
-		if (Detalle.getVatrate() == null) {
-			Detalle.setVatrate(zero);
-		}
-		if (Detalle.getSysbasesum() == null) {
-			Detalle.setSysbasesum(zero);
-		}
-		if (Detalle.getVatamount() == null) {
-			Detalle.setVatamount(zero);
-		}
-		if (Detalle.getGrossvalue() == null) {
-			Detalle.setGrossvalue(zero);
-		}
-		if (Detalle.getBalduedeb() == null) {
-			Detalle.setBalduedeb(zero);
-		}
-		if (Detalle.getBalduecred() == null) {
-			Detalle.setBalduecred(zero);
-		}
-		if (Detalle.getTotalvat() == null) {
-			Detalle.setTotalvat(zero);
+			// Guardar detalle
+			Iterator<JournalEntryLinesTO> iterator = parameters
+					.getJournalentryList().iterator();
+			while (iterator.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
+						.next();
+
+				// ------------------------------------------------------------------------------------------------------------
+				// Valores por defecto del detalle
+				// ------------------------------------------------------------------------------------------------------------
+
+				AccountTO account = new AccountTO();
+
+				if (Detalle.getDebit() == null) {
+					Detalle.setDebit(zero);
+				} else {
+					Detalle.setDebcred("D");
+					account.setCurrtotal(Detalle.getDebit());
+				}
+				if (Detalle.getCredit() == null) {
+					Detalle.setCredit(zero);
+				} else {
+					Detalle.setDebcred("C");
+					account.setCurrtotal(Detalle.getCredit());
+				}
+				if (Detalle.getTomthsum() == null) {
+					Detalle.setTomthsum(zero);
+				}
+				if (Detalle.getBasesum() == null) {
+					Detalle.setBasesum(zero);
+				}
+				if (Detalle.getVatrate() == null) {
+					Detalle.setVatrate(zero);
+				}
+				if (Detalle.getSysbasesum() == null) {
+					Detalle.setSysbasesum(zero);
+				}
+				if (Detalle.getVatamount() == null) {
+					Detalle.setVatamount(zero);
+				}
+				if (Detalle.getGrossvalue() == null) {
+					Detalle.setGrossvalue(zero);
+				}
+				if (Detalle.getBalduedeb() == null) {
+					Detalle.setBalduedeb(zero);
+				}
+				if (Detalle.getBalduecred() == null) {
+					Detalle.setBalduecred(zero);
+				}
+				if (Detalle.getTotalvat() == null) {
+					Detalle.setTotalvat(zero);
+				}
+
+				// ---------------------------------------------------------------------------------------------------------------
+				Detalle.setTransid(_return.getDocentry());
+				Detalle.setTranstype(Integer.toString(_return.getDocentry()));
+				if (action == Common.MTTOINSERT) {
+
+					JournalLinesDAO.journalEntryLines_mtto(Detalle,
+							Common.MTTOINSERT);
+
+				}
+				if (action == Common.MTTODELETE) {
+					JournalLinesDAO.journalEntryLines_mtto(Detalle,
+							Common.MTTODELETE);
+				}
+
+				// ---------------------------------------------------------------------------------------------------------------
+				// actualizacion de saldo de cuenta
+				// ---------------------------------------------------------------------------------------------------------------
+
+				account.setAcctcode(Detalle.getAccount());
+				update_currtotal(account, Detalle.getDebcred(), DAO.getConn());
+			}
+			DAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			_return.setCodigoError(1);
+			_return.setMensaje("error en almacenamiento de datos");
+			return _return;
+
+		} finally {
+
+			DAO.forceCloseConnection();
 		}
 
-		// ---------------------------------------------------------------------------------------------------------------
-		Detalle.setTransid(_return.getDocentry());
-		Detalle.setTranstype(Integer.toString(_return.getDocentry()));
-		if (action == Common.MTTOINSERT) {
-			
-				JournalLinesDAO.journalEntryLines_mtto(Detalle,
-						Common.MTTOINSERT);
-			
-		}
-		if (action == Common.MTTODELETE) {
-			JournalLinesDAO.journalEntryLines_mtto(Detalle,
-					Common.MTTODELETE);
-		}
-
-		
-	
-		
-		// ---------------------------------------------------------------------------------------------------------------
-		// actualizacion de saldo de cuenta
-		// ---------------------------------------------------------------------------------------------------------------
-
-		account.setAcctcode(Detalle.getAccount());
-		update_currtotal(account, Detalle.getDebcred(),DAO.getConn());
-	} 
-	DAO.forceCommit();
-	}catch (Exception e) {
-		// TODO Auto-generated catch block
-		DAO.rollBackConnection();
-		_return.setCodigoError(1);
-		_return.setMensaje("error en almacenamiento de datos");
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con exito");
 		return _return;
-		
-	} finally {
-
-		DAO.forceCloseConnection();
 	}
-	
-	_return.setCodigoError(0);
-	_return.setMensaje("Datos guardados con exito");
-	return _return;
-}
 
 }
