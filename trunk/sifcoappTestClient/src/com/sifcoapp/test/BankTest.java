@@ -157,6 +157,7 @@ public class BankTest {
 			colecturia.setValue3(concept.getValue3());
 			colecturia.setTaxstatus("Y");
             colecturia.setAditional_account("Y");
+            colecturia.setFacturas(concept.getFacturas());
 			
 			
 			prueba.add(colecturia);
@@ -283,16 +284,17 @@ public class BankTest {
 		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
 			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
-			if(periodo.getObjtype().equals("Y")){
+			
 				
 				Iterator<SalesTO> iterator1 = periodo.getFacturas().iterator();
 				while (iterator1.hasNext()) {
 					SalesTO sale = (SalesTO) iterator1.next();
-					System.out.println("Lista de facturas de venta"+"-"+sale.getCardcode());
+					System.out.println("Lista de facturas de venta"+"-"+sale.getDoctotal());
 					fac=fac+sale.getDoctotal();
+			
 			}
-			}
-			System.out.println("lista de conceptos" +"-"+periodo.getValue1() + "  "
+			System.out.println("lista de conceptos" +"-"+periodo.getAcctcode() + "  "+periodo.getAcctcode2() + "  "+periodo.getAcctcode3() + "  "	+
+					+
 					+ periodo.getLinenum() + " - " + periodo.getObjtype()
 					+ " - " + periodo.getDscription());
 			
