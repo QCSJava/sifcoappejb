@@ -284,7 +284,7 @@ public class BankTest {
 		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
 		while (iterator.hasNext()) {
 			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
-			
+			if(periodo.getFacturas()!=null){
 				
 				Iterator<SalesTO> iterator1 = periodo.getFacturas().iterator();
 				while (iterator1.hasNext()) {
@@ -292,6 +292,8 @@ public class BankTest {
 					System.out.println("Lista de facturas de venta"+"-"+sale.getDoctotal());
 					fac=fac+sale.getDoctotal();
 			
+			}
+				
 			}
 			System.out.println("lista de conceptos" +"-"+periodo.getAcctcode() + "  "+periodo.getAcctcode2() + "  "+periodo.getAcctcode3() + "  "	+
 					+

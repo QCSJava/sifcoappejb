@@ -418,14 +418,15 @@ public class SalesEJB implements SalesEJBRemote {
 			AccountingEJB account1 = new AccountingEJB();
 			res_jour = account1.journalEntry_mtto(journal, Common.MTTOINSERT,
 					conn);
+			Sales.setDocstatus("C");
+			Sales.setPaidtodate(Sales.getDocdate());
+			Sales.setPaidsum(journal.getSystotal());
+			_return = inv_Sales_update(Sales, Common.MTTOUPDATE, conn);
 		}
 		// -----------------------------------------------------------------------------------
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
-		Sales.setDocstatus("C");
-		Sales.setPaidtodate(Sales.getDocdate());
-		Sales.setPaidsum(journal.getSystotal());
-		_return = inv_Sales_update(Sales, Common.MTTOUPDATE, conn);
+		
 
 		return _return;
 	}
