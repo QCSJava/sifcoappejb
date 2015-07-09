@@ -2310,6 +2310,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 		// recorre la lista de detalles
 		for (Object obj : list) {
+			ind = false;
 			GoodsReceiptDetailTO good = (GoodsReceiptDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();

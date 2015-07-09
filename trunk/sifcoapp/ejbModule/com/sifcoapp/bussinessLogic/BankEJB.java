@@ -273,7 +273,7 @@ public class BankEJB implements BankEJBRemote {
 		}
 		//filtra las facturas 
 		facturas=filtro_consulta( facturas);
-		
+		if(facturas!=null){
 		parameterTO parameter = new parameterTO();
 		ParameterEJB ejb = new ParameterEJB();
 		parameter = ejb.getParameterbykey(9);
@@ -287,7 +287,7 @@ public class BankEJB implements BankEJBRemote {
 			}
 
 		}
-
+		}
 		return _return;
 	}
 
@@ -656,6 +656,7 @@ public class BankEJB implements BankEJBRemote {
 
 		// recorre la lista de detalles
 		for (Object obj : list) {
+			ind = false;
 			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
 			String cod = good.getAccount();
 			List lisHija = new Vector();
@@ -802,6 +803,7 @@ public class BankEJB implements BankEJBRemote {
 
 	public List filtro_consulta(List sales) throws EJBException {
 		List lista = new Vector();
+		if(sales!=null){
 		Iterator<SalesTO> iterator = sales.iterator();
 		while (iterator.hasNext()) {
 			SalesTO sale = (SalesTO) iterator.next();
@@ -812,7 +814,9 @@ public class BankEJB implements BankEJBRemote {
 			}
 
 		}
-
+		}else{
+			lista=null;
+		}
 		return lista;
 
 	}
