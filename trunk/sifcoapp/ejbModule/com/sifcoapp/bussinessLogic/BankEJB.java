@@ -869,7 +869,8 @@ public class BankEJB implements BankEJBRemote {
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			art1.setLine_id(n);
 			art1.setAccount(business);
-			art1.setCredit(sum);
+			//art1.setCredit(sum);
+			art1.setDebit(sum);
 			art1.setDuedate(parameters.getDocduedate());
 			art1.setShortname(business);
 			art1.setContraact(colecturia_c.getAcctcode());
@@ -888,8 +889,8 @@ public class BankEJB implements BankEJBRemote {
 			art1.setVatamount(0.0);
 			art1.setClosed("N");
 			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(0.0);
-			art1.setBalduecred(art1.getCredit());
+			art1.setBalduedeb(art1.getCredit());
+			art1.setBalduecred(0.0);
 			art1.setIsnet("Y");
 			art1.setTaxtype(0);
 			art1.setTaxpostacc("N");
@@ -923,7 +924,8 @@ public class BankEJB implements BankEJBRemote {
 
 			art2.setLine_id(n);
 			art2.setAccount(colecturia_c.getAcctcode());
-			art2.setDebit(sum);
+			//art2.setDebit(sum);
+			art2.setCredit(sum);
 			art2.setDuedate(parameters.getDocduedate());
 			art2.setShortname(colecturia_c.getAcctcode());
 			art2.setContraact(business);
@@ -942,8 +944,8 @@ public class BankEJB implements BankEJBRemote {
 			art2.setVatamount(0.0);
 			art2.setClosed("N");
 			art2.setGrossvalue(0.0);
-			art2.setBalduedeb(sum);
-			art2.setBalduecred(0.0);
+			art2.setBalduedeb(0.0);
+			art2.setBalduecred(sum);
 			art2.setIsnet("Y");
 			art2.setTaxtype(0);
 			art2.setTaxpostacc("N");
@@ -971,7 +973,8 @@ public class BankEJB implements BankEJBRemote {
 				// ----------------------------------------------------------------------------------------------------------------------------------
 				art3.setLine_id(n);
 				art3.setAccount(colecturia_c.getAcctcode2());
-				art3.setDebit(sum);
+				//art3.setDebit(sum);
+				art3.setCredit(sum);
 				art3.setDuedate(parameters.getDocduedate());
 				art3.setShortname(colecturia_c.getAcctcode2());
 				art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
@@ -990,8 +993,8 @@ public class BankEJB implements BankEJBRemote {
 				art3.setVatamount(0.0);
 				art3.setClosed("N");
 				art3.setGrossvalue(0.0);
-				art3.setBalduedeb(sum);
-				art3.setBalduecred(0.0);
+				art3.setBalduedeb(0.0);
+				art3.setBalduecred(sum);
 				art3.setIsnet("Y");
 				art3.setTaxtype(0);
 				art3.setTaxpostacc("N");
@@ -1018,8 +1021,8 @@ public class BankEJB implements BankEJBRemote {
 					art4.setLine_id(n);
 					art4.setAccount(iva_c);
 
-					art4.setCredit(t_iva);
-
+					//art4.setCredit(0.0);
+                    art4.setDebit(t_iva);
 					art4.setDuedate(parameters.getDocduedate());
 					art4.setShortname(iva_c);
 					art4.setContraact(colecturia_c.getAcctcode2());
@@ -1038,8 +1041,8 @@ public class BankEJB implements BankEJBRemote {
 					art4.setVatamount(0.0);
 					art4.setClosed("N");
 					art4.setGrossvalue(0.0);
-					art4.setBalduedeb(0.0);
-					art4.setBalduecred(t_iva);
+					art4.setBalduedeb(t_iva);
+					art4.setBalduecred(0.0);
 					art4.setIsnet("Y");
 					art4.setTaxtype(0);
 					art4.setTaxpostacc("N");
@@ -1062,7 +1065,8 @@ public class BankEJB implements BankEJBRemote {
 
 				art5.setLine_id(n);
 				art5.setAccount(colecturia_c.getAcctcode3());
-				art5.setCredit(ingreso);
+				//art5.setCredit(ingreso);
+				art5.setDebit(ingreso);
 				art5.setDuedate(parameters.getDocduedate());
 				art5.setShortname(colecturia_c.getAcctcode3());
 				art5.setContraact(colecturia_c.getAcctcode2());
@@ -1081,8 +1085,8 @@ public class BankEJB implements BankEJBRemote {
 				art5.setVatamount(0.0);
 				art5.setClosed("N");
 				art5.setGrossvalue(0.0);
-				art5.setBalduedeb(0.0);
-				art5.setBalduecred(ingreso);
+				art5.setBalduedeb(ingreso);
+				art5.setBalduecred(0.0);
 				art5.setIsnet("Y");
 				art5.setTaxtype(0);
 				art5.setTaxpostacc("N");
