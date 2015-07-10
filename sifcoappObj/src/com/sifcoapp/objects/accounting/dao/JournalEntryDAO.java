@@ -438,9 +438,10 @@ public class JournalEntryDAO extends CommonDAO {
 	}
 	
 
-	public List getJournalEntry1(JournalEntryInTO parameters) {
+	public List getJournalEntry1(JournalEntryInTO parameters) throws Exception{
 		List _return = new Vector();
 		List lstResultSet = null;
+		
 		// ############### faltan filtros########################
 		double zero = 0.00;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
@@ -522,17 +523,14 @@ public class JournalEntryDAO extends CommonDAO {
 		this.setInt(43, "_seqnum",parameters.getSeqnum());
 		this.setString(44, "_rptperiod", parameters.getRptperiod());
 		this.setInt(45, "_usersign", parameters.getUsersign());
+		
+		
+		lstResultSet = this.runQuery();
 
-		
-			try {
-				lstResultSet = this.runQuery();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		
 		CachedRowSetImpl rowsetActual;
+
 		System.out.println("return psg");
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
