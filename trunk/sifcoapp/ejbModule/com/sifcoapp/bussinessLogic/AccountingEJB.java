@@ -243,7 +243,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		List _return = new Vector();
 		JournalEntryDAO DAO = new JournalEntryDAO();
 		try {
-			_return = DAO.getJournalEntry(parameters);
+			_return = DAO.getJournalEntry1(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -826,13 +826,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public List getrecurringPostingExecute() throws EJBException {
+	public List getrecurringPostingExecute(int usersign) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
 
-			_return = DAO.getrecurringPostingExecute();
+			_return = DAO.getrecurringPostingExecute(usersign);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -1186,6 +1186,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		// para retornar el valor absoluto de saldo 
+		_return.setTotalvat(Math.abs(_return.getTotalvat()));
 		return _return;
 	}
 

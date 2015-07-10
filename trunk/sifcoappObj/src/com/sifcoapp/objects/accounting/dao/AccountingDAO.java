@@ -1059,7 +1059,7 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
+
 	public List getrecurringPosting_user(RecurringPostingsInTO parameters)
 			throws Exception {
 		List _return = new Vector();
@@ -1266,12 +1266,12 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public List getrecurringPostingExecute() throws Exception {
+	public List getrecurringPostingExecute(int usersign) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{? = call sp_get_recurringpostings_execute()}");
-
+		this.setDbObject("{call sp_get_recurringpostings_execute(?)}");
+		this.setInt(1, "_usersign", usersign);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		ListIterator liRowset = null;
