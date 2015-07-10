@@ -34,7 +34,7 @@ public class JournalEntryDAO extends CommonDAO {
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		// this.setDject("{call sp_cat_articles_(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5)}");
 		this.setDbObject("{call sp_get_journalentry(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-		this.setInt(1, "_transid", new Integer(parameters.getTransid()));
+		this.setInt(1, "_transid",parameters.getTransid());
 		this.setInt(2, "_batchnum", new Integer(parameters.getBatchnum()));
 		this.setString(3, "_btfstatus", parameters.getBtfstatus());
 		this.setString(4, "_transtype", parameters.getTranstype());
@@ -436,5 +436,166 @@ public class JournalEntryDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	
 
+	public List getJournalEntry1(JournalEntryInTO parameters) {
+		List _return = new Vector();
+		List lstResultSet = null;
+		// ############### faltan filtros########################
+		double zero = 0.00;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		// this.setDject("{call sp_cat_articles_(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5)}");
+		this.setDbObject("{call sp_get_journalentrysdfsdfsf(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setInt(1, "_transid",parameters.getTransid());
+		this.setInt(2, "_batchnum", new Integer(parameters.getBatchnum()));
+		this.setString(3, "_btfstatus", parameters.getBtfstatus());
+		this.setString(4, "_transtype", parameters.getTranstype());
+		this.setString(5, "_baseref", parameters.getBaseref());
+		if (parameters.getRefdate() == null) {
+			this.setDate(6, "_refdate", parameters.getRefdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getRefdate()
+					.getTime());
+			this.setDate(6, "_refdate", fecha);
+		}
+		this.setString(7, "_memo", parameters.getMemo());
+		this.setString(8, "_ref1", parameters.getRef1());
+		this.setString(9, "_ref2", parameters.getRef2());
+		this.setDouble(10, "_loctotal", zero);
+		this.setDouble(11, "_systotal", zero);
+		this.setString(12, "_transcode", parameters.getTranscode());
+		this.setDouble(13, "_transrate", zero);
+		this.setInt(14, "_btfline", new Integer(parameters.getBtfline()));
+		if (parameters.getDuedate() == null) {
+			this.setDate(15, "_duedate", parameters.getDuedate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getDuedate()
+					.getTime());
+			this.setDate(15, "_duedate", fecha);
+		}
+		if (parameters.getTaxdate() == null) {
+			this.setDate(16, "_taxdate", parameters.getTaxdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getTaxdate()
+					.getTime());
+			this.setDate(16, "_taxdate", fecha);
+		}
+		this.setInt(17, "_finncpriod", new Integer(parameters.getFinncpriod()));
+		this.setString(18, "_refndrprt", parameters.getRefndrprt());
+		this.setString(19, "_objtype", parameters.getObjtype());
+		this.setString(20, "_indicator", parameters.getIndicator());
+		this.setString(21, "_adjtran", parameters.getAdjtran());
+		this.setDate(22, "_stornodate", parameters.getStornodate());
+		if (parameters.getStornodate() == null) {
+			this.setDate(22, "_stornodate", parameters.getStornodate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getStornodate()
+					.getTime());
+			this.setDate(22, "_stornodate", fecha);
+		}
+		this.setInt(23, "_stornototr", new Integer(parameters.getStornototr()));
+		this.setString(24, "_autostorno", parameters.getAutostorno());
+		if (parameters.getVatdate() == null) {
+			this.setDate(25, "_vatdate", parameters.getVatdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date(parameters.getVatdate()
+					.getTime());
+			this.setDate(25, "_vatdate", fecha);
+		}
+		this.setInt(26, "_series", new Integer(parameters.getSeries()));
+		this.setInt(27, "_number", new Integer(parameters.getNumber()));
+		this.setString(28, "_autovat", parameters.getAutovat());
+		this.setInt(29, "_docseries", parameters.getDocseries());
+		this.setString(30, "_printed", parameters.getPrinted());
+		this.setString(31, "_doctype", parameters.getDoctype());
+		this.setString(32, "_creator", parameters.getCreator());
+		this.setInt(33, "_seqcode", parameters.getSeqcode());
+		this.setInt(34, "_serial", parameters.getSerial());
+		this.setString(35, "_autowt", parameters.getAutowt());
+		this.setDouble(36, "_wtapplied", zero);
+		this.setDouble(37, "_baseamnt", zero);
+		this.setDouble(38, "_basevtat", zero);
+		this.setInt(39, "_basetrans", parameters.getBasetrans());
+		this.setString(40, "_ref3", parameters.getRef3());
+		this.setString(41, "_deferedtax", parameters.getDeferedtax());
+		this.setInt(42, "_agrno", parameters.getAgrno());
+		this.setInt(43, "_seqnum",parameters.getSeqnum());
+		this.setString(44, "_rptperiod", parameters.getRptperiod());
+		this.setInt(45, "_usersign", parameters.getUsersign());
+
+		
+			try {
+				lstResultSet = this.runQuery();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		
+		CachedRowSetImpl rowsetActual;
+		System.out.println("return psg");
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+
+					JournalEntryTO journal = new JournalEntryTO();
+					journal.setTransid(rowsetActual.getInt(1));
+					journal.setBatchnum(rowsetActual.getInt(2));
+					journal.setBtfstatus(rowsetActual.getString(3));
+					journal.setTranstype(rowsetActual.getString(4));
+					journal.setBaseref(rowsetActual.getString(5));
+					journal.setRefdate(rowsetActual.getDate(6));
+					journal.setMemo(rowsetActual.getString(7));
+					journal.setRef1(rowsetActual.getString(8));
+					journal.setRef2(rowsetActual.getString(9));
+					journal.setLoctotal(rowsetActual.getDouble(10));
+					journal.setSystotal(rowsetActual.getDouble(11));
+					journal.setTranscode(rowsetActual.getString(12));
+					journal.setTransrate(rowsetActual.getDouble(13));
+					journal.setBtfline(rowsetActual.getInt(14));
+					journal.setDuedate(rowsetActual.getDate(15));
+					journal.setTaxdate(rowsetActual.getDate(16));
+					journal.setFinncpriod(rowsetActual.getInt(17));
+					journal.setRefndrprt(rowsetActual.getString(18));
+					journal.setObjtype(rowsetActual.getString(19));
+					journal.setIndicator(rowsetActual.getString(20));
+					journal.setAdjtran(rowsetActual.getString(21));
+					journal.setStornodate(rowsetActual.getDate(22));
+					journal.setStornototr(rowsetActual.getInt(23));
+					journal.setAutostorno(rowsetActual.getString(24));
+					journal.setVatdate(rowsetActual.getDate(25));
+					journal.setSeries(rowsetActual.getInt(26));
+					journal.setNumber(rowsetActual.getInt(27));
+					journal.setAutovat(rowsetActual.getString(28));
+					journal.setDocseries(rowsetActual.getInt(29));
+					journal.setPrinted(rowsetActual.getString(30));
+					journal.setDoctype(rowsetActual.getString(31));
+					journal.setCreator(rowsetActual.getString(32));
+					journal.setSeqcode(rowsetActual.getInt(33));
+					journal.setSerial(rowsetActual.getInt(34));
+					journal.setAutowt(rowsetActual.getString(35));
+					journal.setWtapplied(rowsetActual.getDouble(36));
+					journal.setBaseamnt(rowsetActual.getDouble(37));
+					journal.setBasevtat(rowsetActual.getDouble(38));
+					journal.setBasetrans(rowsetActual.getInt(39));
+					journal.setRef3(rowsetActual.getString(40));
+					journal.setDeferedtax(rowsetActual.getString(41));
+					journal.setAgrno(rowsetActual.getInt(42));
+					journal.setSeqnum(rowsetActual.getInt(43));
+					journal.setRptperiod(rowsetActual.getString(44));
+					journal.setUsersign(rowsetActual.getInt(45));
+					_return.add(journal);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		return _return;
+	}
 }

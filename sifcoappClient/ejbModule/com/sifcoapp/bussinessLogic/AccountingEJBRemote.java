@@ -65,7 +65,7 @@ public interface AccountingEJBRemote {
 	
 	public RecurringPostingsTO getrecurringPosting_by_key(String _rcurcode,int _instance) throws EJBException;
 	
-	public List getrecurringPostingExecute() throws EJBException;
+	public List getrecurringPostingExecute(int usersign) throws EJBException;
 	
 	public ResultOutTO validate_exist_accperiod(Date parameters)throws EJBException;
 	public List getEntryDetail(JournalEntryLinesInTO parameters)

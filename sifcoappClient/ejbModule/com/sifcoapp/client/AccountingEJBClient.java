@@ -215,9 +215,9 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
-	public List getrecurringPostingExecute() throws EJBException {
+	public List getrecurringPostingExecute(int usersign) throws EJBException {
 		List _return = new Vector();
-		_return = bean.getrecurringPostingExecute();
+		_return = bean.getrecurringPostingExecute(usersign);
 		return _return;
 	}
 
