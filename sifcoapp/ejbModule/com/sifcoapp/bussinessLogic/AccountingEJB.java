@@ -243,7 +243,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		List _return = new Vector();
 		JournalEntryDAO DAO = new JournalEntryDAO();
 		try {
-			_return = DAO.getJournalEntry1(parameters);
+			_return = DAO.getJournalEntry(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
