@@ -114,10 +114,10 @@ public class BankTest {
 		ColecturiaTO bus = new ColecturiaTO();
 		
 		bus.setCardcode("00001");
-		bus.setCardname("Prueba");
+		bus.setCardname("nombre del socio ");
 		bus.setDoctotal(10.1);
 		bus.setSeries(2);
-		bus.setReceiptnum(186);
+		bus.setReceiptnum(194);
 		
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods4= null;

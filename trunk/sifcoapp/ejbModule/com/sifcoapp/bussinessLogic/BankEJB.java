@@ -179,32 +179,30 @@ public class BankEJB implements BankEJBRemote {
 
 				}
 			}
-			
-			if(parameters.getSeries()==1){
-			
+
+			if (parameters.getSeries() == 1) {
+
 				journal = fill_JournalEntry(parameters);
-			AccountingEJB account = new AccountingEJB();
-			res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT,
-					DAO.getConn());
-			ResultOutTO nuevo = new ResultOutTO();
-			if (sale != null) {
-				nuevo = actualizar_sale(sale, DAO.getConn(),parameters);
+				AccountingEJB account = new AccountingEJB();
+				res_jour = account.journalEntry_mtto(journal,
+						Common.MTTOINSERT, DAO.getConn());
+				ResultOutTO nuevo = new ResultOutTO();
+				if (sale != null) {
+					nuevo = actualizar_sale(sale, DAO.getConn(), parameters);
+				}
 			}
-			}
-			
-			if(parameters.getSeries()==2){
-				
+
+			if (parameters.getSeries() == 2) {
+
 				journal = fill_JournalEntry_anular(parameters);
 				AccountingEJB account1 = new AccountingEJB();
-				res_jour = account1.journalEntry_mtto(journal, Common.MTTOINSERT,
-				DAO.getConn());
-				
-				ResultOutTO nuevo1 = new ResultOutTO();
-				nuevo1 = actualizar_sale2( DAO.getConn(),parameters);
-			}
-			
+				res_jour = account1.journalEntry_mtto(journal,
+						Common.MTTOINSERT, DAO.getConn());
 
-			
+				ResultOutTO nuevo1 = new ResultOutTO();
+				nuevo1 = actualizar_sale2(DAO.getConn(), parameters);
+			}
+
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -823,9 +821,7 @@ public class BankEJB implements BankEJBRemote {
 		return nuevo;
 
 	}
-	
-    
-	
+
 	public JournalEntryTO fill_JournalEntry_anular(ColecturiaTO parameters)
 			throws Exception {
 		JournalEntryTO nuevo = new JournalEntryTO();
@@ -886,7 +882,7 @@ public class BankEJB implements BankEJBRemote {
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			art1.setLine_id(n);
 			art1.setAccount(business);
-			//art1.setCredit(sum);
+			// art1.setCredit(sum);
 			art1.setDebit(sum);
 			art1.setDuedate(parameters.getDocduedate());
 			art1.setShortname(business);
@@ -941,7 +937,7 @@ public class BankEJB implements BankEJBRemote {
 
 			art2.setLine_id(n);
 			art2.setAccount(colecturia_c.getAcctcode());
-			//art2.setDebit(sum);
+			// art2.setDebit(sum);
 			art2.setCredit(sum);
 			art2.setDuedate(parameters.getDocduedate());
 			art2.setShortname(colecturia_c.getAcctcode());
@@ -990,7 +986,7 @@ public class BankEJB implements BankEJBRemote {
 				// ----------------------------------------------------------------------------------------------------------------------------------
 				art3.setLine_id(n);
 				art3.setAccount(colecturia_c.getAcctcode2());
-				//art3.setDebit(sum);
+				// art3.setDebit(sum);
 				art3.setCredit(sum);
 				art3.setDuedate(parameters.getDocduedate());
 				art3.setShortname(colecturia_c.getAcctcode2());
@@ -1038,8 +1034,8 @@ public class BankEJB implements BankEJBRemote {
 					art4.setLine_id(n);
 					art4.setAccount(iva_c);
 
-					//art4.setCredit(0.0);
-                    art4.setDebit(t_iva);
+					// art4.setCredit(0.0);
+					art4.setDebit(t_iva);
 					art4.setDuedate(parameters.getDocduedate());
 					art4.setShortname(iva_c);
 					art4.setContraact(colecturia_c.getAcctcode2());
@@ -1082,7 +1078,7 @@ public class BankEJB implements BankEJBRemote {
 
 				art5.setLine_id(n);
 				art5.setAccount(colecturia_c.getAcctcode3());
-				//art5.setCredit(ingreso);
+				// art5.setCredit(ingreso);
 				art5.setDebit(ingreso);
 				art5.setDuedate(parameters.getDocduedate());
 				art5.setShortname(colecturia_c.getAcctcode3());
@@ -1160,7 +1156,6 @@ public class BankEJB implements BankEJBRemote {
 
 	}
 
-	
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1184,8 +1179,8 @@ public class BankEJB implements BankEJBRemote {
 
 	}
 
-	public ResultOutTO actualizar_sale(List sales, Connection conn,ColecturiaTO parameter)
-			throws EJBException {
+	public ResultOutTO actualizar_sale(List sales, Connection conn,
+			ColecturiaTO parameter) throws EJBException {
 		List lista = new Vector();
 		ResultOutTO _return = new ResultOutTO();
 		SalesEJB ejb = new SalesEJB();
@@ -1207,43 +1202,43 @@ public class BankEJB implements BankEJBRemote {
 		return _return;
 
 	}
-	// revertir pago de colecturia 
-	public ResultOutTO actualizar_sale2( Connection conn,ColecturiaTO parameter)
+
+	// revertir pago de colecturia
+	public ResultOutTO actualizar_sale2(Connection conn, ColecturiaTO parameter)
 			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
-		SalesEJB EJB= new SalesEJB();
+		SalesEJB EJB = new SalesEJB();
 		List sales = new Vector();
-	    SalesInTO nuevo= new SalesInTO();
-	    nuevo.setReceiptnum(parameter.getReceiptnum());		
+		SalesInTO nuevo = new SalesInTO();
+		nuevo.setReceiptnum(parameter.getReceiptnum());
 		try {
-			sales=EJB.getSales(nuevo);
+			sales = EJB.getSales(nuevo);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		if(sales!=null){	
-		List lista = new Vector();
-		
-		SalesEJB ejb = new SalesEJB();
-		Iterator<SalesTO> iterator = sales.iterator();
-		while (iterator.hasNext()) {
-			SalesTO sale = (SalesTO) iterator.next();
-			sale.setDocstatus("O");
-			sale.setPaidtodate(null);
-			sale.setReceiptnum(0);
-			sale.setPaidsum(0.0);
-			try {
-				_return = ejb.inv_Sales_update(sale, Common.MTTOUPDATE, conn);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if (sales != null) {
+			List lista = new Vector();
+
+			SalesEJB ejb = new SalesEJB();
+			Iterator<SalesTO> iterator = sales.iterator();
+			while (iterator.hasNext()) {
+				SalesTO sale = (SalesTO) iterator.next();
+				sale.setDocstatus("O");
+				sale.setPaidtodate(null);
+				sale.setReceiptnum(0);
+				sale.setPaidsum(0.0);
+				try {
+					_return = ejb.inv_Sales_update(sale, Common.MTTOUPDATE,
+							conn);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+
 		}
 
-		
-
-	}
-	
 		return _return;
 	}
 
