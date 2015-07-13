@@ -283,8 +283,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 			Connection _conn) throws Exception {
 
 		JournalEntryDAO DAO = new JournalEntryDAO(_conn);
-		double debe = 0.0;
-		double haber = 0.0;
+		double debe =  zero;
+		double haber = zero;
 		ResultOutTO _return = new ResultOutTO();
 
 		DAO.setIstransaccional(true);
@@ -308,9 +308,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		// validando que debe y haber sean iguales.....
 
-		if (debe != haber) {
+		double valor = Math.abs(debe - haber);
+		if (valor > 0.00001) {
 			_return.setCodigoError(1);
-			_return.setMensaje("error en el almacenamiento de datos");
+			_return.setMensaje("No coincide los montos del Debe y Haber");
 			return _return;
 		
 		}
@@ -888,16 +889,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 			throws Exception {
 		List journal = new Vector();
 		JournalEntryLinesTO nuevo = new JournalEntryLinesTO();
-		String action = " ";
 		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
 		JournalEntryLinesDAO DAO1 = new JournalEntryLinesDAO();
-		AccountTO account1 = new AccountTO();
-		// consultamos la cuenta para saber el groupmask para realizar los
-		// calculos
-		account1 = getAccountByKey(parameters.getAccount());
 
-		double saldo1 = 0;
-		// salñdo inicial antes de la fecha indicada
+		// saldo inicial antes de la fecha indicada
 		journal = DAO.getEntryDetail(parameters);
 		EntryTO entrada = new EntryTO();
 		entrada.setAcctcode(parameters.getAccount());
@@ -906,274 +901,30 @@ public class AccountingEJB implements AccountingEJBRemote {
 		nuevo = DAO1.getsaldo(entrada);
 		
 		double saldo = nuevo.getTotalvat();
-		nuevo.setLinememo("saldo inicial a la fecha");
+		nuevo.setLinememo("Saldo inicial a la fecha");
 
-		// -----------------------------------------------------------------------------------------------------------
-		switch (account1.getGroupmask()) {
-		// ------------------------------------------------------------------------------------------------------------------
-		// 1- Activo
-		// ------------------------------------------------------------------------------------------------------------------
+		
+		Iterator<JournalEntryLinesTO> iterator = journal.iterator();
+		while (iterator.hasNext()) {
+			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
+					.next();
 
-		case 1:
+			if (Detalle.getDebcred().equals("C")) {
+				saldo = saldo - Detalle.getCredit();
+				Detalle.setTotalvat(saldo);
 
-			Iterator<JournalEntryLinesTO> iterator = journal.iterator();
-			while (iterator.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
+			} else if (Detalle.getDebcred().equals("D")) {
+				saldo = saldo + Detalle.getDebit();
+				Detalle.setTotalvat(saldo);
+			} else {
+				throw new Exception(
+						"Error en cuenta contable, informar al administrador");
 
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo - Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo + Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
 			}
-			break;
-		// ------------------------------------------------------------------------------------------------------------------
-		// 2- Pasivo
-		// ------------------------------------------------------------------------------------------------------------------
-		case 2:
-			Iterator<JournalEntryLinesTO> iterator5 = journal.iterator();
-			while (iterator5.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator5
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
-
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo + Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo - Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
-			}
-			break;
-		// ------------------------------------------------------------------------------------------------------------------
-		// 3-Capital
-		// ------------------------------------------------------------------------------------------------------------------
-		case 3:
-			Iterator<JournalEntryLinesTO> iterator6 = journal.iterator();
-			while (iterator6.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator6
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
-
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo + Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo - Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
-			}
-			break;
-		// ------------------------------------------------------------------------------------------------------------------
-		// 4- Cuentas de costos y gastos
-		// ------------------------------------------------------------------------------------------------------------------
-		case 4:
-			Iterator<JournalEntryLinesTO> iterator2 = journal.iterator();
-			while (iterator2.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator2
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
-
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo - Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo + Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
-			}
-			break;
-		// ------------------------------------------------------------------------------------------------------------------
-		// 5- Cuentas de Ingresos
-		// ------------------------------------------------------------------------------------------------------------------
-		case 5:
-			Iterator<JournalEntryLinesTO> iterator7 = journal.iterator();
-			while (iterator7.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator7
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
-
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo + Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo - Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
-			}
-			break;
-		// ------------------------------------------------------------------------------------------------------------------
-		// 6- Cuentas de Gastos
-		// ------------------------------------------------------------------------------------------------------------------
-		case 6:
-			Iterator<JournalEntryLinesTO> iterator3 = journal.iterator();
-			while (iterator3.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator3
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
-
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo - Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo + Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
-			}
-			break;
-		// ------------------------------------------------------------------------------------------------------------------
-		// Otros Ingresos
-		// ------------------------------------------------------------------------------------------------------------------
-		case 7:
-			Iterator<JournalEntryLinesTO> iterator8 = journal.iterator();
-			while (iterator8.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator8
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
-
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo + Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo - Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
-			}
-			break;
-		// ------------------------------------------------------------------------------------------------------------------
-		// 8 - Otros Gastos
-		// ------------------------------------------------------------------------------------------------------------------
-		case 8:
-			Iterator<JournalEntryLinesTO> iterator4 = journal.iterator();
-			while (iterator4.hasNext()) {
-				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator4
-						.next();
-				// se asigna a la inversa para encontrar el saldo inicial antes
-				// de cada movimiento
-				if (Detalle.getDebit() > 0.0) {
-					action = "D";
-
-				}
-				if (Detalle.getCredit() > 0.0) {
-					action = "C";
-				}
-
-				if (action.equals("C")) {
-					saldo = saldo - Detalle.getCredit();
-					Detalle.setTotalvat(saldo);
-
-				} else if (action.equals("D")) {
-					saldo = saldo + Detalle.getDebit();
-					Detalle.setTotalvat(saldo);
-				} else {
-					throw new Exception(
-							"Error en cuenta contable, informar al administrador");
-
-				}
-			}
-			break;
-
-		default:
-			throw new Exception(
-					"Error en cuenta contable, informar al administrador");
 		}
-		journal.add(nuevo);
+		
+			
+		journal.add(0,nuevo);
 
 		return journal;
 	}
