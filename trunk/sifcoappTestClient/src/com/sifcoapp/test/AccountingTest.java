@@ -341,7 +341,7 @@ ResultOutTO _result = new ResultOutTO();
 	public static void getjournalEntry() {
 		JournalEntryInTO nuevo = new JournalEntryInTO();
 		List consul = new Vector();
-		 nuevo.setTransid(254);
+		 nuevo.setTransid(283);
 		// nuevo.setBtfstatus("Y");
 
 		consul = AccountingEJBService.getJournalEntry(nuevo);

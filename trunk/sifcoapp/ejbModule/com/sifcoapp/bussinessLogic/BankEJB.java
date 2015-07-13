@@ -148,6 +148,7 @@ public class BankEJB implements BankEJBRemote {
 		try {
 			_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(parameters,
 					action));
+			parameters.setDocentry(_return.getDocentry());
 			// Acciones con los hijos
 			Iterator<ColecturiaDetailTO> iterator = parameters
 					.getColecturiaDetail().iterator();
@@ -178,16 +179,32 @@ public class BankEJB implements BankEJBRemote {
 
 				}
 			}
-			journal = fill_JournalEntry(parameters);
+			
+			if(parameters.getSeries()==1){
+			
+				journal = fill_JournalEntry(parameters);
 			AccountingEJB account = new AccountingEJB();
 			res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT,
 					DAO.getConn());
-
 			ResultOutTO nuevo = new ResultOutTO();
 			if (sale != null) {
-				nuevo = actualizar_sale(sale, DAO.getConn());
-
+				nuevo = actualizar_sale(sale, DAO.getConn(),parameters);
 			}
+			}
+			
+			if(parameters.getSeries()==2){
+				
+				journal = fill_JournalEntry_anular(parameters);
+				AccountingEJB account1 = new AccountingEJB();
+				res_jour = account1.journalEntry_mtto(journal, Common.MTTOINSERT,
+				DAO.getConn());
+				
+				ResultOutTO nuevo1 = new ResultOutTO();
+				nuevo1 = actualizar_sale2( DAO.getConn(),parameters);
+			}
+			
+
+			
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1167,7 +1184,7 @@ public class BankEJB implements BankEJBRemote {
 
 	}
 
-	public ResultOutTO actualizar_sale(List sales, Connection conn)
+	public ResultOutTO actualizar_sale(List sales, Connection conn,ColecturiaTO parameter)
 			throws EJBException {
 		List lista = new Vector();
 		ResultOutTO _return = new ResultOutTO();
@@ -1176,6 +1193,8 @@ public class BankEJB implements BankEJBRemote {
 		while (iterator.hasNext()) {
 			SalesTO sale = (SalesTO) iterator.next();
 			sale.setDocstatus("C");
+			sale.setPaidtodate(parameter.getTaxdate());
+			sale.setReceiptnum(parameter.getDocentry());
 			sale.setPaidsum(sale.getDoctotal());
 			try {
 				_return = ejb.inv_Sales_update(sale, Common.MTTOUPDATE, conn);
@@ -1187,6 +1206,45 @@ public class BankEJB implements BankEJBRemote {
 
 		return _return;
 
+	}
+	// revertir pago de colecturia 
+	public ResultOutTO actualizar_sale2( Connection conn,ColecturiaTO parameter)
+			throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+		SalesEJB EJB= new SalesEJB();
+		List sales = new Vector();
+	    SalesInTO nuevo= new SalesInTO();
+	    nuevo.setReceiptnum(parameter.getReceiptnum());		
+		try {
+			sales=EJB.getSales(nuevo);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if(sales!=null){	
+		List lista = new Vector();
+		
+		SalesEJB ejb = new SalesEJB();
+		Iterator<SalesTO> iterator = sales.iterator();
+		while (iterator.hasNext()) {
+			SalesTO sale = (SalesTO) iterator.next();
+			sale.setDocstatus("O");
+			sale.setPaidtodate(null);
+			sale.setReceiptnum(0);
+			sale.setPaidsum(0.0);
+			try {
+				_return = ejb.inv_Sales_update(sale, Common.MTTOUPDATE, conn);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		
+
+	}
+	
+		return _return;
 	}
 
 }

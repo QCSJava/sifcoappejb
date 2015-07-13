@@ -68,7 +68,7 @@ public class SalesDAO extends CommonDAO{
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		//(_docnum integer, _docdate date, _series integer, _towhscode character varying, _ref1 character varying, _ref2 character varying, _comments character varying, _docduedate date, _cardcode character varying, _cardname character varying, _taxdate date, _doctype character, _peymethod character varying, _docstatus character)
-		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -108,6 +108,7 @@ public class SalesDAO extends CommonDAO{
 		this.setString(12,"_doctype", param.getDoctype());
 		this.setString(13, "_peymethod",param.getPeymethod());
 		this.setString(14, "_docstatus", param.getDocstatus());
+		this.setInt(15,"_receiptnum",param.getReceiptnum());
 		
 		lstResultSet = this.runQuery();
 
@@ -179,7 +180,7 @@ public class SalesDAO extends CommonDAO{
 		return _return;
 	}
 	
-	//Retorna elemento goodsreceipt con detalle por clave
+	
 	public SalesTO getSalesByKey(int docentry) throws Exception {
 		SalesTO _return = new SalesTO();
 		List lstResultSet = null;
@@ -250,6 +251,7 @@ public class SalesDAO extends CommonDAO{
 		}
 		return _return;
 	}
+	
 	
 	public int inv_Sales_mtto(SalesTO parameters, int accion) throws Exception {
 		Double DATO=0.00; //////////######## DATO QUEMADO###############

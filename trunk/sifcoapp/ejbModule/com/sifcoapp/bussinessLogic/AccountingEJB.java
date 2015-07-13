@@ -902,7 +902,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 		EntryTO entrada = new EntryTO();
 		entrada.setAcctcode(parameters.getAccount());
 		entrada.setRefdate(parameters.getRefdate());
+		
 		nuevo = DAO1.getsaldo(entrada);
+		
 		double saldo = nuevo.getTotalvat();
 		nuevo.setLinememo("saldo inicial a la fecha");
 
