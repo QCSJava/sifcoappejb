@@ -157,7 +157,7 @@ public class BankEJB implements BankEJBRemote {
 				ColecturiaDetailTO detail = (ColecturiaDetailTO) iterator
 						.next();
               
-				if(detail.getPaidsum()!=zero){
+				if(detail.getPaidsum()!=0.0){
 				
 				if (detail.getPaidsum() == null) {
 					detail.setPaidsum(zero);
@@ -184,6 +184,7 @@ public class BankEJB implements BankEJBRemote {
 				
 				}else{
 					parameters.getColecturiaDetail().remove(detail);
+			
 				}
 			}
 
