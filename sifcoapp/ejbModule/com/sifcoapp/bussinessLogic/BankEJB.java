@@ -146,6 +146,7 @@ public class BankEJB implements BankEJBRemote {
 		}
 
 		try {
+
 			_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(parameters,
 					action));
 			parameters.setDocentry(_return.getDocentry());
@@ -478,7 +479,7 @@ public class BankEJB implements BankEJBRemote {
 			detail.add(art2);
 
 			// falta condicion de cuando llevar
-			if (colecturia_c.getAditional_account().equals("Y")) {
+			if (colecturia_c.getAditional_account() != null && colecturia_c.getAditional_account().equals("Y")) {
 
 				// ----------------------------------------------------------------------------------------------------------------------------------
 				// calculo del iva y del ingreso administrativo segundo asiento
@@ -489,7 +490,7 @@ public class BankEJB implements BankEJBRemote {
 				// ----------------------------------------------------------------------------------------------------------------------------------
 				// pasivo administrativo
 				// ----------------------------------------------------------------------------------------------------------------------------------
-				art3.setLine_id(n);
+				art3.setLine_id(n); 
 				art3.setAccount(colecturia_c.getAcctcode2());
 				art3.setDebit(sum);
 				art3.setDuedate(parameters.getDocduedate());
@@ -524,7 +525,7 @@ public class BankEJB implements BankEJBRemote {
 				n = n + 1;
 				detail.add(art3);
 
-				if (colecturia_c.getTaxstatus().equals("Y")) {
+				if (colecturia_c.getTaxstatus() != null && colecturia_c.getTaxstatus().equals("Y")) {
 					// ----------------------------------------------------------------------------------------------------------------------------------
 					// iva debito fiscal
 					// ----------------------------------------------------------------------------------------------------------------------------------
@@ -714,15 +715,15 @@ public class BankEJB implements BankEJBRemote {
 			Double sum = zero;
 			String acc = null;
 			String c_acc = null;
-			sum_debe = 0.0;
-			sum_credit = 0.0;
+			sum_debe = zero;
+			sum_credit = zero;
 			for (Object obj2 : listaDet) {
 				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
 				if (oldjournal.getDebit() == null) {
 					oldjournal.setDebit(0.0);
 				}
 				if (oldjournal.getCredit() == null) {
-					oldjournal.setCredit(0.0);
+					oldjournal.setCredit(zero);
 				}
 				sum_debe = sum_debe + oldjournal.getDebit();
 				sum_credit = sum_credit + oldjournal.getCredit();
@@ -741,17 +742,17 @@ public class BankEJB implements BankEJBRemote {
 				if (saldo > 0) {
 					art1.setDebit(saldo);
 					art1.setBalduedeb(saldo);
-					art1.setBalduecred(0.0);
+					art1.setBalduecred(zero);
 				} else {
 					saldo = saldo * -1;
 					art1.setCredit(saldo);
 					art1.setBalduecred(saldo);
-					art1.setBalduedeb(0.0);
+					art1.setBalduedeb(zero);
 				}
 			} else {
-				art1.setDebit(0.0);
+				art1.setDebit(zero);
 				art1.setBalduedeb(saldo);
-				art1.setBalduecred(0.0);
+				art1.setBalduecred(zero);
 			}
 
 			// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -775,9 +776,9 @@ public class BankEJB implements BankEJBRemote {
 			art1.setReltype("N");
 			art1.setObjtype("5");
 			art1.setVatline("N");
-			art1.setVatamount(0.0);
+			art1.setVatamount(zero);
 			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
+			art1.setGrossvalue(zero);
 			art1.setIsnet("Y");
 			art1.setTaxtype(0);
 			art1.setTaxpostacc("N");
@@ -800,7 +801,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setRef2(parameters.getRef2());
 		nuevo.setLoctotal(parameters.getLoctotal());
 		nuevo.setSystotal(parameters.getSystotal());
-		nuevo.setTransrate(0.0);
+		nuevo.setTransrate(zero);
 		nuevo.setDuedate(parameters.getDuedate());
 		nuevo.setTaxdate(parameters.getTaxdate());
 		nuevo.setFinncpriod(0);
@@ -832,7 +833,7 @@ public class BankEJB implements BankEJBRemote {
 		Double total = zero;
 		int n = 1;
 		int count = 1;
-		double total_sum = 0.0;
+		double total_sum = zero;
 		List list_param = parameters.getColecturiaDetail();
 		List aux = new Vector();
 		List<List> listas = new Vector();
@@ -954,15 +955,15 @@ public class BankEJB implements BankEJBRemote {
 			art2.setReltype("N");
 			art2.setObjtype("5");
 			art2.setVatline("N");
-			art2.setVatamount(0.0);
+			art2.setVatamount(zero);
 			art2.setClosed("N");
-			art2.setGrossvalue(0.0);
-			art2.setBalduedeb(0.0);
+			art2.setGrossvalue(zero);
+			art2.setBalduedeb(zero);
 			art2.setBalduecred(sum);
 			art2.setIsnet("Y");
 			art2.setTaxtype(0);
 			art2.setTaxpostacc("N");
-			art2.setTotalvat(0.0);
+			art2.setTotalvat(zero);
 			art2.setWtliable("N");
 			art2.setWtline("N");
 			art2.setPayblock("N");
@@ -1003,15 +1004,15 @@ public class BankEJB implements BankEJBRemote {
 				art3.setReltype("N");
 				art3.setObjtype("5");
 				art3.setVatline("N");
-				art3.setVatamount(0.0);
+				art3.setVatamount(zero);
 				art3.setClosed("N");
-				art3.setGrossvalue(0.0);
-				art3.setBalduedeb(0.0);
+				art3.setGrossvalue(zero);
+				art3.setBalduedeb(zero);
 				art3.setBalduecred(sum);
 				art3.setIsnet("Y");
 				art3.setTaxtype(0);
 				art3.setTaxpostacc("N");
-				art3.setTotalvat(0.0);
+				art3.setTotalvat(zero);
 				art3.setWtliable("N");
 				art3.setWtline("N");
 				art3.setPayblock("N");
@@ -1051,15 +1052,15 @@ public class BankEJB implements BankEJBRemote {
 					art4.setReltype("N");
 					art4.setObjtype("5");
 					art4.setVatline("N");
-					art4.setVatamount(0.0);
+					art4.setVatamount(zero);
 					art4.setClosed("N");
-					art4.setGrossvalue(0.0);
+					art4.setGrossvalue(zero);
 					art4.setBalduedeb(t_iva);
-					art4.setBalduecred(0.0);
+					art4.setBalduecred(zero);
 					art4.setIsnet("Y");
 					art4.setTaxtype(0);
 					art4.setTaxpostacc("N");
-					art4.setTotalvat(0.0);
+					art4.setTotalvat(zero);
 					art4.setWtliable("N");
 					art4.setWtline("N");
 					art4.setPayblock("N");
@@ -1095,15 +1096,15 @@ public class BankEJB implements BankEJBRemote {
 				art5.setReltype("N");
 				art5.setObjtype("5");
 				art5.setVatline("N");
-				art5.setVatamount(0.0);
+				art5.setVatamount(zero);
 				art5.setClosed("N");
-				art5.setGrossvalue(0.0);
+				art5.setGrossvalue(zero);
 				art5.setBalduedeb(ingreso);
 				art5.setBalduecred(0.0);
 				art5.setIsnet("Y");
 				art5.setTaxtype(0);
 				art5.setTaxpostacc("N");
-				art5.setTotalvat(0.0);
+				art5.setTotalvat(zero);
 				art5.setWtliable("N");
 				art5.setWtline("N");
 				art5.setPayblock("N");
@@ -1129,7 +1130,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(total_sum);
 		nuevo.setSystotal(total_sum);
-		nuevo.setTransrate(0.0);
+		nuevo.setTransrate(zero);
 		nuevo.setDuedate(parameters.getDocduedate());
 		nuevo.setTaxdate(parameters.getDocdate());
 		nuevo.setFinncpriod(0);
@@ -1227,7 +1228,7 @@ public class BankEJB implements BankEJBRemote {
 				sale.setDocstatus("O");
 				sale.setPaidtodate(null);
 				sale.setReceiptnum(0);
-				sale.setPaidsum(0.0);
+				sale.setPaidsum(zero);
 				try {
 					_return = ejb.inv_Sales_update(sale, Common.MTTOUPDATE,
 							conn);

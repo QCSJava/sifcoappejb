@@ -312,7 +312,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		if (valor > 0.00001) {
 			_return.setCodigoError(1);
 			_return.setMensaje("No coincide los montos del Debe y Haber");
-			return _return;
+			throw new Exception("No coincide los montos del Debe y Haber");
 		
 		}
 
@@ -381,6 +381,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 				Detalle.setWtline("N");
 				Detalle.setPayblock("N");
 				Detalle.setOrdered("N");
+				
+				if ((Detalle.getDebit() == null || Detalle.getDebit() == zero ) && (Detalle.getCredit() == null || Detalle.getCredit()== zero))
+				{
+					throw new Exception("Error en valores");
+				}
 
 				if (Detalle.getDebit() == null || Detalle.getDebit() == zero) {
 					Detalle.setDebit(zero);
