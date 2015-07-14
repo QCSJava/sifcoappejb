@@ -94,6 +94,8 @@ public class ColecturiaDetailDAO extends CommonDAO {
 					colecturia.setValue1(rowsetActual.getString(17));
 					colecturia.setValue2(rowsetActual.getString(18));
 					colecturia.setValue3(rowsetActual.getString(19));
+					colecturia.setTaxstatus(rowsetActual.getString(20));
+					colecturia.setAditional_account(rowsetActual.getString(21));
 
 					_return.add(colecturia);
 				}
