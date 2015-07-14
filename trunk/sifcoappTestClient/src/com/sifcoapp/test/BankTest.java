@@ -116,7 +116,7 @@ public class BankTest {
 		bus.setCardcode("00001");
 		bus.setCardname("nombre del socio ");
 		bus.setDoctotal(10.1);
-		bus.setSeries(2);
+		bus.setSeries(1);
 		bus.setReceiptnum(194);
 		
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
