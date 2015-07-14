@@ -125,7 +125,7 @@ public class SalesTest {
 		document.setGrssprofit(0.000000);
 		document.setGtotal(0.000000);
 		document.setObjtype("10");
-		document.setTaxstatus("N");
+		document.setTaxstatus("Y");
 		
 		prueba.add(document);
 
@@ -145,7 +145,7 @@ public class SalesTest {
 		document1.setGrssprofit(0.000000);
 		document1.setGtotal(6.275);
 		document1.setObjtype("10");
-		document1.setTaxstatus("N");
+		document1.setTaxstatus("Y");
 		prueba.add(document1);
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
 		  long lnMilisegundos = utilDate.getTime();
@@ -154,6 +154,7 @@ public class SalesTest {
 		parameters.setTowhscode("ALM-001");
 		parameters.setDocdate(sqlDate);
 		parameters.setDocduedate(sqlDate);
+
 		parameters.setTaxdate(sqlDate);
 		parameters.setSeries(2);
 		parameters.setUsersign(1);

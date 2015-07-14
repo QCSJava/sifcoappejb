@@ -394,6 +394,9 @@ public class SalesEJB implements SalesEJBRemote {
 					conn);
 		}
 
+		
+		DeliveryTO delivery= new DeliveryTO();
+	delivery=getDeliveryByKey(Sales.getReceiptnum());
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -406,8 +409,13 @@ public class SalesEJB implements SalesEJBRemote {
 		// -----------------------------------------------------------------------------------
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
-
-		Sales.setTransid(res_jour.getDocentry());
+        //actualizacion del documento de nota de remision de donde se produjo la venta 
+		 delivery.setCanceled("C");
+         delivery.setCanceldate(Sales.getTaxdate());
+         _return=inv_Delivery_update(delivery, Common.MTTOUPDATE, conn);
+         //-----------------------------------------------------------------------------------
+         //-----------------------------------------------------------------------------------
+		 Sales.setTransid(res_jour.getDocentry());
 		_return = inv_Sales_update(Sales, Common.MTTOUPDATE, conn);
 
 		// -----------------------------------------------------------------------------------

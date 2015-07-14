@@ -156,7 +156,9 @@ public class BankEJB implements BankEJBRemote {
 			while (iterator.hasNext()) {
 				ColecturiaDetailTO detail = (ColecturiaDetailTO) iterator
 						.next();
-
+              
+				if(detail.getPaidsum()!=zero){
+				
 				if (detail.getPaidsum() == null) {
 					detail.setPaidsum(zero);
 				}
@@ -178,6 +180,10 @@ public class BankEJB implements BankEJBRemote {
 						.getValue1())) {
 					sale = detail.getFacturas();
 
+				}
+				
+				}else{
+					parameters.getColecturiaDetail().remove(detail);
 				}
 			}
 

@@ -518,8 +518,6 @@ public class JournalEntryLinesDAO extends CommonDAO {
 					journal.setBalduedeb(rowsetActual.getDouble(1));
 					journal.setBalduecred(rowsetActual.getDouble(2));
 					journal.setTotalvat(rowsetActual.getDouble(3));
-					journal.setRefdate(parameters.getRefdate());
-
 					}
 				rowsetActual.close();
 			} catch (SQLException e) {

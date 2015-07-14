@@ -447,8 +447,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// actualizacion de saldo de cuenta
 				// ---------------------------------------------------------------------------------------------------------------
 
-				account.setAcctcode(Detalle.getAccount());
-				update_currtotal(account, Detalle.getDebcred(), _conn);
+				//account.setAcctcode(Detalle.getAccount());
+				update_currtotal(Detalle, _conn);
 
 			}
 
@@ -460,6 +460,39 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	
+	public ResultOutTO update_currtotal(JournalEntryLinesTO line,
+			Connection conn) throws Exception {
+		ResultOutTO _return= new ResultOutTO();
+		
+		AccountTO account1 = new AccountTO();
+		double saldo=0.0;
+		account1 = getAccountByKey(line.getAccount());
+		
+		if (account1 == null || account1.getPostable().equals("N")) {
+			throw new Exception(
+					"La cuenta contable no existe o no es posteable");
+		}
+		if (line.getDebcred().equals("C")) {
+			saldo = account1.getCurrtotal()- line.getCredit();
+			
+
+		} else if (line.getDebcred().equals("D")) {
+			saldo = account1.getCurrtotal() + line.getDebit();
+			
+		} else {
+			throw new Exception(
+					"Error en cuenta contable, informar al administrador");
+
+		}
+		
+		account1.setCurrtotal(saldo);
+		int i = update_currtotal(account1, conn);
+
+		return _return;
+		
+	}
+	
 	public ResultOutTO update_currtotal(AccountTO Account, String action,
 			Connection conn) throws Exception {
 		ResultOutTO _return = new ResultOutTO();
