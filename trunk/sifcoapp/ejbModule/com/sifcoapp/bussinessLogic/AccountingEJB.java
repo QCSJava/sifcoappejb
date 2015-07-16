@@ -24,8 +24,14 @@ import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
+import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.dao.ParameterDAO;
+import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.parameterTO;
+import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
+import com.sifcoapp.objects.bank.to.ColecturiaTO;
+import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
+import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
@@ -95,6 +101,20 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		return _return;
 	}
+	public List getAccount_Toclose() throws EJBException {
+
+		List _return = new Vector();
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			_return = DAO.getAccount_Toclose();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
 
 	public int cat_accPeriod_mtto(int parameters, int usersign, int action)
 			throws EJBException {
@@ -1130,4 +1150,356 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public JournalEntryTO fill_Journal_close(JournalEntryTO parameters)
+			throws Exception {
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+		parameterTO cuenta = new parameterTO();
+		String Objtype = "";
+		boolean ind = false;
+		Double total = zero;
+		int n = 1;
+		int count = 1;
+		double total_sum = 0.0;
+		List list_param = getAccount_Toclose();
+		List aux = new Vector();
+		List aux1 = new Vector();
+		AdminDAO admin = new AdminDAO();	
+		
+		ParameterDAO DAO = new ParameterDAO();
+		cuenta = DAO.getParameterbykey(10);
+	
+
+		// recorre la lista de listas para encontrar los detalles de el asiento
+		// contable
+		List detail = new Vector();
+
+		for (Object obj2 : list_param) {
+// encontramos la cuenta individual para ser comparada
+			AccountTO account = (AccountTO) obj2;
+			String linememo = " ";
+			Double sum = zero;
+			String acc = null;
+			String pasivo = null;
+			double ingreso;
+			String caja;
+			String business = null;
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+			
+			total_sum=total_sum+Math.abs(account.getCurrtotal());
+			
+			// comparando con el group mask para encontrar el saldo de la cuenta 
+			if(account.getGroupmask()==4){
+				
+				art1.setCredit(account.getCurrtotal());
+				art1.setBalduecred(account.getCurrtotal());
+				art1.setBalduedeb(0.0);
+				//cuenta perdidas y ganancias 
+				art2.setDebit(account.getCurrtotal());
+				art2.setBalduedeb(account.getCurrtotal());
+				art2.setBalduecred(0.0);
+				
+			}
+			 
+			if(account.getGroupmask()==5){
+				art1.setDebit(account.getCurrtotal()*-1);
+				art1.setBalduecred(0.0);
+				art1.setBalduedeb(account.getCurrtotal()*-1);
+				//cuenta perdidas y ganancias
+				art2.setCredit(account.getCurrtotal()*-1);
+				art2.setBalduedeb(0.0);
+				art2.setBalduecred(account.getCurrtotal()*-1);
+			}
+			
+			art1.setLine_id(n);
+			art1.setAccount(account.getAcctcode());
+			
+			//art1.setDuedate(parameters.getDocduedate());
+			art1.setShortname(account.getAcctcode());
+			art1.setContraact(cuenta.getValue1());
+			art1.setLinememo("Asiento de cierre");
+			//art1.setRefdate(parameters.getDocduedate());
+			//art1.setRef1(parameters.getRef1());
+			// art1.setRef2();
+			//art1.setBaseref(parameters.getRef1());
+			//art1.setTaxdate(parameters.getDocduedate());
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(0.0);
+			art1.setClosed("N");
+			art1.setGrossvalue(0.0);
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(0.0);
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");
+			//art1.setTranstype(colecturia_c.getObjtype());
+			detail.add(art1);
+
+			n++;
+
+			
+			// ----------------------------------------------------------------------------------------------------------------------------------
+			// cuenta de efectivo y caja
+			// ----------------------------------------------------------------------------------------------------------------------------------
+
+			art2.setLine_id(n);
+			art2.setAccount(cuenta.getValue1());
+			//art2.setDuedate(parameters.getDocduedate());
+			art2.setShortname(cuenta.getValue1());
+			art2.setContraact(account.getAcctcode());
+			art2.setLinememo("asiento de cierre de periodo contable ");
+			//art2.setRefdate();
+			//art2.setRef1(parameters.getRef1());
+			// art2.setRef2();
+			//art2.setBaseref(parameters.getRef1());
+			//art2.setTaxdate(parameters.getDocduedate());
+			// art1.setFinncpriod(finncpriod);
+			art2.setReltransid(-1);
+			art2.setRellineid(-1);
+			art2.setReltype("N");
+			art2.setObjtype("5");
+			art2.setVatline("N");
+			art2.setVatamount(0.0);
+			art2.setClosed("N");
+			art2.setGrossvalue(0.0);
+			art2.setIsnet("Y");
+			art2.setTaxtype(0);
+			art2.setTaxpostacc("N");
+			art2.setTotalvat(0.0);
+			art2.setWtliable("N");
+			art2.setWtline("N");
+			art2.setPayblock("N");
+			art2.setOrdered("N");
+			//art2.setTranstype(colecturia_c.getObjtype());
+			n = n + 1;
+			//
+			detail.add(art2);
+
+			
+			
+
+		}
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// llenado del asiento contable
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// LLenado del padre
+
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(Objtype);
+		nuevo.setBaseref("-1");
+		//nuevo.setRefdate(parameters.getDocdate());
+		nuevo.setMemo("asiento de cierre de periodo contable ");
+		//nuevo.setRef1(Integer.toString(parameters.getDocnum()));
+		//nuevo.setRef2(parameters.getRef1());
+		nuevo.setLoctotal(total_sum);
+		nuevo.setSystotal(total_sum);
+		nuevo.setTransrate(0.0);
+		//nuevo.setDuedate(parameters.getDocduedate());
+		//nuevo.setTaxdate(parameters.getDocdate());
+		nuevo.setFinncpriod(0);
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setRefndrprt("N");
+		nuevo.setObjtype("5");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setSeries(0);
+		nuevo.setAutovat("N");
+		nuevo.setDocseries(0);
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+		nuevo.setJournalentryList(detail);
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		// metodo para reagrupar cuentas del mismo codigo
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		JournalEntryTO journal = new JournalEntryTO();
+		journal = fill_JournalEntry_Unir_Toclose(nuevo);
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		return journal;
+
+	}
+
+	public JournalEntryTO fill_JournalEntry_Unir_Toclose(JournalEntryTO parameters)
+			throws Exception {
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+		boolean ind = false;
+		Double total = zero;
+		Double sum_debe = 0.0;
+		Double sum_credit = 0.0;
+		int n = 1;
+		// copiando la lista de los detalles de el asiento contable
+		List list = parameters.getJournalentryList();
+		// --------------------------------------------------------
+		List aux = new Vector();
+		List<List> listas = new Vector();
+		List aux1 = new Vector();
+
+		// recorre la lista de detalles
+		for (Object obj : list) {
+			ind = false;
+			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
+			String cod = good.getAccount();
+			List lisHija = new Vector();
+
+			// comparando lista aux de nodos visitados
+			for (Object obj2 : aux) {
+				JournalEntryLinesTO good2 = (JournalEntryLinesTO) obj2;
+				if (cod.equals(good2.getAccount())) {
+					ind = true;
+				}
+			}
+			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
+			// en otra lista
+			if (ind == false) {
+				for (Object obj3 : list) {
+					JournalEntryLinesTO good3 = (JournalEntryLinesTO) obj3;
+					if (cod.equals(good3.getAccount())) {
+						lisHija.add(good3);
+					}
+				}
+				// guarda en la lista de listas
+				listas.add(lisHija);
+			}
+
+			aux.add(good);
+
+		}
+
+		// recorre la lista de listas para encontrar los detalles de el asiento
+		// contable
+		List detail = new Vector();
+		for (List obj1 : listas) {
+			List listaDet = obj1;
+			Double sum = zero;
+			String acc = null;
+			String c_acc = null;
+			sum_debe = zero;
+			sum_credit = zero;
+			for (Object obj2 : listaDet) {
+				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
+				if (oldjournal.getDebit() == null) {
+					oldjournal.setDebit(0.0);
+				}
+				if (oldjournal.getCredit() == null) {
+					oldjournal.setCredit(zero);
+				}
+				sum_debe = sum_debe + oldjournal.getDebit();
+				sum_credit = sum_credit + oldjournal.getCredit();
+				acc = oldjournal.getAccount();
+				c_acc = oldjournal.getContraact();
+			}
+
+			// asiento contable
+
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			// -----------------------------------------------------------------------------------
+			// encontrando el saldo si es deudor o acreedor
+			// -----------------------------------------------------------------------------------
+			Double saldo = Math.abs(sum_debe) - Math.abs(sum_credit);
+			if (saldo != 0) {
+				if (saldo > 0) {
+					art1.setDebit(saldo);
+					art1.setBalduedeb(saldo);
+					art1.setBalduecred(zero);
+				} else {
+					saldo = saldo * -1;
+					art1.setCredit(saldo);
+					art1.setBalduecred(saldo);
+					art1.setBalduedeb(zero);
+				}
+			/* else {
+				art1.setDebit(zero);
+				art1.setBalduedeb(saldo);
+				art1.setBalduecred(zero);
+			}*/
+
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+			// llenado del asiento contable
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+			art1.setLine_id(n);
+			art1.setAccount(acc);
+			art1.setDuedate(parameters.getDuedate());
+			art1.setShortname(acc);
+			art1.setContraact(c_acc);
+			art1.setLinememo("asiento de cierre de periodo contable");
+			art1.setRefdate(parameters.getDuedate());
+			art1.setRef1(parameters.getRef1());
+			// art1.setRef2();
+			art1.setBaseref(parameters.getRef1());
+			art1.setTaxdate(parameters.getTaxdate());
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(zero);
+			art1.setClosed("N");
+			art1.setGrossvalue(zero);
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(0.0);
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");
+			art1.setTranstype(parameters.getTranstype());
+			detail.add(art1);
+			n++;
+			}
+		}
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(parameters.getTranstype());
+		nuevo.setBaseref(parameters.getBaseref());
+		nuevo.setRefdate(parameters.getRefdate());
+		nuevo.setMemo(parameters.getMemo());
+		nuevo.setRef1(parameters.getRef1());
+		nuevo.setRef2(parameters.getRef2());
+		nuevo.setLoctotal(parameters.getLoctotal());
+		nuevo.setSystotal(parameters.getSystotal());
+		nuevo.setTransrate(zero);
+		nuevo.setDuedate(parameters.getDuedate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setFinncpriod(0);
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setRefndrprt("N");
+		nuevo.setObjtype("5");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setSeries(0);
+		nuevo.setAutovat("N");
+
+		nuevo.setDocseries(0);
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+		nuevo.setJournalentryList(detail);
+
+		return nuevo;
+
+	}
+
+    public ResultOutTO Update_endTotal() throws EJBException{
+		
+    	
+    	
+    	
+    	
+    	return null;
+    	
+    	
+    }
 }

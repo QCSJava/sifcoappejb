@@ -233,6 +233,116 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	
+    public List getAccount_Toclose() throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{?=call sp_get_acc0_account_toclose()}");
+		
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					AccountTO account = new AccountTO();
+					account.setAcctcode(rowsetActual.getString(1));
+					account.setAcctname(rowsetActual.getString(2));
+					account.setCurrtotal(rowsetActual.getDouble(3));
+					account.setEndtotal(rowsetActual.getDouble(4));
+					account.setFinanse(rowsetActual.getString(5));
+					account.setBudget(rowsetActual.getString(6));
+					account.setFrozen(rowsetActual.getString(7));
+					account.setPostable(rowsetActual.getString(8));
+					account.setFixed(rowsetActual.getString(9));
+					account.setLevels(rowsetActual.getInt(10));
+					account.setGrpline(rowsetActual.getInt(11));
+					account.setFathernum(rowsetActual.getString(12));
+					account.setGroupmask(rowsetActual.getInt(13));
+					account.setActtype(rowsetActual.getString(14));
+					account.setProtected1(rowsetActual.getString(15));
+					account.setObjtype(rowsetActual.getString(16));
+					account.setValidfor(rowsetActual.getString(17));
+					account.setFrozenfor(rowsetActual.getString(18));
+					account.setCounter(rowsetActual.getInt(19));
+					account.setFormatcode(rowsetActual.getString(20));
+					account.setCreatedate(rowsetActual.getDate(21));
+
+					_return.add(account);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
+    
+    public List getAccount_Endtotal() throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{?=call sp_get_acc0_account_toclose()}");
+		
+
+		lstResultSet = this.runQuery();
+
+		CachedRowSetImpl rowsetActual;
+
+		System.out.println("return psg");
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					AccountTO account = new AccountTO();
+					account.setAcctcode(rowsetActual.getString(1));
+					account.setAcctname(rowsetActual.getString(2));
+					account.setCurrtotal(rowsetActual.getDouble(3));
+					account.setEndtotal(rowsetActual.getDouble(4));
+					account.setFinanse(rowsetActual.getString(5));
+					account.setBudget(rowsetActual.getString(6));
+					account.setFrozen(rowsetActual.getString(7));
+					account.setPostable(rowsetActual.getString(8));
+					account.setFixed(rowsetActual.getString(9));
+					account.setLevels(rowsetActual.getInt(10));
+					account.setGrpline(rowsetActual.getInt(11));
+					account.setFathernum(rowsetActual.getString(12));
+					account.setGroupmask(rowsetActual.getInt(13));
+					account.setActtype(rowsetActual.getString(14));
+					account.setProtected1(rowsetActual.getString(15));
+					account.setObjtype(rowsetActual.getString(16));
+					account.setValidfor(rowsetActual.getString(17));
+					account.setFrozenfor(rowsetActual.getString(18));
+					account.setCounter(rowsetActual.getInt(19));
+					account.setFormatcode(rowsetActual.getString(20));
+					account.setCreatedate(rowsetActual.getDate(21));
+
+					_return.add(account);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 
 	// ######### RETORNA REGISTRO DE ACCOUNT POR FILTROS
 	// ############################
@@ -1331,4 +1441,32 @@ public class AccountingDAO extends CommonDAO {
 
 		return lstResultSet;
 	}
+	
+	public int inicial_endTotal(AccountTO transaction) throws Exception {
+
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE cat_acc0_account SET endtotal=0.0 WHERE acctcode=?");
+		this.setString(1, "acctcode", transaction.getAcctcode());
+
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
+	}
+	public int update_endTotal(AccountTO transaction) throws Exception {
+
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE cat_acc0_account SET endtotal=? WHERE acctcode=?");
+		this.setDouble(1,"endtotal",transaction.getCurrtotal());
+		this.setString(2, "acctcode", transaction.getAcctcode());
+
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
+	}
+	
+	
+	
+	
 }

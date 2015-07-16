@@ -157,8 +157,8 @@ public class BankTest {
 			colecturia.setValue1(concept.getValue1());
 			colecturia.setValue2(concept.getValue2());
 			colecturia.setValue3(concept.getValue3());
-			colecturia.setTaxstatus("Y");
-            colecturia.setAditional_account("Y");
+			colecturia.setTaxstatus(concept.getTaxstatus());
+            colecturia.setAditional_account(concept.getAditional_account());
             colecturia.setFacturas(concept.getFacturas());
 			
 			

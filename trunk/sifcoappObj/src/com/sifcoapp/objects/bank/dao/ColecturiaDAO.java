@@ -191,7 +191,9 @@ public class ColecturiaDAO extends CommonDAO {
 					colecturia.setRef1(rowsetActual.getString(15));
 					colecturia.setRef2(rowsetActual.getString(16));
 					colecturia.setUsersign(rowsetActual.getInt(17));
-					colecturia.setColecturiaDetail(Detail.get_ges_colecturiaDetailByKey(rowsetActual.getInt(1)));
+					colecturia.setColecturiaDetail(Detail
+							.get_ges_colecturiaDetailByKey(rowsetActual
+									.getInt(1)));
 					_return = colecturia;
 				}
 				rowsetActual.close();

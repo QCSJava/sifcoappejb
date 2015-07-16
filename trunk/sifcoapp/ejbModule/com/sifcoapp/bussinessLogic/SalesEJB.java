@@ -219,6 +219,7 @@ public class SalesEJB implements SalesEJBRemote {
 		Double vatsum = zero;
 		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO admin = new AdminDAO();
+		int Basetry=0;
 
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
@@ -275,7 +276,10 @@ public class SalesEJB implements SalesEJBRemote {
 					* articleDetalle.getPrice());
 			articleDetalle.setOpenqty(articleDetalle.getQuantity());
 			total = total + articleDetalle.getGtotal();
-
+			
+			if(articleDetalle.getBaseentry()!=0){
+			Basetry=articleDetalle.getBaseentry();
+			}
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -395,8 +399,7 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 
 		
-		DeliveryTO delivery= new DeliveryTO();
-	delivery=getDeliveryByKey(Sales.getReceiptnum());
+		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -410,9 +413,13 @@ public class SalesEJB implements SalesEJBRemote {
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
         //actualizacion del documento de nota de remision de donde se produjo la venta 
-		 delivery.setCanceled("C");
+		if(Sales.getReceiptnum()!=0){
+			DeliveryTO delivery= new DeliveryTO();
+			delivery=getDeliveryByKey(Sales.getReceiptnum());
+		delivery.setCanceled("C");
          delivery.setCanceldate(Sales.getTaxdate());
          _return=inv_Delivery_update(delivery, Common.MTTOUPDATE, conn);
+		}
          //-----------------------------------------------------------------------------------
          //-----------------------------------------------------------------------------------
 		 Sales.setTransid(res_jour.getDocentry());
