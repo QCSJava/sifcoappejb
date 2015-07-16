@@ -133,8 +133,8 @@ public class BankEJB implements BankEJBRemote {
 		JournalEntryTO journal = new JournalEntryTO();
 		ResultOutTO res_jour = new ResultOutTO();
 		ColecturiaDAO DAO = new ColecturiaDAO();
-		ColecturiaDetailDAO DAO1 = new ColecturiaDetailDAO(DAO.getConn());
 		DAO.setIstransaccional(true);
+		ColecturiaDetailDAO DAO1 = new ColecturiaDetailDAO(DAO.getConn());
 		DAO1.setIstransaccional(true);
 		List sale = new Vector();
 		parameterTO parameter = new parameterTO();

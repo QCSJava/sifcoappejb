@@ -77,5 +77,7 @@ public interface AccountingEJBRemote {
 	//---------------------------------------------------------------------
 	public JournalEntryTO getpruebaByKey(int transid) throws EJBException;
 	
+	public JournalEntryTO fill_Journal_close(JournalEntryTO parameters)
+			throws Exception ;
 	public ResultOutTO journal_entry_new(JournalEntryTO parameters,int action) throws Exception;
 }
