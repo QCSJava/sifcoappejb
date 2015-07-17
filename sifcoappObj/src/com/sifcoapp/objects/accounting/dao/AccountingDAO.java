@@ -294,7 +294,7 @@ public class AccountingDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{?=call sp_get_acc0_account_toclose()}");
+		this.setDbObject("{?=call sp_get_acc0_account()}");
 		
 
 		lstResultSet = this.runQuery();
@@ -1453,7 +1453,8 @@ public class AccountingDAO extends CommonDAO {
 
 		return lstResultSet;
 	}
-	public int update_endTotal(AccountTO transaction) throws Exception {
+	
+public int update_endTotal(AccountTO transaction) throws Exception {
 
 		int lstResultSet = 0;
 
