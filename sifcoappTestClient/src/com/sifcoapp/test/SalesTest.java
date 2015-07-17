@@ -83,7 +83,7 @@ public class SalesTest {
 		// nuevo.setDocdate(fecha);
 		// nuevo.setSeries(42);
 		try {
-			periodo = sales.getSalesByKey(15);
+			periodo = sales.getSalesByKey(254);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,7 +126,7 @@ public class SalesTest {
 		document.setGrssprofit(0.000000);
 		document.setGtotal(0.000000);
 		document.setObjtype("10");
-		document.setTaxstatus("Y");
+		document.setTaxstatus("N");
 		
 		prueba.add(document);
 
@@ -146,7 +146,7 @@ public class SalesTest {
 		document1.setGrssprofit(0.000000);
 		document1.setGtotal(6.275);
 		document1.setObjtype("10");
-		document1.setTaxstatus("Y");
+		document1.setTaxstatus("N");
 		prueba.add(document1);
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
 		  long lnMilisegundos = utilDate.getTime();
@@ -166,7 +166,7 @@ public class SalesTest {
 		parameters.setPaidsum(0.0000);
 		parameters.setRounddif(0.00000);
 		parameters.setObjtype("10");
-		parameters.setPeymethod("2");
+		
 		parameters.setVatsum(0.000000);
 		parameters.setCtlaccount("110602");
 		parameters.setPeymethod("1");

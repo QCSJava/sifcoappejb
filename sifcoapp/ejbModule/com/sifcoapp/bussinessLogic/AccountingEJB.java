@@ -218,17 +218,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return acc;
 	}
 
-	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
+	public ResultOutTO cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
 			throws EJBException {
 		// TODO Auto-generated method stub
-		int _return = 0;
+		ResultOutTO _return= new ResultOutTO();
+		//int _return = 0;
 		AccountingDAO DAO = new AccountingDAO();
 		try {
-			_return = DAO.cat_acc0_ACCOUNT_mtto(parameters, action);
+			_return.setDocentry(DAO.cat_acc0_ACCOUNT_mtto(parameters, action));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		
 		return _return;
 	}
 
