@@ -277,5 +277,15 @@ public class AccountingEJBClient {
 		}
 		return _return;
 	}
+	
+	public ResultOutTO fill_Journal_close(JournalEntryTO parameters)
+			throws Exception{
+		ResultOutTO _return=new ResultOutTO();
+		
+		_return=bean.fill_Journal_close(parameters);
+		
+		return _return;
+		
+	}
 
 }

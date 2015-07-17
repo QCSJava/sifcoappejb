@@ -306,8 +306,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 		double debe = zero;
 		double haber = zero;
 		ResultOutTO _return = new ResultOutTO();
-
 		DAO.setIstransaccional(true);
+		
+		
+		
+		
 		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(_conn);
 		JournalLinesDAO.setIstransaccional(true);
 
@@ -1141,7 +1144,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public JournalEntryTO fill_Journal_close(JournalEntryTO parameters)
+	public ResultOutTO fill_Journal_close(JournalEntryTO parameters)
 			throws Exception {
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
@@ -1310,8 +1313,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 		JournalEntryTO journal = new JournalEntryTO();
 		journal = fill_JournalEntry_Unir_Toclose(nuevo);
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ResultOutTO _return= new ResultOutTO();
 
-		return journal;
+		_return=journalEntry_mtto(journal,Common.MTTOINSERT );
+		
+		return _return;
 
 	}
 
