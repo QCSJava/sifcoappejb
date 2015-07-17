@@ -80,4 +80,6 @@ public interface AccountingEJBRemote {
 	public JournalEntryTO fill_Journal_close(JournalEntryTO parameters)
 			throws Exception ;
 	public ResultOutTO journal_entry_new(JournalEntryTO parameters,int action) throws Exception;
+	
+	public ResultOutTO Update_endTotal(int indicador) throws Exception;
 }

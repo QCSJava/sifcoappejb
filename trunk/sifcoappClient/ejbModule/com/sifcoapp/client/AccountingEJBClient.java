@@ -266,5 +266,16 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
+	public ResultOutTO Update_endTotal(int indicador) throws Exception{
+		
+		ResultOutTO _return = null;
+		try {
+			_return = bean.Update_endTotal(indicador);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return _return;
+	}
 
 }
