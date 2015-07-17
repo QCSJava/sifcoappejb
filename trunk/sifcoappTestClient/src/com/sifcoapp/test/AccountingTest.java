@@ -250,7 +250,7 @@ ResultOutTO _result = new ResultOutTO();
 	}
 
 	public static void cat_Acc0_account_mtto() throws Exception {
-		int _return = 8;
+		ResultOutTO _return = new ResultOutTO();
 		AccountTO acc = new AccountTO();
 		acc.setAcctcode("1102700106");
 		acc.setAcctname("cuenta por cobrar Equipo 01");
@@ -260,7 +260,7 @@ ResultOutTO _result = new ResultOutTO();
 
 		_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 1);
 
-		System.out.println(_return);
+		System.out.println(_return.getDocentry());
 
 	}
 

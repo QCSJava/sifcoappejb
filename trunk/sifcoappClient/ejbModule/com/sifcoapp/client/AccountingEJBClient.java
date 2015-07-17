@@ -121,10 +121,11 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
-	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
+	public ResultOutTO cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
 			throws Exception {
 		// TODO Auto-generated method stub
-		int _return = 0;
+		ResultOutTO _return = new ResultOutTO();
+		
 		_return = bean.cat_acc0_ACCOUNT_mtto(parameters, action);
 		return _return;
 	}

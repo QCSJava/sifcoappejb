@@ -38,7 +38,7 @@ public interface AccountingEJBRemote {
 	
 	public AccountTO getAccountByKey(String acctcode)throws EJBException;
 	
-	public int cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)throws EJBException;
+	public ResultOutTO cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)throws EJBException;
 	
 	public List getTreeAccount()throws EJBException;
     
