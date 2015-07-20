@@ -179,6 +179,8 @@ public class SalesEJB implements SalesEJBRemote {
 		} finally {
 			DAO.forceCloseConnection();
 		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Almacenados con exito");
 		return _return;
 
 	}
@@ -440,7 +442,9 @@ public class SalesEJB implements SalesEJBRemote {
 		// -----------------------------------------------------------------------------------
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------
-
+        _return.setCodigoError(0);
+        _return.setDocentry(Sales.getDocentry());
+        _return.setMensaje("Datos Alamacenados con Exito");
 		return _return;
 	}
 
@@ -1660,6 +1664,8 @@ public JournalEntryTO fill_JournalEntry_pago(SalesTO parameters)
 		} finally {
 			DAO.forceCloseConnection();
 		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Alamacenados Con Exito");
 		return _return;
 
 	}
@@ -1964,7 +1970,8 @@ public JournalEntryTO fill_JournalEntry_pago(SalesTO parameters)
 			_return = inv_ClientCredit_update(clientcredi, Common.MTTOUPDATE,
 					conn);
 		}
-
+        _return.setCodigoError(0);
+        _return.setMensaje("Datos Guardados Con Exito");
 		return _return;
 	}
 
@@ -2951,6 +2958,8 @@ public JournalEntryTO fill_JournalEntry_pago(SalesTO parameters)
 		} finally {
 			DAO.forceCloseConnection();
 		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Almacenados Con Exito");
 		return _return;
 
 	}
@@ -3186,7 +3195,9 @@ public JournalEntryTO fill_JournalEntry_pago(SalesTO parameters)
 
 		Delivery.setTransid(res_jour.getDocentry());
 		_return = inv_Delivery_update(Delivery, Common.MTTOUPDATE, conn);
-
+        
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Alamacenados Con exito");
 		return _return;
 	}
 
@@ -3583,7 +3594,7 @@ public JournalEntryTO fill_JournalEntry_pago(SalesTO parameters)
 
 		}
 		_return.setCodigoError(0);
-
+         _return.setMensaje("Datos Almacenados Con Exito");
 		return _return;
 
 	}

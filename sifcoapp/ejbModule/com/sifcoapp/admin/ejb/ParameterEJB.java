@@ -52,7 +52,7 @@ public class ParameterEJB implements ParameterEJBRemote {
 				// TODO Auto-generated catch block
 				throw (EJBException) new EJBException(e);
 			}
-			if(i==0){
+			if(i!=0){
 				_return.setCodigoError(1);
 				_return.setMensaje("No es posible ingresar los datos al sistema");
 				
