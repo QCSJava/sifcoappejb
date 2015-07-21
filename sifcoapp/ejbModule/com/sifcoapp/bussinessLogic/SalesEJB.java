@@ -2268,16 +2268,19 @@ public class SalesEJB implements SalesEJBRemote {
 
 		String buss_c;
 		String branch_c;
-		String iva_c;
+		String iva_c = null;
 		String V_local;
 		String costo_venta;
-		String fovialCotrans_c = null;
-		double bussines = 0;
-		double branch = 0;
-		double tax = 0;
-		double fovc = 0;
-		double sale = 0;
-		double costo = 0;
+		String fovial = null;
+		String cotrans_C = null;
+		double bussines = 0.0;
+		double branch = 0.0;
+		double tax = 0.0;
+		double fovc = 0.0;
+		double cotrans = 0.0;
+		double sale = 0.0;
+		double costo = 0.0;
+		double impuesto = 0.0;
 		AdminDAO admin = new AdminDAO();
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
@@ -2290,27 +2293,77 @@ public class SalesEJB implements SalesEJBRemote {
 		List aux1 = new Vector();
 		// recorre la lista de detalles
 		admin = new AdminDAO();
-		CatalogTO Catalog1 = new CatalogTO();
-		Catalog1 = admin.findCatalogByKey("IVA", 10);
+
 		for (Object obj : list) {
 			ClientCrediDetailTO good = (ClientCrediDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
+			CatalogTO Catalog = new CatalogTO();
+
+			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
 
 			arti = good.getArticle();
 			branch = branch + (arti.getAvgPrice() * good.getQuantity());
 			sale = sale + good.getLinetotal();
-			double impuesto = good.getLinetotal()
-					* (Double.parseDouble(Catalog1.getCatvalue()) / 100);
-			fovc = fovc + (good.getVatsum() - impuesto);
-			tax = tax + impuesto;
+			// calculando el iva validando si el producto esta exento o de iva
+			if (good.getTaxstatus().equals("Y")) {
+				// validar si es FOV
+				if (good.getTaxcode().equals("FOV")) {
+
+					admin = new AdminDAO();
+					CatalogTO Catalog1 = new CatalogTO();
+					Catalog1 = admin.findCatalogByKey("FOV1", 10);
+					if (Catalog1.getCatvalue3() == null) {
+						throw new Exception(
+								"No tiene cuenta asignada para  impuestos");
+					}
+					if (Catalog1.getCatvalue2() == null) {
+						throw new Exception(
+								"No tiene cuenta asignada para  impuestos");
+					}
+					if (Catalog1.getCatvalue() == null) {
+						throw new Exception(
+								"No tiene cuenta asignada para  impuestos");
+					}
+					cotrans_C = Catalog1.getCatvalue3();
+					fovial = Catalog1.getCatvalue2();
+					iva_c = Catalog1.getCatvalue();
+
+					impuesto = good.getLinetotal()
+							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+					fovc = fovc
+							+ (Double.parseDouble(Catalog.getCatvalue2()) * good
+									.getQuantity());
+					cotrans = cotrans
+							+ (Double.parseDouble(Catalog.getCatvalue3()) * good
+									.getQuantity());
+					tax = tax + impuesto;
+
+				} else {
+
+					if (Catalog.getCatvalue2() == null) {
+						throw new Exception(
+								"No tiene cuenta asignada para impuestos");
+					}
+					iva_c = Catalog.getCatvalue2();
+					impuesto = good.getLinetotal()
+							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+
+					tax = tax + impuesto;
+				}
+
+			}
+
+			// sacando el total de venta
+
 			bussines = bussines
 					+ ((good.getVatsum() - impuesto) + impuesto + good
 							.getLinetotal());
 
 		}
+
 		// consultando en la base de datos los codigos de cuenta asignados
 		// cuenta de bussines partner
 		buss_c = parameters.getCtlaccount();
@@ -2318,7 +2371,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
-
+		admin = new AdminDAO();
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		branch_c = branch1.getBalinvntac();
 		if (branch1.getBalinvntac() == null) {
@@ -2327,29 +2380,6 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 
 		// buscando cuenta asignada para IVA y FOVIAL
-		if (fovc != 0) {
-			admin = new AdminDAO();
-			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("FOV1", 10);
-
-			if (Catalog.getCatvalue2() == null) {
-				throw new Exception("No tiene cuenta asignada para  impuestos");
-			}
-			if (Catalog.getCatvalue() == null) {
-				iva_c = Catalog.getCatvalue();
-			}
-			fovialCotrans_c = Catalog.getCatvalue2();
-			iva_c = Catalog.getCatvalue();
-
-		} else {
-			admin = new AdminDAO();
-			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("IVA", 10);
-			if (Catalog.getCatvalue2() == null) {
-				throw new Exception("No tiene cuenta asignada para impuestos");
-			}
-			iva_c = Catalog.getCatvalue2();
-		}
 
 		// cuenta asignada a ventas
 		AccassignmentTO acc = new AccassignmentTO();
@@ -2365,6 +2395,7 @@ public class SalesEJB implements SalesEJBRemote {
 		JournalEntryLinesTO art4 = new JournalEntryLinesTO();
 		JournalEntryLinesTO art5 = new JournalEntryLinesTO();
 		JournalEntryLinesTO art6 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art7 = new JournalEntryLinesTO();
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// llenado del asiento contable
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2375,7 +2406,7 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines + branch);
 		nuevo.setSystotal(bussines + branch);
-		;
+
 		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());
@@ -2384,6 +2415,7 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setTranstype(parameters.getObjtype());
 		nuevo.setBaseref(parameters.getRef1());
 		nuevo.setRefdate(parameters.getDocduedate());
+
 		nuevo.setRef1(parameters.getRef1());
 		nuevo.setRefndrprt("N");
 		nuevo.setAdjtran("N");
@@ -2392,10 +2424,13 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setPrinted("N");
 		nuevo.setAutowt("N");
 		nuevo.setDeferedtax("N");
+
 		// llenado de los
 		// hijos---------------------------------------------------------------------------------------------------
 		// cuenta del socio de negocio
 		art1.setLine_id(1);
+
+		//art1.setDebit(bussines);
 		art1.setCredit(bussines);
 		art1.setAccount(buss_c);
 		art1.setDuedate(parameters.getDocdate());
@@ -2416,6 +2451,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setVatamount(0.0);
 		art1.setClosed("N");
 		art1.setGrossvalue(0.0);
+		art1.setBalduedeb(0.0);
 		art1.setBalduecred(bussines);
 		art1.setIsnet("Y");
 		art1.setTaxtype(0);
@@ -2431,8 +2467,8 @@ public class SalesEJB implements SalesEJBRemote {
 		// cuenta asignada al almacen
 		art2.setLine_id(2);
 		art2.setAccount(branch_c);
-		art2.setDebit(branch);
-		art2.setCredit(null);
+        art2.setDebit(branch);
+		//art2.setCredit(branch);
 		art2.setDuedate(parameters.getDocdate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
@@ -2451,8 +2487,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setVatamount(0.0);
 		art2.setClosed("N");
 		art2.setGrossvalue(0.0);
-
 		art2.setBalduedeb(branch);
+		art2.setBalduecred(0.0);
 		art2.setIsnet("Y");
 		art2.setTaxtype(0);
 		art2.setTaxpostacc("N");
@@ -2466,8 +2502,8 @@ public class SalesEJB implements SalesEJBRemote {
 
 		// cuenta de iva
 		art3.setLine_id(3);
-		art3.setDebit(tax);
-
+        art3.setDebit(tax);
+	
 		art3.setAccount(iva_c);
 		art3.setDuedate(parameters.getDocduedate());
 		art3.setShortname(iva_c);
@@ -2487,8 +2523,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art3.setVatamount(0.0);
 		art3.setClosed("N");
 		art3.setGrossvalue(0.0);
-		art3.setBalduedeb(tax);
-
+		art3.setBalduedeb(0.0);
+		art3.setBalduecred(tax);
 		art3.setIsnet("Y");
 		art3.setTaxtype(0);
 		art3.setTaxpostacc("N");
@@ -2504,8 +2540,8 @@ public class SalesEJB implements SalesEJBRemote {
 		// -----------------------------
 
 		art4.setLine_id(4);
-		art4.setDebit(sale);
-
+        art4.setDebit(sale);
+		//art4.setCredit(sale);
 		art4.setAccount(V_local);
 		art4.setDuedate(parameters.getDocduedate());
 		art4.setShortname(V_local);
@@ -2525,8 +2561,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art4.setVatamount(0.0);
 		art4.setClosed("N");
 		art4.setGrossvalue(0.0);
-
 		art4.setBalduedeb(sale);
+		art4.setBalduecred(0.0);
 		art4.setIsnet("Y");
 		art4.setTaxtype(0);
 		art4.setTaxpostacc("N");
@@ -2542,8 +2578,8 @@ public class SalesEJB implements SalesEJBRemote {
 		// -----------------------------
 
 		art5.setLine_id(5);
-
-		art5.setCredit(branch);
+		//art5.setDebit(branch);
+art5.setCredit(branch);
 		art5.setAccount(costo_venta);
 		art5.setDuedate(parameters.getDocduedate());
 		art5.setShortname(costo_venta);
@@ -2563,9 +2599,8 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setVatamount(0.0);
 		art5.setClosed("N");
 		art5.setGrossvalue(0.0);
-
+		art5.setBalduedeb(0.0);
 		art5.setBalduecred(branch);
-
 		art5.setIsnet("Y");
 		art5.setTaxtype(0);
 		art5.setTaxpostacc("N");
@@ -2577,15 +2612,15 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setTranstype(parameters.getObjtype());
 		detail.add(art5);
 		// cuenta de cotrans y fovial si se aplica el impuesto
-		if (fovc != 0) {
+		if (fovc != 0.0) {
 			art6.setLine_id(6);
-			art6.setDebit(fovc);
-
-			art6.setAccount(fovialCotrans_c);
+           art6.setDebit(fovc);
+			//art6.setCredit(fovc);
+			art6.setAccount(fovial);
 			art6.setDuedate(parameters.getDocduedate());
-			art6.setShortname(fovialCotrans_c);
+			art6.setShortname(fovial);
 			art6.setContraact(buss_c);
-			art6.setLinememo("nota de credito");
+			art6.setLinememo("Venta  de mercancias");
 			art6.setRefdate(parameters.getDocduedate());
 			art6.setRef1(parameters.getRef1());
 			// art2.setRef2();
@@ -2600,8 +2635,8 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setVatamount(0.0);
 			art6.setClosed("N");
 			art6.setGrossvalue(0.0);
-
 			art6.setBalduedeb(fovc);
+			art6.setBalduecred(0.0);
 			art6.setIsnet("Y");
 			art6.setTaxtype(0);
 			art6.setTaxpostacc("N");
@@ -2613,10 +2648,212 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setTranstype(parameters.getObjtype());
 			detail.add(art6);
 		}
+		if (cotrans != 0.0) {
+			art7.setLine_id(7);
+
+			//art7.setCredit(cotrans);
+			art7.setDebit(cotrans);
+			art7.setAccount(cotrans_C);
+			art7.setDuedate(parameters.getDocduedate());
+			art7.setShortname(cotrans_C);
+			art7.setContraact(buss_c);
+			art7.setLinememo("venta de mercancias");
+			art7.setRefdate(parameters.getDocduedate());
+			art7.setRef1(parameters.getRef1());
+			// art2.setRef2();
+			art7.setBaseref(parameters.getRef1());
+			art7.setTaxdate(parameters.getDocduedate());
+			// 4rt1.setFinncpriod(finncpriod);
+			art7.setReltransid(-1);
+			art7.setRellineid(-1);
+			art7.setReltype("N");
+			art7.setObjtype("5");
+			art7.setVatline("N");
+			art7.setVatamount(0.0);
+			art7.setClosed("N");
+			art7.setGrossvalue(0.0);
+			art7.setBalduedeb(cotrans);
+			art7.setBalduecred(0.0);
+			art7.setIsnet("Y");
+			art7.setTaxtype(0);
+			art7.setTaxpostacc("N");
+			art7.setTotalvat(0.0);
+			art7.setWtliable("N");
+			art7.setWtline("N");
+			art7.setPayblock("N");
+			art7.setOrdered("N");
+			art7.setTranstype(parameters.getObjtype());
+			detail.add(art7);
+		}
 		nuevo.setJournalentryList(detail);
+		
+		nuevo=fill_JournalEntry_Unir2(nuevo);
 		return nuevo;
 	}
 
+	public JournalEntryTO fill_JournalEntry_Unir2(JournalEntryTO parameters)
+			throws Exception {
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+		boolean ind = false;
+		Double total = zero;
+		Double sum_debe = 0.0;
+		Double sum_credit = 0.0;
+		int n = 1;
+		// copiando la lista de los detalles de el asiento contable
+		List list = parameters.getJournalentryList();
+		// --------------------------------------------------------
+		List aux = new Vector();
+		List<List> listas = new Vector();
+		List aux1 = new Vector();
+
+		// recorre la lista de detalles
+		for (Object obj : list) {
+			ind = false;
+			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
+			String cod = good.getAccount();
+			List lisHija = new Vector();
+
+			// comparando lista aux de nodos visitados
+			for (Object obj2 : aux) {
+				JournalEntryLinesTO good2 = (JournalEntryLinesTO) obj2;
+				if (cod.equals(good2.getAccount())) {
+					ind = true;
+				}
+			}
+			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
+			// en otra lista
+			if (ind == false) {
+				for (Object obj3 : list) {
+					JournalEntryLinesTO good3 = (JournalEntryLinesTO) obj3;
+					if (cod.equals(good3.getAccount())) {
+						lisHija.add(good3);
+					}
+				}
+				// guarda en la lista de listas
+				listas.add(lisHija);
+			}
+
+			aux.add(good);
+
+		}
+
+		// recorre la lista de listas para encontrar los detalles de el asiento
+		// contable
+		List detail = new Vector();
+		for (List obj1 : listas) {
+			List listaDet = obj1;
+			Double sum = zero;
+			String acc = null;
+			String c_acc = null;
+			sum_debe = zero;
+			sum_credit = zero;
+			for (Object obj2 : listaDet) {
+				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
+				if (oldjournal.getDebit() == null) {
+					oldjournal.setDebit(0.0);
+				}
+				if (oldjournal.getCredit() == null) {
+					oldjournal.setCredit(zero);
+				}
+				sum_debe = sum_debe + oldjournal.getDebit();
+				sum_credit = sum_credit + oldjournal.getCredit();
+				acc = oldjournal.getAccount();
+				c_acc = oldjournal.getContraact();
+			}
+
+			// asiento contable
+
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			// -----------------------------------------------------------------------------------
+			// encontrando el saldo si es deudor o acreedor
+			// -----------------------------------------------------------------------------------
+			Double saldo = sum_debe - sum_credit;
+			if (saldo != 0) {
+				if (saldo > 0) {
+					art1.setDebit(saldo);
+					art1.setBalduedeb(saldo);
+					art1.setBalduecred(zero);
+				} else {
+					saldo = saldo * -1;
+					art1.setCredit(saldo);
+					art1.setBalduecred(saldo);
+					art1.setBalduedeb(zero);
+				}
+			} else {
+				art1.setDebit(zero);
+				art1.setBalduedeb(saldo);
+				art1.setBalduecred(zero);
+			}
+
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+			// llenado del asiento contable
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+			art1.setLine_id(n);
+			art1.setAccount(acc);
+			art1.setDuedate(parameters.getDuedate());
+			art1.setShortname(acc);
+			art1.setContraact(c_acc);
+			art1.setLinememo("Pago de Colecturia");
+			art1.setRefdate(parameters.getDuedate());
+			art1.setRef1(parameters.getRef1());
+			// art1.setRef2();
+			art1.setBaseref(parameters.getRef1());
+			art1.setTaxdate(parameters.getTaxdate());
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(zero);
+			art1.setClosed("N");
+			art1.setGrossvalue(zero);
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(0.0);
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");
+			art1.setTranstype(parameters.getTranstype());
+			detail.add(art1);
+			n++;
+
+		}
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(parameters.getTranstype());
+		nuevo.setBaseref(parameters.getBaseref());
+		nuevo.setRefdate(parameters.getRefdate());
+		nuevo.setMemo(parameters.getMemo());
+		nuevo.setRef1(parameters.getRef1());
+		nuevo.setRef2(parameters.getRef2());
+		nuevo.setLoctotal(parameters.getLoctotal());
+		nuevo.setSystotal(parameters.getSystotal());
+		nuevo.setTransrate(zero);
+		nuevo.setDuedate(parameters.getDuedate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setFinncpriod(0);
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setRefndrprt("N");
+		nuevo.setObjtype("5");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setSeries(0);
+		nuevo.setAutovat("N");
+
+		nuevo.setDocseries(0);
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+		nuevo.setJournalentryList(detail);
+
+		return nuevo;
+
+	}
+	
 	public JournalEntryTO fill_JournalEntry_pago(ClientCrediTO parameters)
 			throws Exception {
 

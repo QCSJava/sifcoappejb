@@ -269,7 +269,7 @@ public class AccountingEJBClient {
 
 	public ResultOutTO Update_endTotal(int indicador) throws Exception{
 		
-		ResultOutTO _return = null;
+		ResultOutTO _return = new ResultOutTO();
 		try {
 			_return = bean.Update_endTotal(indicador);
 		} catch (Exception e) {
