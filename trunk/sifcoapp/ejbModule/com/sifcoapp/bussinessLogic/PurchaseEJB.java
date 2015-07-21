@@ -1457,7 +1457,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		}
 		// -------------------------------------------------------------------------------------------------------------------------------------
 		// validaciones-------------------------------------------------------------------------------------------------------------------------
-		System.out.println("llego al salesejb");
+		
 		ResultOutTO _return = new ResultOutTO();
 		_return = validate_inv_PurchaseQuotation_mtto(parameters);
 		System.out.println(_return.getCodigoError());
@@ -2381,7 +2381,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(branch_c);
-		art1.setLinememo("Compra  de mercancias");
+		art1.setLinememo("anulacion de compra");
 		art1.setRefdate(parameters.getDocduedate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
@@ -2417,7 +2417,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
-		art2.setLinememo("Compra  de mercancias");
+		art2.setLinememo("anulacion de compras");
 		art2.setRefdate(parameters.getDocduedate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
@@ -2453,7 +2453,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art3.setDuedate(parameters.getDocduedate());
 		art3.setShortname(iva_c);
 		art3.setContraact(buss_c);
-		art3.setLinememo("Compra de mercancias");
+		art3.setLinememo("anulacion de compras");
 		art3.setRefdate(parameters.getDocduedate());
 		art3.setRef1(parameters.getRef1());
 		// art2.setRef2();
@@ -2490,7 +2490,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art4.setDuedate(parameters.getDocduedate());
 			art4.setShortname(fovial);
 			art4.setContraact(buss_c);
-			art4.setLinememo("compra  de mercancias");
+			art4.setLinememo("anulacion de compras");
 			art4.setRefdate(parameters.getDocduedate());
 			art4.setRef1(parameters.getRef1());
 			// art2.setRef2();
@@ -2527,7 +2527,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art5.setDuedate(parameters.getDocduedate());
 			art5.setShortname(cotrans_C);
 			art5.setContraact(buss_c);
-			art5.setLinememo("compra de mercancias");
+			art5.setLinememo("anulacion de compras");
 			art5.setRefdate(parameters.getDocduedate());
 			art5.setRef1(parameters.getRef1());
 			// 5rt2.setRef2();
@@ -2665,7 +2665,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
-			art1.setLinememo("Pago de Colecturia");
+			art1.setLinememo("anulacion de compra");
 			art1.setRefdate(parameters.getDuedate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
