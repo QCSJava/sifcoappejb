@@ -126,7 +126,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_pruebadetalle(?)}");
+		this.setDbObject("{call sp_get_journalentrydetail(?)}");
 		this.setInt(1, "_transid", new Integer(transid));
 
 		lstResultSet = this.runQuery();

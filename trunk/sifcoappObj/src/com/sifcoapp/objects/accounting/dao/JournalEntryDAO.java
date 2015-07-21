@@ -189,7 +189,7 @@ public class JournalEntryDAO extends CommonDAO {
 		JournalEntryTO _return = new JournalEntryTO();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_journalEntry_by_key(?)}");
+		this.setDbObject("{call sp_get_journalentry_by_key(?)}");
 		this.setInt(1, "_docentry", new Integer(transid));
 		try {
 			lstResultSet = this.runQuery();

@@ -140,6 +140,7 @@ public class BankEJB implements BankEJBRemote {
 		parameterTO parameter = new parameterTO();
 		ParameterEJB ejb = new ParameterEJB();
 		parameter = ejb.getParameterbykey(9);
+		List aux=new Vector();
 
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
@@ -181,13 +182,11 @@ public class BankEJB implements BankEJBRemote {
 					sale = detail.getFacturas();
 
 				}
-				
-				}else{
-					parameters.getColecturiaDetail().remove(detail);
-			
+				aux.add(detail);
 				}
 			}
-
+         parameters.setColecturiaDetail(aux);
+			
 			if (parameters.getSeries() == 1) {
 
 				journal = fill_JournalEntry(parameters);
@@ -195,7 +194,7 @@ public class BankEJB implements BankEJBRemote {
 				res_jour = account.journalEntry_mtto(journal,
 						Common.MTTOINSERT, DAO.getConn());
 				ResultOutTO nuevo = new ResultOutTO();
-				if (sale != null) {
+				if (sale.size()!=0) {
 					nuevo = actualizar_sale(sale, DAO.getConn(), parameters);
 				}
 			}
