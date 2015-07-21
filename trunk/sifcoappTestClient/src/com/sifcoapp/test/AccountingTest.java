@@ -513,5 +513,12 @@ ResultOutTO _result = new ResultOutTO();
 	
 	}
 	
+	public static void update_endtotal() throws Exception {
+		ResultOutTO _result = new ResultOutTO();
+		
+
+		_result = AccountingEJBService.Update_endTotal(1);
+		System.out.println(_result.getMensaje());
+	}
 	
 }
