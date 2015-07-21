@@ -385,14 +385,17 @@ ResultOutTO _result = new ResultOutTO();
 	public static void getjournalentry_by_key() {
 		List consul = new Vector();
 		JournalEntryTO result = new JournalEntryTO();
-		int trans = 14;
+		int trans =367 ;
 		result = AccountingEJBService.getJournalEntryByKey(trans);
 		System.out.println(result.getBtfstatus() + result.getTransid());
 		consul = result.getJournalentryList();
+		
+		if(consul!=null){
 		Iterator<JournalEntryLinesTO> iterator = consul.iterator();
 		while (iterator.hasNext()) {
 			JournalEntryLinesTO acc = (JournalEntryLinesTO) iterator.next();
 			System.out.println(acc.getTransid() + " - " + acc.getLine_id());
+		}
 		}
 	}
 
@@ -497,8 +500,8 @@ ResultOutTO _result = new ResultOutTO();
 			
 			result = AccountingEJBService.getpruebaByKey(i);
 							
-			nuevo = AccountingEJBService.journalEntry_mtto(result,
-					Common.MTTOINSERT);			
+			//nuevo = AccountingEJBService.journalEntry_mtto(result,
+			//		Common.MTTOINSERT);			
 			
 			if (nuevo.getCodigoError() != 0) {
 				System.out.println(nuevo.getMensaje());

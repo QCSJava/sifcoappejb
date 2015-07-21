@@ -1161,7 +1161,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 	}
 	
-public JournalEntryTO fill_JournalEntry_pago(SalesTO parameters)
+     public JournalEntryTO fill_JournalEntry_pago(SalesTO parameters)
 			throws Exception {
 
 		String buss_c;

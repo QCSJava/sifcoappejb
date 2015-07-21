@@ -684,7 +684,22 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	public JournalEntryTO fill_JournalEntry(PurchaseTO parameters)
 			throws Exception {
-
+		
+		/*String buss_c;
+		String branch_c;
+		String iva_c = null;
+		String V_local;
+		String costo_venta;
+		String fovial = null;
+		String cotrans_C = null;
+		double bussines = 0.0;
+		double branch = 0.0;
+		double tax = 0.0;
+		double fovc = 0.0;
+		double cotrans = 0.0;
+		double sale = 0.0;
+		double costo = 0.0;
+		double impuesto = 0.0;*/
 		String buss_c;
 		String branch_c;
 		String iva_c;
