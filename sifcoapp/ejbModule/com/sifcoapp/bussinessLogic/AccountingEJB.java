@@ -1319,71 +1319,34 @@ ResultOutTO _return= new ResultOutTO();
 
 	public ResultOutTO Update_endTotal() throws EJBException {
 		AccountingDAO DAO = new AccountingDAO();
+		
 		List accountlist = new Vector();
 		ResultOutTO _return= new ResultOutTO();
 		
 		
 			
 				try {
-					accountlist = DAO.getAccount_Endtotal();
-					for (Object object : accountlist) {
-						AccountTO account = (AccountTO) object;
-						//inicializa el endtotal a cero 
-						account.setEndtotal(0.0);
-						DAO = new AccountingDAO();
-						DAO.inicial_endTotal(account);
-						//actualiza el endtotal con el valor del currtotal
-						account.setEndtotal(account.getCurrtotal());
-						DAO = new AccountingDAO();
-						DAO.update_endTotal(account);
-						
-					}
+					DAO.setIstransaccional(true);
+					DAO.inicial_endTotal();
+					
+					DAO.update_TreeTotal();
+					
 					_return.setCodigoError(0);
 					_return.setMensaje("datos almacenados correctamente");
 
+					DAO.forceCommit();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					DAO.rollBackConnection();
+					throw (EJBException) new EJBException(e);
+				} finally {
+					DAO.forceCloseConnection();
 				}
-
-			
 		
 		return _return;
 
 	}
 	
-	/*public List createDocuments(List acc) {
-	        AccountTO accNode = null;
-	        //List acc = new DefaultTreeNode(accNode, null);
-
-
-	        Iterator<AccountTO> iterator = acc.iterator();
-	        while (iterator.hasNext()) {
-	            AccountTO accdetail = (AccountTO) iterator.next();
-
-	            //Asignar hijos
-	            if (accdetail.getChild() != null) {
-	                createDocumentsChild(documents, accdetail.getChild());
-	                documents.setExpanded(true);
-	            }
-	        }
-	        acc.getChildren().get(0).setExpanded(true);
-	        return acc;
-	    }
-
-	    public void createDocumentsChild(TreeNode padre, List hijos) {
-	        List AccDetLst = new Vector();
-	        AccDetLst = hijos;
-	        Iterator<AccountTO> iterator = AccDetLst.iterator();
-	        while (iterator.hasNext()) {
-	            AccountTO accdetail = (AccountTO) iterator.next();
-	            TreeNode documents = new DefaultTreeNode(accdetail, padre);
-	            //Asignar hijos
-	            if (accdetail.getChild() != null) {
-	                createDocumentsChild(documents, accdetail.getChild());
-	                documents.setExpanded(true);
-	            }
-	        }
-	    }
-*/
+	
+	   
 }
