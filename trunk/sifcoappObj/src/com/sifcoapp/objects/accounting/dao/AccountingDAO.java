@@ -1442,14 +1442,13 @@ public class AccountingDAO extends CommonDAO {
 		return lstResultSet;
 	}
 	
-	public int inicial_endTotal(AccountTO transaction) throws Exception {
+	public int inicial_endTotal() throws Exception {
 
 		int lstResultSet = 0;
 		Double endtotal=0.0000;
 
-		this.setDbObject("UPDATE cat_acc0_account SET endtotal=? WHERE acctcode=?");
+		this.setDbObject("UPDATE cat_acc0_account SET endtotal=?");
 		this.setDouble(1, "endtotal",endtotal);
-		this.setString(2, "acctcode", transaction.getAcctcode());
 
 		lstResultSet = this.runUpdate();
 
@@ -1469,7 +1468,123 @@ public int update_endTotal(AccountTO transaction) throws Exception {
 		return lstResultSet;
 	}
 	
+public void update_TreeTotal() throws Exception {
 	
+	List _return = new Vector();
+	List lstResultSet = null;
+
+	this.setTypeReturn(Common.TYPERETURN_CURSOR);
+	this.setDbObject("{call sp_get_account(?)}");
+	this.setInt(1, "_type", 1); // para devolver todas las cuentas
+	lstResultSet = this.runQuery();
+
+	CachedRowSetImpl rowsetActual;
+	
+	
+	
+	System.out.println("return psg");
+
+	ListIterator liRowset = null;
+	liRowset = lstResultSet.listIterator();
+	Hashtable _values = new Hashtable();
+	while (liRowset.hasNext()) {
+		rowsetActual = (CachedRowSetImpl) liRowset.next();
+		try {
+			while (rowsetActual.next()) {
+				AccountTO account = new AccountTO();
+				account.setAcctcode(rowsetActual.getString(1));
+				account.setAcctname(rowsetActual.getString(2));
+				account.setCurrtotal(rowsetActual.getDouble(3));
+				account.setEndtotal(rowsetActual.getDouble(4));
+				account.setFinanse(rowsetActual.getString(5));
+				account.setBudget(rowsetActual.getString(6));
+				account.setFrozen(rowsetActual.getString(7));
+				account.setPostable(rowsetActual.getString(8));
+				account.setFixed(rowsetActual.getString(9));
+				account.setLevels(rowsetActual.getInt(10));
+				account.setGrpline(rowsetActual.getInt(11));
+				account.setFathernum(rowsetActual.getString(12));
+				account.setGroupmask(rowsetActual.getInt(13));
+				account.setActtype(rowsetActual.getString(14));
+				account.setProtected1(rowsetActual.getString(15));
+				account.setObjtype(rowsetActual.getString(16));
+				account.setValidfor(rowsetActual.getString(17));
+				account.setFrozenfor(rowsetActual.getString(18));
+				account.setCounter(rowsetActual.getInt(19));
+				account.setFormatcode(rowsetActual.getString(20));
+				account.setCreatedate(rowsetActual.getDate(21));
+				account.setUsersing(rowsetActual.getInt(22));
+
+				_values.put(account.getAcctcode(), account);
+				// _return.add(account);
+			}
+			AccountTO profileDetTmp = null;
+			String _position = null;
+			List lstDetProfile = new Vector();
+
+			String[] claves = (String[]) _values.keySet().toArray(
+					new String[0]);
+			java.util.Arrays.sort(claves);
+
+			// partimos de los nodos sin hijos
+			for (String clave : claves) {
+				profileDetTmp = (AccountTO) _values.get(clave);
+				if (profileDetTmp.getFathernum() == null) {
+					profileDetTmp.setCurrtotal(0.00);
+					this.filterParent_update(profileDetTmp, _values,
+							profileDetTmp.getAcctcode());
+					_return.add(profileDetTmp);
+				}
+			}
+			// while (enParameters.hasMoreElements()) {
+
+			// }
+			rowsetActual.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+}
+
+private void filterParent_update(AccountTO parent, Hashtable _allvalues,
+		String parentFilter) throws Exception{
+
+	// Enumeration enParameters = _allvalues.keys();
+	AccountTO profileDetTmp = null;
+	String _position = null;
+	List lstDetProfile = new Vector();
+
+	// partimos de los nodos sin hijos
+
+	String[] claves = (String[]) _allvalues.keySet().toArray(new String[0]);
+	java.util.Arrays.sort(claves);
+
+	for (String clave : claves) {
+		// _position = (String) enParameters.nextElement();
+		profileDetTmp = (AccountTO) _allvalues.get(clave);
+
+		String padre = profileDetTmp.getFathernum();
+
+		if (padre != null && padre.equals(parentFilter)) {
+
+			this.filterParent_update(profileDetTmp, _allvalues,
+					profileDetTmp.getAcctcode());
+
+			lstDetProfile.add(profileDetTmp);
+
+			parent.setCurrtotal(parent.getCurrtotal()
+					+ profileDetTmp.getCurrtotal());
+
+		}
+
+	}
+
+	parent.setChild(lstDetProfile);
+    parent.setEndtotal(parent.getCurrtotal());
+    update_endTotal(parent);
+}
 	
 	
 }
