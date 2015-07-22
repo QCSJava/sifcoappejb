@@ -524,10 +524,6 @@ public class UserDAO extends CommonDAO {
 		return _return;	
 	}
 
-	
-	
-	
-	
 	/*mantenimiento de Usr1_profile*/
 	public int Usr1_profile_mtto(ProfileTO parameters, int action) throws Exception{
 		int v_resp = 0;
