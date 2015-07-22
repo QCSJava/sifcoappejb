@@ -81,5 +81,5 @@ public interface AccountingEJBRemote {
 			throws Exception ;
 	public ResultOutTO journal_entry_new(JournalEntryTO parameters,int action) throws Exception;
 	
-	public ResultOutTO Update_endTotal(int indicador) throws Exception;
+	public ResultOutTO Update_endTotal() throws Exception;
 }

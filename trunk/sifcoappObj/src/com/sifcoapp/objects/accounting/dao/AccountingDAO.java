@@ -1445,9 +1445,11 @@ public class AccountingDAO extends CommonDAO {
 	public int inicial_endTotal(AccountTO transaction) throws Exception {
 
 		int lstResultSet = 0;
+		Double endtotal=0.0000;
 
-		this.setDbObject("UPDATE cat_acc0_account SET endtotal=0.0 WHERE acctcode=?");
-		this.setString(1, "acctcode", transaction.getAcctcode());
+		this.setDbObject("UPDATE cat_acc0_account SET endtotal=? WHERE acctcode=?");
+		this.setDouble(1, "endtotal",endtotal);
+		this.setString(2, "acctcode", transaction.getAcctcode());
 
 		lstResultSet = this.runUpdate();
 
@@ -1459,7 +1461,7 @@ public int update_endTotal(AccountTO transaction) throws Exception {
 		int lstResultSet = 0;
 
 		this.setDbObject("UPDATE cat_acc0_account SET endtotal=? WHERE acctcode=?");
-		this.setDouble(1,"endtotal",transaction.getCurrtotal());
+		this.setDouble(1,"endtotal",transaction.getEndtotal());
 		this.setString(2, "acctcode", transaction.getAcctcode());
 
 		lstResultSet = this.runUpdate();

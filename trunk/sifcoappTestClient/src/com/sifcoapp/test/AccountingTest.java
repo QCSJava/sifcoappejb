@@ -517,7 +517,7 @@ ResultOutTO _result = new ResultOutTO();
 		ResultOutTO _result = new ResultOutTO();
 		
 
-		_result = AccountingEJBService.Update_endTotal(1);
+		_result = AccountingEJBService.Update_endTotal();
 		System.out.println(_result.getMensaje());
 	}
 	

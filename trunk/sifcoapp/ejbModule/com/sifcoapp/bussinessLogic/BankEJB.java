@@ -145,6 +145,7 @@ public class BankEJB implements BankEJBRemote {
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
 		}
+		parameters.setTranstype(30);
 
 		try {
 
@@ -167,6 +168,7 @@ public class BankEJB implements BankEJBRemote {
 					detail.setVatsum(zero);
 				}
 				// Para articulos nuevos
+				detail.setObjtype("33");
 				detail.setDocentry(_return.getDocentry());
 				if (action == Common.MTTOINSERT) {
 					DAO1.ges_ges_col0_colecturiadetail_mtto(detail,
@@ -409,15 +411,15 @@ public class BankEJB implements BankEJBRemote {
 			art1.setLine_id(n);
 			art1.setAccount(business);
 			art1.setCredit(sum);
-			art1.setDuedate(parameters.getDocduedate());
+			art1.setDuedate(parameters.getDocdate());
 			art1.setShortname(business);
 			art1.setContraact(colecturia_c.getAcctcode());
 			art1.setLinememo("pago de colecturia");
-			art1.setRefdate(parameters.getDocduedate());
-			art1.setRef1(parameters.getRef1());
+			art1.setRefdate(parameters.getDocdate());
+			art1.setRef1(Integer.toString(parameters.getDocentry()));
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
-			art1.setTaxdate(parameters.getDocduedate());
+			art1.setTaxdate(parameters.getTaxdate());
 			// art1.setFinncpriod(finncpriod);
 			art1.setReltransid(-1);
 			art1.setRellineid(-1);
@@ -427,7 +429,7 @@ public class BankEJB implements BankEJBRemote {
 			art1.setVatamount(0.0);
 			art1.setClosed("N");
 			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(0.0);
+			art1.setBalduedeb(0.0); 
 			art1.setBalduecred(art1.getCredit());
 			art1.setIsnet("Y");
 			art1.setTaxtype(0);
@@ -463,15 +465,15 @@ public class BankEJB implements BankEJBRemote {
 			art2.setLine_id(n);
 			art2.setAccount(colecturia_c.getAcctcode());
 			art2.setDebit(sum);
-			art2.setDuedate(parameters.getDocduedate());
+			art2.setDuedate(parameters.getDocdate());
 			art2.setShortname(colecturia_c.getAcctcode());
 			art2.setContraact(business);
 			art2.setLinememo("pago de colecturia ");
 			art2.setRefdate(parameters.getDocduedate());
-			art2.setRef1(parameters.getRef1());
+			art2.setRef1(Integer.toString(parameters.getDocentry()));
 			// art2.setRef2();
 			art2.setBaseref(parameters.getRef1());
-			art2.setTaxdate(parameters.getDocduedate());
+			art2.setTaxdate(parameters.getTaxdate());
 			// art1.setFinncpriod(finncpriod);
 			art2.setReltransid(-1);
 			art2.setRellineid(-1);
@@ -511,15 +513,15 @@ public class BankEJB implements BankEJBRemote {
 				art3.setLine_id(n); 
 				art3.setAccount(colecturia_c.getAcctcode2());
 				art3.setDebit(sum);
-				art3.setDuedate(parameters.getDocduedate());
+				art3.setDuedate(parameters.getDocdate());
 				art3.setShortname(colecturia_c.getAcctcode2());
 				art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
 				art3.setLinememo("pago de colecturia");
-				art3.setRefdate(parameters.getDocduedate());
-				art3.setRef1(parameters.getRef1());
+				art3.setRefdate(parameters.getDocdate());
+				art3.setRef1(Integer.toString(parameters.getDocentry()));
 				// art2.setRef2();
 				art3.setBaseref(parameters.getRef1());
-				art3.setTaxdate(parameters.getDocduedate());
+				art3.setTaxdate(parameters.getTaxdate());
 				// art1.setFinncpriod(finncpriod);
 				art3.setReltransid(-1);
 				art3.setRellineid(-1);
@@ -539,7 +541,8 @@ public class BankEJB implements BankEJBRemote {
 				art3.setWtline("N");
 				art3.setPayblock("N");
 				art3.setOrdered("N");
-				// at2.setTranstype(parameters.getObjtype());
+				
+				 art3.setTranstype(colecturia_c.getObjtype());
 				n = n + 1;
 				detail.add(art3);
 
@@ -559,15 +562,15 @@ public class BankEJB implements BankEJBRemote {
 
 					art4.setCredit(t_iva);
 
-					art4.setDuedate(parameters.getDocduedate());
+					art4.setDuedate(parameters.getDocdate());
 					art4.setShortname(iva_c);
 					art4.setContraact(colecturia_c.getAcctcode2());
 					art4.setLinememo("pago de colecturia");
-					art4.setRefdate(parameters.getDocduedate());
+					art4.setRefdate(parameters.getDocdate());
 					art4.setRef1(parameters.getRef1());
 					// rt2.setRef2();
 					art4.setBaseref(parameters.getRef1());
-					art4.setTaxdate(parameters.getDocduedate());
+					art4.setTaxdate(parameters.getTaxdate());
 					// art1.setFinncpriod(finncpriod);
 					art4.setReltransid(-1);
 					art4.setRellineid(-1);
@@ -587,7 +590,7 @@ public class BankEJB implements BankEJBRemote {
 					art4.setWtline("N");
 					art4.setPayblock("N");
 					art4.setOrdered("N");
-					// t2.setTranstype(parameters.getObjtype());
+					art4.setTranstype(colecturia_c.getObjtype());
 					n = n + 1;
 					detail.add(art4);
 				} else {
@@ -602,12 +605,12 @@ public class BankEJB implements BankEJBRemote {
 				art5.setLine_id(n);
 				art5.setAccount(colecturia_c.getAcctcode3());
 				art5.setCredit(ingreso);
-				art5.setDuedate(parameters.getDocduedate());
+				art5.setDuedate(parameters.getDocdate());
 				art5.setShortname(colecturia_c.getAcctcode3());
 				art5.setContraact(colecturia_c.getAcctcode2());
 				art5.setLinememo("pago de colecturia");
-				art5.setRefdate(parameters.getDocduedate());
-				art5.setRef1(parameters.getRef1());
+				art5.setRefdate(parameters.getDocdate());
+				art5.setRef1(Integer.toString(parameters.getDocentry()));
 				// art2.setRef2();
 				art5.setBaseref(parameters.getRef1());
 				art5.setTaxdate(parameters.getDocduedate());
@@ -646,14 +649,14 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setTranstype(Objtype);
 		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setMemo("pago de conceptos de colecturia");
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(total_sum);
 		nuevo.setSystotal(total_sum);
 		nuevo.setTransrate(0.0);
-		nuevo.setDuedate(parameters.getDocduedate());
-		nuevo.setTaxdate(parameters.getDocdate());
+		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setTaxdate(parameters.getTaxdate());
 		nuevo.setFinncpriod(0);
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setRefndrprt("N");
@@ -667,6 +670,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setAutowt("N");
 		nuevo.setDeferedtax("N");
 		nuevo.setJournalentryList(detail);
+		nuevo.setTranstype(Integer.toString(parameters.getTranstype()));
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		// metodo para reagrupar cuentas del mismo codigo
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -903,15 +907,15 @@ public class BankEJB implements BankEJBRemote {
 			art1.setAccount(business);
 			// art1.setCredit(sum);
 			art1.setDebit(sum);
-			art1.setDuedate(parameters.getDocduedate());
+			art1.setDuedate(parameters.getDocdate());
 			art1.setShortname(business);
 			art1.setContraact(colecturia_c.getAcctcode());
-			art1.setLinememo("pago de colecturia");
-			art1.setRefdate(parameters.getDocduedate());
-			art1.setRef1(parameters.getRef1());
+			art1.setLinememo("reversion de pago de colecturia");
+			art1.setRefdate(parameters.getDocdate());
+			art1.setRef1(Integer.toString(parameters.getDocentry()));
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
-			art1.setTaxdate(parameters.getDocduedate());
+			art1.setTaxdate(parameters.getTaxdate());
 			// art1.setFinncpriod(finncpriod);
 			art1.setReltransid(-1);
 			art1.setRellineid(-1);
@@ -958,15 +962,15 @@ public class BankEJB implements BankEJBRemote {
 			art2.setAccount(colecturia_c.getAcctcode());
 			// art2.setDebit(sum);
 			art2.setCredit(sum);
-			art2.setDuedate(parameters.getDocduedate());
+			art2.setDuedate(parameters.getDocdate());
 			art2.setShortname(colecturia_c.getAcctcode());
 			art2.setContraact(business);
-			art2.setLinememo("pago de colecturia ");
-			art2.setRefdate(parameters.getDocduedate());
-			art2.setRef1(parameters.getRef1());
+			art2.setLinememo("Reversion pago de colecturia ");
+			art2.setRefdate(parameters.getDocdate());
+			art2.setRef1(Integer.toString(parameters.getDocentry()));
 			// art2.setRef2();
 			art2.setBaseref(parameters.getRef1());
-			art2.setTaxdate(parameters.getDocduedate());
+			art2.setTaxdate(parameters.getTaxdate());
 			// art1.setFinncpriod(finncpriod);
 			art2.setReltransid(-1);
 			art2.setRellineid(-1);
@@ -1007,12 +1011,12 @@ public class BankEJB implements BankEJBRemote {
 				art3.setAccount(colecturia_c.getAcctcode2());
 				// art3.setDebit(sum);
 				art3.setCredit(sum);
-				art3.setDuedate(parameters.getDocduedate());
+				art3.setDuedate(parameters.getDocdate());
 				art3.setShortname(colecturia_c.getAcctcode2());
 				art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
-				art3.setLinememo("pago de colecturia");
-				art3.setRefdate(parameters.getDocduedate());
-				art3.setRef1(parameters.getRef1());
+				art3.setLinememo("Reversion pago de colecturia");
+				art3.setRefdate(parameters.getDocdate());
+				art3.setRef1(Integer.toString(parameters.getDocentry()));
 				// art2.setRef2();
 				art3.setBaseref(parameters.getRef1());
 				art3.setTaxdate(parameters.getDocduedate());
@@ -1035,7 +1039,7 @@ public class BankEJB implements BankEJBRemote {
 				art3.setWtline("N");
 				art3.setPayblock("N");
 				art3.setOrdered("N");
-				// at2.setTranstype(parameters.getObjtype());
+			  art3.setTranstype(colecturia_c.getObjtype());
 				n = n + 1;
 				detail.add(art3);
 
@@ -1055,15 +1059,15 @@ public class BankEJB implements BankEJBRemote {
 
 					// art4.setCredit(0.0);
 					art4.setDebit(t_iva);
-					art4.setDuedate(parameters.getDocduedate());
+					art4.setDuedate(parameters.getDocdate());
 					art4.setShortname(iva_c);
 					art4.setContraact(colecturia_c.getAcctcode2());
-					art4.setLinememo("pago de colecturia");
-					art4.setRefdate(parameters.getDocduedate());
-					art4.setRef1(parameters.getRef1());
+					art4.setLinememo("reversion pago de colecturia");
+					art4.setRefdate(parameters.getDocdate());
+					art4.setRef1(Integer.toString(parameters.getDocentry()));
 					// rt2.setRef2();
 					art4.setBaseref(parameters.getRef1());
-					art4.setTaxdate(parameters.getDocduedate());
+					art4.setTaxdate(parameters.getTaxdate());
 					// art1.setFinncpriod(finncpriod);
 					art4.setReltransid(-1);
 					art4.setRellineid(-1);
@@ -1083,7 +1087,7 @@ public class BankEJB implements BankEJBRemote {
 					art4.setWtline("N");
 					art4.setPayblock("N");
 					art4.setOrdered("N");
-					// t2.setTranstype(parameters.getObjtype());
+					art4.setTranstype(colecturia_c.getObjtype());
 					n = n + 1;
 					detail.add(art4);
 				} else {
@@ -1099,15 +1103,15 @@ public class BankEJB implements BankEJBRemote {
 				art5.setAccount(colecturia_c.getAcctcode3());
 				// art5.setCredit(ingreso);
 				art5.setDebit(ingreso);
-				art5.setDuedate(parameters.getDocduedate());
+				art5.setDuedate(parameters.getDocdate());
 				art5.setShortname(colecturia_c.getAcctcode3());
 				art5.setContraact(colecturia_c.getAcctcode2());
-				art5.setLinememo("pago de colecturia");
-				art5.setRefdate(parameters.getDocduedate());
-				art5.setRef1(parameters.getRef1());
+				art5.setLinememo("Reversion  pago de colecturia");
+				art5.setRefdate(parameters.getDocdate());
+				art5.setRef1(Integer.toString(parameters.getDocentry()));
 				// art2.setRef2();
 				art5.setBaseref(parameters.getRef1());
-				art5.setTaxdate(parameters.getDocduedate());
+				art5.setTaxdate(parameters.getDocdate());
 				// art1.setFinncpriod(finncpriod);
 				art5.setReltransid(-1);
 				art5.setRellineid(-1);
@@ -1127,7 +1131,7 @@ public class BankEJB implements BankEJBRemote {
 				art5.setWtline("N");
 				art5.setPayblock("N");
 				art5.setOrdered("N");
-				// 5.setTranstype(parameters.getObjtype());
+				art5.setTranstype(colecturia_c.getObjtype());
 				detail.add(art5);
 				n++;
 
@@ -1149,8 +1153,8 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setLoctotal(total_sum);
 		nuevo.setSystotal(total_sum);
 		nuevo.setTransrate(zero);
-		nuevo.setDuedate(parameters.getDocduedate());
-		nuevo.setTaxdate(parameters.getDocdate());
+		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setTaxdate(parameters.getTaxdate());
 		nuevo.setFinncpriod(0);
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setRefndrprt("N");
