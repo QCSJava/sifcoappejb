@@ -217,7 +217,7 @@ public class BankEJB implements BankEJBRemote {
                  // cambia estado a 2 indicando que el pago de colecturia ha sido anulado 
 				colecturia.setTranstype(2);
                 //actualizando el pago de colecturia anterior  
-                 DAO.ges_ges_col0_colecturia_mtto(parameters,
+                 DAO.ges_ges_col0_colecturia_mtto(colecturia,
  						Common.MTTOUPDATE);
                  //actualiza el campo de pago de facturas de cancelado a no cancelado 
                  ResultOutTO nuevo1 = new ResultOutTO();
