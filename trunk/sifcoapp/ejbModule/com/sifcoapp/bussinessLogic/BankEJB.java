@@ -145,10 +145,12 @@ public class BankEJB implements BankEJBRemote {
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
 		}
-		parameters.setTranstype(30);
+		
 
 		try {
 
+			if(action==Common.MTTOINSERT){
+				
 			_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(parameters,
 					action));
 			parameters.setDocentry(_return.getDocentry());
@@ -187,8 +189,9 @@ public class BankEJB implements BankEJBRemote {
 				aux.add(detail);
 				}
 			}
-         parameters.setColecturiaDetail(aux);
 			
+         parameters.setColecturiaDetail(aux);
+		
 			if (parameters.getSeries() == 1) {
 
 				journal = fill_JournalEntry(parameters);
@@ -207,9 +210,23 @@ public class BankEJB implements BankEJBRemote {
 				AccountingEJB account1 = new AccountingEJB();
 				res_jour = account1.journalEntry_mtto(journal,
 						Common.MTTOINSERT, DAO.getConn());
-
-				ResultOutTO nuevo1 = new ResultOutTO();
+				
+				ColecturiaTO colecturia= new ColecturiaTO();
+				
+				colecturia=get_ges_colecturiaByKey(parameters.getReceiptnum());
+                 // cambia estado a 2 indicando que el pago de colecturia ha sido anulado 
+				colecturia.setTranstype(2);
+                //actualizando el pago de colecturia anterior  
+                 DAO.ges_ges_col0_colecturia_mtto(parameters,
+ 						Common.MTTOUPDATE);
+                 //actualiza el campo de pago de facturas de cancelado a no cancelado 
+                 ResultOutTO nuevo1 = new ResultOutTO();
 				nuevo1 = actualizar_sale2(DAO.getConn(), parameters);
+			}
+			
+			}else{
+				DAO.ges_ges_col0_colecturia_mtto(parameters,
+						Common.MTTOUPDATE);
 			}
 
 			DAO.forceCommit();
