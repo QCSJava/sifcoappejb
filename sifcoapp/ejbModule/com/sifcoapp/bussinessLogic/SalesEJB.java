@@ -1102,7 +1102,7 @@ public class SalesEJB implements SalesEJBRemote {
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
-			art1.setLinememo("Pago de Colecturia");
+			art1.setLinememo("venta de mercaderia");
 			art1.setRefdate(parameters.getDuedate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
@@ -1791,7 +1791,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
-		parameters.setReceiptnum(basentry);
+		//parameters.setReceiptnum(basentr);
 		parameters.setRounddif(zero);
 		parameters.setRounding("N");
 		// parameters.setCtlaccount(ctlaccount); Aqui deberia de hacerse la
