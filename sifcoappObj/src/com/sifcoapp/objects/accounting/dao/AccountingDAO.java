@@ -1459,6 +1459,10 @@ public int update_endTotal(AccountTO transaction) throws Exception {
 
 		int lstResultSet = 0;
 
+		if (transaction.getGroupmask() == 2 || transaction.getGroupmask() == 3  ||  transaction.getGroupmask() == 5) {
+			transaction.setEndtotal(transaction.getEndtotal() * -1);
+		}
+		
 		this.setDbObject("UPDATE cat_acc0_account SET endtotal=? WHERE acctcode=?");
 		this.setDouble(1,"endtotal",transaction.getEndtotal());
 		this.setString(2, "acctcode", transaction.getAcctcode());
@@ -1582,7 +1586,9 @@ private void filterParent_update(AccountTO parent, Hashtable _allvalues,
 	}
 
 	parent.setChild(lstDetProfile);
+	
     parent.setEndtotal(parent.getCurrtotal());
+    
     update_endTotal(parent);
 }
 	
