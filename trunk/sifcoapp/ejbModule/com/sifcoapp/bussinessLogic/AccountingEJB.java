@@ -337,6 +337,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		// validando que debe y haber sean iguales.....
 
+	
 		double valor = Math.abs(debe - haber);
 		if (valor > 0.00001) {
 			_return.setCodigoError(1);
@@ -356,6 +357,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		parameters.setPrinted("N");
 		parameters.setAutowt("N");
 		parameters.setDeferedtax("N");
+		
+		if(action==Common.MTTOINSERT){
 
 		if (parameters.getLoctotal() == null) {
 			parameters.setLoctotal(zero);
@@ -379,7 +382,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// Guardar encabezado
 
 		_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
-		_return.getDocentry();
+	
 
 		// Guardar detalle
 		Iterator<JournalEntryLinesTO> iterator = parameters
@@ -479,7 +482,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 			update_currtotal(Detalle, _conn);
 
 		}
-
+		}else{
+			_return.setDocentry(DAO.journalEntry_mtto(parameters, Common.MTTOUPDATE));
+			
+		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;
@@ -1510,7 +1516,24 @@ ResultOutTO _return= new ResultOutTO();
 
 	
 	nuevo.setJournalentryList(detail);
+	
+	_result=journalEntry_mtto(nuevo, Common.MTTOINSERT);
+	JournalEntryLinesDAO journal=new JournalEntryLinesDAO();
+	int i=0;
+	for (Object obj : list) {
+		JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
+	good.setIntrnmatch(_result.getDocentry());
+	good.setMthdate(account.getCreatedate());
+	journal=new JournalEntryLinesDAO();
+	i=journal.update_journalentryline(good);
+		
+	}
+	
+	_result.setCodigoError(0);
+	_result.setDocentry(i);
+	_result.setMensaje("Datos almacenados con exito");
 	return _result;
+	
 }
 
 	   

@@ -686,6 +686,21 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		}
 		return _return;
 	}
+    
+	public int update_journalentryline(JournalEntryLinesTO journalentrylines) throws Exception {
 
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE cat_jdt1_journalentrylines SET intrnmatch=?, mthdate = ? WHERE transid =? and line_id = ?");
+		this.setInt(1, "extrmatch", new Integer(journalentrylines.getExtrmatch()));
+		this.setDate(2, "acctmthdatecode", journalentrylines.getMthdate());
+		this.setInt(3, "transid", new Integer(journalentrylines.getTransid()));
+		this.setInt(4, "line_id", new Integer(journalentrylines.getLine_id()));
+		
+
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
+	}
 
 }
