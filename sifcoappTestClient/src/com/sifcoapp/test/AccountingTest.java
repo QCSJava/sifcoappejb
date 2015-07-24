@@ -521,4 +521,25 @@ ResultOutTO _result = new ResultOutTO();
 		System.out.println(_result.getMensaje());
 	}
 	
+
+	public static void traslado_bancos() throws Exception {
+		ResultOutTO _result = new ResultOutTO();
+		List detail = new Vector();
+		JournalEntryTO nuevo = new JournalEntryTO();
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+		java.util.Date utilDate = new java.util.Date(); //fecha actual
+		  long lnMilisegundos = utilDate.getTime();
+		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+		  
+		  AccountTO account=new AccountTO();
+		  account.setCreatedate(sqlDate);
+		  account.setAcctcode("1101020202");
+
+		_result = AccountingEJBService.traslado_caja(account,
+				53);
+
+		System.out.println(_result.getMensaje());
+	}
 }
