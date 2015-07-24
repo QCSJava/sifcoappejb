@@ -82,4 +82,7 @@ public interface AccountingEJBRemote {
 	public ResultOutTO journal_entry_new(JournalEntryTO parameters,int action) throws Exception;
 	
 	public ResultOutTO Update_endTotal() throws Exception;
+	
+	
+	public ResultOutTO traslado_caja(AccountTO account,int usersign) throws Exception;
 }
