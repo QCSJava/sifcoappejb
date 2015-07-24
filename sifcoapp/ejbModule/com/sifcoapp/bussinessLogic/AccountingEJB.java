@@ -1368,6 +1368,7 @@ ResultOutTO _return= new ResultOutTO();
 	
 	// lista de movimientos realizados por el usuario indicado 
 	List list = DAO.getjournaldetail(usersign);
+	List detail=new Vector();
 	
 	
 	
@@ -1389,101 +1390,74 @@ ResultOutTO _return= new ResultOutTO();
 	JournalEntryLinesTO art2 = new JournalEntryLinesTO(); 
 	
 	saldo=debe-haber;
-	if(saldo<=0){
+	if(saldo==0.00){
 		_result.setCodigoError(1);
 		_result.setMensaje("no se registran entradas de efectivo en caja");
-		
-			throw new Exception("no se registran entradas de efectivo en caja");
-		
+		throw new Exception("no se registran entradas de efectivo en caja");
+	}
+    
+	if(saldo<0.00){
+		_result.setCodigoError(1);
+		_result.setMensaje("salidas de efectivos son mayores que las entradas");
+		throw new Exception("salidas de efectivos son mayores que las entradas");
 
-	}else{
-		
-		art1.setCredit(saldo);
-		
 	}
 	
-	// asiento contable
+	
+	// Cuenta Caja.....
+	
+	if (saldo>0.00) {
+		art1.setLine_id(1);
+		//art1.setDebit(bussines);
+		 art1.setCredit(saldo);
+		art1.setAccount(Catalog1.getValue1());
+		art1.setDuedate(account.getCreatedate());
+		art1.setShortname(Catalog1.getValue1());
+		art1.setContraact(account.getAcctcode());
+		art1.setLinememo("traslado de caja a bancos");
+		art1.setRefdate(account.getCreatedate());
+		art1.setRef1(Integer.toString(usersign));
+		// ar1.setRef2();
+		art1.setBaseref(art1.getRef1());
+		art1.setTaxdate(account.getCreatedate());
+		// art1.setFinncpriod(finncpriod);
+		art1.setReltransid(-1);
+		art1.setRellineid(-1);
+		art1.setReltype("N");
+		art1.setObjtype("5");
+		art1.setVatline("N");
+		art1.setVatamount(0.0);
+		art1.setClosed("N");
+		art1.setGrossvalue(0.0);
+		art1.setBalduedeb(0.0);
+		art1.setBalduecred(saldo);
+		art1.setIsnet("Y");
+		art1.setTaxtype(0);
+		art1.setTaxpostacc("N");
+		art1.setTotalvat(0.0);
+		art1.setWtliable("N");
+		art1.setWtline("N");
+		art1.setPayblock("N");
+		art1.setOrdered("N");
+		//art1.setTranstype(parameters.getObjtype());
+		detail.add(art1);
+	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	// llenado del asiento contable
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	// LLenado del padre
-	/*List detail = new Vector();
-	nuevo.setObjtype("5");
-	nuevo.setMemo(parameters.getJrnlmemo());
-	nuevo.setUsersign(parameters.getUsersign());
-	nuevo.setLoctotal(bussines);
-	nuevo.setSystotal(bussines);
-	nuevo.setMemo("anulacion pago de factura de venta");
-	nuevo.setUsersign(parameters.getUsersign());
-	nuevo.setDuedate(parameters.getDocdate());
-	nuevo.setTaxdate(parameters.getTaxdate());
-	nuevo.setBtfstatus("O");
-	nuevo.setTranstype(parameters.getObjtype());
-	nuevo.setBaseref(parameters.getRef1());
-	nuevo.setRefdate(parameters.getDocduedate());
-	nuevo.setRef1(parameters.getRef1());
-	nuevo.setRefndrprt("N");
-	nuevo.setAdjtran("N");
-	nuevo.setAutostorno("N");
-	nuevo.setAutovat("N");
-	nuevo.setPrinted("N");
-	nuevo.setAutowt("N");
-	nuevo.setDeferedtax("N");
-
-	// llenado de los
-	// hijos---------------------------------------------------------------------------------------------------
-	// cuenta del socio de negocio
-	art1.setLine_id(1);
-	art1.setDebit(bussines);
-	// art1.setCredit(bussines);
-	art1.setAccount(buss_c);
-	art1.setDuedate(parameters.getDocdate());
-	art1.setShortname(buss_c);
-	art1.setContraact(Catalog1.getValue1());
-	art1.setLinememo("Pago de Factura");
-	art1.setRefdate(parameters.getDocdate());
-	art1.setRef1(parameters.getRef1());
-	// ar1.setRef2();
-	art1.setBaseref(parameters.getRef1());
-	art1.setTaxdate(parameters.getTaxdate());
-	// art1.setFinncpriod(finncpriod);
-	art1.setReltransid(-1);
-	art1.setRellineid(-1);
-	art1.setReltype("N");
-	art1.setObjtype("5");
-	art1.setVatline("N");
-	art1.setVatamount(0.0);
-	art1.setClosed("N");
-	art1.setGrossvalue(0.0);
-	art1.setBalduedeb(bussines);
-	art1.setBalduecred(0.0);
-	art1.setIsnet("Y");
-	art1.setTaxtype(0);
-	art1.setTaxpostacc("N");
-	art1.setTotalvat(0.0);
-	art1.setWtliable("N");
-	art1.setWtline("N");
-	art1.setPayblock("N");
-	art1.setOrdered("N");
-	art1.setTranstype(parameters.getObjtype());
-	detail.add(art1);
-	// ---------------------------------------------------------------------------------------------------
-	// cuenta del socio de negocio
-	// ---------------------------------------------------------------------------------------------------
+	// cuenta Bancos..........
+	
 	art2.setLine_id(2);
-	art2.setCredit(bussines);
-	// art2.setDebit(bussines);
-	art2.setAccount(Catalog1.getValue1());
-	art2.setDuedate(parameters.getDocdate());
-	art2.setShortname(Catalog1.getValue1());
-	art2.setContraact(buss_c);
-	art2.setLinememo(" Anulacion Pago de Factura de ventas");
-	art2.setRefdate(parameters.getDocdate());
-	art2.setRef1(parameters.getRef1());
+	//art2.setCredit(bussines);
+	 art2.setDebit(saldo);
+	art2.setAccount(account.getAcctcode());
+	art2.setDuedate(account.getCreatedate());
+	art2.setShortname(account.getAcctcode());
+	art2.setContraact(Catalog1.getValue1());
+	art2.setLinememo("traslado de caja a bancos");
+	art2.setRefdate(account.getCreatedate());
+	art2.setRef1(Integer.toString(usersign));
 	// r1.setRef2();
-	art2.setBaseref(parameters.getRef1());
-	art2.setTaxdate(parameters.getTaxdate());
+	art2.setBaseref(art2.getRef1());
+	art2.setTaxdate(account.getCreatedate());
 	// art1.setFinncpriod(finncpriod);
 	art2.setReltransid(-1);
 	art2.setRellineid(-1);
@@ -1493,8 +1467,8 @@ ResultOutTO _return= new ResultOutTO();
 	art2.setVatamount(0.0);
 	art2.setClosed("N");
 	art2.setGrossvalue(0.0);
-	art2.setBalduedeb(0.0);
-	art2.setBalduecred(bussines);
+	art2.setBalduedeb(saldo);
+	art2.setBalduecred(0.0);
 	art2.setIsnet("Y");
 	art2.setTaxtype(0);
 	art2.setTaxpostacc("N");
@@ -1503,10 +1477,39 @@ ResultOutTO _return= new ResultOutTO();
 	art2.setWtline("N");
 	art2.setPayblock("N");
 	art2.setOrdered("N");
-	art2.setTranstype(parameters.getObjtype());
+	//art2.setTranstype(parameters.getObjtype());
 	detail.add(art2);
 
-	nuevo.setJournalentryList(detail);*/
+		
+	
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	// llenado del asiento contable
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	// LLenado del padre
+	
+	nuevo.setObjtype("5");
+	nuevo.setMemo("traslado de caja a Bancos");
+	nuevo.setUsersign(usersign);
+	nuevo.setLoctotal(saldo);
+	nuevo.setSystotal(saldo);
+	nuevo.setDuedate(account.getCreatedate());
+	nuevo.setTaxdate(account.getCreatedate());
+	nuevo.setBtfstatus("O");
+	nuevo.setTranstype(nuevo.getObjtype());
+	//nuevo.setBaseref(parameters.getRef1());
+	nuevo.setRefdate(account.getCreatedate());
+	//nuevo.setRef1(parameters.getRef1());
+	nuevo.setRefndrprt("N");
+	nuevo.setAdjtran("N");
+	nuevo.setAutostorno("N");
+	nuevo.setAutovat("N");
+	nuevo.setPrinted("N");
+	nuevo.setAutowt("N");
+	nuevo.setDeferedtax("N");
+
+	
+	nuevo.setJournalentryList(detail);
 	return _result;
 }
 
