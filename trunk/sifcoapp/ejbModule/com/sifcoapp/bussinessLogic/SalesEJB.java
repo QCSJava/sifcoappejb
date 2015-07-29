@@ -3314,7 +3314,7 @@ public class SalesEJB implements SalesEJBRemote {
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
 		parameters.setDocduedate(sqlDate);
 		parameters.setDocnum(parameters.getDocentry());
-		parameters.setDoctype("I");
+		//parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
 		parameters.setObjtype("10");
