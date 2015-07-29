@@ -2216,14 +2216,14 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		admin = new AdminDAO();
 		
 		ArticlesTO arti = new ArticlesTO();
-		admin = new AdminDAO();
+		
 
 		for (Object obj : list) {
 			SupplierDetailTO good = (SupplierDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
 			CatalogTO Catalog = new CatalogTO();
-
+			admin = new AdminDAO();
 			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
@@ -2413,6 +2413,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 
+		if (tax != 0.00) {
 		// cuenta de iva
 		art3.setLine_id(3);
 		art3.setCredit(tax);
@@ -2448,6 +2449,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art3.setOrdered("N");
 		art3.setTranstype(parameters.getObjtype());
 		detail.add(art3);
+		}
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0.0) {
 			art4.setLine_id(4);
