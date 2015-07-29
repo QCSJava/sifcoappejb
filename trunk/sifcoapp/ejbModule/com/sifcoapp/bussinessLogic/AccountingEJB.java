@@ -950,7 +950,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 				// ---------------------------------------------------------------------------------------------------------------
 				Detalle.setTransid(_return.getDocentry());
-				Detalle.setTranstype(Integer.toString(_return.getDocentry()));
+				
 				if (action == Common.MTTOINSERT) {
 
 					JournalLinesDAO.journalEntryLines_mtto(Detalle,

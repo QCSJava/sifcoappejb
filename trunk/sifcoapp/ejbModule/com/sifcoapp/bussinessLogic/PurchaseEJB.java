@@ -679,14 +679,14 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		admin = new AdminDAO();
 		
 		ArticlesTO arti = new ArticlesTO();
-		admin = new AdminDAO();
+		
 
 		for (Object obj : list) {
 			PurchaseDetailTO good = (PurchaseDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
 			CatalogTO Catalog = new CatalogTO();
-
+			admin = new AdminDAO();
 			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
@@ -875,39 +875,43 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		detail.add(art2);
 
 		// cuenta de iva
-		art3.setLine_id(3);
-		art3.setDebit(tax);
-		art3.setAccount(iva_c);
-		art3.setDuedate(parameters.getDocduedate());
-		art3.setShortname(iva_c);
-		art3.setContraact(buss_c);
-		art3.setLinememo("Compra de mercancias");
-		art3.setRefdate(parameters.getDocduedate());
-		art3.setRef1(parameters.getRef1());
-		// art2.setRef2();
-		art3.setBaseref(parameters.getRef1());
-		art3.setTaxdate(parameters.getDocduedate());
-		// 3art1.setFinncpriod(finncpriod);
-		art3.setReltransid(-1);
-		art3.setRellineid(-1);
-		art3.setReltype("N");
-		art3.setObjtype("5");
-		art3.setVatline("N");
-		art3.setVatamount(0.0);
-		art3.setClosed("N");
-		art3.setGrossvalue(0.0);
-		art3.setBalduedeb(tax);
-		art3.setBalduecred(0.0);
-		art3.setIsnet("Y");
-		art3.setTaxtype(0);
-		art3.setTaxpostacc("N");
-		art3.setTotalvat(0.0);
-		art3.setWtliable("N");
-		art3.setWtline("N");
-		art3.setPayblock("N");
-		art3.setOrdered("N");
-		art3.setTranstype(parameters.getObjtype());
-		detail.add(art3);
+		if (tax != 0.00) {
+			art3.setLine_id(3);
+			art3.setDebit(tax);
+			art3.setAccount(iva_c);
+			art3.setDuedate(parameters.getDocduedate());
+			art3.setShortname(iva_c);
+			art3.setContraact(buss_c);
+			art3.setLinememo("Compra de mercancias");
+			art3.setRefdate(parameters.getDocduedate());
+			art3.setRef1(parameters.getRef1());
+			// art2.setRef2();
+			art3.setBaseref(parameters.getRef1());
+			art3.setTaxdate(parameters.getDocduedate());
+			// 3art1.setFinncpriod(finncpriod);
+			art3.setReltransid(-1);
+			art3.setRellineid(-1);
+			art3.setReltype("N");
+			art3.setObjtype("5");
+			art3.setVatline("N");
+			art3.setVatamount(0.0);
+			art3.setClosed("N");
+			art3.setGrossvalue(0.0);
+			art3.setBalduedeb(tax);
+			art3.setBalduecred(0.0);
+			art3.setIsnet("Y");
+			art3.setTaxtype(0);
+			art3.setTaxpostacc("N");
+			art3.setTotalvat(0.0);
+			art3.setWtliable("N");
+			art3.setWtline("N");
+			art3.setPayblock("N");
+			art3.setOrdered("N");
+			art3.setTranstype(parameters.getObjtype());
+			detail.add(art3);
+	
+		}
+
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0.0) {
 			art4.setLine_id(4);
@@ -946,7 +950,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art4.setTranstype(parameters.getObjtype());
 			detail.add(art4);
 		}
-		if (cotrans != 0.0) {
+				if (cotrans != 0.0) {
 			art5.setLine_id(5);
 
 			//art5.setCredit(cotrans);
