@@ -2506,46 +2506,11 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 
-		// cuenta de iva
-		art3.setLine_id(3);
-		art3.setDebit(tax);
-
-		art3.setAccount(iva_c);
-		art3.setDuedate(parameters.getDocduedate());
-		art3.setShortname(iva_c);
-		art3.setContraact(buss_c);
-		art3.setLinememo("anulacion de venta");
-		art3.setRefdate(parameters.getDocduedate());
-		art3.setRef1(parameters.getRef1());
-		// art2.setRef2();
-		art3.setBaseref(parameters.getRef1());
-		art3.setTaxdate(parameters.getDocduedate());
-		// 3art1.setFinncpriod(finncpriod);
-		art3.setReltransid(-1);
-		art3.setRellineid(-1);
-		art3.setReltype("N");
-		art3.setObjtype("5");
-		art3.setVatline("N");
-		art3.setVatamount(0.0);
-		art3.setClosed("N");
-		art3.setGrossvalue(0.0);
-		art3.setBalduedeb(0.0);
-		art3.setBalduecred(tax);
-		art3.setIsnet("Y");
-		art3.setTaxtype(0);
-		art3.setTaxpostacc("N");
-		art3.setTotalvat(0.0);
-		art3.setWtliable("N");
-		art3.setWtline("N");
-		art3.setPayblock("N");
-		art3.setOrdered("N");
-		art3.setTranstype(parameters.getObjtype());
-		detail.add(art3);
 		// ------------------------
 		// para la cuenta de ventas
 		// -----------------------------
 
-		art4.setLine_id(4);
+		art4.setLine_id(3);
 		art4.setDebit(sale);
 		// art4.setCredit(sale);
 		art4.setAccount(V_local);
@@ -2583,7 +2548,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// para la cuenta de costo de ventas
 		// -----------------------------
 
-		art5.setLine_id(5);
+		art5.setLine_id(4);
 		// art5.setDebit(branch);
 		art5.setCredit(branch);
 		art5.setAccount(costo_venta);
@@ -2617,6 +2582,44 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setOrdered("N");
 		art5.setTranstype(parameters.getObjtype());
 		detail.add(art5);
+		
+		if (tax != 0.00) {
+			art3.setLine_id(5);
+			art3.setDebit(tax);
+
+			art3.setAccount(iva_c);
+			art3.setDuedate(parameters.getDocduedate());
+			art3.setShortname(iva_c);
+			art3.setContraact(buss_c);
+			art3.setLinememo("anulacion de venta");
+			art3.setRefdate(parameters.getDocduedate());
+			art3.setRef1(parameters.getRef1());
+			// art2.setRef2();
+			art3.setBaseref(parameters.getRef1());
+			art3.setTaxdate(parameters.getDocduedate());
+			// 3art1.setFinncpriod(finncpriod);
+			art3.setReltransid(-1);
+			art3.setRellineid(-1);
+			art3.setReltype("N");
+			art3.setObjtype("5");
+			art3.setVatline("N");
+			art3.setVatamount(0.0);
+			art3.setClosed("N");
+			art3.setGrossvalue(0.0);
+			art3.setBalduedeb(0.0);
+			art3.setBalduecred(tax);
+			art3.setIsnet("Y");
+			art3.setTaxtype(0);
+			art3.setTaxpostacc("N");
+			art3.setTotalvat(0.0);
+			art3.setWtliable("N");
+			art3.setWtline("N");
+			art3.setPayblock("N");
+			art3.setOrdered("N");
+			art3.setTranstype(parameters.getObjtype());
+			detail.add(art3);
+		}
+		
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0.0) {
 			art6.setLine_id(6);
@@ -3314,10 +3317,10 @@ public class SalesEJB implements SalesEJBRemote {
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
 		parameters.setDocduedate(sqlDate);
 		parameters.setDocnum(parameters.getDocentry());
-		//parameters.setDoctype("I");
+		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
-		parameters.setObjtype("10");
+		parameters.setObjtype("12");
 		parameters.setVatsum(vatsum);
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
