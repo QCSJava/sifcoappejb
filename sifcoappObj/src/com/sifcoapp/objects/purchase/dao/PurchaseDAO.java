@@ -27,7 +27,7 @@ public class PurchaseDAO extends CommonDAO{
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_purchase(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_purchase(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -62,6 +62,8 @@ public class PurchaseDAO extends CommonDAO{
 			java.sql.Date fecha= new java.sql.Date(param.getTaxdate().getTime());
 			this.setDate(14, "_taxdate", fecha);
 		}
+		
+		this.setString(15, "_canceled", param.getCanceled());
 		
 	
 		lstResultSet = this.runQuery();
