@@ -464,7 +464,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 			// ---------------------------------------------------------------------------------------------------------------
 			Detalle.setTransid(_return.getDocentry());
-			Detalle.setTranstype(Integer.toString(_return.getDocentry()));
+			//Detalle.setTranstype(Integer.toString(_return.getDocentry()));
 			if (action == Common.MTTOINSERT) {
 				JournalLinesDAO.journalEntryLines_mtto(Detalle,
 						Common.MTTOINSERT);
@@ -1357,7 +1357,7 @@ ResultOutTO _return= new ResultOutTO();
 
 	}
 	
-	public ResultOutTO traslado_caja(AccountTO account,int usersign) throws Exception{
+	public ResultOutTO traslado_caja(AccountTO account) throws Exception{
 	
 	double debe = 0.0;
 	double haber = 0.0;
@@ -1365,15 +1365,13 @@ ResultOutTO _return= new ResultOutTO();
 	
 	JournalEntryLinesDAO DAO= new JournalEntryLinesDAO();
 	
-	
-	
 	ParameterDAO admin1 = new ParameterDAO();
 	JournalEntryTO nuevo = new JournalEntryTO();
 	ResultOutTO _result = new ResultOutTO();
 	
 	
 	// lista de movimientos realizados por el usuario indicado 
-	List list = DAO.getjournaldetail(usersign);
+	List list = DAO.getjournaldetail(account.getUsersing());
 	List detail=new Vector();
 	
 	
@@ -1382,34 +1380,11 @@ ResultOutTO _return= new ResultOutTO();
 	parameterTO Catalog1 = new parameterTO();
 	Catalog1 = admin1.getParameterbykey(7);
 
-	for (Object obj : list) {
-		JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
-		
-		
-        debe=debe+good.getDebit();
-       
-        haber=haber+good.getCredit();
-        
-		
-	}
+	
 	JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 	JournalEntryLinesTO art2 = new JournalEntryLinesTO(); 
 	
-	saldo=debe-haber;
-	if(saldo==0.00){
-		_result.setCodigoError(1);
-		_result.setMensaje("no se registran entradas de efectivo en caja");
-		throw new Exception("no se registran entradas de efectivo en caja");
-	}
-    
-	if(saldo<0.00){
-		_result.setCodigoError(1);
-		_result.setMensaje("salidas de efectivos son mayores que las entradas");
-		throw new Exception("salidas de efectivos son mayores que las entradas");
-
-	}
-	
-	
+	saldo=account.getCurrtotal();
 	// Cuenta Caja.....
 	
 	if (saldo>0.00) {
@@ -1422,7 +1397,7 @@ ResultOutTO _return= new ResultOutTO();
 		art1.setContraact(account.getAcctcode());
 		art1.setLinememo("traslado de caja a bancos");
 		art1.setRefdate(account.getCreatedate());
-		art1.setRef1(Integer.toString(usersign));
+		art1.setRef1(Integer.toString(account.getUsersing()));
 		// ar1.setRef2();
 		art1.setBaseref(art1.getRef1());
 		art1.setTaxdate(account.getCreatedate());
@@ -1460,7 +1435,7 @@ ResultOutTO _return= new ResultOutTO();
 	art2.setContraact(Catalog1.getValue1());
 	art2.setLinememo("traslado de caja a bancos");
 	art2.setRefdate(account.getCreatedate());
-	art2.setRef1(Integer.toString(usersign));
+	art2.setRef1(Integer.toString(account.getUsersing()));
 	// r1.setRef2();
 	art2.setBaseref(art2.getRef1());
 	art2.setTaxdate(account.getCreatedate());
@@ -1496,7 +1471,7 @@ ResultOutTO _return= new ResultOutTO();
 	
 	nuevo.setObjtype("5");
 	nuevo.setMemo("traslado de caja a Bancos");
-	nuevo.setUsersign(usersign);
+	nuevo.setUsersign(account.getUsersing());
 	nuevo.setLoctotal(saldo);
 	nuevo.setSystotal(saldo);
 	nuevo.setDuedate(account.getCreatedate());
@@ -1535,6 +1510,60 @@ ResultOutTO _return= new ResultOutTO();
 	return _result;
 	
 }
+    
+	public Double devolver_saldo(AccountTO account)throws Exception{
+		double _return=0.0;
+		double debe = 0.0;
+		double haber = 0.0;
+		double saldo = 0.0;
+		
+		JournalEntryLinesDAO DAO= new JournalEntryLinesDAO();
+		
+		ParameterDAO admin1 = new ParameterDAO();
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+		
+		
+		// lista de movimientos realizados por el usuario indicado 
+		List list = DAO.getjournaldetail(account.getUsersing());
+		List detail=new Vector();
+		
+		
+		
+		admin1 = new ParameterDAO();
+		parameterTO Catalog1 = new parameterTO();
+		Catalog1 = admin1.getParameterbykey(7);
 
+		for (Object obj : list) {
+			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
+			
+			
+	        debe=debe+good.getDebit();
+	       
+	        haber=haber+good.getCredit();
+	        
+			
+		}
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO(); 
+		
+		saldo=debe-haber;
+		
+		if(saldo==0.00){
+			_result.setCodigoError(1);
+			_result.setMensaje("no se registran entradas de efectivo en caja");
+			throw new Exception("no se registran entradas de efectivo en caja");
+		}
+	    
+		if(saldo<0.00){
+			_result.setCodigoError(1);
+			_result.setMensaje("salidas de efectivos son mayores que las entradas");
+			throw new Exception("salidas de efectivos son mayores que las entradas");
+
+		}
+		
+		_return=Math.abs(saldo);
+		return _return;
+	}
 	   
 }
