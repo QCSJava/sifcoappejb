@@ -289,14 +289,21 @@ public class AccountingEJBClient {
 		
 	}
 
-	public ResultOutTO traslado_caja(AccountTO account,int usersign) throws Exception{
+	public ResultOutTO traslado_caja(AccountTO account) throws Exception{
 		ResultOutTO _return=new ResultOutTO();
 		
-		_return=bean.traslado_caja(account, usersign);
+		_return=bean.traslado_caja(account);
 		
 		return _return;
 		
 	}
-	
-	
+	public double devolver_saldo(AccountTO account)throws Exception
+	{
+		double _return;
+		
+		_return=bean.devolver_saldo(account);
+		
+		return _return;
+		
+	}
 }
