@@ -531,91 +531,15 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		
 	}
 
-	public List getpruebadetalle(int transid) throws Exception {
-		List _return = new Vector();
-		List lstResultSet = null;
-		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_pruebadetalle(?)}");
-		this.setInt(1, "_transid", new Integer(transid));
-
-		lstResultSet = this.runQuery();
-		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
-		ListIterator liRowset = null;
-		liRowset = lstResultSet.listIterator();
-
-		while (liRowset.hasNext()) {
-			rowsetActual = (CachedRowSetImpl) liRowset.next();
-			while (rowsetActual.next()) {
-				JournalEntryLinesTO journal = new JournalEntryLinesTO();
-				journal.setTransid(rowsetActual.getInt(1));
-				journal.setLine_id(rowsetActual.getInt(2));
-				journal.setAccount(rowsetActual.getString(3));
-				journal.setDebit(rowsetActual.getDouble(4));
-				journal.setCredit(rowsetActual.getDouble(5));
-				journal.setDuedate(rowsetActual.getDate(6));
-				journal.setShortname(rowsetActual.getString(7));
-				journal.setContraact(rowsetActual.getString(8));
-				journal.setLinememo(rowsetActual.getString(9));
-				journal.setRef3line(rowsetActual.getString(10));
-				journal.setTranstype(rowsetActual.getString(11));
-				journal.setRefdate(rowsetActual.getDate(12));
-				journal.setRef1(rowsetActual.getString(13));
-				journal.setRef2(rowsetActual.getString(14));
-				journal.setBaseref(rowsetActual.getString(15));
-				journal.setTaxdate(rowsetActual.getDate(16));
-				journal.setMthdate(rowsetActual.getDate(17));
-				journal.setTomthsum(rowsetActual.getDouble(18));
-				journal.setBatchnum(rowsetActual.getInt(19));
-				journal.setFinncpriod(rowsetActual.getInt(20));
-				journal.setReltransid(rowsetActual.getInt(21));
-				journal.setRellineid(rowsetActual.getInt(22));
-				journal.setReltype(rowsetActual.getString(23));
-				journal.setVatgroup(rowsetActual.getString(24));
-				journal.setBasesum(rowsetActual.getDouble(25));
-				journal.setVatrate(rowsetActual.getDouble(26));
-				journal.setIndicator(rowsetActual.getString(27));
-				journal.setObjtype(rowsetActual.getString(28));
-				journal.setVatdate(rowsetActual.getDate(29));
-				journal.setPaymentref(rowsetActual.getString(30));
-				journal.setSysbasesum(rowsetActual.getDouble(31));
-				journal.setVatline(rowsetActual.getString(32));
-				journal.setVatamount(rowsetActual.getDouble(33));
-				journal.setClosed(rowsetActual.getString(34));
-				journal.setGrossvalue(rowsetActual.getDouble(35));
-				journal.setDebcred(rowsetActual.getString(36));
-				journal.setSequencenr(rowsetActual.getInt(37));
-				journal.setStornoacc(rowsetActual.getString(38));
-				journal.setBalduedeb(rowsetActual.getDouble(39));
-				journal.setBalduecred(rowsetActual.getDouble(40));
-				journal.setIsnet(rowsetActual.getString(41));
-				journal.setTaxtype(rowsetActual.getInt(42));
-				journal.setTaxpostacc(rowsetActual.getString(43));
-				journal.setTotalvat(rowsetActual.getDouble(44));
-				journal.setWtliable(rowsetActual.getString(45));
-				journal.setWtline(rowsetActual.getString(46));
-				journal.setPayblock(rowsetActual.getString(47));
-				journal.setMatchref(rowsetActual.getString(48));
-				journal.setOrdered(rowsetActual.getString(49));
-				journal.setBplname(rowsetActual.getString(50));
-				journal.setVatregnum(rowsetActual.getString(51));
-				journal.setSledgerf(rowsetActual.getString(52));
-				journal.setAcctname(rowsetActual.getString(53));
-
-				_return.add(journal);
-			}
-			rowsetActual.close();
-		}
-		return _return;
-	}
+	
  
-	public List getjournaldetail(int usersign) throws Exception {
+	public List getjournaldetail(int usersign,String transtype) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_journalentrydetail_traslado(?)}");
+		this.setDbObject("{call sp_get_journalentrydetail_traslado(?,?)}");
 		this.setInt(1, "_usersign", new Integer(usersign));
-
+		this.setString(2, "_transtype", transtype);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
@@ -632,53 +556,55 @@ public class JournalEntryLinesDAO extends CommonDAO {
 				journal.setDebit(rowsetActual.getDouble(4));
 				journal.setCredit(rowsetActual.getDouble(5));
 				journal.setDuedate(rowsetActual.getDate(6));
-				journal.setShortname(rowsetActual.getString(7));
-				journal.setContraact(rowsetActual.getString(8));
-				journal.setLinememo(rowsetActual.getString(9));
-				journal.setRef3line(rowsetActual.getString(10));
-				journal.setTranstype(rowsetActual.getString(11));
-				journal.setRefdate(rowsetActual.getDate(12));
-				journal.setRef1(rowsetActual.getString(13));
-				journal.setRef2(rowsetActual.getString(14));
-				journal.setBaseref(rowsetActual.getString(15));
-				journal.setTaxdate(rowsetActual.getDate(16));
-				journal.setMthdate(rowsetActual.getDate(17));
-				journal.setTomthsum(rowsetActual.getDouble(18));
-				journal.setBatchnum(rowsetActual.getInt(19));
-				journal.setFinncpriod(rowsetActual.getInt(20));
-				journal.setReltransid(rowsetActual.getInt(21));
-				journal.setRellineid(rowsetActual.getInt(22));
-				journal.setReltype(rowsetActual.getString(23));
-				journal.setVatgroup(rowsetActual.getString(24));
-				journal.setBasesum(rowsetActual.getDouble(25));
-				journal.setVatrate(rowsetActual.getDouble(26));
-				journal.setIndicator(rowsetActual.getString(27));
-				journal.setObjtype(rowsetActual.getString(28));
-				journal.setVatdate(rowsetActual.getDate(29));
-				journal.setPaymentref(rowsetActual.getString(30));
-				journal.setSysbasesum(rowsetActual.getDouble(31));
-				journal.setVatline(rowsetActual.getString(32));
-				journal.setVatamount(rowsetActual.getDouble(33));
-				journal.setClosed(rowsetActual.getString(34));
-				journal.setGrossvalue(rowsetActual.getDouble(35));
-				journal.setDebcred(rowsetActual.getString(36));
-				journal.setSequencenr(rowsetActual.getInt(37));
-				journal.setStornoacc(rowsetActual.getString(38));
-				journal.setBalduedeb(rowsetActual.getDouble(39));
-				journal.setBalduecred(rowsetActual.getDouble(40));
-				journal.setIsnet(rowsetActual.getString(41));
-				journal.setTaxtype(rowsetActual.getInt(42));
-				journal.setTaxpostacc(rowsetActual.getString(43));
-				journal.setTotalvat(rowsetActual.getDouble(44));
-				journal.setWtliable(rowsetActual.getString(45));
-				journal.setWtline(rowsetActual.getString(46));
-				journal.setPayblock(rowsetActual.getString(47));
-				journal.setMatchref(rowsetActual.getString(48));
-				journal.setOrdered(rowsetActual.getString(49));
-				journal.setBplname(rowsetActual.getString(50));
-				journal.setVatregnum(rowsetActual.getString(51));
-				journal.setSledgerf(rowsetActual.getString(52));
-				journal.setAcctname(rowsetActual.getString(53));
+				journal.setIntrnmatch(rowsetActual.getInt(7));
+				journal.setExtrmatch(rowsetActual.getInt(8));
+				journal.setShortname(rowsetActual.getString(9));
+				journal.setContraact(rowsetActual.getString(10));
+				journal.setLinememo(rowsetActual.getString(11));
+				journal.setRef3line(rowsetActual.getString(12));
+				journal.setTranstype(rowsetActual.getString(13));
+				journal.setRefdate(rowsetActual.getDate(14));
+				journal.setRef1(rowsetActual.getString(15));
+				journal.setRef2(rowsetActual.getString(16));
+				journal.setBaseref(rowsetActual.getString(17));
+				journal.setTaxdate(rowsetActual.getDate(18));
+				journal.setMthdate(rowsetActual.getDate(19));
+				journal.setTomthsum(rowsetActual.getDouble(20));
+				journal.setBatchnum(rowsetActual.getInt(21));
+				journal.setFinncpriod(rowsetActual.getInt(22));
+				journal.setReltransid(rowsetActual.getInt(23));
+				journal.setRellineid(rowsetActual.getInt(24));
+				journal.setReltype(rowsetActual.getString(25));
+				journal.setVatgroup(rowsetActual.getString(26));
+				journal.setBasesum(rowsetActual.getDouble(27));
+				journal.setVatrate(rowsetActual.getDouble(28));
+				journal.setIndicator(rowsetActual.getString(29));
+				journal.setObjtype(rowsetActual.getString(30));
+				journal.setVatdate(rowsetActual.getDate(31));
+				journal.setPaymentref(rowsetActual.getString(32));
+				journal.setSysbasesum(rowsetActual.getDouble(33));
+				journal.setVatline(rowsetActual.getString(34));
+				journal.setVatamount(rowsetActual.getDouble(35));
+				journal.setClosed(rowsetActual.getString(36));
+				journal.setGrossvalue(rowsetActual.getDouble(37));
+				journal.setDebcred(rowsetActual.getString(38));
+				journal.setSequencenr(rowsetActual.getInt(39));
+				journal.setStornoacc(rowsetActual.getString(40));
+				journal.setBalduedeb(rowsetActual.getDouble(41));
+				journal.setBalduecred(rowsetActual.getDouble(42));
+				journal.setIsnet(rowsetActual.getString(43));
+				journal.setTaxtype(rowsetActual.getInt(44));
+				journal.setTaxpostacc(rowsetActual.getString(45));
+				journal.setTotalvat(rowsetActual.getDouble(46));
+				journal.setWtliable(rowsetActual.getString(47));
+				journal.setWtline(rowsetActual.getString(48));
+				journal.setPayblock(rowsetActual.getString(49));
+				journal.setMatchref(rowsetActual.getString(50));
+				journal.setOrdered(rowsetActual.getString(51));
+				journal.setBplname(rowsetActual.getString(52));
+				journal.setVatregnum(rowsetActual.getString(53));
+				journal.setSledgerf(rowsetActual.getString(54));
+				
 
 				_return.add(journal);
 			}
@@ -693,7 +619,14 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		this.setDbObject("UPDATE cat_jdt1_journalentrylines SET intrnmatch=?, mthdate = ? WHERE transid =? and line_id = ?");
 		this.setInt(1, "extrmatch", new Integer(journalentrylines.getExtrmatch()));
-		this.setDate(2, "acctmthdatecode", journalentrylines.getMthdate());
+		if (journalentrylines.getMthdate()== null) {
+			this.setDate(2, "acctmthdatecode", journalentrylines.getMthdate());
+		} else {
+			java.sql.Date fecha = new java.sql.Date( journalentrylines.getMthdate()
+					.getTime());
+			this.setDate(2, "acctmthdatecode", fecha);
+		}
+		
 		this.setInt(3, "transid", new Integer(journalentrylines.getTransid()));
 		this.setInt(4, "line_id", new Integer(journalentrylines.getLine_id()));
 		
