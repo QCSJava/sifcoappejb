@@ -843,17 +843,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 	// elementos de prueba
 	// -----------------------------------------------------------
 
-	public JournalEntryTO getpruebaByKey(int transid) throws EJBException {
-		JournalEntryTO _return = new JournalEntryTO();
-		JournalEntryDAO DAO = new JournalEntryDAO();
-		try {
-			_return = DAO.getpruebaByKey(transid);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-		return _return;
-	}
+	
 
 	public ResultOutTO journal_entry_new(JournalEntryTO parameters, int action)
 			throws EJBException {
@@ -1018,7 +1008,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 			Double sum = zero;
 			String acc = null;
 			String pasivo = null;
-			double ingreso;
+			double ingreso=0.0;
+	        double costos=0.0;
 			String caja;
 			String business = null;
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
@@ -1036,6 +1027,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				art2.setDebit(account.getCurrtotal());
 				art2.setBalduedeb(account.getCurrtotal());
 				art2.setBalduecred(0.0);
+			
 
 			}
 
@@ -1056,11 +1048,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art1.setShortname(account.getAcctcode());
 			art1.setContraact(cuenta.getValue1());
 			art1.setLinememo("Asiento de cierre");
-			// art1.setRefdate(parameters.getDocduedate());
+			 art1.setRefdate(parameters.getDuedate());
 			// art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
 			// art1.setBaseref(parameters.getRef1());
-			// art1.setTaxdate(parameters.getDocduedate());
+		   art1.setTaxdate(parameters.getDuedate());
 			// art1.setFinncpriod(finncpriod);
 			art1.setReltransid(-1);
 			art1.setRellineid(-1);
@@ -1084,12 +1076,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 			n++;
 
 			// ----------------------------------------------------------------------------------------------------------------------------------
-			// cuenta de efectivo y caja
+			// cuenta de perdidas y ganancias
 			// ----------------------------------------------------------------------------------------------------------------------------------
 
 			art2.setLine_id(n);
 			art2.setAccount(cuenta.getValue1());
-			// art2.setDuedate(parameters.getDocduedate());
+			art2.setDuedate(parameters.getDuedate());
 			art2.setShortname(cuenta.getValue1());
 			art2.setContraact(account.getAcctcode());
 			art2.setLinememo("asiento de cierre de periodo contable ");
@@ -1097,7 +1089,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// art2.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			// art2.setBaseref(parameters.getRef1());
-			// art2.setTaxdate(parameters.getDocduedate());
+		       art2.setTaxdate(parameters.getDuedate());
 			// art1.setFinncpriod(finncpriod);
 			art2.setReltransid(-1);
 			art2.setRellineid(-1);
@@ -1129,15 +1121,15 @@ public class AccountingEJB implements AccountingEJBRemote {
 		nuevo.setBtfstatus("O");
 		nuevo.setTranstype(Objtype);
 		nuevo.setBaseref("-1");
-		// nuevo.setRefdate(parameters.getDocdate());
+		nuevo.setRefdate(parameters.getDuedate());
 		nuevo.setMemo("asiento de cierre de periodo contable ");
 		// nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		// nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(total_sum);
 		nuevo.setSystotal(total_sum);
 		nuevo.setTransrate(0.0);
-		// nuevo.setDuedate(parameters.getDocduedate());
-		// nuevo.setTaxdate(parameters.getDocdate());
+		nuevo.setDuedate(parameters.getDuedate());
+	    nuevo.setTaxdate(parameters.getDuedate());
 		nuevo.setFinncpriod(0);
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setRefndrprt("N");
@@ -1159,7 +1151,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ResultOutTO _return= new ResultOutTO();
 
-		_return=journalEntry_mtto(journal,Common.MTTOINSERT );
+		_return=journalEntry_mtto(journal,Common.MTTOINSERT);
 		
 		return _return;
 
@@ -1371,7 +1363,7 @@ ResultOutTO _return= new ResultOutTO();
 	
 	
 	// lista de movimientos realizados por el usuario indicado 
-	List list = DAO.getjournaldetail(account.getUsersing());
+	List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype());
 	List detail=new Vector();
 	
 	
@@ -1525,7 +1517,7 @@ ResultOutTO _return= new ResultOutTO();
 		
 		
 		// lista de movimientos realizados por el usuario indicado 
-		List list = DAO.getjournaldetail(account.getUsersing());
+		List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype());
 		List detail=new Vector();
 		
 		
@@ -1535,13 +1527,14 @@ ResultOutTO _return= new ResultOutTO();
 		Catalog1 = admin1.getParameterbykey(7);
 
 		for (Object obj : list) {
+			
 			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
 			
-			
+			if(good.getAccount().equals(Catalog1.getValue1())){
 	        debe=debe+good.getDebit();
 	       
 	        haber=haber+good.getCredit();
-	        
+			}
 			
 		}
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
