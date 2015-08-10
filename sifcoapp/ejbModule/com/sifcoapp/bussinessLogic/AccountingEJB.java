@@ -840,7 +840,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 	}
 
 	// -----------------------------------------------------------
-	// elementos de prueba
+	// cierre contable y cierres de Dia
 	// -----------------------------------------------------------
 
 	
@@ -1122,7 +1122,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		nuevo.setTranstype(Objtype);
 		nuevo.setBaseref("-1");
 		nuevo.setRefdate(parameters.getDuedate());
-		nuevo.setMemo("asiento de cierre de periodo contable ");
+		nuevo.setMemo("Asiento de cierre de periodo contable ");
 		// nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		// nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(total_sum);
@@ -1149,7 +1149,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		JournalEntryTO journal = new JournalEntryTO();
 		journal = fill_JournalEntry_Unir_Toclose(nuevo);
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-ResultOutTO _return= new ResultOutTO();
+        ResultOutTO _return= new ResultOutTO();
 
 		_return=journalEntry_mtto(journal,Common.MTTOINSERT);
 		
@@ -1499,6 +1499,7 @@ ResultOutTO _return= new ResultOutTO();
 	_result.setCodigoError(0);
 	_result.setDocentry(i);
 	_result.setMensaje("Datos almacenados con exito");
+	
 	return _result;
 	
 }

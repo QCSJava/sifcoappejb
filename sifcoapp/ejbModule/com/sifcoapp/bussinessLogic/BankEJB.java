@@ -8,6 +8,9 @@ import java.util.Vector;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import sun.org.mozilla.javascript.internal.ast.ThrowStatement;
+
+import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.admin.ejb.ParameterEJB;
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
@@ -42,6 +45,7 @@ import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
 import com.sifcoapp.objects.sales.to.SalesDetailTO;
 import com.sifcoapp.objects.sales.to.SalesInTO;
 import com.sifcoapp.objects.sales.to.SalesTO;
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 @Stateless
 public class BankEJB implements BankEJBRemote {
@@ -72,6 +76,16 @@ public class BankEJB implements BankEJBRemote {
 		try {
 			_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(parameters,
 					action));
+           // llenado del asiento contable del chekforapayment
+			
+			AccountingEJB acounting = new AccountingEJB();
+
+			JournalEntryTO journal = new JournalEntryTO();
+			journal = journal_CheckForPayment(parameters);
+			ResultOutTO resultado= acounting.journalEntry_mtto(journal, Common.MTTOINSERT,
+					DAO.getConn());
+			
+			 
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -140,93 +154,94 @@ public class BankEJB implements BankEJBRemote {
 		parameterTO parameter = new parameterTO();
 		ParameterEJB ejb = new ParameterEJB();
 		parameter = ejb.getParameterbykey(9);
-		List aux=new Vector();
+		List aux = new Vector();
 
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
 		}
-		
 
 		try {
 
-			if(action==Common.MTTOINSERT){
-				
-			_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(parameters,
-					action));
-			parameters.setDocentry(_return.getDocentry());
-			// Acciones con los hijos
-			Iterator<ColecturiaDetailTO> iterator = parameters
-					.getColecturiaDetail().iterator();
-			while (iterator.hasNext()) {
-				ColecturiaDetailTO detail = (ColecturiaDetailTO) iterator
-						.next();
-              
-				if(detail.getPaidsum()!=0.0){
-				
-				if (detail.getPaidsum() == null) {
-					detail.setPaidsum(zero);
-				}
-				if (detail.getVatsum() == null) {
-					detail.setVatsum(zero);
-				}
-				// Para articulos nuevos
-				detail.setObjtype("33");
-				detail.setDocentry(_return.getDocentry());
-				if (action == Common.MTTOINSERT) {
-					DAO1.ges_ges_col0_colecturiadetail_mtto(detail,
-							Common.MTTOINSERT);
-				}
-				if (action == Common.MTTODELETE) {
-					DAO1.ges_ges_col0_colecturiadetail_mtto(detail,
-							Common.MTTODELETE);
+			if (action == Common.MTTOINSERT) {
+
+				_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(
+						parameters, action));
+				parameters.setDocentry(_return.getDocentry());
+				// Acciones con los hijos
+				Iterator<ColecturiaDetailTO> iterator = parameters
+						.getColecturiaDetail().iterator();
+				while (iterator.hasNext()) {
+					ColecturiaDetailTO detail = (ColecturiaDetailTO) iterator
+							.next();
+
+					if (detail.getPaidsum() != 0.0) {
+
+						if (detail.getPaidsum() == null) {
+							detail.setPaidsum(zero);
+						}
+						if (detail.getVatsum() == null) {
+							detail.setVatsum(zero);
+						}
+						// Para articulos nuevos
+						detail.setObjtype("33");
+						detail.setDocentry(_return.getDocentry());
+						if (action == Common.MTTOINSERT) {
+							DAO1.ges_ges_col0_colecturiadetail_mtto(detail,
+									Common.MTTOINSERT);
+						}
+						if (action == Common.MTTODELETE) {
+							DAO1.ges_ges_col0_colecturiadetail_mtto(detail,
+									Common.MTTODELETE);
+						}
+
+						if (detail.getLinenum() == Integer.parseInt(parameter
+								.getValue1())) {
+							sale = detail.getFacturas();
+
+						}
+						aux.add(detail);
+					}
 				}
 
-				if (detail.getLinenum() == Integer.parseInt(parameter
-						.getValue1())) {
-					sale = detail.getFacturas();
+				parameters.setColecturiaDetail(aux);
 
+				if (parameters.getSeries() == 1) {
+
+					journal = fill_JournalEntry(parameters);
+					AccountingEJB account = new AccountingEJB();
+					res_jour = account.journalEntry_mtto(journal,
+							Common.MTTOINSERT, DAO.getConn());
+					ResultOutTO nuevo = new ResultOutTO();
+					if (sale.size() != 0) {
+						nuevo = actualizar_sale(sale, DAO.getConn(), parameters);
+					}
 				}
-				aux.add(detail);
+
+				if (parameters.getSeries() == 2) {
+
+					journal = fill_JournalEntry_anular(parameters);
+					AccountingEJB account1 = new AccountingEJB();
+					res_jour = account1.journalEntry_mtto(journal,
+							Common.MTTOINSERT, DAO.getConn());
+
+					ColecturiaTO colecturia = new ColecturiaTO();
+
+					colecturia = get_ges_colecturiaByKey(parameters
+							.getReceiptnum());
+					// cambia estado a 2 indicando que el pago de colecturia ha
+					// sido anulado
+					colecturia.setTranstype(2);
+					// actualizando el pago de colecturia anterior
+					DAO.ges_ges_col0_colecturia_mtto(colecturia,
+							Common.MTTOUPDATE);
+					// actualiza el campo de pago de facturas de cancelado a no
+					// cancelado
+					ResultOutTO nuevo1 = new ResultOutTO();
+					nuevo1 = actualizar_sale2(DAO.getConn(), parameters);
 				}
-			}
-			
-         parameters.setColecturiaDetail(aux);
-		
-			if (parameters.getSeries() == 1) {
 
-				journal = fill_JournalEntry(parameters);
-				AccountingEJB account = new AccountingEJB();
-				res_jour = account.journalEntry_mtto(journal,
-						Common.MTTOINSERT, DAO.getConn());
-				ResultOutTO nuevo = new ResultOutTO();
-				if (sale.size()!=0) {
-					nuevo = actualizar_sale(sale, DAO.getConn(), parameters);
-				}
-			}
-
-			if (parameters.getSeries() == 2) {
-
-				journal = fill_JournalEntry_anular(parameters);
-				AccountingEJB account1 = new AccountingEJB();
-				res_jour = account1.journalEntry_mtto(journal,
-						Common.MTTOINSERT, DAO.getConn());
-				
-				ColecturiaTO colecturia= new ColecturiaTO();
-				
-				colecturia=get_ges_colecturiaByKey(parameters.getReceiptnum());
-                 // cambia estado a 2 indicando que el pago de colecturia ha sido anulado 
-				colecturia.setTranstype(2);
-                //actualizando el pago de colecturia anterior  
-                 DAO.ges_ges_col0_colecturia_mtto(colecturia,
- 						Common.MTTOUPDATE);
-                 //actualiza el campo de pago de facturas de cancelado a no cancelado 
-                 ResultOutTO nuevo1 = new ResultOutTO();
-				nuevo1 = actualizar_sale2(DAO.getConn(), parameters);
-			}
-			
-			}else{
-				DAO.ges_ges_col0_colecturia_mtto(parameters,
-						Common.MTTOUPDATE);
+			} else {
+				DAO.ges_ges_col0_colecturia_mtto(parameters, Common.MTTOUPDATE);
 			}
 
 			DAO.forceCommit();
@@ -349,8 +364,7 @@ public class BankEJB implements BankEJBRemote {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		try {
 			_return.setDocentry(DAO.ges_ges_col2_colecturiaConcepts_mtto(
 					parameters, action));
@@ -446,7 +460,7 @@ public class BankEJB implements BankEJBRemote {
 			art1.setVatamount(0.0);
 			art1.setClosed("N");
 			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(0.0); 
+			art1.setBalduedeb(0.0);
 			art1.setBalduecred(art1.getCredit());
 			art1.setIsnet("Y");
 			art1.setTaxtype(0);
@@ -516,7 +530,8 @@ public class BankEJB implements BankEJBRemote {
 			detail.add(art2);
 
 			// falta condicion de cuando llevar
-			if (colecturia_c.getAditional_account() != null && colecturia_c.getAditional_account().equals("Y")) {
+			if (colecturia_c.getAditional_account() != null
+					&& colecturia_c.getAditional_account().equals("Y")) {
 
 				// ----------------------------------------------------------------------------------------------------------------------------------
 				// calculo del iva y del ingreso administrativo segundo asiento
@@ -527,7 +542,7 @@ public class BankEJB implements BankEJBRemote {
 				// ----------------------------------------------------------------------------------------------------------------------------------
 				// pasivo administrativo
 				// ----------------------------------------------------------------------------------------------------------------------------------
-				art3.setLine_id(n); 
+				art3.setLine_id(n);
 				art3.setAccount(colecturia_c.getAcctcode2());
 				art3.setDebit(sum);
 				art3.setDuedate(parameters.getDocdate());
@@ -558,12 +573,13 @@ public class BankEJB implements BankEJBRemote {
 				art3.setWtline("N");
 				art3.setPayblock("N");
 				art3.setOrdered("N");
-				
-				 art3.setTranstype(colecturia_c.getObjtype());
+
+				art3.setTranstype(colecturia_c.getObjtype());
 				n = n + 1;
 				detail.add(art3);
 
-				if (colecturia_c.getTaxstatus() != null && colecturia_c.getTaxstatus().equals("Y")) {
+				if (colecturia_c.getTaxstatus() != null
+						&& colecturia_c.getTaxstatus().equals("Y")) {
 					// ----------------------------------------------------------------------------------------------------------------------------------
 					// iva debito fiscal
 					// ----------------------------------------------------------------------------------------------------------------------------------
@@ -1056,7 +1072,7 @@ public class BankEJB implements BankEJBRemote {
 				art3.setWtline("N");
 				art3.setPayblock("N");
 				art3.setOrdered("N");
-			  art3.setTranstype(colecturia_c.getObjtype());
+				art3.setTranstype(colecturia_c.getObjtype());
 				n = n + 1;
 				detail.add(art3);
 
@@ -1282,4 +1298,131 @@ public class BankEJB implements BankEJBRemote {
 		return _return;
 	}
 
+	public JournalEntryTO journal_CheckForPayment(CheckForPaymentTO parameters)
+			throws Exception {
+		JournalEntryTO journal = new JournalEntryTO();
+		if (parameters.getChecksum() == 0) {
+			throw new Exception("debe ser un monto mayor que cero");
+
+		}
+		List detail = new Vector();
+
+		String cardcode = parameters.getVendorcode();
+
+		BusinesspartnerTO busines = new BusinesspartnerTO();
+
+		CatalogEJB admin = new CatalogEJB();
+
+		busines = admin.get_businesspartnerBykey(cardcode);
+
+		if (busines == null) {
+			throw new Exception("no se encuentra socio de negocio");
+
+		}
+
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		// cuenta de socio de negocio
+		art1.setLine_id(1);
+		art1.setAccount(busines.getDebpayacct());
+		art1.setDebit(parameters.getChecksum());
+		art1.setDuedate(parameters.getTaxdate());
+		art1.setShortname(busines.getDebpayacct());
+		art1.setContraact(parameters.getCheckacct());
+		art1.setLinememo("emision de cheque a proveedor ");
+		art1.setRefdate(parameters.getTaxdate());
+		art1.setRef1(Integer.toString(parameters.getBnkactkey()));
+		// art1.setRef2();
+		art1.setBaseref(art1.getRef1());
+		art1.setTaxdate(parameters.getTaxdate());
+		// art1.setFinncpriod(finncpriod);
+		art1.setReltransid(-1);
+		art1.setRellineid(-1);
+		art1.setReltype("N");
+		art1.setObjtype("5");
+		art1.setVatline("N");
+		art1.setVatamount(0.0);
+		art1.setClosed("N");
+		art1.setGrossvalue(0.0);
+		art1.setBalduedeb(art1.getDebit());
+		art1.setBalduecred(0.0);
+		art1.setIsnet("Y");
+		art1.setTaxtype(0);
+		art1.setTaxpostacc("N");
+		art1.setTotalvat(0.0);
+		art1.setWtliable("N");
+		art1.setWtline("N");
+		art1.setPayblock("N");
+		art1.setOrdered("N");
+		// art1.setTranstype(colecturia_c.getObjtype());
+		detail.add(art1);
+
+		// cuenta del banco
+
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+		art2.setLine_id(2);
+		art2.setAccount(parameters.getCheckacct());
+		art2.setCredit(parameters.getChecksum());
+		art2.setDuedate(parameters.getTaxdate());
+		art2.setShortname(parameters.getCheckacct());
+		art2.setContraact(busines.getDebpayacct());
+		art2.setLinememo("emision de cheque a proveedor ");
+		art2.setRefdate(parameters.getTaxdate());
+		art2.setRef1(Integer.toString(parameters.getCheckkey()));
+		// rt1.setRef2();
+		art2.setBaseref(art1.getRef1());
+		art2.setTaxdate(parameters.getTaxdate());
+		// art1.setFinncpriod(finncpriod);
+		art2.setReltransid(-1);
+		art2.setRellineid(-1);
+		art2.setReltype("N");
+		art2.setObjtype("5");
+		art2.setVatline("N");
+		art2.setVatamount(0.0);
+		art2.setClosed("N");
+		art2.setGrossvalue(0.0);
+		art2.setBalduedeb(0.0);
+		art2.setBalduecred(art2.getCredit());
+		art2.setIsnet("Y");
+		art2.setTaxtype(0);
+		art2.setTaxpostacc("N");
+		art2.setTotalvat(0.0);
+		art2.setWtliable("N");
+		art2.setWtline("N");
+		art2.setPayblock("N");
+		art2.setOrdered("N");
+		// art1.setTranstype(colecturia_c.getObjtype());
+		detail.add(art2);
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// LLenado del padre
+
+		journal.setBtfstatus("O");
+		journal.setTranstype("-1");
+		journal.setBaseref(Integer.toString(parameters.getCheckkey()));
+		journal.setRefdate(parameters.getTaxdate());
+		journal.setMemo("emision de cheques a proveedor ");
+		journal.setRef1(Integer.toString(parameters.getCheckkey()));
+		journal.setRef2(journal.getRef1());
+		journal.setLoctotal(parameters.getChecksum());
+		journal.setSystotal(parameters.getChecksum());
+		journal.setTransrate(0.0);
+		journal.setDuedate(parameters.getTaxdate());
+		journal.setTaxdate(parameters.getTaxdate());
+		journal.setFinncpriod(0);
+		journal.setUsersign(parameters.getUsersign());
+		journal.setRefndrprt("N");
+		journal.setObjtype("5");
+		journal.setAdjtran("N");
+		journal.setAutostorno("N");
+		journal.setSeries(0);
+		journal.setAutovat("N");
+		journal.setDocseries(0);
+		journal.setPrinted("N");
+		journal.setAutowt("N");
+		journal.setDeferedtax("N");
+		journal.setJournalentryList(detail);
+
+		journal.setJournalentryList(detail);
+		return journal;
+	}
 }
