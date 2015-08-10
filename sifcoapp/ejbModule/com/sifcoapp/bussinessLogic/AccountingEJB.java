@@ -1567,5 +1567,18 @@ public class AccountingEJB implements AccountingEJBRemote {
 		_return=Math.abs(saldo);
 		return _return;
 	}
-	   
+	 
+	public void update_tree(Date refdate,String transtype) throws EJBException {
+		AccountingDAO acc = new AccountingDAO();
+
+		try {
+			 acc.update_TreeTotal_date(refdate, transtype);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		// para retornar el valor absoluto de saldo
+		
+	}
+
 }
