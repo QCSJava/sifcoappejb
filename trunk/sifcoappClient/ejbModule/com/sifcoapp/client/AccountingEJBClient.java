@@ -125,7 +125,7 @@ public class AccountingEJBClient {
 			throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-		
+
 		_return = bean.cat_acc0_ACCOUNT_mtto(parameters, action);
 		return _return;
 	}
@@ -246,8 +246,7 @@ public class AccountingEJBClient {
 	}
 
 	// --------------------------------------------------------------
-	
-		
+
 	public ResultOutTO journal_entry_new(JournalEntryTO parameters, int action)
 			throws EJBException {
 		ResultOutTO _return = null;
@@ -260,8 +259,8 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
-	public ResultOutTO Update_endTotal() throws Exception{
-		
+	public ResultOutTO Update_endTotal() throws Exception {
+
 		ResultOutTO _return = new ResultOutTO();
 		try {
 			_return = bean.Update_endTotal();
@@ -271,32 +270,35 @@ public class AccountingEJBClient {
 		}
 		return _return;
 	}
-	
+
 	public ResultOutTO fill_Journal_close(JournalEntryTO parameters)
-			throws Exception{
-		ResultOutTO _return=new ResultOutTO();
-		
-		_return=bean.fill_Journal_close(parameters);
-		
+			throws Exception {
+		ResultOutTO _return = new ResultOutTO();
+
+		_return = bean.fill_Journal_close(parameters);
+
 		return _return;
-		
+
 	}
 
-	public ResultOutTO traslado_caja(AccountTO account) throws Exception{
-		ResultOutTO _return=new ResultOutTO();
-		
-		_return=bean.traslado_caja(account);
-		
+	public ResultOutTO traslado_caja(AccountTO account) throws Exception {
+		ResultOutTO _return = new ResultOutTO();
+
+		_return = bean.traslado_caja(account);
+
 		return _return;
-		
+
 	}
-	public double devolver_saldo(AccountTO account)throws Exception
-	{
+
+	public double devolver_saldo(AccountTO account) throws Exception {
 		double _return;
-		
-		_return=bean.devolver_saldo(account);
-		
+
+		_return = bean.devolver_saldo(account);
+
 		return _return;
-		
+
+	}
+	public void update_tree(Date refdate,String transtype) throws EJBException{
+		bean.update_tree(refdate, transtype);
 	}
 }
