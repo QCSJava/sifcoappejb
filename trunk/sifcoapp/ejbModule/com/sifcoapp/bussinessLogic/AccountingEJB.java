@@ -989,14 +989,22 @@ public class AccountingEJB implements AccountingEJBRemote {
 		int n = 1;
 		int count = 1;
 		double total_sum = 0.0;
-		List list_param = getAccount_Toclose();
+		
 		List aux = new Vector();
 		List aux1 = new Vector();
 		AdminDAO admin = new AdminDAO();
 
 		ParameterDAO DAO = new ParameterDAO();
 		cuenta = DAO.getParameterbykey(10);
-
+		
+		//actualizando el end total para 
+		
+		AccountingDAO acount = new AccountingDAO();
+		acount.setIstransaccional(true);
+		acount.inicial_endTotal();
+		acount.update_TreeTotal_date(parameters.getTaxdate(), "-1");
+		
+		List list_param = getAccount_Toclose();
 		// recorre la lista de listas para encontrar los detalles de el asiento
 		// contable
 		List detail = new Vector();
@@ -1015,30 +1023,30 @@ public class AccountingEJB implements AccountingEJBRemote {
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 
-			total_sum = total_sum + Math.abs(account.getCurrtotal());
+			total_sum = total_sum + Math.abs(account.getEndtotal());
 
 			// comparando con el group mask para encontrar el saldo de la cuenta
 			if (account.getGroupmask() == 4) {
 
-				art1.setCredit(account.getCurrtotal());
-				art1.setBalduecred(account.getCurrtotal());
+				art1.setCredit(account.getEndtotal());
+				art1.setBalduecred(account.getEndtotal());
 				art1.setBalduedeb(0.0);
 				// cuenta perdidas y ganancias
-				art2.setDebit(account.getCurrtotal());
-				art2.setBalduedeb(account.getCurrtotal());
+				art2.setDebit(account.getEndtotal());
+				art2.setBalduedeb(account.getEndtotal());
 				art2.setBalduecred(0.0);
 			
 
 			}
 
 			if (account.getGroupmask() == 5) {
-				art1.setDebit(account.getCurrtotal() * -1);
+				art1.setDebit(account.getEndtotal() * -1);
 				art1.setBalduecred(0.0);
-				art1.setBalduedeb(account.getCurrtotal() * -1);
+				art1.setBalduedeb(account.getEndtotal() * -1);
 				// cuenta perdidas y ganancias
-				art2.setCredit(account.getCurrtotal() * -1);
+				art2.setCredit(account.getEndtotal() * -1);
 				art2.setBalduedeb(0.0);
-				art2.setBalduecred(account.getCurrtotal() * -1);
+				art2.setBalduecred(account.getEndtotal() * -1);
 			}
 
 			art1.setLine_id(n);
