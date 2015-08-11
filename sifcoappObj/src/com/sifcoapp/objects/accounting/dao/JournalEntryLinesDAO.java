@@ -533,13 +533,14 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 	
  
-	public List getjournaldetail(int usersign,String transtype) throws Exception {
+	public List getjournaldetail(int usersign,String transtype,String account) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_journalentrydetail_traslado(?,?)}");
+		this.setDbObject("{call sp_get_journalentrydetail_traslado(?,?,?)}");
 		this.setInt(1, "_usersign", new Integer(usersign));
 		this.setString(2, "_transtype", transtype);
+		this.setString(3, "_account", account);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");

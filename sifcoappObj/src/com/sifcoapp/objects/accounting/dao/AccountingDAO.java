@@ -1551,9 +1551,13 @@ public class AccountingDAO extends CommonDAO {
 
 	public void update_TreeTotal_date(Date Refdate, String transtype)
 			throws Exception {
-
+         
+		
+		this.inicial_endTotal();
+		
 		List _return = new Vector();
 		List lstResultSet = null;
+
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_account_date(?,?)}");
