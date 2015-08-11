@@ -1002,7 +1002,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		AccountingDAO acount = new AccountingDAO();
 		acount.setIstransaccional(true);
 		acount.inicial_endTotal();
-		acount.update_TreeTotal_date(parameters.getTaxdate(), "-1");
+		acount.update_TreeTotal_date(parameters.getTaxdate(),null);
 		
 		List list_param = getAccount_Toclose();
 		// recorre la lista de listas para encontrar los detalles de el asiento
@@ -1078,7 +1078,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art1.setWtline("N");
 			art1.setPayblock("N");
 			art1.setOrdered("N");
-			// art1.setTranstype(colecturia_c.getObjtype());
+			 art1.setTranstype("-1");
 			detail.add(art1);
 
 			n++;
@@ -1115,7 +1115,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art2.setWtline("N");
 			art2.setPayblock("N");
 			art2.setOrdered("N");
-			// art2.setTranstype(colecturia_c.getObjtype());
+		 art2.setTranstype("-1");
 			n = n + 1;
 			//
 			detail.add(art2);
@@ -1127,7 +1127,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// LLenado del padre
 
 		nuevo.setBtfstatus("O");
-		nuevo.setTranstype(Objtype);
+		nuevo.setTranstype("-1");
 		nuevo.setBaseref("-1");
 		nuevo.setRefdate(parameters.getDuedate());
 		nuevo.setMemo("Asiento de cierre de periodo contable ");
@@ -1332,12 +1332,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		
 		List accountlist = new Vector();
 		ResultOutTO _return= new ResultOutTO();
-		
-		
-			
-				try {
+			try {
 					DAO.setIstransaccional(true);
-					DAO.inicial_endTotal();
 					
 					DAO.update_TreeTotal();
 					
@@ -1371,15 +1367,15 @@ public class AccountingEJB implements AccountingEJBRemote {
 	
 	
 	// lista de movimientos realizados por el usuario indicado 
-	List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype());
-	List detail=new Vector();
+	
 	
 	
 	
 	admin1 = new ParameterDAO();
 	parameterTO Catalog1 = new parameterTO();
 	Catalog1 = admin1.getParameterbykey(7);
-
+	List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype(),Catalog1.getValue1());
+	List detail=new Vector();
 	
 	JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 	JournalEntryLinesTO art2 = new JournalEntryLinesTO(); 
@@ -1420,6 +1416,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		art1.setWtline("N");
 		art1.setPayblock("N");
 		art1.setOrdered("N");
+		art1.setIntrnmatch(1);
+		art1.setMthdate(art1.getDuedate());
 		//art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
 	}
@@ -1458,6 +1456,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 	art2.setWtline("N");
 	art2.setPayblock("N");
 	art2.setOrdered("N");
+	art2.setIntrnmatch(1);
+	art2.setMthdate(art2.getDuedate());
 	//art2.setTranstype(parameters.getObjtype());
 	detail.add(art2);
 
@@ -1526,24 +1526,24 @@ public class AccountingEJB implements AccountingEJBRemote {
 		
 		
 		// lista de movimientos realizados por el usuario indicado 
-		List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype());
+		admin1 = new ParameterDAO();
+		parameterTO Catalog1 = new parameterTO();
+		Catalog1 = admin1.getParameterbykey(7);
+		List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype(),Catalog1.getValue1());
 		List detail=new Vector();
 		
 		
 		
-		admin1 = new ParameterDAO();
-		parameterTO Catalog1 = new parameterTO();
-		Catalog1 = admin1.getParameterbykey(7);
 
 		for (Object obj : list) {
 			
 			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
 			
-			if(good.getAccount().equals(Catalog1.getValue1())){
+			//if(good.getAccount().equals(Catalog1.getValue1())){
 	        debe=debe+good.getDebit();
 	       
 	        haber=haber+good.getCredit();
-			}
+			//}
 			
 		}
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
@@ -1570,6 +1570,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 	 
 	public void update_tree(Date refdate,String transtype) throws EJBException {
 		AccountingDAO acc = new AccountingDAO();
+	acc.setIstransaccional(true);
 
 		try {
 			 acc.update_TreeTotal_date(refdate, transtype);
