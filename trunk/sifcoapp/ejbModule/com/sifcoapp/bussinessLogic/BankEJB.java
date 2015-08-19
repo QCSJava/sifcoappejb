@@ -528,6 +528,9 @@ public class BankEJB implements BankEJBRemote {
 			n = n + 1;
 			//
 			detail.add(art2);
+			
+			
+			//if (colec)
 
 			// falta condicion de cuando llevar
 			if (colecturia_c.getAditional_account() != null
@@ -1425,4 +1428,6 @@ public class BankEJB implements BankEJBRemote {
 		journal.setJournalentryList(detail);
 		return journal;
 	}
+
+
 }
