@@ -151,7 +151,7 @@ public class BankTest {
 			colecturia.setTransid(concept.getTransid());
 			colecturia.setConfirmed(concept.getConfirmed());
 			colecturia.setPeymethod(concept.getPeymethod());
-			colecturia.setPaidsum(10.00);
+			colecturia.setPaidsum(concept.getPaidsum());
 			colecturia.setVatsum(concept.getVatsum());
 			colecturia.setDocsubtype(concept.getDocsubtype());
 			colecturia.setValue1(concept.getValue1());
@@ -160,9 +160,9 @@ public class BankTest {
 			colecturia.setTaxstatus(concept.getTaxstatus());
             colecturia.setAditional_account(concept.getAditional_account());
             colecturia.setFacturas(concept.getFacturas());
-			
-			
-			prueba.add(colecturia);
+        			
+			System.out.println("nombre del concepto y numero "+concept.getLinenum()+" "+concept.getDscription());
+			prueba.add(colecturia); 
 		}
 		
 		bus.setColecturiaDetail(prueba);
