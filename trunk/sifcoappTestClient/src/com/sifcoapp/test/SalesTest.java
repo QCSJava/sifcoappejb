@@ -127,6 +127,8 @@ public class SalesTest {
 		document.setGtotal(0.000000);
 		document.setObjtype("10");
 		document.setTaxstatus("N");
+		document.setTaxcode("IVA");
+	
 		
 		prueba.add(document);
 
@@ -147,6 +149,8 @@ public class SalesTest {
 		document1.setGtotal(6.275);
 		document1.setObjtype("10");
 		document1.setTaxstatus("N");
+		document1.setTaxcode("IVA");
+		
 		prueba.add(document1);
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
 		  long lnMilisegundos = utilDate.getTime();
