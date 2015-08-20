@@ -358,12 +358,12 @@ public class BankEJB implements BankEJBRemote {
 		List lstPeriods3 = null;
 		// nuevo.setDocentry(1);
 
-		try {
+		/*try {
 			lstPeriods3 = DAO.get_ges_colecturiaConcept();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 		try {
 			_return.setDocentry(DAO.ges_ges_col2_colecturiaConcepts_mtto(
