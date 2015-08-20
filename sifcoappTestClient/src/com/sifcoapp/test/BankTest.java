@@ -181,14 +181,30 @@ public class BankTest {
 	}
 
 	public static void colecturiaConcept_mtto() {
-
+List lista= new Vector();
 		ResultOutTO resp = null;
 		ColecturiaConceptTO detalle = new ColecturiaConceptTO();
-		detalle.setLinenum(1);
-		detalle.setAcctcode("23434");
-		detalle.setDscription("jjjjjjjj");
-		detalle.setPaidsum(0.00000);
-		detalle.setVatsum(0.00000);
+		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
+		List lstPeriods3 = null;
+		// nuevo.setDocentry(1);
+
+		try {
+			lstPeriods3 = catalog.get_ges_colecturiaConcept();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator<ColecturiaConceptTO> iterator = lstPeriods3.iterator();
+		while (iterator.hasNext()) {
+			ColecturiaConceptTO periodo = (ColecturiaConceptTO) iterator.next();
+			if(periodo.getLinenum()==1){
+				detalle=periodo;
+			}
+		}
+		
+// cambio a realizar dento del concepto 
+		detalle.setPaidsum(40.00);
+		
 		
 		try {
 			resp = catalog.ges_ges_col2_colecturiaConcepts_mtto(detalle, 2);
