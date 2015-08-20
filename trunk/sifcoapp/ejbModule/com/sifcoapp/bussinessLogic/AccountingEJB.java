@@ -499,9 +499,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 		double saldo = 0.0;
 		account1 = getAccountByKey(line.getAccount());
 
-		if (account1 == null || account1.getPostable().equals("N")) {
+		if (account1.getAcctcode() == null || account1.getPostable().equals("N")) {
 			throw new Exception(
-					"La cuenta contable no existe o no es posteable");
+					"La cuenta contable no existe o no es posteable edn la linea =" + line.getLine_id()+"codigo de cuenta"+line.getAccount());
 		}
 		if (line.getDebcred().equals("C")) {
 			saldo = account1.getCurrtotal() - line.getCredit();
