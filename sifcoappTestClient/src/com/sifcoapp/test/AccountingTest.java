@@ -530,15 +530,19 @@ public class AccountingTest {
 		account.setUsersing(53);
 
 		_result = AccountingEJBService.devolver_saldo(account);
-
 		System.out.println(_result);
+ 
+		account.setCurrtotal(_result);
+		
+		ResultOutTO result = new ResultOutTO();
+ result=AccountingEJBService.traslado_caja(account);
 	}
 
 	public static void cierre_contable() {
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 		String strFecha = "2015-06-07";
-		Date fecha = null;     
+		Date fecha = null;
 		JournalEntryTO parameters = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 
