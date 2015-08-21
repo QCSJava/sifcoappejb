@@ -619,13 +619,13 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		int lstResultSet = 0;
 
 		this.setDbObject("UPDATE cat_jdt1_journalentrylines SET intrnmatch=?, mthdate = ? WHERE transid =? and line_id = ?");
-		this.setInt(1, "extrmatch", new Integer(journalentrylines.getExtrmatch()));
+		this.setInt(1, "intrnmatch", new Integer(journalentrylines.getIntrnmatch()));
 		if (journalentrylines.getMthdate()== null) {
-			this.setDate(2, "acctmthdatecode", journalentrylines.getMthdate());
+			this.setDate(2, "mthdate", journalentrylines.getMthdate());
 		} else {
 			java.sql.Date fecha = new java.sql.Date( journalentrylines.getMthdate()
 					.getTime());
-			this.setDate(2, "acctmthdatecode", fecha);
+			this.setDate(2, "mthdate", fecha);
 		}
 		
 		this.setInt(3, "transid", new Integer(journalentrylines.getTransid()));

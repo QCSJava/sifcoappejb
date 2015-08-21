@@ -225,8 +225,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 	public ResultOutTO cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
 			throws EJBException {
 		// TODO Auto-generated method stub
-		ResultOutTO _return= new ResultOutTO();
-		//int _return = 0;
+		ResultOutTO _return = new ResultOutTO();
+		// int _return = 0;
 		AccountingDAO DAO = new AccountingDAO();
 		try {
 			_return.setDocentry(DAO.cat_acc0_ACCOUNT_mtto(parameters, action));
@@ -234,7 +234,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-		
+
 		return _return;
 	}
 
@@ -313,10 +313,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		double haber = zero;
 		ResultOutTO _return = new ResultOutTO();
 		DAO.setIstransaccional(true);
-		
-		
-		
-		
+
 		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(_conn);
 		JournalLinesDAO.setIstransaccional(true);
 
@@ -337,7 +334,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		// validando que debe y haber sean iguales.....
 
-	
 		double valor = Math.abs(debe - haber);
 		if (valor > 0.00001) {
 			_return.setCodigoError(1);
@@ -357,134 +353,135 @@ public class AccountingEJB implements AccountingEJBRemote {
 		parameters.setPrinted("N");
 		parameters.setAutowt("N");
 		parameters.setDeferedtax("N");
-		
-		if(action==Common.MTTOINSERT){
 
-		if (parameters.getLoctotal() == null) {
-			parameters.setLoctotal(zero);
-		}
-		if (parameters.getSystotal() == null) {
-			parameters.setSystotal(zero);
-		}
-		if (parameters.getTransrate() == null) {
-			parameters.setTransrate(zero);
-		}
-		if (parameters.getWtapplied() == null) {
-			parameters.setWtapplied(zero);
-		}
-		if (parameters.getBaseamnt() == null) {
-			parameters.setBaseamnt(zero);
-		}
-		if (parameters.getBasevtat() == null) {
-			parameters.setBasevtat(zero);
-		}
+		if (action == Common.MTTOINSERT) {
 
-		// Guardar encabezado
-
-		_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
-	
-
-		// Guardar detalle
-		Iterator<JournalEntryLinesTO> iterator = parameters
-				.getJournalentryList().iterator();
-		while (iterator.hasNext()) {
-			JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator.next();
-
-			// ------------------------------------------------------------------------------------------------------------
-			// Valores por defecto del detalle
-			// ------------------------------------------------------------------------------------------------------------
-
-			AccountTO account = new AccountTO();
-
-			Detalle.setReltransid(-1);
-			Detalle.setRellineid(-1);
-			Detalle.setReltype("N");
-			Detalle.setObjtype("5");
-			Detalle.setVatline("N");
-			Detalle.setVatamount(0.0);
-			Detalle.setClosed("N");
-			Detalle.setGrossvalue(0.0);
-			Detalle.setIsnet("Y");
-			Detalle.setTaxtype(0);
-			Detalle.setTaxpostacc("N");
-			Detalle.setTotalvat(0.0);
-			Detalle.setWtliable("N");
-			Detalle.setWtline("N");
-			Detalle.setPayblock("N");
-			Detalle.setOrdered("N");
-
-			if ((Detalle.getDebit() == null || Detalle.getDebit() == zero)
-					&& (Detalle.getCredit() == null || Detalle.getCredit() == zero)) {
-				throw new Exception("Error en valores");
+			if (parameters.getLoctotal() == null) {
+				parameters.setLoctotal(zero);
+			}
+			if (parameters.getSystotal() == null) {
+				parameters.setSystotal(zero);
+			}
+			if (parameters.getTransrate() == null) {
+				parameters.setTransrate(zero);
+			}
+			if (parameters.getWtapplied() == null) {
+				parameters.setWtapplied(zero);
+			}
+			if (parameters.getBaseamnt() == null) {
+				parameters.setBaseamnt(zero);
+			}
+			if (parameters.getBasevtat() == null) {
+				parameters.setBasevtat(zero);
 			}
 
-			if (Detalle.getDebit() == null || Detalle.getDebit() == zero) {
-				Detalle.setDebit(zero);
-				Detalle.setDebcred("C");
-				account.setCurrtotal(Detalle.getCredit());
+			// Guardar encabezado
 
-			} else {
-				Detalle.setCredit(zero);
-				Detalle.setDebcred("D");
-				account.setCurrtotal(Detalle.getDebit());
-			}
-			/*
-			 * if (Detalle.getCredit() == null) { Detalle.setCredit(zero); }
-			 * else { Detalle.setDebcred("C");
-			 * account.setCurrtotal(Detalle.getCredit()); }
-			 */
+			_return.setDocentry(DAO.journalEntry_mtto(parameters, action));
 
-			if (Detalle.getTomthsum() == null) {
-				Detalle.setTomthsum(zero);
-			}
-			if (Detalle.getBasesum() == null) {
-				Detalle.setBasesum(zero);
-			}
-			if (Detalle.getVatrate() == null) {
-				Detalle.setVatrate(zero);
-			}
-			if (Detalle.getSysbasesum() == null) {
-				Detalle.setSysbasesum(zero);
-			}
-			if (Detalle.getVatamount() == null) {
-				Detalle.setVatamount(zero);
-			}
-			if (Detalle.getGrossvalue() == null) {
-				Detalle.setGrossvalue(zero);
-			}
-			if (Detalle.getBalduedeb() == null) {
-				Detalle.setBalduedeb(zero);
-			}
-			if (Detalle.getBalduecred() == null) {
-				Detalle.setBalduecred(zero);
-			}
-			if (Detalle.getTotalvat() == null) {
-				Detalle.setTotalvat(zero);
-			}
+			// Guardar detalle
+			Iterator<JournalEntryLinesTO> iterator = parameters
+					.getJournalentryList().iterator();
+			while (iterator.hasNext()) {
+				JournalEntryLinesTO Detalle = (JournalEntryLinesTO) iterator
+						.next();
 
-			// ---------------------------------------------------------------------------------------------------------------
-			Detalle.setTransid(_return.getDocentry());
-			//Detalle.setTranstype(Integer.toString(_return.getDocentry()));
-			if (action == Common.MTTOINSERT) {
-				JournalLinesDAO.journalEntryLines_mtto(Detalle,
-						Common.MTTOINSERT);
+				// ------------------------------------------------------------------------------------------------------------
+				// Valores por defecto del detalle
+				// ------------------------------------------------------------------------------------------------------------
+
+				AccountTO account = new AccountTO();
+
+				Detalle.setReltransid(-1);
+				Detalle.setRellineid(-1);
+				Detalle.setReltype("N");
+				Detalle.setObjtype("5");
+				Detalle.setVatline("N");
+				Detalle.setVatamount(0.0);
+				Detalle.setClosed("N");
+				Detalle.setGrossvalue(0.0);
+				Detalle.setIsnet("Y");
+				Detalle.setTaxtype(0);
+				Detalle.setTaxpostacc("N");
+				Detalle.setTotalvat(0.0);
+				Detalle.setWtliable("N");
+				Detalle.setWtline("N");
+				Detalle.setPayblock("N");
+				Detalle.setOrdered("N");
+
+				if ((Detalle.getDebit() == null || Detalle.getDebit() == zero)
+						&& (Detalle.getCredit() == null || Detalle.getCredit() == zero)) {
+					throw new Exception("Error en valores");
+				}
+
+				if (Detalle.getDebit() == null || Detalle.getDebit() == zero) {
+					Detalle.setDebit(zero);
+					Detalle.setDebcred("C");
+					account.setCurrtotal(Detalle.getCredit());
+
+				} else {
+					Detalle.setCredit(zero);
+					Detalle.setDebcred("D");
+					account.setCurrtotal(Detalle.getDebit());
+				}
+				/*
+				 * if (Detalle.getCredit() == null) { Detalle.setCredit(zero); }
+				 * else { Detalle.setDebcred("C");
+				 * account.setCurrtotal(Detalle.getCredit()); }
+				 */
+
+				if (Detalle.getTomthsum() == null) {
+					Detalle.setTomthsum(zero);
+				}
+				if (Detalle.getBasesum() == null) {
+					Detalle.setBasesum(zero);
+				}
+				if (Detalle.getVatrate() == null) {
+					Detalle.setVatrate(zero);
+				}
+				if (Detalle.getSysbasesum() == null) {
+					Detalle.setSysbasesum(zero);
+				}
+				if (Detalle.getVatamount() == null) {
+					Detalle.setVatamount(zero);
+				}
+				if (Detalle.getGrossvalue() == null) {
+					Detalle.setGrossvalue(zero);
+				}
+				if (Detalle.getBalduedeb() == null) {
+					Detalle.setBalduedeb(zero);
+				}
+				if (Detalle.getBalduecred() == null) {
+					Detalle.setBalduecred(zero);
+				}
+				if (Detalle.getTotalvat() == null) {
+					Detalle.setTotalvat(zero);
+				}
+
+				// ---------------------------------------------------------------------------------------------------------------
+				Detalle.setTransid(_return.getDocentry());
+				// Detalle.setTranstype(Integer.toString(_return.getDocentry()));
+				if (action == Common.MTTOINSERT) {
+					JournalLinesDAO.journalEntryLines_mtto(Detalle,
+							Common.MTTOINSERT);
+				}
+				if (action == Common.MTTODELETE) {
+					JournalLinesDAO.journalEntryLines_mtto(Detalle,
+							Common.MTTODELETE);
+				}
+
+				// ---------------------------------------------------------------------------------------------------------------
+				// actualizacion de saldo de cuenta
+				// ---------------------------------------------------------------------------------------------------------------
+
+				// account.setAcctcode(Detalle.getAccount());
+				update_currtotal(Detalle, _conn);
+
 			}
-			if (action == Common.MTTODELETE) {
-				JournalLinesDAO.journalEntryLines_mtto(Detalle,
-						Common.MTTODELETE);
-			}
+		} else {
+			_return.setDocentry(DAO.journalEntry_mtto(parameters,
+					Common.MTTOUPDATE));
 
-			// ---------------------------------------------------------------------------------------------------------------
-			// actualizacion de saldo de cuenta
-			// ---------------------------------------------------------------------------------------------------------------
-
-			// account.setAcctcode(Detalle.getAccount());
-			update_currtotal(Detalle, _conn);
-
-		}
-		}else{
-			_return.setDocentry(DAO.journalEntry_mtto(parameters, Common.MTTOUPDATE));
-			
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
@@ -499,9 +496,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 		double saldo = 0.0;
 		account1 = getAccountByKey(line.getAccount());
 
-		if (account1.getAcctcode() == null || account1.getPostable().equals("N")) {
+		if (account1.getAcctcode() == null
+				|| account1.getPostable().equals("N")) {
 			throw new Exception(
-					"La cuenta contable no existe o no es posteable edn la linea =" + line.getLine_id()+"codigo de cuenta"+line.getAccount());
+					"La cuenta contable no existe o no es posteable edn la linea ="
+							+ line.getLine_id() + "codigo de cuenta"
+							+ line.getAccount());
 		}
 		if (line.getDebcred().equals("C")) {
 			saldo = account1.getCurrtotal() - line.getCredit();
@@ -521,8 +521,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 
 	}
-
-	
 
 	// ################### BUDGET ######################
 	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action)
@@ -843,8 +841,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 	// cierre contable y cierres de Dia
 	// -----------------------------------------------------------
 
-	
-
 	public ResultOutTO journal_entry_new(JournalEntryTO parameters, int action)
 			throws EJBException {
 
@@ -940,7 +936,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 				// ---------------------------------------------------------------------------------------------------------------
 				Detalle.setTransid(_return.getDocentry());
-				
+
 				if (action == Common.MTTOINSERT) {
 
 					JournalLinesDAO.journalEntryLines_mtto(Detalle,
@@ -956,9 +952,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// actualizacion de saldo de cuenta
 				// ---------------------------------------------------------------------------------------------------------------
 
-				//account.setAcctcode(Detalle.getAccount());
+				// account.setAcctcode(Detalle.getAccount());
 				update_currtotal(Detalle, DAO.getConn());
-				//update_currtotal(account, Detalle.getDebcred(), DAO.getConn());
+				// update_currtotal(account, Detalle.getDebcred(),
+				// DAO.getConn());
 			}
 			DAO.forceCommit();
 		} catch (Exception e) {
@@ -989,23 +986,23 @@ public class AccountingEJB implements AccountingEJBRemote {
 		int n = 1;
 		int count = 1;
 		double total_sum = 0.0;
-		double ingreso=0.0;
-        double costos=0.0;
-		
+		double ingreso = 0.0;
+		double costos = 0.0;
+
 		List aux = new Vector();
 		List aux1 = new Vector();
 		AdminDAO admin = new AdminDAO();
 
 		ParameterDAO DAO = new ParameterDAO();
 		cuenta = DAO.getParameterbykey(10);
-		
-		//actualizando el end total para 
-		
+
+		// actualizando el end total para
+
 		AccountingDAO acount = new AccountingDAO();
 		acount.setIstransaccional(true);
 		acount.inicial_endTotal();
-		acount.update_TreeTotal_date(parameters.getTaxdate(),null);
-		
+		acount.update_TreeTotal_date(parameters.getTaxdate(), null);
+
 		List list_param = getAccount_Toclose();
 		// recorre la lista de listas para encontrar los detalles de el asiento
 		// contable
@@ -1018,109 +1015,109 @@ public class AccountingEJB implements AccountingEJBRemote {
 			Double sum = zero;
 			String acc = null;
 			String pasivo = null;
-			
+
 			String caja;
 			String business = null;
-			if(account.getEndtotal()!=0.0){
-			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+			if (account.getEndtotal() != 0.0) {
+				JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+				JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 
-			total_sum = total_sum + Math.abs(account.getEndtotal());
+				total_sum = total_sum + Math.abs(account.getEndtotal());
 
-			// comparando con el group mask para encontrar el saldo de la cuenta
-			if (account.getGroupmask() == 4) {
+				// comparando con el group mask para encontrar el saldo de la
+				// cuenta
+				if (account.getGroupmask() == 4) {
 
-				art1.setCredit(account.getEndtotal());
-				art1.setBalduecred(account.getEndtotal());
-				art1.setBalduedeb(0.0);
-				// cuenta perdidas y ganancias
-				art2.setDebit(account.getEndtotal());
-				art2.setBalduedeb(account.getEndtotal());
-				art2.setBalduecred(0.0);
-			
+					art1.setCredit(account.getEndtotal());
+					art1.setBalduecred(account.getEndtotal());
+					art1.setBalduedeb(0.0);
+					// cuenta perdidas y ganancias
+					art2.setDebit(account.getEndtotal());
+					art2.setBalduedeb(account.getEndtotal());
+					art2.setBalduecred(0.0);
 
-			}
+				}
 
-			if (account.getGroupmask() == 5) {
-				art1.setDebit(account.getEndtotal() * -1);
-				art1.setBalduecred(0.0);
-				art1.setBalduedeb(account.getEndtotal() * -1);
-				// cuenta perdidas y ganancias
-				art2.setCredit(account.getEndtotal() * -1);
-				art2.setBalduedeb(0.0);
-				art2.setBalduecred(account.getEndtotal() * -1);
-			}
+				if (account.getGroupmask() == 5) {
+					art1.setDebit(account.getEndtotal() * -1);
+					art1.setBalduecred(0.0);
+					art1.setBalduedeb(account.getEndtotal() * -1);
+					// cuenta perdidas y ganancias
+					art2.setCredit(account.getEndtotal() * -1);
+					art2.setBalduedeb(0.0);
+					art2.setBalduecred(account.getEndtotal() * -1);
+				}
 
-			art1.setLine_id(n);
-			art1.setAccount(account.getAcctcode());
+				art1.setLine_id(n);
+				art1.setAccount(account.getAcctcode());
 
-			// art1.setDuedate(parameters.getDocduedate());
-			art1.setShortname(account.getAcctcode());
-			art1.setContraact(cuenta.getValue1());
-			art1.setLinememo("Asiento de cierre");
-			 art1.setRefdate(parameters.getDuedate());
-			// art1.setRef1(parameters.getRef1());
-			// art1.setRef2();
-			// art1.setBaseref(parameters.getRef1());
-		   art1.setTaxdate(parameters.getDuedate());
-			// art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);
-			art1.setRellineid(-1);
-			art1.setReltype("N");
-			art1.setObjtype("5");
-			art1.setVatline("N");
-			art1.setVatamount(0.0);
-			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
-			art1.setIsnet("Y");
-			art1.setTaxtype(0);
-			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);
-			art1.setWtliable("N");
-			art1.setWtline("N");
-			art1.setPayblock("N");
-			art1.setOrdered("N");
-			 art1.setTranstype("-1");
-			detail.add(art1);
+				// art1.setDuedate(parameters.getDocduedate());
+				art1.setShortname(account.getAcctcode());
+				art1.setContraact(cuenta.getValue1());
+				art1.setLinememo("Asiento de cierre");
+				art1.setRefdate(parameters.getDuedate());
+				// art1.setRef1(parameters.getRef1());
+				// art1.setRef2();
+				// art1.setBaseref(parameters.getRef1());
+				art1.setTaxdate(parameters.getDuedate());
+				// art1.setFinncpriod(finncpriod);
+				art1.setReltransid(-1);
+				art1.setRellineid(-1);
+				art1.setReltype("N");
+				art1.setObjtype("5");
+				art1.setVatline("N");
+				art1.setVatamount(0.0);
+				art1.setClosed("N");
+				art1.setGrossvalue(0.0);
+				art1.setIsnet("Y");
+				art1.setTaxtype(0);
+				art1.setTaxpostacc("N");
+				art1.setTotalvat(0.0);
+				art1.setWtliable("N");
+				art1.setWtline("N");
+				art1.setPayblock("N");
+				art1.setOrdered("N");
+				art1.setTranstype("-1");
+				detail.add(art1);
 
-			n++;
+				n++;
 
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			// cuenta de perdidas y ganancias
-			// ----------------------------------------------------------------------------------------------------------------------------------
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				// cuenta de perdidas y ganancias
+				// ----------------------------------------------------------------------------------------------------------------------------------
 
-			art2.setLine_id(n);
-			art2.setAccount(cuenta.getValue1());
-			art2.setDuedate(parameters.getDuedate());
-			art2.setShortname(cuenta.getValue1());
-			art2.setContraact(account.getAcctcode());
-			art2.setLinememo("asiento de cierre de periodo contable ");
-			// art2.setRefdate();
-			// art2.setRef1(parameters.getRef1());
-			// art2.setRef2();
-			// art2.setBaseref(parameters.getRef1());
-		       art2.setTaxdate(parameters.getDuedate());
-			// art1.setFinncpriod(finncpriod);
-			art2.setReltransid(-1);
-			art2.setRellineid(-1);
-			art2.setReltype("N");
-			art2.setObjtype("5");
-			art2.setVatline("N");
-			art2.setVatamount(0.0);
-			art2.setClosed("N");
-			art2.setGrossvalue(0.0);
-			art2.setIsnet("Y");
-			art2.setTaxtype(0);
-			art2.setTaxpostacc("N");
-			art2.setTotalvat(0.0);
-			art2.setWtliable("N");
-			art2.setWtline("N");
-			art2.setPayblock("N");
-			art2.setOrdered("N");
-		 art2.setTranstype("-1");
-			n = n + 1;
-			//
-			detail.add(art2);
+				art2.setLine_id(n);
+				art2.setAccount(cuenta.getValue1());
+				art2.setDuedate(parameters.getDuedate());
+				art2.setShortname(cuenta.getValue1());
+				art2.setContraact(account.getAcctcode());
+				art2.setLinememo("asiento de cierre de periodo contable ");
+				// art2.setRefdate();
+				// art2.setRef1(parameters.getRef1());
+				// art2.setRef2();
+				// art2.setBaseref(parameters.getRef1());
+				art2.setTaxdate(parameters.getDuedate());
+				// art1.setFinncpriod(finncpriod);
+				art2.setReltransid(-1);
+				art2.setRellineid(-1);
+				art2.setReltype("N");
+				art2.setObjtype("5");
+				art2.setVatline("N");
+				art2.setVatamount(0.0);
+				art2.setClosed("N");
+				art2.setGrossvalue(0.0);
+				art2.setIsnet("Y");
+				art2.setTaxtype(0);
+				art2.setTaxpostacc("N");
+				art2.setTotalvat(0.0);
+				art2.setWtliable("N");
+				art2.setWtline("N");
+				art2.setPayblock("N");
+				art2.setOrdered("N");
+				art2.setTranstype("-1");
+				n = n + 1;
+				//
+				detail.add(art2);
 			}
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1139,7 +1136,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		nuevo.setSystotal(total_sum);
 		nuevo.setTransrate(0.0);
 		nuevo.setDuedate(parameters.getDuedate());
-	    nuevo.setTaxdate(parameters.getDuedate());
+		nuevo.setTaxdate(parameters.getDuedate());
 		nuevo.setFinncpriod(0);
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setRefndrprt("N");
@@ -1159,10 +1156,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 		JournalEntryTO journal = new JournalEntryTO();
 		journal = fill_JournalEntry_Unir_Toclose(nuevo);
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-        ResultOutTO _return= new ResultOutTO();
+		ResultOutTO _return = new ResultOutTO();
 
-		_return=journalEntry_mtto(journal,Common.MTTOINSERT);
-		
+		_return = journalEntry_mtto(journal, Common.MTTOINSERT);
+
 		return _return;
 
 	}
@@ -1217,7 +1214,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// recorre la lista de listas para encontrar los detalles de el asiento
 		// contable
 		List detail = new Vector();
-		for (List obj1 : listas) {//llega con todas las sublistas del asiento contable 
+		for (List obj1 : listas) {// llega con todas las sublistas del asiento
+									// contable
 			List listaDet = obj1;
 			Double sum = zero;
 			String acc = null;
@@ -1236,8 +1234,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				sum_credit = sum_credit + oldjournal.getCredit();
 				acc = oldjournal.getAccount();
 				c_acc = oldjournal.getContraact();
-			
-			
+
 			}
 
 			// asiento contable
@@ -1495,257 +1492,249 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 	public ResultOutTO Update_endTotal() throws EJBException {
 		AccountingDAO DAO = new AccountingDAO();
-		
-		List accountlist = new Vector();
-		ResultOutTO _return= new ResultOutTO();
-			try {
-					DAO.setIstransaccional(true);
-					
-					DAO.update_TreeTotal();
-					
-					_return.setCodigoError(0);
-					_return.setMensaje("datos almacenados correctamente");
 
-					DAO.forceCommit();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					DAO.rollBackConnection();
-					throw (EJBException) new EJBException(e);
-				} finally {
-					DAO.forceCloseConnection();
-				}
-		
+		List accountlist = new Vector();
+		ResultOutTO _return = new ResultOutTO();
+		try {
+			DAO.setIstransaccional(true);
+
+			DAO.update_TreeTotal();
+
+			_return.setCodigoError(0);
+			_return.setMensaje("datos almacenados correctamente");
+
+			DAO.forceCommit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+			DAO.forceCloseConnection();
+		}
+
 		return _return;
 
 	}
-	
-	public ResultOutTO traslado_caja(AccountTO account) throws Exception{
-	
-	double debe = 0.0;
-	double haber = 0.0;
-	double saldo = 0.0;
-	
-	JournalEntryLinesDAO DAO= new JournalEntryLinesDAO();
-	
-	ParameterDAO admin1 = new ParameterDAO();
-	JournalEntryTO nuevo = new JournalEntryTO();
-	ResultOutTO _result = new ResultOutTO();
-	
-	
-	// lista de movimientos realizados por el usuario indicado 
-	
-	
-	
-	
-	admin1 = new ParameterDAO();
-	parameterTO Catalog1 = new parameterTO();
-	Catalog1 = admin1.getParameterbykey(7);
-	List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype(),Catalog1.getValue1());
-	List detail=new Vector();
-	
-	JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-	JournalEntryLinesTO art2 = new JournalEntryLinesTO(); 
-	
-	saldo=account.getCurrtotal();
-	// Cuenta Caja.....
-	
-	if (saldo>0.00) {
-		art1.setLine_id(1);
-		//art1.setDebit(bussines);
-		 art1.setCredit(saldo);
-		art1.setAccount(Catalog1.getValue1());
-		art1.setDuedate(account.getCreatedate());
-		art1.setShortname(Catalog1.getValue1());
-		art1.setContraact(account.getAcctcode());
-		art1.setLinememo("traslado de caja a bancos");
-		art1.setRefdate(account.getCreatedate());
-		art1.setRef1(Integer.toString(account.getUsersing()));
-		// ar1.setRef2();
-		art1.setBaseref(art1.getRef1());
-		art1.setTaxdate(account.getCreatedate());
-		// art1.setFinncpriod(finncpriod);
-		art1.setReltransid(-1);
-		art1.setRellineid(-1);
-		art1.setReltype("N");
-		art1.setObjtype("5");
-		art1.setVatline("N");
-		art1.setVatamount(0.0);
-		art1.setClosed("N");
-		art1.setGrossvalue(0.0);
-		art1.setBalduedeb(0.0);
-		art1.setBalduecred(saldo);
-		art1.setIsnet("Y");
-		art1.setTaxtype(0);
-		art1.setTaxpostacc("N");
-		art1.setTotalvat(0.0);
-		art1.setWtliable("N");
-		art1.setWtline("N");
-		art1.setPayblock("N");
-		art1.setOrdered("N");
-		art1.setIntrnmatch(1);
-		art1.setMthdate(art1.getDuedate());
-		//art1.setTranstype(parameters.getObjtype());
-		detail.add(art1);
-	}
 
-	// cuenta Bancos..........
-	
-	art2.setLine_id(2);
-	//art2.setCredit(bussines);
-	 art2.setDebit(saldo);
-	art2.setAccount(account.getAcctcode());
-	art2.setDuedate(account.getCreatedate());
-	art2.setShortname(account.getAcctcode());
-	art2.setContraact(Catalog1.getValue1());
-	art2.setLinememo("traslado de caja a bancos");
-	art2.setRefdate(account.getCreatedate());
-	art2.setRef1(Integer.toString(account.getUsersing()));
-	// r1.setRef2();
-	art2.setBaseref(art2.getRef1());
-	art2.setTaxdate(account.getCreatedate());
-	// art1.setFinncpriod(finncpriod);
-	art2.setReltransid(-1);
-	art2.setRellineid(-1);
-	art2.setReltype("N");
-	art2.setObjtype("5");
-	art2.setVatline("N");
-	art2.setVatamount(0.0);
-	art2.setClosed("N");
-	art2.setGrossvalue(0.0);
-	art2.setBalduedeb(saldo);
-	art2.setBalduecred(0.0);
-	art2.setIsnet("Y");
-	art2.setTaxtype(0);
-	art2.setTaxpostacc("N");
-	art2.setTotalvat(0.0);
-	art2.setWtliable("N");
-	art2.setWtline("N");
-	art2.setPayblock("N");
-	art2.setOrdered("N");
-	art2.setIntrnmatch(1);
-	art2.setMthdate(art2.getDuedate());
-	//art2.setTranstype(parameters.getObjtype());
-	detail.add(art2);
+	public ResultOutTO traslado_caja(AccountTO account) throws Exception {
 
-		
-	
-	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	// llenado del asiento contable
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	// LLenado del padre
-	
-	nuevo.setObjtype("5");
-	nuevo.setMemo("traslado de caja a Bancos");
-	nuevo.setUsersign(account.getUsersing());
-	nuevo.setLoctotal(saldo);
-	nuevo.setSystotal(saldo);
-	nuevo.setDuedate(account.getCreatedate());
-	nuevo.setTaxdate(account.getCreatedate());
-	nuevo.setBtfstatus("O");
-	nuevo.setTranstype(nuevo.getObjtype());
-	//nuevo.setBaseref(parameters.getRef1());
-	nuevo.setRefdate(account.getCreatedate());
-	//nuevo.setRef1(parameters.getRef1());
-	nuevo.setRefndrprt("N");
-	nuevo.setAdjtran("N");
-	nuevo.setAutostorno("N");
-	nuevo.setAutovat("N");
-	nuevo.setPrinted("N");
-	nuevo.setAutowt("N");
-	nuevo.setDeferedtax("N");
-
-	
-	nuevo.setJournalentryList(detail);
-	
-	_result=journalEntry_mtto(nuevo, Common.MTTOINSERT);
-	JournalEntryLinesDAO journal=new JournalEntryLinesDAO();
-	int i=0;
-	for (Object obj : list) {
-		JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
-	good.setIntrnmatch(_result.getDocentry());
-	good.setMthdate(account.getCreatedate());
-	journal=new JournalEntryLinesDAO();
-	i=journal.update_journalentryline(good);
-		
-	}
-	
-	_result.setCodigoError(0);
-	_result.setDocentry(i);
-	_result.setMensaje("Datos almacenados con exito");
-	
-	return _result;
-	
-}
-    
-	public Double devolver_saldo(AccountTO account)throws Exception{
-		double _return=0.0;
 		double debe = 0.0;
 		double haber = 0.0;
 		double saldo = 0.0;
-		
-		JournalEntryLinesDAO DAO= new JournalEntryLinesDAO();
-		
+
+		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
+
 		ParameterDAO admin1 = new ParameterDAO();
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
-		
-		
-		// lista de movimientos realizados por el usuario indicado 
+
+		// lista de movimientos realizados por el usuario indicado
+
 		admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
 		Catalog1 = admin1.getParameterbykey(7);
-		List list = DAO.getjournaldetail(account.getUsersing(),account.getObjtype(),Catalog1.getValue1());
-		List detail=new Vector();
-		
-		
-		
+		List list = DAO.getjournaldetail(account.getUsersing(),
+				account.getObjtype(), Catalog1.getValue1());
+		List detail = new Vector();
+
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+		saldo = account.getCurrtotal();
+		// Cuenta Caja.....
+
+		if (saldo > 0.00) {
+			art1.setLine_id(1);
+			// art1.setDebit(bussines);
+			art1.setCredit(saldo);
+			art1.setAccount(Catalog1.getValue1());
+			art1.setDuedate(account.getCreatedate());
+			art1.setShortname(Catalog1.getValue1());
+			art1.setContraact(account.getAcctcode());
+			art1.setLinememo("traslado de caja a bancos");
+			art1.setRefdate(account.getCreatedate());
+			art1.setRef1(Integer.toString(account.getUsersing()));
+			// ar1.setRef2();
+			art1.setBaseref(art1.getRef1());
+			art1.setTaxdate(account.getCreatedate());
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(0.0);
+			art1.setClosed("N");
+			art1.setGrossvalue(0.0);
+			art1.setBalduedeb(0.0);
+			art1.setBalduecred(saldo);
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(0.0);
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");
+			art1.setIntrnmatch(1);
+			art1.setMthdate(art1.getDuedate());
+			// art1.setTranstype(parameters.getObjtype());
+			detail.add(art1);
+		}
+
+		// cuenta Bancos..........
+
+		art2.setLine_id(2);
+		// art2.setCredit(bussines);
+		art2.setDebit(saldo);
+		art2.setAccount(account.getAcctcode());
+		art2.setDuedate(account.getCreatedate());
+		art2.setShortname(account.getAcctcode());
+		art2.setContraact(Catalog1.getValue1());
+		art2.setLinememo("traslado de caja a bancos");
+		art2.setRefdate(account.getCreatedate());
+		art2.setRef1(Integer.toString(account.getUsersing()));
+		// r1.setRef2();
+		art2.setBaseref(art2.getRef1());
+		art2.setTaxdate(account.getCreatedate());
+		// art1.setFinncpriod(finncpriod);
+		art2.setReltransid(-1);
+		art2.setRellineid(-1);
+		art2.setReltype("N");
+		art2.setObjtype("5");
+		art2.setVatline("N");
+		art2.setVatamount(0.0);
+		art2.setClosed("N");
+		art2.setGrossvalue(0.0);
+		art2.setBalduedeb(saldo);
+		art2.setBalduecred(0.0);
+		art2.setIsnet("Y");
+		art2.setTaxtype(0);
+		art2.setTaxpostacc("N");
+		art2.setTotalvat(0.0);
+		art2.setWtliable("N");
+		art2.setWtline("N");
+		art2.setPayblock("N");
+		art2.setOrdered("N");
+		art2.setIntrnmatch(1);
+		art2.setMthdate(art2.getDuedate());
+		// art2.setTranstype(parameters.getObjtype());
+		detail.add(art2);
+
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// llenado del asiento contable
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// LLenado del padre
+
+		nuevo.setObjtype("5");
+		nuevo.setMemo("traslado de caja a Bancos");
+		nuevo.setUsersign(account.getUsersing());
+		nuevo.setLoctotal(saldo);
+		nuevo.setSystotal(saldo);
+		nuevo.setDuedate(account.getCreatedate());
+		nuevo.setTaxdate(account.getCreatedate());
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(nuevo.getObjtype());
+		// nuevo.setBaseref(parameters.getRef1());
+		nuevo.setRefdate(account.getCreatedate());
+		// nuevo.setRef1(parameters.getRef1());
+		nuevo.setRefndrprt("N");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setAutovat("N");
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+
+		nuevo.setJournalentryList(detail);
+
+		_result = journalEntry_mtto(nuevo, Common.MTTOINSERT);
+		JournalEntryLinesDAO journal = new JournalEntryLinesDAO();
+		int i = 0;
 
 		for (Object obj : list) {
-			
 			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
-			
-			//if(good.getAccount().equals(Catalog1.getValue1())){
-	        debe=debe+good.getDebit();
-	       
-	        haber=haber+good.getCredit();
-			//}
-			
+			good.setIntrnmatch(_result.getDocentry());
+			good.setMthdate(account.getCreatedate());
+			journal = new JournalEntryLinesDAO();
+			i = journal.update_journalentryline(good);
+
+		}
+
+		_result.setCodigoError(0);
+		_result.setDocentry(i);
+		_result.setMensaje("Datos almacenados con exito");
+
+		return _result;
+
+	}
+
+	public Double devolver_saldo(AccountTO account) throws Exception {
+		double _return = 0.0;
+		double debe = 0.0;
+		double haber = 0.0;
+		double saldo = 0.0;
+
+		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO();
+
+		ParameterDAO admin1 = new ParameterDAO();
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+
+		// lista de movimientos realizados por el usuario indicado
+		admin1 = new ParameterDAO();
+		parameterTO Catalog1 = new parameterTO();
+		Catalog1 = admin1.getParameterbykey(7);
+		List list = DAO.getjournaldetail(account.getUsersing(),
+				account.getObjtype(), Catalog1.getValue1());
+		List detail = new Vector();
+
+		for (Object obj : list) {
+
+			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
+
+			// if(good.getAccount().equals(Catalog1.getValue1())){
+			debe = debe + good.getDebit();
+
+			haber = haber + good.getCredit();
+			// }
+
 		}
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-		JournalEntryLinesTO art2 = new JournalEntryLinesTO(); 
-		
-		saldo=debe-haber;
-		
-		if(saldo==0.00){
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+		saldo = debe - haber;
+
+		if (saldo == 0.00) {
 			_result.setCodigoError(1);
 			_result.setMensaje("no se registran entradas de efectivo en caja");
 			throw new Exception("no se registran entradas de efectivo en caja");
 		}
-	    
-		if(saldo<0.00){
+
+		if (saldo < 0.00) {
 			_result.setCodigoError(1);
 			_result.setMensaje("salidas de efectivos son mayores que las entradas");
-			throw new Exception("salidas de efectivos son mayores que las entradas");
+			throw new Exception(
+					"salidas de efectivos son mayores que las entradas");
 
 		}
-		
-		_return=Math.abs(saldo);
+
+		_return = Math.abs(saldo);
 		return _return;
 	}
-	 
-	public void update_tree(Date refdate,String transtype) throws EJBException {
+
+	public void update_tree(Date refdate, String transtype) throws EJBException {
 		AccountingDAO acc = new AccountingDAO();
-	acc.setIstransaccional(true);
+		acc.setIstransaccional(true);
 
 		try {
-			 acc.update_TreeTotal_date(refdate, transtype);
+			acc.update_TreeTotal_date(refdate, transtype);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
 		// para retornar el valor absoluto de saldo
-		
+
 	}
 
 }

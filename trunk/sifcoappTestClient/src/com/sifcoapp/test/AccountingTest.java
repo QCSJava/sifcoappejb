@@ -535,7 +535,8 @@ public class AccountingTest {
 		account.setCurrtotal(_result);
 		
 		ResultOutTO result = new ResultOutTO();
- result=AccountingEJBService.traslado_caja(account);
+ 
+		result=AccountingEJBService.traslado_caja(account);
 	}
 
 	public static void cierre_contable() {

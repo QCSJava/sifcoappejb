@@ -103,7 +103,7 @@ public class AccountingEJBClient {
 
 	public List getAccountByFilter(String acctcode, String acctname)
 			throws Exception {
-		return getAccountByFilter(acctcode, acctname, null);
+		return getAccountByFilter(acctcode, acctname, "Y");
 	}
 
 	public List getAccountByFilter(String acctcode, String acctname,
