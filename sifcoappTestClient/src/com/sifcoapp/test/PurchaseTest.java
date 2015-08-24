@@ -114,42 +114,23 @@ public class PurchaseTest {
 		document.setLinenum(1);
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
-		document.setQuantity(80.0);
-		document.setPrice(0.9);
+		document.setQuantity(10.0);
+		document.setPrice(0.95);
 		document.setDiscprcnt(0.0);
-		document.setLinetotal(40.0);			
+		document.setLinetotal(9.50);			
 		document.setPricebefdi(0.5);
 		document.setPriceafvat(0.565);
-		document.setVatsum(5.2);
+		document.setVatsum(1.235);
 		document.setGrssprofit(0.0);
 		document.setTaxcode("IVA");
 		document.setVatappld(0.0);
 		document.setStockpricestockprice(0.0);
-		document.setGtotal(45.2);
+		document.setGtotal(10.735);
 		
 		
 
 		prueba.add(document);
-		
-		/*document1.setLinenum(2);
-		document1.setItemcode("001-004-545-6114");
-		document1.setDscription("A");
-		document1.setQuantity(10.25);
-		document1.setPrice(11.25);
-		document1.setLinetotal(0.0);
-		document1.setPricebefdi(0.00000);
-		document1.setPriceafvat(0.0000);
-		document1.setStockpricestockprice(0.00000);
-		document1.setVatappld(0.000000);
-		document1.setVatsum(0.0000);
-		document1.setGrssprofit(0.000000);
-		document1.setGtotal(0.000000);
-		document.setDiscprcnt(0.0000);*/
-		
-		//prueba.add(document1);
-		
-		
-		
+			
 		java.util.Date utilDate = new java.util.Date(); //fecha actual
 		  long lnMilisegundos = utilDate.getTime();
 		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
@@ -160,13 +141,13 @@ public class PurchaseTest {
 		parameters.setTaxdate(sqlDate);
 		parameters.setTowhscode("ALM-001");
 		parameters.setCardcode("P125");
-		parameters.setDocnum(48);
-		parameters.setUsersign(78);		
-		parameters.setDoctotal(0.0);
-		parameters.setVatsum(0.0);
+		parameters.setDocnum(60);
+		parameters.setUsersign(53);		
+		parameters.setDoctotal(10.74);
+		parameters.setVatsum(1.24);
 		parameters.setCtlaccount("210201010121");
 		parameters.setObjtype("20");
-		
+		parameters.setPeymethod("1");
 		parameters.setpurchaseDetails(prueba);
 		try {
 			_result = Purchase.inv_Purchase_mtto(parameters,Common.MTTOINSERT);
