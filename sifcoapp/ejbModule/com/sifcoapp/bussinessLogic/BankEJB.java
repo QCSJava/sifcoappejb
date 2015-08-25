@@ -7,9 +7,6 @@ import java.util.Vector;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-
-import sun.org.mozilla.javascript.internal.ast.ThrowStatement;
-
 import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.admin.ejb.ParameterEJB;
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
