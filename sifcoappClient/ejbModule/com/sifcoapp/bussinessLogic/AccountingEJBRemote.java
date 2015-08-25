@@ -32,7 +32,7 @@ public interface AccountingEJBRemote {
 
 	public AccassignmentTO getAccAssignment() throws EJBException;
 
-	public List getAccount(int type) throws EJBException;
+	// public List getAccount(int type) throws EJBException;
 
 	public List getAccountByFilter(String acctcode, String acctname)
 			throws EJBException;

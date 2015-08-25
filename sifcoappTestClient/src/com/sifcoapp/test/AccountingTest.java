@@ -90,23 +90,18 @@ public class AccountingTest {
 
 	}
 
-	public static void getAccount() {
-
-		List lstPeriods = new Vector();
-
-		try {
-			lstPeriods = AccountingEJBService.getAccount(2);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		Iterator<AccountTO> iterator = lstPeriods.iterator();
-		while (iterator.hasNext()) {
-			AccountTO acc = (AccountTO) iterator.next();
-			System.out.println(acc.getAcctcode() + " - " + acc.getCurrtotal());
-		}
-	}
+	/*
+	 * public static void getAccount() {
+	 * 
+	 * List lstPeriods = new Vector();
+	 * 
+	 * try { lstPeriods = AccountingEJBService.getAccount(2); } catch (Exception
+	 * e) { // TODO Auto-generated catch block e.printStackTrace(); }
+	 * 
+	 * Iterator<AccountTO> iterator = lstPeriods.iterator(); while
+	 * (iterator.hasNext()) { AccountTO acc = (AccountTO) iterator.next();
+	 * System.out.println(acc.getAcctcode() + " - " + acc.getCurrtotal()); } }
+	 */
 
 	public static void getAccountree() {
 
@@ -531,12 +526,12 @@ public class AccountingTest {
 
 		_result = AccountingEJBService.devolver_saldo(account);
 		System.out.println(_result);
- 
+
 		account.setCurrtotal(_result);
-		
+
 		ResultOutTO result = new ResultOutTO();
- 
-		result=AccountingEJBService.traslado_caja(account);
+
+		result = AccountingEJBService.traslado_caja(account);
 	}
 
 	public static void cierre_contable() {
