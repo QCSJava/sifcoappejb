@@ -192,6 +192,7 @@ public class AdminEJB implements AdminEJBRemote {
 	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action)
 			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
+		boolean asociate=false;
 		ArticlesTO article= new ArticlesTO();
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
@@ -205,11 +206,9 @@ public class AdminEJB implements AdminEJBRemote {
 		
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
 				.iterator();
-		List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
-
+		
 		try {
-			consult = adminDAO2.getBranchArticles(parameters.getItemCode());
-
+			
 			while (iterator.hasNext()) {
 
 				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
@@ -238,36 +237,25 @@ public class AdminEJB implements AdminEJBRemote {
 				if (branch.getMaxstock() == null) {
 					branch.setMaxstock(zero);
 				}
-				if (action == Common.MTTOINSERT && branch.isIsasociated()) {
+				if (action == Common.MTTOINSERT  && branch.isIsasociated()) {
 
 					adminDAO2.cat_brancharticles_mtto(branch, action);
-					
+					asociate= branch.isIsasociated();
 					//------------------------------------------------------------------------------------------------------------------------------------------------------
 					//ingreso de lista de precios por defectos
 					//------------------------------------------------------------------------------------------------------------------------------------------------------
-					ArticlesPriceTO art = new ArticlesPriceTO();
-					ArticlesPriceTO art2 = new ArticlesPriceTO();
-					art.setItemcode(parameters.getItemCode());
-					art.setPrice(0.0);
-					art.setPricelist(1);
-					art.setFactor(0.0);
-					art.setOvrwritten(true);
-					art.setAddprice1(0.0);
-					art.setAddprice2(0.0);
-					cat_art1_articlesprice_mtto(art, 1,adminDAO.getConn());
-					art2.setItemcode(parameters.getItemCode());
-					art2.setPrice(0.0);
-					art2.setPricelist(2);
-					art2.setFactor(0.0);
-					art2.setOvrwritten(true);
-					art2.setAddprice1(0.0);
-					art2.setAddprice2(0.0);
-					cat_art1_articlesprice_mtto(art2, 1,adminDAO.getConn());
+					
 				}
 			
 			
 				if (action == Common.MTTOUPDATE) {
+					List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
+
+					consult = adminDAO2.getBranchArticles(parameters.getItemCode());
+
+					
 					adminDAO3 = new AdminDAO(adminDAO.getConn());
+					
 					adminDAO3.setIstransaccional(true);
 					article=adminDAO3.getArticlesByKey(parameters.getItemCode());
 					if(!article.getInvntItem().equals(parameters.getInvntItem())){
@@ -311,6 +299,28 @@ public class AdminEJB implements AdminEJBRemote {
 							.cat_brancharticles_mtto(branch, Common.MTTODELETE);
 				}
 
+			}
+			
+			//si es producto nuevo 
+			if (action == Common.MTTOINSERT && asociate){
+			ArticlesPriceTO art = new ArticlesPriceTO();
+			ArticlesPriceTO art2 = new ArticlesPriceTO();
+			art.setItemcode(parameters.getItemCode());
+			art.setPrice(0.0);
+			art.setPricelist(1);
+			art.setFactor(0.0);
+			art.setOvrwritten(true);
+			art.setAddprice1(0.0);
+			art.setAddprice2(0.0);
+			cat_art1_articlesprice_mtto(art, 1,adminDAO.getConn());
+			art2.setItemcode(parameters.getItemCode());
+			art2.setPrice(0.0);
+			art2.setPricelist(2);
+			art2.setFactor(0.0);
+			art2.setOvrwritten(true);
+			art2.setAddprice1(0.0);
+			art2.setAddprice2(0.0);
+			cat_art1_articlesprice_mtto(art2, 1,adminDAO.getConn());
 			}
 
 			// ############################ VALORES QUEMADOS
