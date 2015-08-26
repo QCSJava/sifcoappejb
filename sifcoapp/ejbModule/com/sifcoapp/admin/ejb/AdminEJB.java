@@ -192,8 +192,8 @@ public class AdminEJB implements AdminEJBRemote {
 	public ResultOutTO cat_articles_mtto(ArticlesTO parameters, int action)
 			throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
-		boolean asociate=false;
-		ArticlesTO article= new ArticlesTO();
+		boolean asociate = false;
+		ArticlesTO article = new ArticlesTO();
 		AdminDAO adminDAO = new AdminDAO();
 		adminDAO.setIstransaccional(true);
 		AdminDAO adminDAO2 = new AdminDAO(adminDAO.getConn());
@@ -202,13 +202,12 @@ public class AdminEJB implements AdminEJBRemote {
 		trans.setIstransaccional(true);
 		AdminDAO adminDAO3 = new AdminDAO(adminDAO.getConn());
 		adminDAO3.setIstransaccional(true);
-		
-		
+
 		Iterator<BranchArticlesTO> iterator = parameters.getBranchArticles()
 				.iterator();
-		
+
 		try {
-			
+
 			while (iterator.hasNext()) {
 
 				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
@@ -237,37 +236,46 @@ public class AdminEJB implements AdminEJBRemote {
 				if (branch.getMaxstock() == null) {
 					branch.setMaxstock(zero);
 				}
-				if (action == Common.MTTOINSERT  && branch.isIsasociated()) {
+				if (action == Common.MTTOINSERT && branch.isIsasociated()) {
 
 					adminDAO2.cat_brancharticles_mtto(branch, action);
-					asociate= branch.isIsasociated();
-					//------------------------------------------------------------------------------------------------------------------------------------------------------
-					//ingreso de lista de precios por defectos
-					//------------------------------------------------------------------------------------------------------------------------------------------------------
+					asociate = branch.isIsasociated();
+
+					
 					
 				}
-			
-			
+
 				if (action == Common.MTTOUPDATE) {
 					List<BranchArticlesTO> consult = new Vector<BranchArticlesTO>();
 
-					consult = adminDAO2.getBranchArticles(parameters.getItemCode());
+					consult = adminDAO2.getBranchArticles(parameters
+							.getItemCode());
 
-					
 					adminDAO3 = new AdminDAO(adminDAO.getConn());
-					
+
 					adminDAO3.setIstransaccional(true);
-					article=adminDAO3.getArticlesByKey(parameters.getItemCode());
-					if(!article.getInvntItem().equals(parameters.getInvntItem())){
-						int registros=trans.getwarehosejournal(parameters.getItemCode());
-						System.out.println("registros"+registros);
-					if(registros>0){
-					    _return.setMensaje("error de actualizacion el producto"+"-"+parameters.getItemCode()+"-"+ "continene"+":"+registros+"-"+"ingresados");
-						_return.setCodigoError(1);
-						return _return;
+					article = adminDAO3.getArticlesByKey(parameters
+							.getItemCode());
+					if (!article.getInvntItem().equals(
+							parameters.getInvntItem())) {
+						int registros = trans.getwarehosejournal(parameters
+								.getItemCode());
+						System.out.println("registros" + registros);
+						if (registros > 0) {
+							_return.setMensaje("error de actualizacion el producto"
+									+ "-"
+									+ parameters.getItemCode()
+									+ "-"
+									+ "continene"
+									+ ":"
+									+ registros
+									+ "-"
+									+ "ingresados");
+							_return.setCodigoError(1);
+							return _return;
+						}
 					}
-					}
-					
+
 					if (branch.isIsasociated()) {
 						int update = 0;
 						Iterator<BranchArticlesTO> iterator2 = consult
@@ -300,27 +308,32 @@ public class AdminEJB implements AdminEJBRemote {
 				}
 
 			}
+
 			
-			//si es producto nuevo 
-			if (action == Common.MTTOINSERT && asociate){
-			ArticlesPriceTO art = new ArticlesPriceTO();
-			ArticlesPriceTO art2 = new ArticlesPriceTO();
-			art.setItemcode(parameters.getItemCode());
-			art.setPrice(0.0);
-			art.setPricelist(1);
-			art.setFactor(0.0);
-			art.setOvrwritten(true);
-			art.setAddprice1(0.0);
-			art.setAddprice2(0.0);
-			cat_art1_articlesprice_mtto(art, 1,adminDAO.getConn());
-			art2.setItemcode(parameters.getItemCode());
-			art2.setPrice(0.0);
-			art2.setPricelist(2);
-			art2.setFactor(0.0);
-			art2.setOvrwritten(true);
-			art2.setAddprice1(0.0);
-			art2.setAddprice2(0.0);
-			cat_art1_articlesprice_mtto(art2, 1,adminDAO.getConn());
+			if (action == Common.MTTOINSERT) {
+				// ------------------------------------------------------------------------------------------------------------------------------------------------------
+				// ingreso de lista de precios por defectos
+				// ------------------------------------------------------------------------------------------------------------------------------------------------------
+				ArticlesPriceTO art = new ArticlesPriceTO();
+				ArticlesPriceTO art2 = new ArticlesPriceTO();
+				
+				art.setItemcode(parameters.getItemCode());
+				art.setPrice(0.0);
+				art.setPricelist(1);
+				art.setFactor(0.0);
+				art.setOvrwritten(true);
+				art.setAddprice1(0.0);
+				art.setAddprice2(0.0);
+				cat_art1_articlesprice_mtto(art, 1, adminDAO.getConn());
+				
+				art2.setItemcode(parameters.getItemCode());
+				art2.setPrice(0.0);
+				art2.setPricelist(2);
+				art2.setFactor(0.0);
+				art2.setOvrwritten(true);
+				art2.setAddprice1(0.0);
+				art2.setAddprice2(0.0);
+				cat_art1_articlesprice_mtto(art2, 1, adminDAO.getConn());
 			}
 
 			// ############################ VALORES QUEMADOS
@@ -343,19 +356,19 @@ public class AdminEJB implements AdminEJBRemote {
 			if (parameters.getOnHand() == null) {
 				parameters.setOnHand(zero);
 			}
-			
-			
 
+			
 			adminDAO.cat_articles_mtto(parameters, action);
+			
 			adminDAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			adminDAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
-			
+
 			adminDAO.forceCloseConnection();
-			
+
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
@@ -622,12 +635,12 @@ public class AdminEJB implements AdminEJBRemote {
 	}
 
 	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters,
-			int action)
-			throws EJBException {
+			int action) throws EJBException {
 		ResultOutTO _return = new ResultOutTO();
 		AdminDAO DAO = new AdminDAO();
 		try {
-			_return = cat_art1_articlesprice_mtto(parameters, action, DAO.getConn());
+			_return = cat_art1_articlesprice_mtto(parameters, action,
+					DAO.getConn());
 			DAO.forceCommit();
 		} catch (Exception e) {
 			DAO.rollBackConnection();
@@ -638,8 +651,9 @@ public class AdminEJB implements AdminEJBRemote {
 		return _return;
 
 	}
+
 	public ResultOutTO cat_art1_articlesprice_mtto(ArticlesPriceTO parameters,
-			int action,Connection conn) throws Exception {
+			int action, Connection conn) throws Exception {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
 
@@ -647,7 +661,7 @@ public class AdminEJB implements AdminEJBRemote {
 		adminDAO.setIstransaccional(true);
 
 		adminDAO.cat_art1_articlesprice_mtto(parameters, action);
-			
+
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
 		return _return;

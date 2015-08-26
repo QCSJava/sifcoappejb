@@ -11,7 +11,7 @@ import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.to.*;
 
 public class SalesTest {
-	
+
 	private static SalesEJBClient sales;
 
 	public static void main(String[] args) {
@@ -21,17 +21,49 @@ public class SalesTest {
 
 		String v_method = args[0];
 
-		/*
-		 * List lstPeriods=new Vector();
-		 * 
-		 * lstPeriods=AccountingEJBService.getAccPeriods();
-		 * 
-		 * System.out.println(lstPeriods);
-		 */
-
 		try {
-			SalesTest.class.getMethod(args[0], null).invoke(null, null);
-			// testPeriods();
+
+			
+			if (args.length > 0) {
+				SalesTest.class.getMethod(args[0], null).invoke(null, null);
+			} else {
+				System.out
+						.println("SalesTest.ClientCredi_mtto();;-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.ClientCredi_mtto();
+
+				System.out
+						.println("SalesTest.Delivery_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.Delivery_mtto();
+
+				System.out
+						.println("SalesTest.getClientCredi();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.getClientCredi();
+
+				System.out
+						.println("SalesTest.getClientCredibykey();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.getClientCredibykey();
+
+				System.out
+						.println("SalesTest.getDelivery();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.getDelivery();
+
+				System.out
+						.println("SalesTest.getDeliverybykey();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.getDeliverybykey();
+
+				System.out
+						.println("SalesTest.getSales();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.getSales();
+
+				System.out
+						.println("SalesTest.getSalesbykey();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.getSalesbykey();
+
+				System.out
+						.println("SalesTest.Sales_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				SalesTest.Sales_mtto();
+
+			}
 
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -56,13 +88,13 @@ public class SalesTest {
 
 		List lstPeriods = new Vector();
 		SalesInTO nuevo = new SalesInTO();
-		//nuevo.setCardcode("00001");
-		int n=1;
+		// nuevo.setCardcode("00001");
+		int n = 1;
 		try {
-			
-			SalesEJBClient nuevo1= new SalesEJBClient();
-			lstPeriods =  nuevo1.getSales(nuevo);
-					//sales.getDelivery(nuevo);
+
+			SalesEJBClient nuevo1 = new SalesEJBClient();
+			lstPeriods = nuevo1.getSales(nuevo);
+			// sales.getDelivery(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,7 +103,8 @@ public class SalesTest {
 		while (iterator.hasNext()) {
 			SalesTO periodo = (SalesTO) iterator.next();
 			System.out.println(periodo.getDocnum() + " - "
-					+ periodo.getJrnlmemo() + " - " + periodo.getDocentry()+"-"+n);
+					+ periodo.getJrnlmemo() + " - " + periodo.getDocentry()
+					+ "-" + n);
 			n++;
 		}
 	}
@@ -128,8 +161,7 @@ public class SalesTest {
 		document.setObjtype("10");
 		document.setTaxstatus("N");
 		document.setTaxcode("IVA");
-	
-		
+
 		prueba.add(document);
 
 		document1.setLinenum(2);
@@ -138,7 +170,7 @@ public class SalesTest {
 		document1.setQuantity(6.0);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
-		
+
 		document1.setLinetotal(0.0000);
 		document1.setPricebefdi(0.00000);
 		document1.setPriceafvat(0.0000);
@@ -150,12 +182,12 @@ public class SalesTest {
 		document1.setObjtype("10");
 		document1.setTaxstatus("N");
 		document1.setTaxcode("IVA");
-		
+
 		prueba.add(document1);
-		java.util.Date utilDate = new java.util.Date(); //fecha actual
-		  long lnMilisegundos = utilDate.getTime();
-		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-		  
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+
 		parameters.setTowhscode("ALM-001");
 		parameters.setDocdate(sqlDate);
 		parameters.setDocduedate(sqlDate);
@@ -170,27 +202,26 @@ public class SalesTest {
 		parameters.setPaidsum(0.0000);
 		parameters.setRounddif(0.00000);
 		parameters.setObjtype("10");
-		
+
 		parameters.setVatsum(0.000000);
 		parameters.setCtlaccount("110602");
 		parameters.setPeymethod("1");
-		
 
 		parameters.setSalesDetails(prueba);
 
 		System.out.println(document1.getItemcode());
 
-
 		try {
-			_result = sales.inv_Sales_mtto(parameters,1);
+			_result = sales.inv_Sales_mtto(parameters, 1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
+
 		System.out.println("luego de servicio");
 		System.out.println(_result.getCodigoError() + "---"
-				+ _result.getDocentry()+ "---------------"+_result.getMensaje());
+				+ _result.getDocentry() + "---------------"
+				+ _result.getMensaje());
 
 	}
 
@@ -198,13 +229,12 @@ public class SalesTest {
 
 		List lstPeriods = new Vector();
 		ClientCrediInTO nuevo = new ClientCrediInTO();
-		
-		
+
 		try {
-			
-			//SalesEJB nuevo1= new SalesEJB();
-			lstPeriods =  sales.getClientCredi(nuevo);
-					//sales.getDelivery(nuevo);
+
+			// SalesEJB nuevo1= new SalesEJB();
+			lstPeriods = sales.getClientCredi(nuevo);
+			// sales.getDelivery(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -254,9 +284,6 @@ public class SalesTest {
 		ClientCrediDetailTO document = new ClientCrediDetailTO();
 		ClientCrediDetailTO document1 = new ClientCrediDetailTO();
 
-
-		
-
 		document.setLinenum(1);
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
@@ -281,7 +308,7 @@ public class SalesTest {
 		document1.setQuantity(6.0);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
-		
+
 		document1.setLinetotal(0.0000);
 		document1.setPricebefdi(0.00000);
 		document1.setPriceafvat(0.0000);
@@ -292,10 +319,10 @@ public class SalesTest {
 		document1.setGtotal(6.275);
 		document1.setObjtype("10");
 		prueba.add(document1);
-		java.util.Date utilDate = new java.util.Date(); //fecha actual
-		  long lnMilisegundos = utilDate.getTime();
-		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-		  
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+
 		parameters.setTowhscode("ALM-001");
 		parameters.setDocdate(sqlDate);
 		parameters.setDocduedate(sqlDate);
@@ -332,12 +359,12 @@ public class SalesTest {
 
 		List lstPeriods = new Vector();
 		DeliveryInTO nuevo = new DeliveryInTO();
-		
+
 		try {
-			
-			SalesEJBClient nuevo1= new SalesEJBClient();
-			lstPeriods =  nuevo1.getDelivery(nuevo);
-					//sales.getDelivery(nuevo);
+
+			SalesEJBClient nuevo1 = new SalesEJBClient();
+			lstPeriods = nuevo1.getDelivery(nuevo);
+			// sales.getDelivery(nuevo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -386,7 +413,6 @@ public class SalesTest {
 		DeliveryDetailTO document = new DeliveryDetailTO();
 		DeliveryDetailTO document1 = new DeliveryDetailTO();
 
-		
 		document.setLinenum(1);
 		document.setItemcode("001-004-545-6114");
 		document.setDscription("A");
@@ -411,7 +437,7 @@ public class SalesTest {
 		document1.setQuantity(6.0);
 		document1.setPrice(11.25);
 		document1.setWhscode("ALM-001");
-		
+
 		document1.setLinetotal(0.0000);
 		document1.setPricebefdi(0.00000);
 		document1.setPriceafvat(0.0000);
@@ -422,10 +448,10 @@ public class SalesTest {
 		document1.setGtotal(6.275);
 		document1.setObjtype("10");
 		prueba.add(document1);
-		java.util.Date utilDate = new java.util.Date(); //fecha actual
-		  long lnMilisegundos = utilDate.getTime();
-		  java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-		  
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+
 		parameters.setTowhscode("ALM-001");
 		parameters.setDocdate(sqlDate);
 		parameters.setDocduedate(sqlDate);
@@ -445,9 +471,9 @@ public class SalesTest {
 
 		parameters.setDeliveryDetails(prueba);
 		try {
-			SalesEJBClient nuevo= new SalesEJBClient();
+			SalesEJBClient nuevo = new SalesEJBClient();
 			_result = nuevo.inv_Delivery_mtto(parameters, 1);
-					//sales.inv_Delivery_mtto(parameters, 1);
+			// sales.inv_Delivery_mtto(parameters, 1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error EJB " + e.getMessage());
@@ -455,7 +481,7 @@ public class SalesTest {
 
 		System.out.println("luego de servicio");
 		System.out.println(_result.getCodigoError() + "---"
-				+ _result.getDocentry()+ _result.getMensaje());
+				+ _result.getDocentry() + _result.getMensaje());
 
 	}
 }

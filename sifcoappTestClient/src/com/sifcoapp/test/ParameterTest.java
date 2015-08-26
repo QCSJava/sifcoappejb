@@ -38,16 +38,17 @@ public class ParameterTest {
 
 		String v_method = args[0];
 
-		/*
-		 * List lstPeriods=new Vector();
-		 * 
-		 * lstPeriods=AccountingEJBService.getAccPeriods();
-		 * 
-		 * System.out.println(lstPeriods);
-		 */
-
 		try {
+		if(args.length>0){
 			ParameterTest.class.getMethod(args[0], null).invoke(null, null);
+		}else
+		{
+			System.out
+			.println("ParameterTest.getparameter();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+			ParameterTest.getparameter();
+			
+			
+		}
 			// testPeriods();
 
 		} catch (IllegalAccessException e) {
