@@ -4,22 +4,13 @@ import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-
-import sun.org.mozilla.javascript.internal.ast.ThrowStatement;
-
-import com.sifcoapp.admin.ejb.AdminEJB;
 import com.sifcoapp.admin.ejb.ParameterEJB;
-import com.sifcoapp.objects.accounting.dao.AccountingDAO;
-import com.sifcoapp.objects.accounting.to.AccassignmentTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.dao.ParameterDAO;
-import com.sifcoapp.objects.admin.to.ArticlesTO;
-import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.parameterTO;
 import com.sifcoapp.objects.bank.dao.CheckForPaymentDAO;
@@ -34,18 +25,11 @@ import com.sifcoapp.objects.bank.to.ColecturiaInTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
-import com.sifcoapp.objects.catalog.to.BusinesspartnerInTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
-import com.sifcoapp.objects.purchase.dao.PurchaseDetailDAO;
-import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
-import com.sifcoapp.objects.sales.to.SalesDetailTO;
 import com.sifcoapp.objects.sales.to.SalesInTO;
 import com.sifcoapp.objects.sales.to.SalesTO;
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 @Stateless
 public class BankEJB implements BankEJBRemote {
