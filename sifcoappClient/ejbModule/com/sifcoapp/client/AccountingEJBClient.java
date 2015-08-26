@@ -92,14 +92,14 @@ public class AccountingEJBClient {
 		return acc;
 	}
 
-	/*
-	 * public List getAccount(int type) throws Exception { // TODO
-	 * Auto-generated method stub List acc = new Vector();
-	 * 
-	 * acc = bean.getAccount(type);
-	 * 
-	 * return acc; }
-	 */
+	public List getAccount(int type) throws Exception {
+		// TODO Auto-generated method stub
+		List acc = new Vector();
+
+		acc = bean.getAccount(type);
+
+		return acc;
+	}
 
 	public List getAccountByFilter(String acctcode, String acctname)
 			throws Exception {
@@ -298,8 +298,7 @@ public class AccountingEJBClient {
 		return _return;
 
 	}
-
-	public void update_tree(Date refdate, String transtype) throws EJBException {
+	public void update_tree(Date refdate,String transtype) throws EJBException{
 		bean.update_tree(refdate, transtype);
 	}
 }
