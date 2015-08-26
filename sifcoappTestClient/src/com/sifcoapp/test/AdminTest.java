@@ -213,12 +213,15 @@ public class AdminTest {
 	public static void articles_mtto() {
 
 		ArticlesTO article = null;
-
+		
+        List Branch = new Vector();
 		String code = "001-004-545-6114";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
 			//System.out.println(article.getPrice(42));
+			
+			article.setItemCode("001-004-545-6399");
 			
 			System.out.println(article.getItemCode() + " - "
 					+ article.getItemName());
@@ -228,12 +231,12 @@ public class AdminTest {
 			Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
 					.iterator();
 			while (iterator.hasNext()) {
-				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
-				System.out.println(branch.isIsasociated() + " - "
-						+ branch.getWhscode() + " - " + branch.getWhsname());
-			}
-			
-		} catch (Exception e) {
+				BranchArticlesTO branch1 = (BranchArticlesTO) iterator.next();
+				branch1.setItemcode(article.getItemCode());;
+				
+		        	
+		}
+		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}			
@@ -285,7 +288,7 @@ public class AdminTest {
 		// Agregar
 
 		try {
-			_result = AdminEJBService.cat_articles_mtto(article,2);
+			_result = AdminEJBService.cat_articles_mtto(article,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
