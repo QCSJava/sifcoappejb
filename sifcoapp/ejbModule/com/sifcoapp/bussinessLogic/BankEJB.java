@@ -59,6 +59,7 @@ public class BankEJB implements BankEJBRemote {
 
 		try {
 			if (action == Common.MTTOINSERT) {
+				parameters.setObjtype("40");
 				_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(
 						parameters, action));
 				// llenado del asiento contable del chekforapayment
@@ -160,8 +161,8 @@ public class BankEJB implements BankEJBRemote {
 		try {
 
 			if (action == Common.MTTOINSERT) {
-
-				_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(
+                 
+ 				_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(
 						parameters, action));
 				parameters.setDocentry(_return.getDocentry());
 				// Acciones con los hijos
@@ -180,7 +181,7 @@ public class BankEJB implements BankEJBRemote {
 							detail.setVatsum(zero);
 						}
 						// Para articulos nuevos
-						detail.setObjtype("33");
+						detail.setObjtype("41");
 						detail.setDocentry(_return.getDocentry());
 						if (action == Common.MTTOINSERT) {
 							DAO1.ges_ges_col0_colecturiadetail_mtto(detail,
@@ -353,14 +354,7 @@ public class BankEJB implements BankEJBRemote {
 		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods3 = null;
-		// nuevo.setDocentry(1);
-
-		/*
-		 * try { lstPeriods3 = DAO.get_ges_colecturiaConcept(); } catch
-		 * (Exception e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
+			
 		try {
 			_return.setDocentry(DAO.ges_ges_col2_colecturiaConcepts_mtto(
 					parameters, action));
@@ -1351,7 +1345,7 @@ public class BankEJB implements BankEJBRemote {
 		art1.setWtline("N");
 		art1.setPayblock("N");
 		art1.setOrdered("N");
-		// art1.setTranstype(colecturia_c.getObjtype());
+	    art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
 
 		// cuenta del banco
@@ -1389,7 +1383,7 @@ public class BankEJB implements BankEJBRemote {
 		art2.setWtline("N");
 		art2.setPayblock("N");
 		art2.setOrdered("N");
-		// art1.setTranstype(colecturia_c.getObjtype());
+	    art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// LLenado del padre
@@ -1419,6 +1413,7 @@ public class BankEJB implements BankEJBRemote {
 		journal.setAutowt("N");
 		journal.setDeferedtax("N");
 		journal.setJournalentryList(detail);
+		journal.setObjtype(parameters.getObjtype());
 
 		journal.setJournalentryList(detail);
 		return journal;
