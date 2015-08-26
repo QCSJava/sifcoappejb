@@ -8,12 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
 import javax.ejb.EJBException;
-
-//import sun.awt.shell.Win32ShellFolder2.SystemIcon;
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
-
 import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
@@ -28,7 +23,8 @@ import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
-import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
+
+//import sun.awt.shell.Win32ShellFolder2.SystemIcon;
 
 public class AccountingTest {
 	private static AccountingEJBClient AccountingEJBService = null;
@@ -38,18 +34,80 @@ public class AccountingTest {
 		if (AccountingEJBService == null)
 			AccountingEJBService = new AccountingEJBClient();
 
-		String v_method = args[0];
-
-		/*
-		 * List lstPeriods=new Vector();
-		 * 
-		 * lstPeriods=AccountingEJBService.getAccPeriods();
-		 * 
-		 * System.out.println(lstPeriods);
-		 */
 		try {
-			AccountingTest.class.getMethod(args[0], null).invoke(null, null);
-			// testPeriods();
+			
+			if (args.length > 0) {
+				AccountingTest.class.getMethod(args[0], null)
+						.invoke(null, null);
+			} else {
+				// AccountingTest.accAssignmetn_mtto();
+				System.out
+						.println("AccountingTest.accAssignmetn_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.accPeridod_mtto();
+				System.out
+						.println("  AccountingTest.accPeridod_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.budget_mtto();
+				System.out
+						.println("  AccountingTest.budget_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				// AccountingTest.cat_Acc0_account_mtto();
+				System.out
+						.println("  AccountingTest.cat_Acc0_account_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.cierre_contable();
+				System.out
+						.println("  AccountingTest.cierre_contable();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getAccAssignment();
+				System.out
+						.println("  AccountingTest.getAccAssignment();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getAccountByFilter();
+				System.out
+						.println("  AccountingTest.getAccountByFilter();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getAccountByKey();
+				System.out
+						.println("  AccountingTest.getAccountByKey();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getAccountree();
+				System.out
+						.println("  AccountingTest.getAccountree();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getBudget();
+				System.out
+						.println("  AccountingTest.getBudget();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getEntry();
+				System.out
+						.println("  AccountingTest.getEntry();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getPeriods();
+				System.out
+						.println("  AccountingTest.getPeriods();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getReccuring_by_key();
+				System.out
+						.println("  AccountingTest.getReccuring_by_key();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getRecurring();
+				System.out
+						.println("  AccountingTest.getRecurring();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getjournalEntry();
+				System.out
+						.println("  AccountingTest.getjournalEntry();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.getjournalentry_by_key();
+				System.out
+						.println("  AccountingTest.getjournalentry_by_key();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.journal_matto();
+				System.out
+						.println("  AccountingTest.journal_matto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.recurring_mtto();
+				System.out
+						.println("  AccountingTest.recurring_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.saveTreeAccount();
+				System.out
+						.println("  AccountingTest.saveTreeAccount();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.traslado_bancos();
+				System.out
+						.println("  AccountingTest.traslado_bancos();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.update_endtotal();
+				System.out
+						.println("  AccountingTest.update_endtotal();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				AccountingTest.update_treetotal();
+				System.out
+						.println("  AccountingTest.update_treetotal();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+			}
 
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -64,6 +122,9 @@ public class AccountingTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
