@@ -58,18 +58,31 @@ public class BankEJB implements BankEJBRemote {
 		}
 
 		try {
-			_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(parameters,
-					action));
-           // llenado del asiento contable del chekforapayment
-			
-			AccountingEJB acounting = new AccountingEJB();
+			if (action == Common.MTTOINSERT) {
+				_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(
+						parameters, action));
+				// llenado del asiento contable del chekforapayment
 
-			JournalEntryTO journal = new JournalEntryTO();
-			journal = journal_CheckForPayment(parameters);
-			ResultOutTO resultado= acounting.journalEntry_mtto(journal, Common.MTTOINSERT,
-					DAO.getConn());
-			
-			 
+				AccountingEJB acounting = new AccountingEJB();
+
+				JournalEntryTO journal = new JournalEntryTO();
+				journal = journal_CheckForPayment(parameters);
+				ResultOutTO resultado = acounting.journalEntry_mtto(journal,
+						Common.MTTOINSERT, DAO.getConn());
+				
+				// Actualizando el documento de Contrl de cheques emitidos con
+				// el transid del journalEntry
+				parameters
+						.setTransref(Integer.toString(resultado.getDocentry()));
+				int result = DAO.ges_cfp0_checkforpayment_mtto(parameters,
+						Common.MTTOUPDATE);
+
+			}
+			if (action == Common.MTTOUPDATE) {
+				_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(
+						parameters, Common.MTTOUPDATE));
+			}
+
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -342,12 +355,11 @@ public class BankEJB implements BankEJBRemote {
 		List lstPeriods3 = null;
 		// nuevo.setDocentry(1);
 
-		/*try {
-			lstPeriods3 = DAO.get_ges_colecturiaConcept();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		/*
+		 * try { lstPeriods3 = DAO.get_ges_colecturiaConcept(); } catch
+		 * (Exception e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
 
 		try {
 			_return.setDocentry(DAO.ges_ges_col2_colecturiaConcepts_mtto(
@@ -512,9 +524,8 @@ public class BankEJB implements BankEJBRemote {
 			n = n + 1;
 			//
 			detail.add(art2);
-			
-			
-			//if (colec)
+
+			// if (colec)
 
 			// falta condicion de cuando llevar
 			if (colecturia_c.getAditional_account() != null
@@ -1412,6 +1423,5 @@ public class BankEJB implements BankEJBRemote {
 		journal.setJournalentryList(detail);
 		return journal;
 	}
-
 
 }
