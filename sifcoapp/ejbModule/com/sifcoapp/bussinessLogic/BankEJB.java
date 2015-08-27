@@ -337,6 +337,12 @@ public class BankEJB implements BankEJBRemote {
 			while (iterator.hasNext()) {
 				ColecturiaConceptTO concept = (ColecturiaConceptTO) iterator
 						.next();
+				//para ver si hay una cuenta para el asiento contable 
+				
+				if (concept.getObjtype()!=null||concept.getObjtype().isEmpty()){
+					concept.setAcctcode3(concept.getObjtype());
+				}
+				//CONCEPTO CORRESPONDIENTE A LAS FACTURAS DE DIESEL 
 				if (concept.getLinenum() == Integer.parseInt(parameter
 						.getValue1())) {
 					concept.setFacturas(facturas);
@@ -356,6 +362,7 @@ public class BankEJB implements BankEJBRemote {
 		List lstPeriods3 = null;
 			
 		try {
+			parameters.setObjtype("42");
 			_return.setDocentry(DAO.ges_ges_col2_colecturiaConcepts_mtto(
 					parameters, action));
 		} catch (Exception e) {
