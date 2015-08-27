@@ -27,15 +27,31 @@ public class BankReconciliationTest {
 
 	private static BankreconciliationEJBClient catalog;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		if (catalog == null)
 			catalog = new BankreconciliationEJBClient();
 		String v_method = args[0];
 
 		try {
+			if(args.length>0){
 			BankReconciliationTest.class.getMethod(args[0], null).invoke(null,
 					null);
+			}else{
+				
+				// testPeriods();
+				System.out
+				.println("BankReconciliationTest.aux_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				BankReconciliationTest.aux_mtto();
+				
+				System.out
+				.println("BankReconciliationTest.conliciacion_update();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				BankReconciliationTest.conliciacion_update();
+				
+				System.out
+				.println("BankReconciliationTest.get_new();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				BankReconciliationTest.get_new();
+			}
 			// testPeriods();
 
 		} catch (IllegalAccessException e) {

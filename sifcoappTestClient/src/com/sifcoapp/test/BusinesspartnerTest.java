@@ -21,18 +21,22 @@ public class BusinesspartnerTest {
 			catalog = new CatalogEJBClient();
 		String v_method = args[0];
 
-		/*
-		 * List lstPeriods=new Vector();
-		 * 
-		 * lstPeriods=AccountingEJBService.getAccPeriods();
-		 * 
-		 * System.out.println(lstPeriods);
-		 */
-
+		
 		try {
+		if(args.length>0){
 			BusinesspartnerTest.class.getMethod(args[0], null).invoke(null, null);
-			// testPeriods();
-
+		}else{
+				// testPeriods();
+			System.out
+			.println("BusinesspartnerTest.businesspartner_mtto();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+			BusinesspartnerTest.businesspartner_mtto();
+			
+			System.out
+			.println("BusinesspartnerTest.getBuss();-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+			BusinesspartnerTest.getBuss();
+		
+			
+		}
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
