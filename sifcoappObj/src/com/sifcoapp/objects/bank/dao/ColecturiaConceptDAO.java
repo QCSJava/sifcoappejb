@@ -159,4 +159,8 @@ public class ColecturiaConceptDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	
+	//SELECT (current_date-docdate)as dias
+	 // FROM ges_col0_colecturia where cardcode='00001'order by docentry desc limit 1;
+	
 }
