@@ -92,19 +92,15 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public List getAccount(int type) throws EJBException {
-
-		List _return = new Vector();
-		AccountingDAO DAO = new AccountingDAO();
-		try {
-			_return = DAO.getAccount(type);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-
-		return _return;
-	}
+	/*
+	 * public List getAccount(int type) throws EJBException {
+	 * 
+	 * List _return = new Vector(); AccountingDAO DAO = new AccountingDAO(); try
+	 * { _return = DAO.getAccount(type); } catch (Exception e) { // TODO
+	 * Auto-generated catch block throw (EJBException) new EJBException(e); }
+	 * 
+	 * return _return; }
+	 */
 
 	public List getAccount_Toclose() throws EJBException {
 

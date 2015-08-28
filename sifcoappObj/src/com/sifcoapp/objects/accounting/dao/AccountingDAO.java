@@ -70,8 +70,8 @@ public class AccountingDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_account(?)}");
-		this.setInt(1, "_type", 1); // para devolver todas las cuentas
+		this.setDbObject("{? = call sp_get_acc0_account()}");
+		// this.setInt(1, "_type", 1); // para devolver todas las cuentas
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
@@ -1477,8 +1477,8 @@ public class AccountingDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_account(?)}");
-		this.setInt(1, "_type", 1); // para devolver todas las cuentas
+		this.setDbObject("{call sp_get_acc0_account()}");
+		// this.setInt(1, "_type", 1); // para devolver todas las cuentas
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
@@ -1551,13 +1551,11 @@ public class AccountingDAO extends CommonDAO {
 
 	public void update_TreeTotal_date(Date Refdate, String transtype)
 			throws Exception {
-         
-		
+
 		this.inicial_endTotal();
-		
+
 		List _return = new Vector();
 		List lstResultSet = null;
-
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_account_date(?,?)}");

@@ -151,23 +151,6 @@ public class AccountingTest {
 
 	}
 
-	public static void getAccount() {
-
-		List lstPeriods = new Vector();
-
-		try {
-			lstPeriods = AccountingEJBService.getAccount(2);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		Iterator<AccountTO> iterator = lstPeriods.iterator();
-		while (iterator.hasNext()) {
-			AccountTO acc = (AccountTO) iterator.next();
-			System.out.println(acc.getAcctcode() + " - " + acc.getCurrtotal());
-		}
-	}
 
 	public static void getAccountree() {
 
