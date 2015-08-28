@@ -17,22 +17,12 @@ public class BusinesspartnerAcountTO extends CommonTO{
 	private String cardcode;
 	  private int acctype; 
 	  private String acctcode; 
+	  private String acctcode2; 
+	  private String acctcode3;
+	  private String acctcode4;	  
 	  private Double balance; 
 	  private String objtype;
-	  
-	  public BusinesspartnerAcountTO(String cardcode, int acctype,
-				String acctcode, Double balance, String objtype) {
-			super();
-			
-			this.cardcode = cardcode;
-			this.acctype = acctype;
-			this.acctcode = acctcode;
-			this.balance = balance;
-			this.objtype = objtype;
-		}
-	  
-	  
-	  
+
 	public String getCardcode() {
 		return cardcode;
 	}
@@ -51,6 +41,24 @@ public class BusinesspartnerAcountTO extends CommonTO{
 	public void setAcctcode(String acctcode) {
 		this.acctcode = acctcode;
 	}
+	public String getAcctcode2() {
+		return acctcode2;
+	}
+	public void setAcctcode2(String acctcode2) {
+		this.acctcode2 = acctcode2;
+	}
+	public String getAcctcode3() {
+		return acctcode3;
+	}
+	public void setAcctcode3(String acctcode3) {
+		this.acctcode3 = acctcode3;
+	}
+	public String getAcctcode4() {
+		return acctcode4;
+	}
+	public void setAcctcode4(String acctcode4) {
+		this.acctcode4 = acctcode4;
+	}
 	public Double getBalance() {
 		return balance;
 	}
@@ -62,6 +70,10 @@ public class BusinesspartnerAcountTO extends CommonTO{
 	}
 	public void setObjtype(String objtype) {
 		this.objtype = objtype;
-	} 
+	}
+	  
+	  
+	  
+	 
 	
 }
