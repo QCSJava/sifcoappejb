@@ -386,6 +386,9 @@ public class BusinesspartnerDAO extends CommonDAO {
 		this.setString(4, "_cardcode ", parameters.getCardcode());
 		this.setString(5, "_objtype ", parameters.getObjtype());
 		this.setInt(6, "_accion", action);
+		this.setInt(7, "_acctcode2",parameters.getAcctcode2());
+		this.setInt(8, "_acctcode3",parameters.getAcctcode3());
+		this.setInt(9, "_acctcode4",parameters.getAcctcode4());
 		v_resp = this.runUpdate();
 		return v_resp;
 	}
@@ -410,11 +413,15 @@ public class BusinesspartnerDAO extends CommonDAO {
 			try {
 				while (rowsetActual.next()) {
 					BusinesspartnerAcountTO partner = new BusinesspartnerAcountTO();
+					
 					partner.setAcctcode(rowsetActual.getString(1));
 					partner.setAcctype(rowsetActual.getInt(2));
 					partner.setBalance(rowsetActual.getDouble(3));
 					partner.setCardcode(rowsetActual.getString(4));
 					partner.setObjtype(rowsetActual.getString(5));
+					partner.setAcctcode2(rowsetActual.getString(6));
+					partner.setAcctcode3(rowsetActual.getString(7));
+					partner.setAcctcode4(rowsetActual.getString(8));
 
 					_return.add(partner);
 				}
@@ -453,6 +460,10 @@ public class BusinesspartnerDAO extends CommonDAO {
 					partner.setBalance(rowsetActual.getDouble(3));
 					partner.setCardcode(rowsetActual.getString(4));
 					partner.setObjtype(rowsetActual.getString(5));
+					partner.setAcctcode2(rowsetActual.getString(6));
+					partner.setAcctcode3(rowsetActual.getString(7));
+					partner.setAcctcode4(rowsetActual.getString(8));
+
 					_return = partner;
 				}
 				rowsetActual.close();
