@@ -339,7 +339,7 @@ public class BankEJB implements BankEJBRemote {
 						.next();
 				//para ver si hay una cuenta para el asiento contable 
 				
-				if (concept.getObjtype()!=null||concept.getObjtype().isEmpty()){
+				if (concept.getObjtype()!=null&&!concept.getObjtype().isEmpty()){
 					concept.setAcctcode3(concept.getObjtype());
 				}
 				//CONCEPTO CORRESPONDIENTE A LAS FACTURAS DE DIESEL 

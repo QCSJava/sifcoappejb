@@ -128,6 +128,7 @@ public class ColecturiaConceptDAO extends CommonDAO {
 			try {
 				while (rowsetActual.next()) {
 					ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
+					
 					colecturia.setLinenum(rowsetActual.getInt(1));
 					colecturia.setLinestatus(rowsetActual.getString(2));
 					colecturia.setObjtype(rowsetActual.getString(3));
