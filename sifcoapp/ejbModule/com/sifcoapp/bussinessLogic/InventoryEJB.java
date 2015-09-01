@@ -1645,7 +1645,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		transactions = fill_transaction(tranfers);
 
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Calculo de existencias y costos, actualizacion de inventarios y listas de precios 
+		// Calculo de existencias y costos, actualizacion de inventarios y
+		// listas de precios
 		// --------------------------------------------------------------------------------------------------------------------------------
 		for (Object object : transactions) {
 			TransactionTo ivt = (TransactionTo) object;
@@ -1692,9 +1693,6 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			res_whjl = trans.save_WarehouseJournalLayer(warehouseJournallayer,
 					conn);
 		}
-
-		
-		
 
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
@@ -1895,139 +1893,134 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		boolean ind = false;
 		Double total = zero;
 		List list = parameters.getTransfersDetail();
-		List detail= new Vector();
-	
+		List detail = new Vector();
+
 		// asiento contable
 
-			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
-			// --------------------------------------------------------------------------------------------------------------------------------------------------------
-			// llenado del asiento contable
-			// --------------------------------------------------------------------------------------------------------------------------------------------------------
-			// // nuevo.setBatchnum(1);
-			// LLenado del padre
-			nuevo.setBtfstatus("O");
-			nuevo.setTranstype(parameters.getObjtype());
-			nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
-			nuevo.setRefdate(parameters.getDocdate());
-			nuevo.setMemo(parameters.getJrnlmemo());
-			nuevo.setRef1(Integer.toString(parameters.getDocnum()));
-			nuevo.setRef2(parameters.getRef1());
-			nuevo.setLoctotal(parameters.getDoctotal());
-			nuevo.setSystotal(parameters.getDoctotal());
-			nuevo.setTransrate(0.0);
-			nuevo.setDuedate(parameters.getDocduedate());
-			nuevo.setTaxdate(parameters.getDocdate());
-			nuevo.setFinncpriod(0);
-			nuevo.setUsersign(parameters.getUsersign());
-			nuevo.setRefndrprt("N");
-			nuevo.setObjtype("5");
-			nuevo.setAdjtran("N");
-			nuevo.setAutostorno("N");
-			nuevo.setSeries(0);
-			nuevo.setAutovat("N");
-			nuevo.setDocseries(0);
-			nuevo.setPrinted("N");
-			nuevo.setAutowt("N");
-			nuevo.setDeferedtax("N");
-			// nuevo.setRef2(ref2);
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// llenado del asiento contable
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// // nuevo.setBatchnum(1);
+		// LLenado del padre
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(parameters.getObjtype());
+		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
+		nuevo.setRefdate(parameters.getDocdate());
+		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
+		nuevo.setRef2(parameters.getRef1());
+		nuevo.setLoctotal(parameters.getDoctotal());
+		nuevo.setSystotal(parameters.getDoctotal());
+		nuevo.setTransrate(0.0);
+		nuevo.setDuedate(parameters.getDocduedate());
+		nuevo.setTaxdate(parameters.getDocdate());
+		nuevo.setFinncpriod(0);
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setRefndrprt("N");
+		nuevo.setObjtype("5");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setSeries(0);
+		nuevo.setAutovat("N");
+		nuevo.setDocseries(0);
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+		// nuevo.setRef2(ref2);
 
-			// llenado de los hijos
-			art1.setLine_id(1);
-			// buscar la cuenta asignada al almacen origen 
-			AdminDAO admin = new AdminDAO();
-			BranchTO branch = new BranchTO();
-			// buscando la cuenta asignada de cuenta de existencias al almacen
-			branch = admin.getBranchByKey(parameters.getFromwhscode());
-			art1.setAccount(branch.getBalinvntac());
-          if (branch.getBalinvntac() == null) {
-				throw new Exception(
-						"No hay una cuenta de Inventario asignada al almacen");
-			}
-		
-			
-			
-			// buscando la cuenta asignada de cuenta de existencias al almacen destino
-		    admin = new AdminDAO();
-			BranchTO branch1 = new BranchTO();
-			branch1 = admin.getBranchByKey(parameters.getTowhscode());
-			if (branch1.getBalinvntac() == null) {
-				throw new Exception(
-						"No hay una cuenta de Inventario asignada al almacen");
-			}
-			
-			
+		// llenado de los hijos
+		art1.setLine_id(1);
+		// buscar la cuenta asignada al almacen origen
+		AdminDAO admin = new AdminDAO();
+		BranchTO branch = new BranchTO();
+		// buscando la cuenta asignada de cuenta de existencias al almacen
+		branch = admin.getBranchByKey(parameters.getFromwhscode());
+		art1.setAccount(branch.getBalinvntac());
+		if (branch.getBalinvntac() == null) {
+			throw new Exception(
+					"No hay una cuenta de Inventario asignada al almacen");
+		}
 
-			art1.setCredit(parameters.getDoctotal());
-			art1.setDuedate(parameters.getDocduedate());
-			art1.setShortname(branch.getBalinvntac());
-			art1.setContraact(branch1.getBalinvntac());
-			art1.setLinememo("entrada de mercancias");
-			art1.setRefdate(parameters.getDocduedate());
-			art1.setRef1(parameters.getRef1());
-			// art1.setRef2();
-			art1.setBaseref(parameters.getRef1());
-			art1.setTaxdate(parameters.getDocduedate());
-			// art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);
-			art1.setRellineid(-1);
-			art1.setReltype("N");
-			art1.setObjtype("5");
-			art1.setVatline("N");
-			art1.setVatamount(0.0);
-			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(0.0);
-			art1.setBalduecred(parameters.getDoctotal());
-			art1.setIsnet("Y");
-			art1.setTaxtype(0);
-			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);
-			art1.setWtliable("N");
-			art1.setWtline("N");
-			art1.setPayblock("N");
-			art1.setOrdered("N");
-			art1.setTranstype(parameters.getObjtype());
-			detail.add(art1);
+		// buscando la cuenta asignada de cuenta de existencias al almacen
+		// destino
+		admin = new AdminDAO();
+		BranchTO branch1 = new BranchTO();
+		branch1 = admin.getBranchByKey(parameters.getTowhscode());
+		if (branch1.getBalinvntac() == null) {
+			throw new Exception(
+					"No hay una cuenta de Inventario asignada al almacen");
+		}
 
-			
-			art2.setLine_id(2);
-			
-			art2.setAccount(branch1.getBalinvntac());
+		art1.setCredit(parameters.getDoctotal());
+		art1.setDuedate(parameters.getDocduedate());
+		art1.setShortname(branch.getBalinvntac());
+		art1.setContraact(branch1.getBalinvntac());
+		art1.setLinememo("entrada de mercancias");
+		art1.setRefdate(parameters.getDocduedate());
+		art1.setRef1(parameters.getRef1());
+		// art1.setRef2();
+		art1.setBaseref(parameters.getRef1());
+		art1.setTaxdate(parameters.getDocduedate());
+		// art1.setFinncpriod(finncpriod);
+		art1.setReltransid(-1);
+		art1.setRellineid(-1);
+		art1.setReltype("N");
+		art1.setObjtype("5");
+		art1.setVatline("N");
+		art1.setVatamount(0.0);
+		art1.setClosed("N");
+		art1.setGrossvalue(0.0);
+		art1.setBalduedeb(0.0);
+		art1.setBalduecred(parameters.getDoctotal());
+		art1.setIsnet("Y");
+		art1.setTaxtype(0);
+		art1.setTaxpostacc("N");
+		art1.setTotalvat(0.0);
+		art1.setWtliable("N");
+		art1.setWtline("N");
+		art1.setPayblock("N");
+		art1.setOrdered("N");
+		art1.setTranstype(parameters.getObjtype());
+		detail.add(art1);
 
-			art2.setDebit(parameters.getDoctotal());
-			art2.setDuedate(parameters.getDocduedate());
-			art2.setShortname(branch1.getBalinvntac());
-			art2.setContraact(branch.getBalinvntac());
-			art2.setLinememo("entrada de mercancias");
-			art2.setRefdate(parameters.getDocduedate());
-			art2.setRef1(parameters.getRef1());
-			// art2.setRef2();
-			art2.setBaseref(parameters.getRef1());
-			art2.setTaxdate(parameters.getDocduedate());
-			// art1.setFinncpriod(finncpriod);
-			art2.setReltransid(-1);
-			art2.setRellineid(-1);
-			art2.setReltype("N");
-			art2.setObjtype("5");
-			art2.setVatline("N");
-			art2.setVatamount(0.0);
-			art2.setClosed("N");
-			art2.setGrossvalue(0.0);
-			art2.setBalduedeb(parameters.getDoctotal());
-			art2.setBalduecred(0.0);
-			art2.setIsnet("Y");
-			art2.setTaxtype(0);
-			art2.setTaxpostacc("N");
-			art2.setTotalvat(0.0);
-			art2.setWtliable("N");
-			art2.setWtline("N");
-			art2.setPayblock("N");
-			art2.setOrdered("N");
-			art2.setTranstype(parameters.getObjtype());
-			detail.add(art2);
+		art2.setLine_id(2);
 
-		
+		art2.setAccount(branch1.getBalinvntac());
+
+		art2.setDebit(parameters.getDoctotal());
+		art2.setDuedate(parameters.getDocduedate());
+		art2.setShortname(branch1.getBalinvntac());
+		art2.setContraact(branch.getBalinvntac());
+		art2.setLinememo("entrada de mercancias");
+		art2.setRefdate(parameters.getDocduedate());
+		art2.setRef1(parameters.getRef1());
+		// art2.setRef2();
+		art2.setBaseref(parameters.getRef1());
+		art2.setTaxdate(parameters.getDocduedate());
+		// art1.setFinncpriod(finncpriod);
+		art2.setReltransid(-1);
+		art2.setRellineid(-1);
+		art2.setReltype("N");
+		art2.setObjtype("5");
+		art2.setVatline("N");
+		art2.setVatamount(0.0);
+		art2.setClosed("N");
+		art2.setGrossvalue(0.0);
+		art2.setBalduedeb(parameters.getDoctotal());
+		art2.setBalduecred(0.0);
+		art2.setIsnet("Y");
+		art2.setTaxtype(0);
+		art2.setTaxpostacc("N");
+		art2.setTotalvat(0.0);
+		art2.setWtliable("N");
+		art2.setWtline("N");
+		art2.setPayblock("N");
+		art2.setOrdered("N");
+		art2.setTranstype(parameters.getObjtype());
+		detail.add(art2);
+
 		nuevo.setJournalentryList(detail);
 		return nuevo;
 
@@ -2090,10 +2083,20 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		// ------------------------------------------------------------------------------------------------------------
 		// validaciones
 		// ------------------------------------------------------------------------------------------------------------
+		// ------------------------------------------------------------------------------------------------------------
+		// validacion de almacen origen y destino 
+		// ------------------------------------------------------------------------------------------------------------
 
+		if (parameters.getTowhscode().equals(parameters.getFromwhscode())) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen origen coincide con almacen destino");
+
+			return _return;
+		}
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
+
 		if (parameters.getTowhscode() == null) {
 			_return.setCodigoError(1);
 			_return.setMensaje("Codigo de almacen null");
@@ -2297,7 +2300,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		boolean ind = false;
 		Double total = zero;
 		String acc = null;
-		int n=1;
+		int n = 1;
 		List list = parameters.getGoodReceiptDetail();
 		List aux = new Vector();
 		List<List> listas = new Vector();
@@ -2359,7 +2362,6 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			// llenado del asiento contable
 
 			// llenado de los hijos
-			
 
 			art2.setLine_id(n);
 			art2.setAccount(acc);
@@ -2397,12 +2399,12 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			n++;
 
 		}
-		
+
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 
 		art1.setLine_id(n);
 		// buscar la cuenta asignada al almacen
-		
+
 		art1.setAccount(branch.getBalinvntac());
 
 		if (branch.getBalinvntac() == null) {
@@ -2441,8 +2443,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		art1.setOrdered("N");
 		art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
-		
-		
+
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// LLenado del padre
 

@@ -308,25 +308,31 @@ public class BankEJB implements BankEJBRemote {
 		return _return;
 	}
 
+	// metodo que devuelve los conceptos de colecturia por socios con saldos de
+	// las cuentas
+
 	public List get_ges_colecturiaConcept1(String Code) throws EJBException {
 		// TODO Auto-generated method stub
+
+		ResultOutTO resultado = new ResultOutTO();
 		List _return = new Vector();
 		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
+		DAO.setIstransaccional(true);
 		ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
 		List facturas = new Vector();
 		SalesInTO aux = new SalesInTO();
 		aux.setCardcode(Code);
 		SalesEJB sales = new SalesEJB();
 		try {
-			facturas = sales.getSales(aux);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+			// actualizando intereses moratorios
+			resultado = interes_moratorio(Code);
 
-		// cosulta del colecturia concept con su saldo de la cuenta
-		try {
+			// consulta para devolver facturas de diesel del socio
+			facturas = sales.getSales(aux);
+
+			// cosulta del colecturia concept con su saldo de la cuenta
 			_return = DAO.get_ges_colecturiaConcept1(Code);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -1182,7 +1188,7 @@ public class BankEJB implements BankEJBRemote {
 		// LLenado del padre
 
 		nuevo.setBtfstatus("O");
-		nuevo.setTranstype(Objtype);
+		nuevo.setTranstype("41");
 		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
 		nuevo.setRefdate(parameters.getDocdate());
 		nuevo.setMemo(parameters.getJrnlmemo());
@@ -1444,13 +1450,31 @@ public class BankEJB implements BankEJBRemote {
 		return Days;
 	}
 
+	public ResultOutTO interes_moratorio(String cardcode) throws Exception {
+		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
+		DAO.setIstransaccional(true);
+		ResultOutTO resultado = new ResultOutTO();
+		try {
+
+			resultado = interes_moratorio(cardcode, DAO.getConn());
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+			DAO.forceCloseConnection();
+		}
+
+		return resultado;
+	}
+
 	public ResultOutTO interes_moratorio(String cardcode, Connection conn)
 			throws Exception {
 		ResultOutTO _result = new ResultOutTO();
 		BusinesspartnerAcountTO busines = new BusinesspartnerAcountTO();
+		ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
 		AccountTO account = new AccountTO();
 		AccountTO account2 = new AccountTO();
-		List conceptos=new Vector();
+		List conceptos = new Vector();
 		double interes = 0.0;
 		String codpres;
 		String cuenta;
@@ -1481,6 +1505,8 @@ public class BankEJB implements BankEJBRemote {
 
 		if (account.getCurrtotal() != null && account.getCurrtotal() > 0.0) {
 			parameterTO = parameter.getParameterbykey(12);
+
+			// codigo del concepto de interes moratorio
 			codpres = parameterTO.getValue1();
 			double i;
 			busines.setCardcode(cardcode);
@@ -1490,20 +1516,141 @@ public class BankEJB implements BankEJBRemote {
 			busines = DAO.get_businesspartnerAcount_FCredit(busines);
 			cuenta = busines.getAcctcode();
 			int days = get_dias(cuenta, "50", conn);
+			// si ya se hiso el registro mostrara day=0
+
+			if (days == 0) {
+				_result.setCodigoError(1);
+				_result.setMensaje("transaccion registrada anteriormente");
+				return _result;
+			}
+
 			// consultando el porcentage de interes y el monto a cargar a la
 			// cuenta
+
 			parameterTO = parameter.getParameterbykey(13);
 			i = (Double.parseDouble(parameterTO.getValue1())) / 100;
 			interes = (i * account.getCurrtotal()) * days;
-			BusinesspartnerAcountTO concepto=new BusinesspartnerAcountTO();
-			conceptos=concept.get_ges_colecturiaConcept();
+			ColecturiaConceptTO concepto = new ColecturiaConceptTO();
+			conceptos = concept.get_ges_colecturiaConcept();
 			for (Object object : conceptos) {
-                busines=(BusinesspartnerAcountTO)object;
-				if(busines.getAcctype()==Integer.parseInt(codpres)){				
-				concepto=busines;
+				colecturia = (ColecturiaConceptTO) object;
+				if (busines.getAcctype() == Integer.parseInt(codpres)) {
+					concepto = colecturia;
+				}
+
 			}
-			}
-			account2 = accounting.getAccountByKey(cuenta);
+			// asiento contable correspondiente al calculo del interes moratorio
+
+			JournalEntryTO journal = new JournalEntryTO();
+			List detail = new Vector();
+
+			java.util.Date utilDate = new java.util.Date(); // fecha actual
+			long lnMilisegundos = utilDate.getTime();
+			java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+
+			journal.setBtfstatus("O");
+			journal.setTranstype("50");
+			journal.setBaseref("50");
+			journal.setRefdate(sqlDate);
+			journal.setMemo("registro de interes moratorio a la fecha");
+			journal.setRef1(Integer.toString(journal.getTransid()));
+			journal.setRef2(journal.getRef1());
+			journal.setLoctotal(interes);
+			journal.setSystotal(interes);
+			journal.setTransrate(zero);
+			journal.setDuedate(sqlDate);
+			journal.setTaxdate(sqlDate);
+			journal.setFinncpriod(0);
+			journal.setUsersign(0);
+			journal.setRefndrprt("N");
+			journal.setObjtype("5");
+			journal.setAdjtran("N");
+			journal.setAutostorno("N");
+			journal.setSeries(0);
+			journal.setAutovat("N");
+			journal.setDocseries(0);
+			journal.setPrinted("N");
+			journal.setAutowt("N");
+			journal.setDeferedtax("N");
+
+			// lineas del asiento contable
+
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+			// cuenta de socio de negocio
+			art1.setLine_id(1);
+			art1.setAccount(concepto.getAcctcode2());
+			art1.setDebit(interes);
+			art1.setDuedate(sqlDate);
+			art1.setShortname(concepto.getAcctcode2());
+			art1.setContraact(concepto.getAcctcode3());
+			art1.setLinememo("emision de cheque a proveedor ");
+			art1.setRefdate(sqlDate);
+			art1.setRef1(Integer.toString(concepto.getLinenum()));
+			// art1.setRef2();
+			art1.setBaseref(art1.getRef1());
+			art1.setTaxdate(sqlDate);
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(0.0);
+			art1.setClosed("N");
+			art1.setGrossvalue(0.0);
+			art1.setBalduedeb(interes);
+			art1.setBalduecred(0.0);
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(0.0);
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");
+			art1.setTranstype("50");
+			detail.add(art1);
+
+			art2.setLine_id(2);
+			art2.setAccount(concepto.getAcctcode3());
+			art2.setCredit(interes);
+			art2.setDuedate(sqlDate);
+			art2.setShortname(concepto.getAcctcode3());
+			art2.setContraact(concepto.getAcctcode2());
+			art2.setLinememo("registro de interes moratorios");
+			art2.setRefdate(sqlDate);
+			art2.setRef1(Integer.toString(concepto.getLinenum()));
+			// rt1.setRef2();
+			art2.setBaseref(art1.getRef1());
+			art2.setTaxdate(sqlDate);
+			// art1.setFinncpriod(finncpriod);
+			art2.setReltransid(-1);
+			art2.setRellineid(-1);
+			art2.setReltype("N");
+			art2.setObjtype("5");
+			art2.setVatline("N");
+			art2.setVatamount(0.0);
+			art2.setClosed("N");
+			art2.setGrossvalue(0.0);
+			art2.setBalduedeb(0.0);
+			art2.setBalduecred(art2.getCredit());
+			art2.setIsnet("Y");
+			art2.setTaxtype(0);
+			art2.setTaxpostacc("N");
+			art2.setTotalvat(0.0);
+			art2.setWtliable("N");
+			art2.setWtline("N");
+			art2.setPayblock("N");
+			art2.setOrdered("N");
+			art2.setTranstype("50");
+			detail.add(art2);
+
+			journal.setJournalentryList(detail);
+			AccountingEJB acounting = new AccountingEJB();
+
+			_result = acounting.journalEntry_mtto(journal, Common.MTTOINSERT,
+					conn);
 
 		}
 

@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/sifco"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GlassFishLibrary"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sifcoappClient"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Postgres"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/glasfishlibrary"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

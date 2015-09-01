@@ -2298,7 +2298,7 @@ public class SalesEJB implements SalesEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		
+
 		for (Object obj : list) {
 			ClientCrediDetailTO good = (ClientCrediDetailTO) obj;
 			String cod = good.getAcctcode();
@@ -2582,7 +2582,7 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setOrdered("N");
 		art5.setTranstype(parameters.getObjtype());
 		detail.add(art5);
-		
+
 		if (tax != 0.00) {
 			art3.setLine_id(5);
 			art3.setDebit(tax);
@@ -2619,7 +2619,7 @@ public class SalesEJB implements SalesEJBRemote {
 			art3.setTranstype(parameters.getObjtype());
 			detail.add(art3);
 		}
-		
+
 		// cuenta de cotrans y fovial si se aplica el impuesto
 		if (fovc != 0.0) {
 			art6.setLine_id(6);
@@ -3586,6 +3586,17 @@ public class SalesEJB implements SalesEJBRemote {
 		String code;
 		// validaciones
 		// validaciones del documento
+		// ------------------------------------------------------------------------------------------------------------
+		// validacion de almacen origen y destino
+		// ------------------------------------------------------------------------------------------------------------
+
+		if (parameters.getTowhscode().equals(parameters.getFromwhscode())) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Codigo de almacen origen coincide con almacen destino");
+
+			return _return;
+		}
+
 		// ------------------------------------------------------------------------------------------------------------
 		// Validación almacen origen bloqueado
 		// ------------------------------------------------------------------------------------------------------------
