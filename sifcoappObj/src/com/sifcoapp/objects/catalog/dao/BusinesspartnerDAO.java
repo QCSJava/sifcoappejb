@@ -474,6 +474,8 @@ public class BusinesspartnerDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	
+
 	public BusinesspartnerAcountTO get_businesspartnerAcount_FCredit(
 			BusinesspartnerAcountTO parameters) throws Exception {
 
