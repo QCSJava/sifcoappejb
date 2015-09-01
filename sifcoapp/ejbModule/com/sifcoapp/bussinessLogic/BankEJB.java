@@ -4,9 +4,14 @@ import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+
 import com.sifcoapp.admin.ejb.ParameterEJB;
+import com.sifcoapp.objects.accounting.dao.AccountingDAO;
+import com.sifcoapp.objects.accounting.dao.JournalEntryLinesDAO;
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
@@ -62,6 +67,7 @@ public class BankEJB implements BankEJBRemote {
 				parameters.setObjtype("40");
 				_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(
 						parameters, action));
+				parameters.setCheckkey(_return.getDocentry());
 				// llenado del asiento contable del chekforapayment
 
 				AccountingEJB acounting = new AccountingEJB();
@@ -70,11 +76,10 @@ public class BankEJB implements BankEJBRemote {
 				journal = journal_CheckForPayment(parameters);
 				ResultOutTO resultado = acounting.journalEntry_mtto(journal,
 						Common.MTTOINSERT, DAO.getConn());
-				
+
 				// Actualizando el documento de Contrl de cheques emitidos con
 				// el transid del journalEntry
-				parameters
-						.setTransref(Integer.toString(resultado.getDocentry()));
+				parameters.setTransref(resultado.getDocentry() + "");
 				int result = DAO.ges_cfp0_checkforpayment_mtto(parameters,
 						Common.MTTOUPDATE);
 
@@ -161,8 +166,8 @@ public class BankEJB implements BankEJBRemote {
 		try {
 
 			if (action == Common.MTTOINSERT) {
-                 
- 				_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(
+
+				_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(
 						parameters, action));
 				parameters.setDocentry(_return.getDocentry());
 				// Acciones con los hijos
@@ -337,12 +342,13 @@ public class BankEJB implements BankEJBRemote {
 			while (iterator.hasNext()) {
 				ColecturiaConceptTO concept = (ColecturiaConceptTO) iterator
 						.next();
-				//para ver si hay una cuenta para el asiento contable 
-				
-				if (concept.getObjtype()!=null&&!concept.getObjtype().isEmpty()){
+				// para ver si hay una cuenta para el asiento contable
+
+				if (concept.getObjtype() != null
+						&& !concept.getObjtype().isEmpty()) {
 					concept.setAcctcode3(concept.getObjtype());
 				}
-				//CONCEPTO CORRESPONDIENTE A LAS FACTURAS DE DIESEL 
+				// CONCEPTO CORRESPONDIENTE A LAS FACTURAS DE DIESEL
 				if (concept.getLinenum() == Integer.parseInt(parameter
 						.getValue1())) {
 					concept.setFacturas(facturas);
@@ -360,7 +366,7 @@ public class BankEJB implements BankEJBRemote {
 		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods3 = null;
-			
+
 		try {
 			parameters.setObjtype("42");
 			_return.setDocentry(DAO.ges_ges_col2_colecturiaConcepts_mtto(
@@ -1352,7 +1358,7 @@ public class BankEJB implements BankEJBRemote {
 		art1.setWtline("N");
 		art1.setPayblock("N");
 		art1.setOrdered("N");
-	    art1.setTranstype(parameters.getObjtype());
+		art1.setTranstype(parameters.getObjtype());
 		detail.add(art1);
 
 		// cuenta del banco
@@ -1390,7 +1396,7 @@ public class BankEJB implements BankEJBRemote {
 		art2.setWtline("N");
 		art2.setPayblock("N");
 		art2.setOrdered("N");
-	    art2.setTranstype(parameters.getObjtype());
+		art2.setTranstype(parameters.getObjtype());
 		detail.add(art2);
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// LLenado del padre
@@ -1424,6 +1430,85 @@ public class BankEJB implements BankEJBRemote {
 
 		journal.setJournalentryList(detail);
 		return journal;
+	}
+
+	public int get_dias(String cuenta, String objtype, Connection conn)
+			throws Exception {
+
+		int Days = 0;
+		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO(conn);
+		DAO.setIstransaccional(true);
+
+		Days = DAO.getdays(cuenta, objtype);
+
+		return Days;
+	}
+
+	public ResultOutTO interes_moratorio(String cardcode, Connection conn)
+			throws Exception {
+		ResultOutTO _result = new ResultOutTO();
+		BusinesspartnerAcountTO busines = new BusinesspartnerAcountTO();
+		AccountTO account = new AccountTO();
+		AccountTO account2 = new AccountTO();
+		List conceptos=new Vector();
+		double interes = 0.0;
+		String codpres;
+		String cuenta;
+
+		BusinesspartnerDAO DAO = new BusinesspartnerDAO(conn);
+		DAO.setIstransaccional(true);
+		ParameterDAO parameter = new ParameterDAO(conn);
+		parameter.setIstransaccional(true);
+		AccountingDAO accounting = new AccountingDAO(conn);
+		accounting.setIstransaccional(true);
+		ColecturiaConceptDAO concept = new ColecturiaConceptDAO();
+		concept.setIstransaccional(true);
+
+		// consultando el numero de concepto correspondiente a prestamos
+		parameterTO parameterTO = new parameterTO();
+		parameterTO = parameter.getParameterbykey(11);
+
+		codpres = parameterTO.getValue1();
+		busines.setCardcode(cardcode);
+		busines.setAcctype(Integer.parseInt(codpres));
+		// cosultando el codigo de la cuenta configurada en el concepto de
+		// prestamospor socio
+		busines = DAO.get_businesspartnerAcount_FCredit(busines);
+		cuenta = busines.getAcctcode();
+		// consultando el codigo de cuenta para encontrar su saldo si es mayor
+		// que cero el socio posee un prestamo sino sera igual que cero
+		account = accounting.getAccountByKey(cuenta);
+
+		if (account.getCurrtotal() != null && account.getCurrtotal() > 0.0) {
+			parameterTO = parameter.getParameterbykey(12);
+			codpres = parameterTO.getValue1();
+			double i;
+			busines.setCardcode(cardcode);
+			busines.setAcctype(Integer.parseInt(codpres));
+			// cosultando el codigo de la cuenta configurada en el concepto de
+			// prestamospor socio
+			busines = DAO.get_businesspartnerAcount_FCredit(busines);
+			cuenta = busines.getAcctcode();
+			int days = get_dias(cuenta, "50", conn);
+			// consultando el porcentage de interes y el monto a cargar a la
+			// cuenta
+			parameterTO = parameter.getParameterbykey(13);
+			i = (Double.parseDouble(parameterTO.getValue1())) / 100;
+			interes = (i * account.getCurrtotal()) * days;
+			BusinesspartnerAcountTO concepto=new BusinesspartnerAcountTO();
+			conceptos=concept.get_ges_colecturiaConcept();
+			for (Object object : conceptos) {
+                busines=(BusinesspartnerAcountTO)object;
+				if(busines.getAcctype()==Integer.parseInt(codpres)){				
+				concepto=busines;
+			}
+			}
+			account2 = accounting.getAccountByKey(cuenta);
+
+		}
+
+		return _result;
+
 	}
 
 }

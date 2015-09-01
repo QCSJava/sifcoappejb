@@ -204,4 +204,6 @@ public class ColecturiaDAO extends CommonDAO {
 		}
 		return _return;
 	}
+//metodo para regresara el numero de dias desde la ultima transaccion de interese moratorios 
+	
 }

@@ -39,7 +39,7 @@ public class CheckForPaymentDAO extends CommonDAO {
 		this.setString(7, "_acctnum,", parameters.getAcctnum());
 		this.setString(8, "_details,", parameters.getDetails());
 		this.setString(9, "_transref,", parameters.getTransref());
-		// this.setDate(10, "_pmntdate,", parameters.getPmntdate());
+		
 		if (parameters.getPmntdate() == null) {
 			this.setDate(10, "_pmntdate", parameters.getPmntdate());
 		} else {

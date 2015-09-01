@@ -134,13 +134,22 @@ public class BankTest {
 	public static void check_mtto() {
 		ResultOutTO resp = null;
 		CheckForPaymentTO bus = new CheckForPaymentTO();
-		bus.setCheckkey(1);
-		bus.setAcctnum("000001");
+		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		long lnMilisegundos = utilDate.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+
+		bus.setCheckdate(sqlDate);
+		bus.setVendorcode("00001");
 		bus.setBankname("Banck JC");
 		bus.setChecknum(5454);
+		bus.setSignature("asdasdasd");
+		bus.setChecksum(10.00);
+		bus.setAcctnum("1101010202");
+		bus.setCheckacct("1101010101");
+		
 
 		try {
-			resp = catalog.ges_cfp0_checkforpayment_mtto(bus, 2);
+			resp = catalog.ges_cfp0_checkforpayment_mtto(bus, 1);
 			System.out.println(resp.getDocentry());
 			System.out.println(resp.getCodigoError());
 			System.out.println(resp.getMensaje());

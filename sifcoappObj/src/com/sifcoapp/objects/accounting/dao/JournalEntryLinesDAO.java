@@ -636,5 +636,16 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		return lstResultSet;
 	}
+	public int getdays(String account, String objtype) throws Exception {
+		int days = 0;
+
+		this.setDbObject("SELECT (current_date-duedate)as dias FROM cat_jdt1_journalentrylines where account=? and transtype=? order by transid desc limit 1");
+		this.setString(1, "account", account);
+		this.setString(3, "transid", objtype);
+		days = this.runUpdate();
+
+		return days;
+
+	}
 
 }

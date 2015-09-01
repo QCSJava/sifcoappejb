@@ -474,5 +474,45 @@ public class BusinesspartnerDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	public BusinesspartnerAcountTO get_businesspartnerAcount_FCredit(
+			BusinesspartnerAcountTO parameters) throws Exception {
+
+		BusinesspartnerAcountTO _return = new BusinesspartnerAcountTO();
+		List lstResultSet = null;
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_businesspartneracount_fcredit(?,?)}");
+		
+		this.setString(1, "_acctype", parameters.getAcctype());
+		this.setString(2, "_cardcode", parameters.getCardcode());
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+		System.out.println("return psg");
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					BusinesspartnerAcountTO partner = new BusinesspartnerAcountTO();
+					partner.setAcctcode(rowsetActual.getString(1));
+					partner.setAcctype(rowsetActual.getInt(2));
+					partner.setBalance(rowsetActual.getDouble(3));
+					partner.setCardcode(rowsetActual.getString(4));
+					partner.setObjtype(rowsetActual.getString(5));
+					partner.setAcctcode2(rowsetActual.getString(6));
+					partner.setAcctcode3(rowsetActual.getString(7));
+					partner.setAcctcode4(rowsetActual.getString(8));
+
+					_return = partner;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 
 }
