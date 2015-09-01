@@ -209,7 +209,8 @@ public class AdminEJB implements AdminEJBRemote {
 		try {
 
 			while (iterator.hasNext()) {
-
+				 adminDAO2 = new AdminDAO(adminDAO.getConn());
+					adminDAO2.setIstransaccional(true);
 				BranchArticlesTO branch = (BranchArticlesTO) iterator.next();
 
 				// Para articulos nuevos

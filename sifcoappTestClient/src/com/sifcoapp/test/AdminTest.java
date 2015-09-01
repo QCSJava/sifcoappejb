@@ -279,28 +279,28 @@ public class AdminTest {
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
 			//System.out.println(article.getPrice(42));
-			
-			article.setItemCode("001-004-545-6399");
+			article.setCardCode("123");
+			//article.setItemCode("001-004-545-6399");
 			
 			System.out.println(article.getItemCode() + " - "
 					+ article.getItemName());
 			System.out.println("Almacenes asociados");
 			System.out.println(article.getValidFor());
 
-			Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
+			/*Iterator<BranchArticlesTO> iterator = article.getBranchArticles()
 					.iterator();
 			while (iterator.hasNext()) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) iterator.next();
 				branch1.setItemcode(article.getItemCode());;
 				
 		        	
-		}
+		}*/
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}			
 		
-		article.setValidFor("Y");
+		//article.setValidFor("Y");
 		ResultOutTO _result = new ResultOutTO();
 		//ArticlesTO parameters = new ArticlesTO();
 		//parameters.setItemCode("00-00-01");
@@ -347,7 +347,7 @@ public class AdminTest {
 		// Agregar
 
 		try {
-			_result = AdminEJBService.cat_articles_mtto(article,1);
+			_result = AdminEJBService.cat_articles_mtto(article,2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
