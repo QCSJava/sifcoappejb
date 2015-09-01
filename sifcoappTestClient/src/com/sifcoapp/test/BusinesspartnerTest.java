@@ -99,7 +99,7 @@ public class BusinesspartnerTest {
 		 BusinesspartnerTO lstPeriods3 = null;
 			BusinesspartnerTO nuevo = new BusinesspartnerTO();
 			
-			
+			/*
 			try {
 				lstPeriods3 = catalog.get_businesspartnerBykey("004");
 			} catch (Exception e) {
@@ -113,22 +113,23 @@ public class BusinesspartnerTest {
 				BusinesspartnerAcountTO periodo = (BusinesspartnerAcountTO) iterator.next();
 				System.out.println(periodo.getCardcode()+"  "+periodo.getAcctcode()+ " - "
 						);
-			}
+			}*/
 		
 		
 		//bus.setBusinesspartnerAcount(ne);
 			
 			List aux=lstPeriods3.getBusinesspartnerAcount();
 			BusinesspartnerAcountTO nuevo1= new BusinesspartnerAcountTO();
+			
 			nuevo1.setAcctcode("110102010104");
 			nuevo1.setCardcode("004");
 			nuevo1.setBalance(0.0);
-			nuevo1.setAcctype(17);
+			nuevo1.setAcctype(1);
 			aux.add(nuevo1);
-			lstPeriods3.setBusinesspartnerAcount(aux);
+			nuevo.setBusinesspartnerAcount(aux);
 			
 		try {
-			resp= catalog.cat_bpa_businesspartner_mtto(lstPeriods3,2);
+			resp= catalog.cat_bpa_businesspartner_mtto(nuevo,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

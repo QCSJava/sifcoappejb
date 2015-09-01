@@ -68,8 +68,11 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		try {
 				if (accion == Common.MTTOINSERT) {
 			DAO.inv_cat_bpa_businesspartner_mtto(parameters, accion);
-
-			Iterator<BusinesspartnerAcountTO> iterator = parameters
+			
+			//validacion si el businespartner tiene conceptos asignados 
+    if(parameters.getBusinesspartnerAcount()!=null&&parameters.getBusinesspartnerAcount().size()>0){
+			
+    	Iterator<BusinesspartnerAcountTO> iterator = parameters
 					.getBusinesspartnerAcount().iterator();
 			while (iterator.hasNext()) {
 				BusinesspartnerAcountTO detalleReceipt = (BusinesspartnerAcountTO) iterator
@@ -80,6 +83,8 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 				DAO1.inv_cat_bpa_businesspartnerAcount_mtto(detalleReceipt,
 						Common.MTTOINSERT);
 			}
+        }//fin del if de validacion 
+
 				}
 			// ----------------------------------------------------------------------------------------------------------------------------------------------------
 			// para actualizar campos del business partner

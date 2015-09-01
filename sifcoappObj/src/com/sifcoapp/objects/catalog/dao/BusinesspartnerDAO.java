@@ -379,16 +379,16 @@ public class BusinesspartnerDAO extends CommonDAO {
 			BusinesspartnerAcountTO parameters, int action) throws Exception {
 		int v_resp = 0;
 		// s.setDbObject("{call sp_gis1_goodsissuedetail_mtto         (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1)}");
-		this.setDbObject("{call sp_cat_bpa0_businesspartneracount_mtto(?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_cat_bpa0_businesspartneracount_mtto(?,?,?,?,?,?,?,?,?)}");
 		this.setString(1, "_acctcode", parameters.getAcctcode());
 		this.setInt(2, "_acctype ", parameters.getAcctype());
 		this.setDouble(3, "_balance ", parameters.getBalance());
 		this.setString(4, "_cardcode ", parameters.getCardcode());
 		this.setString(5, "_objtype ", parameters.getObjtype());
 		this.setInt(6, "_accion", action);
-		this.setInt(7, "_acctcode2",parameters.getAcctcode2());
-		this.setInt(8, "_acctcode3",parameters.getAcctcode3());
-		this.setInt(9, "_acctcode4",parameters.getAcctcode4());
+		this.setString(7, "_acctcode2",parameters.getAcctcode2());
+		this.setString(8, "_acctcode3",parameters.getAcctcode3());
+		this.setString(9, "_acctcode4",parameters.getAcctcode4());
 		v_resp = this.runUpdate();
 		return v_resp;
 	}
