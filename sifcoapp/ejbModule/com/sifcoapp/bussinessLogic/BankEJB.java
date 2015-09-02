@@ -1449,6 +1449,17 @@ public class BankEJB implements BankEJBRemote {
 
 		return Days;
 	}
+	public int dias_prestamo(String cuenta, Connection conn)
+			throws Exception {
+
+		int Days = 0;
+		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO(conn);
+		DAO.setIstransaccional(true);
+
+		Days = DAO.getdays_credit(cuenta);
+
+		return Days;
+	}
 
 	public ResultOutTO interes_moratorio(String cardcode) throws Exception {
 		BusinesspartnerDAO DAO = new BusinesspartnerDAO();
@@ -1476,6 +1487,7 @@ public class BankEJB implements BankEJBRemote {
 		AccountTO account2 = new AccountTO();
 		List conceptos = new Vector();
 		double interes = 0.0;
+		int dias_prestamo = 0;
 		String codpres;
 		String cuenta;
 
@@ -1504,7 +1516,11 @@ public class BankEJB implements BankEJBRemote {
 		account = accounting.getAccountByKey(cuenta);
 
 		if (account.getCurrtotal() != null && account.getCurrtotal() > 0.0) {
+			
+			
 			parameterTO = parameter.getParameterbykey(12);
+			
+			dias_prestamo=dias_prestamo(cuenta, conn);
 
 			// codigo del concepto de interes moratorio
 			codpres = parameterTO.getValue1();
@@ -1515,7 +1531,16 @@ public class BankEJB implements BankEJBRemote {
 			// prestamospor socio
 			busines = DAO.get_businesspartnerAcount_FCredit(busines);
 			cuenta = busines.getAcctcode();
+			
+			
 			int days = get_dias(cuenta, "50", conn);
+			
+			//validacion si es el primer asiento que se realizas o si es un refinanciamiento
+			//si days=-1 no existe transaccion 
+			//si days > dias_prestamo ... se ha realizado un nuevo prestamo
+			if(days==-1||(days>dias_prestamo)){
+				days=dias_prestamo;
+							}
 			// si ya se hiso el registro mostrara day=0
 
 			if (days == 0) {
@@ -1534,7 +1559,7 @@ public class BankEJB implements BankEJBRemote {
 			conceptos = concept.get_ges_colecturiaConcept();
 			for (Object object : conceptos) {
 				colecturia = (ColecturiaConceptTO) object;
-				if (busines.getAcctype() == Integer.parseInt(codpres)) {
+				if (colecturia.getLinenum()== Integer.parseInt(codpres)) {
 					concepto = colecturia;
 				}
 

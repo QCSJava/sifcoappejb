@@ -262,7 +262,7 @@ public class BusinesspartnerDAO extends CommonDAO {
 		this.setString(1, "_cardcode", parameters);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		BusinesspartnerDAO nuev=new BusinesspartnerDAO();
+		BusinesspartnerDAO nuev = new BusinesspartnerDAO();
 		System.out.println("return psg");
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -362,7 +362,9 @@ public class BusinesspartnerDAO extends CommonDAO {
 					partner.setUsersign(rowsetActual.getInt(88));
 					partner.setUpdatedate(rowsetActual.getDate(89));
 					partner.setUpdatetime(rowsetActual.getInt(90));
-					partner.setBusinesspartnerAcount(nuev.get_businesspartnerAcount(rowsetActual.getString(1)));
+					partner.setBusinesspartnerAcount(nuev
+							.get_businesspartnerAcount(rowsetActual
+									.getString(1)));
 
 					_return = partner;
 				}
@@ -386,20 +388,19 @@ public class BusinesspartnerDAO extends CommonDAO {
 		this.setString(4, "_cardcode ", parameters.getCardcode());
 		this.setString(5, "_objtype ", parameters.getObjtype());
 		this.setInt(6, "_accion", action);
-		this.setString(7, "_acctcode2",parameters.getAcctcode2());
-		this.setString(8, "_acctcode3",parameters.getAcctcode3());
-		this.setString(9, "_acctcode4",parameters.getAcctcode4());
+		this.setString(7, "_acctcode2", parameters.getAcctcode2());
+		this.setString(8, "_acctcode3", parameters.getAcctcode3());
+		this.setString(9, "_acctcode4", parameters.getAcctcode4());
 		v_resp = this.runUpdate();
 		return v_resp;
 	}
 
 	public List get_businesspartnerAcount(String code) throws Exception {
 		List _return = new Vector();
-		
+
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		
-		
+
 		this.setDbObject("{call sp_get_businesspartneracount(?)}");
 		this.setString(1, "_cardcode", code);
 		lstResultSet = this.runQuery();
@@ -413,11 +414,11 @@ public class BusinesspartnerDAO extends CommonDAO {
 			try {
 				while (rowsetActual.next()) {
 					BusinesspartnerAcountTO partner = new BusinesspartnerAcountTO();
-					
-					partner.setAcctcode(rowsetActual.getString(1));
+
+					partner.setCardcode(rowsetActual.getString(1));
 					partner.setAcctype(rowsetActual.getInt(2));
-					partner.setBalance(rowsetActual.getDouble(3));
-					partner.setCardcode(rowsetActual.getString(4));
+					partner.setAcctcode(rowsetActual.getString(3));
+					partner.setBalance(rowsetActual.getDouble(4));
 					partner.setObjtype(rowsetActual.getString(5));
 					partner.setAcctcode2(rowsetActual.getString(6));
 					partner.setAcctcode3(rowsetActual.getString(7));
@@ -455,10 +456,10 @@ public class BusinesspartnerDAO extends CommonDAO {
 			try {
 				while (rowsetActual.next()) {
 					BusinesspartnerAcountTO partner = new BusinesspartnerAcountTO();
-					partner.setAcctcode(rowsetActual.getString(1));
+					partner.setCardcode(rowsetActual.getString(1));
 					partner.setAcctype(rowsetActual.getInt(2));
-					partner.setBalance(rowsetActual.getDouble(3));
-					partner.setCardcode(rowsetActual.getString(4));
+					partner.setAcctcode(rowsetActual.getString(3));
+					partner.setBalance(rowsetActual.getDouble(4));
 					partner.setObjtype(rowsetActual.getString(5));
 					partner.setAcctcode2(rowsetActual.getString(6));
 					partner.setAcctcode3(rowsetActual.getString(7));
@@ -474,7 +475,6 @@ public class BusinesspartnerDAO extends CommonDAO {
 		}
 		return _return;
 	}
-	
 
 	public BusinesspartnerAcountTO get_businesspartnerAcount_FCredit(
 			BusinesspartnerAcountTO parameters) throws Exception {
@@ -483,9 +483,9 @@ public class BusinesspartnerDAO extends CommonDAO {
 		List lstResultSet = null;
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_businesspartneracount_fcredit(?,?)}");
-		
-		this.setString(1, "_acctype", parameters.getAcctype());
-		this.setString(2, "_cardcode", parameters.getCardcode());
+		this.setString(1, "_cardcode", parameters.getCardcode());
+		this.setInt(2, "_acctype", parameters.getAcctype());
+
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		System.out.println("return psg");
@@ -497,15 +497,15 @@ public class BusinesspartnerDAO extends CommonDAO {
 			try {
 				while (rowsetActual.next()) {
 					BusinesspartnerAcountTO partner = new BusinesspartnerAcountTO();
-					partner.setAcctcode(rowsetActual.getString(1));
+					partner.setCardcode(rowsetActual.getString(1));
 					partner.setAcctype(rowsetActual.getInt(2));
-					partner.setBalance(rowsetActual.getDouble(3));
-					partner.setCardcode(rowsetActual.getString(4));
+					partner.setAcctcode(rowsetActual.getString(3));
+					partner.setBalance(rowsetActual.getDouble(4));
 					partner.setObjtype(rowsetActual.getString(5));
 					partner.setAcctcode2(rowsetActual.getString(6));
 					partner.setAcctcode3(rowsetActual.getString(7));
 					partner.setAcctcode4(rowsetActual.getString(8));
-
+					
 					_return = partner;
 				}
 				rowsetActual.close();

@@ -165,7 +165,7 @@ public class BankTest {
 		
 		bus.setCardcode("00001");
 		bus.setCardname("nombre del socio ");
-		bus.setDoctotal(10.1);
+		bus.setDoctotal(100.00);
 		bus.setSeries(1);
 		bus.setReceiptnum(194);
 		
