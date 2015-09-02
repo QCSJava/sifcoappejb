@@ -279,7 +279,7 @@ public class AdminTest {
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
 			//System.out.println(article.getPrice(42));
-			article.setCardCode("123");
+			article.setCardCode("154");
 			//article.setItemCode("001-004-545-6399");
 			
 			System.out.println(article.getItemCode() + " - "
