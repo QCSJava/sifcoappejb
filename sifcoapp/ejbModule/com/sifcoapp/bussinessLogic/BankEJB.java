@@ -1579,11 +1579,11 @@ public class BankEJB implements BankEJBRemote {
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 			// cuenta de socio de negocio
 			art1.setLine_id(1);
-			art1.setAccount(concepto.getAcctcode2());
+			art1.setAccount(cuenta);
 			art1.setDebit(interes);
 			art1.setDuedate(sqlDate);
-			art1.setShortname(concepto.getAcctcode2());
-			art1.setContraact(concepto.getAcctcode3());
+			art1.setShortname(cuenta);
+			art1.setContraact(concepto.getAcctcode2());
 			art1.setLinememo("emision de cheque a proveedor ");
 			art1.setRefdate(sqlDate);
 			art1.setRef1(Integer.toString(concepto.getLinenum()));
@@ -1613,11 +1613,11 @@ public class BankEJB implements BankEJBRemote {
 			detail.add(art1);
 
 			art2.setLine_id(2);
-			art2.setAccount(concepto.getAcctcode3());
+			art2.setAccount(concepto.getAcctcode2());
 			art2.setCredit(interes);
 			art2.setDuedate(sqlDate);
-			art2.setShortname(concepto.getAcctcode3());
-			art2.setContraact(concepto.getAcctcode2());
+			art2.setShortname(concepto.getAcctcode2());
+			art2.setContraact(cuenta);
 			art2.setLinememo("registro de interes moratorios");
 			art2.setRefdate(sqlDate);
 			art2.setRef1(Integer.toString(concepto.getLinenum()));
