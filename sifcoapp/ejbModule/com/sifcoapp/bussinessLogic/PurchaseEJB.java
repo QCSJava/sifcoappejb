@@ -2307,7 +2307,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			// --------------------------------------------------------------------------------
 
 			arti = good.getArticle();
-			branch = branch + (arti.getAvgPrice() * good.getQuantity());
+			branch = branch + (good.getPrice()* good.getQuantity());
 			sale = sale + good.getLinetotal();
 			// calculando el iva validando si el producto esta exento o de iva
 			if (good.getTaxstatus().equals("Y")) {

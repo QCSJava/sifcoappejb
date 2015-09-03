@@ -714,7 +714,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setAutowt("N");
 		nuevo.setDeferedtax("N");
 		nuevo.setJournalentryList(detail);
-		nuevo.setTranstype(Integer.toString(parameters.getTranstype()));
+		nuevo.setTranstype("41");
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		// metodo para reagrupar cuentas del mismo codigo
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1336,15 +1336,15 @@ public class BankEJB implements BankEJBRemote {
 		art1.setLine_id(1);
 		art1.setAccount(busines.getDebpayacct());
 		art1.setDebit(parameters.getChecksum());
-		art1.setDuedate(parameters.getTaxdate());
+		art1.setDuedate(parameters.getPmntdate());
 		art1.setShortname(busines.getDebpayacct());
 		art1.setContraact(parameters.getCheckacct());
 		art1.setLinememo("emision de cheque a proveedor ");
-		art1.setRefdate(parameters.getTaxdate());
-		art1.setRef1(Integer.toString(parameters.getBnkactkey()));
+		art1.setRefdate(parameters.getPmntdate());
+		art1.setRef1(Integer.toString(parameters.getCheckkey()));
 		// art1.setRef2();
 		art1.setBaseref(art1.getRef1());
-		art1.setTaxdate(parameters.getTaxdate());
+		art1.setTaxdate(parameters.getPmntdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);
@@ -1374,15 +1374,15 @@ public class BankEJB implements BankEJBRemote {
 		art2.setLine_id(2);
 		art2.setAccount(parameters.getCheckacct());
 		art2.setCredit(parameters.getChecksum());
-		art2.setDuedate(parameters.getTaxdate());
+		art2.setDuedate(parameters.getPmntdate());
 		art2.setShortname(parameters.getCheckacct());
 		art2.setContraact(busines.getDebpayacct());
 		art2.setLinememo("emision de cheque a proveedor ");
-		art2.setRefdate(parameters.getTaxdate());
+		art2.setRefdate(parameters.getPmntdate());
 		art2.setRef1(Integer.toString(parameters.getCheckkey()));
 		// rt1.setRef2();
 		art2.setBaseref(art1.getRef1());
-		art2.setTaxdate(parameters.getTaxdate());
+		art2.setTaxdate(parameters.getPmntdate());
 		// art1.setFinncpriod(finncpriod);
 		art2.setReltransid(-1);
 		art2.setRellineid(-1);
@@ -1410,15 +1410,15 @@ public class BankEJB implements BankEJBRemote {
 		journal.setBtfstatus("O");
 		journal.setTranstype("-1");
 		journal.setBaseref(Integer.toString(parameters.getCheckkey()));
-		journal.setRefdate(parameters.getTaxdate());
+		journal.setRefdate(parameters.getPmntdate());
 		journal.setMemo("emision de cheques a proveedor ");
 		journal.setRef1(Integer.toString(parameters.getCheckkey()));
 		journal.setRef2(journal.getRef1());
 		journal.setLoctotal(parameters.getChecksum());
 		journal.setSystotal(parameters.getChecksum());
 		journal.setTransrate(0.0);
-		journal.setDuedate(parameters.getTaxdate());
-		journal.setTaxdate(parameters.getTaxdate());
+		journal.setDuedate(parameters.getPmntdate());
+		journal.setTaxdate(parameters.getPmntdate());
 		journal.setFinncpriod(0);
 		journal.setUsersign(parameters.getUsersign());
 		journal.setRefndrprt("N");

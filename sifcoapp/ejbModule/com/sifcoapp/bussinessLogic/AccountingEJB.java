@@ -499,6 +499,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 							+ line.getLine_id() + "codigo de cuenta"
 							+ line.getAccount());
 		}
+	// C es para credito(haber) y D debito(debe)
+		
 		if (line.getDebcred().equals("C")) {
 			saldo = account1.getCurrtotal() - line.getCredit();
 
