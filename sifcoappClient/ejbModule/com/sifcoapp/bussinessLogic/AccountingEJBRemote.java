@@ -91,6 +91,8 @@ public interface AccountingEJBRemote {
 	// elementos de prueba
 	// ---------------------------------------------------------------------
 
+	public JournalEntryTO getpruebaByKey(int transid) throws EJBException;
+	
 	public ResultOutTO fill_Journal_close(JournalEntryTO parameters)
 			throws Exception;
 

@@ -1733,4 +1733,20 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 	}
 
+	// -----------------------------------------------------------
+	// elementos de prueba
+	// -----------------------------------------------------------
+
+	public JournalEntryTO getpruebaByKey(int transid) throws EJBException {
+		JournalEntryTO _return = new JournalEntryTO();
+		JournalEntryDAO DAO = new JournalEntryDAO();
+		try {
+			_return = DAO.getpruebaByKey(transid);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
+
 }

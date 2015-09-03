@@ -302,4 +302,14 @@ public class AccountingEJBClient {
 	public void update_tree(Date refdate, String transtype) throws EJBException {
 		bean.update_tree(refdate, transtype);
 	}
+
+	// --------------------------------------------------------------
+	// --elementos de prueba-----------------------------------------
+	public JournalEntryTO getpruebaByKey(int transid) throws EJBException {
+		JournalEntryTO _return = new JournalEntryTO();
+
+		_return = bean.getpruebaByKey(transid);
+
+		return _return;
+	}
 }

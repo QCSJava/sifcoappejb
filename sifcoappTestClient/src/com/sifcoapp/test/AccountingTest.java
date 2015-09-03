@@ -35,7 +35,7 @@ public class AccountingTest {
 			AccountingEJBService = new AccountingEJBClient();
 
 		try {
-			
+
 			if (args.length > 0) {
 				AccountingTest.class.getMethod(args[0], null)
 						.invoke(null, null);
@@ -150,7 +150,6 @@ public class AccountingTest {
 		}
 
 	}
-
 
 	public static void getAccountree() {
 
@@ -575,12 +574,12 @@ public class AccountingTest {
 
 		_result = AccountingEJBService.devolver_saldo(account);
 		System.out.println(_result);
- 
+
 		account.setCurrtotal(_result);
-		
+
 		ResultOutTO result = new ResultOutTO();
- 
-		result=AccountingEJBService.traslado_caja(account);
+
+		result = AccountingEJBService.traslado_caja(account);
 	}
 
 	public static void cierre_contable() {
@@ -606,4 +605,28 @@ public class AccountingTest {
 		}
 
 	}
+
+	// pruebas de insercion de cuentas
+	public static void getprueba_by_key() {
+		ResultOutTO nuevo = new ResultOutTO();
+		List consul = new Vector();
+
+		for (int i = 1; i < 1000; i++) {
+			JournalEntryTO result = new JournalEntryTO();
+
+			result = AccountingEJBService.getpruebaByKey(i);
+
+			nuevo = AccountingEJBService.journalEntry_mtto(result,
+			Common.MTTOINSERT);
+
+			if (nuevo.getCodigoError() != 0) {
+				System.out.println(nuevo.getMensaje());
+				break;
+			}
+
+			System.out.println(nuevo.getDocentry() + " - "+ result.getTransid() + " - " + nuevo.getMensaje());
+		}
+
+	}
+
 }
