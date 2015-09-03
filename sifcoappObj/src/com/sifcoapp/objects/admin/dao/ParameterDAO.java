@@ -78,7 +78,7 @@ public class ParameterDAO extends CommonDAO{
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -120,7 +120,7 @@ public class ParameterDAO extends CommonDAO{
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();

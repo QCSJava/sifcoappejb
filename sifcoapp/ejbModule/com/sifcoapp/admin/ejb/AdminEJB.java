@@ -261,7 +261,7 @@ public class AdminEJB implements AdminEJBRemote {
 							parameters.getInvntItem())) {
 						int registros = trans.getwarehosejournal(parameters
 								.getItemCode());
-						System.out.println("registros" + registros);
+						
 						if (registros > 0) {
 							_return.setMensaje("error de actualizacion el producto"
 									+ "-"

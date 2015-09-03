@@ -131,7 +131,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -292,7 +292,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -410,7 +410,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -497,7 +497,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		}
 		lstResultSet = this.runQueryPrepared();
 
-		System.out.println("return psg");
+		
 
 		CachedRowSetImpl rowsetActual;
 
@@ -521,7 +521,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 			}
 		}
 
-		System.out.println("numero de registros" + "-" + i);
+		
 		return journal;
 
 	}
@@ -537,7 +537,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		this.setString(3, "_account", account);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -643,7 +643,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQueryPrepared();
 
-		System.out.println("return psg");
+		
 
 		CachedRowSetImpl rowsetActual;
 
@@ -680,7 +680,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQueryPrepared();
 
-		System.out.println("return psg");
+		
 
 		CachedRowSetImpl rowsetActual;
 
@@ -715,7 +715,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 

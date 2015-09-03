@@ -65,7 +65,7 @@ public class SupplierDAO extends CommonDAO{
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -139,7 +139,7 @@ public class SupplierDAO extends CommonDAO{
 		this.setInt(1, "_docentry", new Integer(docentry));
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 		SupplierDetailDAO Detail = new SupplierDetailDAO();

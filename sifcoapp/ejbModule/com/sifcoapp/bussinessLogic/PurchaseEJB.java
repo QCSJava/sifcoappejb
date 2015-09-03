@@ -358,7 +358,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ PurchaseDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -382,7 +382,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ PurchaseDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -1507,7 +1507,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		ResultOutTO _return = new ResultOutTO();
 		_return = validate_inv_PurchaseQuotation_mtto(parameters);
-		System.out.println(_return.getCodigoError());
+		
 		if (_return.getCodigoError() != 0) {
 			return _return;
 		}
@@ -1569,7 +1569,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	public ResultOutTO validate_inv_PurchaseQuotation_mtto(
 			PurchaseQuotationTO parameters) throws Exception {
-		System.out.println("llego al validate purchase_quotation_mtto ");
+		
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -1661,7 +1661,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ PurchaseQuotationDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -1685,7 +1685,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ PurchaseQuotationDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -3030,7 +3030,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	public ResultOutTO validate_inv_supplier_mtto(SupplierTO parameters)
 			throws EJBException {
-		System.out.println("llego al validate inv_supplier_mtto ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -3121,7 +3120,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ SupplierDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -3145,7 +3144,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ SupplierDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}

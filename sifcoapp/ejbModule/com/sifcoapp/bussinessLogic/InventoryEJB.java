@@ -255,7 +255,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 						+ " no existe,informar al administrador. linea :"
 						+ GoodsReceiptDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -279,7 +279,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 						+ " No esta activo. linea :"
 						+ GoodsReceiptDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -1054,7 +1054,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 	public ResultOutTO valid_goodsissues_mtto(GoodsissuesTO parameters)
 			throws EJBException {
-		System.out.println("llego al valid_goodsissues_mtto ");
+		
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -1130,7 +1130,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 						+ " no existe,informar al administrador. linea :"
 						+ GoodsIssuesDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -1154,7 +1154,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 						+ " No esta activo. linea :"
 						+ GoodsIssuesDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -1234,8 +1234,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				if (branch1.getWhscode().equals(parameters.getFromwhscode())) {
-					System.out.println("sumatoria" + stocks + "base"
-							+ branch1.getOnhand());
+				
 					if (stocks <= branch1.getOnhand()) {
 						valid = true;
 					}
@@ -2071,7 +2070,6 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 	public ResultOutTO valida_inv_transfers_mtto(TransfersTO parameters)
 			throws EJBException {
-		System.out.println("llego al valid_goodsissues_mtto ");
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -2157,7 +2155,6 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 						+ " no existe,informar al administrador. linea :"
 						+ TransfersDetail.getLinenum());
-				System.out.println(valid);
 				return _return;
 
 			}
@@ -2181,7 +2178,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 
 						+ " No esta activo. linea :"
 						+ TransfersDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -2261,8 +2258,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				if (branch1.getWhscode().equals(parameters.getFromwhscode())) {
-					System.out.println("sumatoria" + stocks + "base"
-							+ branch1.getOnhand());
+					
 					if (stocks <= branch1.getOnhand()) {
 						valid = true;
 					}

@@ -624,7 +624,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 					RecurringPostingsDetailTO Detalle = (RecurringPostingsDetailTO) iterator
 							.next();
 					// Para articulos nuevos
-					// System.out.println("" + _return + "");
+					
 					Detalle.setRcurcode(parameters.getRcurcode());
 					if (Detalle.getCredit() == null) {
 						Detalle.setCredit(zero);

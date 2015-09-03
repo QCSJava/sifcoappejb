@@ -55,14 +55,14 @@ public class AdminDAO extends CommonDAO {
 		List lstResult = new Vector();
 		List lstResultSet = null;
 
-		System.out.println("Desde DAO");
+
 		this.setTypeReturn(Common.TYPERETURN_RESULTSET);
 		this.setDbObject("{call sp_get_catalog(?)}");
 		// this.setString(1, "return");
 		this.setString(1, "IN_CAT_NAME", nameCatalog);
 
 		lstResultSet = this.runQuery();
-		System.out.println("return psg");
+
 
 		CachedRowSetImpl rowsetActual;
 
@@ -75,11 +75,7 @@ public class AdminDAO extends CommonDAO {
 
 			try {
 				while (rowsetActual.next()) {
-					/*
-					 * System.out.println(rowsetActual.getString(1));
-					 * System.out.println(rowsetActual.getString(2));
-					 * System.out.println(rowsetActual.getString(3));
-					 */
+					
 
 					lstResult.add(new CatalogTO(rowsetActual.getString(1),
 							rowsetActual.getInt(2), rowsetActual.getString(3),
@@ -199,7 +195,7 @@ public class AdminDAO extends CommonDAO {
 		List lstResultSet = null;
 		TablesCatalogTO _returnTO = new TablesCatalogTO();
 
-		System.out.println("Desde DAO");
+		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{? = call sp_get_tables_catalog()}");
 
@@ -285,12 +281,12 @@ public class AdminDAO extends CommonDAO {
 		List lstResultSet = null;
 		EnterpriseTO _return = new EnterpriseTO();
 
-		System.out.println("Desde DAO");
+		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{? = call sp_get_enterprise_info()}");
 
 		lstResultSet = this.runQuery();
-		System.out.println("return psg");
+
 
 		CachedRowSetImpl rowsetActual;
 
@@ -404,7 +400,7 @@ public class AdminDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -469,7 +465,7 @@ public class AdminDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -538,7 +534,7 @@ public class AdminDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -683,7 +679,7 @@ public class AdminDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -769,7 +765,7 @@ public class AdminDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -1088,13 +1084,13 @@ public class AdminDAO extends CommonDAO {
 		List lstResult = new Vector();
 		List lstResultSet = null;
 
-		System.out.println("Desde DAO");
+		
 		this.setDbObject("INSERT INTO PRUEBA (VALOR)VALUES(?)");
 		// this.setString(1, "return");
 		this.setString(1, "IN_CAT_NAME", 1);
 
 		lstResultSet = this.runQueryPrepared();
-		System.out.println("return psg");
+
 
 		CachedRowSetImpl rowsetActual;
 
@@ -1107,11 +1103,7 @@ public class AdminDAO extends CommonDAO {
 
 			try {
 				while (rowsetActual.next()) {
-					/*
-					 * System.out.println(rowsetActual.getString(1));
-					 * System.out.println(rowsetActual.getString(2));
-					 * System.out.println(rowsetActual.getString(3));
-					 */
+					
 
 					lstResult.add(new CatalogTO(rowsetActual.getString(1),
 							rowsetActual.getInt(2), rowsetActual.getString(3),

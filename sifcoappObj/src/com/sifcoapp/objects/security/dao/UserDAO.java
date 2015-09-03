@@ -41,7 +41,7 @@ public class UserDAO extends CommonDAO {
 
 		UserAppOutTO v_return = new UserAppOutTO();
 		List lstResultSets = new Vector();
-		System.out.println("Desde DAO");
+		
 
 		this.setDbObject("{? = call sp_valid_usr(?,?)}");
 		// this.setString(1, "return");
@@ -49,8 +49,7 @@ public class UserDAO extends CommonDAO {
 		this.setString(3, "USRPSW", parameters.getPasswordUserApp());
 
 		lstResultSets = this.runQuery();
-		System.out.println("return psg");
-		System.out.println(this.getInt());
+		
 		v_return.setValidUser(this.getInt());
 		// return this.getIntReturn();
 
@@ -70,10 +69,7 @@ public class UserDAO extends CommonDAO {
 		this.setInt(1, "USRNAME", new Integer(1));
 
 		lstResultSets = this.runQuery();
-		System.out.println("return psg");
-		// System.out.println(this.getInt());
-
-		// return this.getIntReturn();
+		
 
 		return v_return;
 
@@ -108,8 +104,7 @@ public class UserDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
-
+	
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -144,8 +139,7 @@ public class UserDAO extends CommonDAO {
 		List lstResultSet = null;
 		TablesCatalogTO _returnTO = new TablesCatalogTO();
 
-		System.out
-				.println("Desde DAO " + "{call sp_get_usr_profile_header(?)}");
+		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_usr_profile_header(?)}");
 		this.setString(1, "nickname", _nickname);
@@ -186,7 +180,7 @@ public class UserDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -220,7 +214,7 @@ public class UserDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -255,7 +249,7 @@ public class UserDAO extends CommonDAO {
 		List lstResultSet = null;
 		TablesCatalogTO _returnTO = new TablesCatalogTO();
 
-		System.out.println("Desde DAO");
+		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_usr_profile(?)}");
 		this.setInt(1, "_profilecode", _profileCode);
@@ -321,7 +315,7 @@ public class UserDAO extends CommonDAO {
 		List lstResultSet = null;
 		TablesCatalogTO _returnTO = new TablesCatalogTO();
 
-		System.out.println("Desde DAO");
+		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{call sp_get_usr_profile_mtto(?)}");
 		this.setInt(1, "_profilecode", _profileCode);

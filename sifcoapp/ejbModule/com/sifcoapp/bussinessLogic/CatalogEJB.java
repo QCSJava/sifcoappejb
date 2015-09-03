@@ -142,7 +142,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 					}
 
 					if (encontrado) {
-						System.out.println("encontrado");
+						//ENCONTRADO
 
 					} else {
 						DAO1.inv_cat_bpa_businesspartnerAcount_mtto(business,

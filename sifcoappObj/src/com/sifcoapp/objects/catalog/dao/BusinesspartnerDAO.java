@@ -142,7 +142,7 @@ public class BusinesspartnerDAO extends CommonDAO {
 		this.setString(5, "_nit", parameters.getNit());
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -263,7 +263,7 @@ public class BusinesspartnerDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 		BusinesspartnerDAO nuev = new BusinesspartnerDAO();
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -405,7 +405,7 @@ public class BusinesspartnerDAO extends CommonDAO {
 		this.setString(1, "_cardcode", code);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -447,7 +447,7 @@ public class BusinesspartnerDAO extends CommonDAO {
 		this.setString(3, "_cardcode", parameters.getCardcode());
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -488,7 +488,7 @@ public class BusinesspartnerDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 

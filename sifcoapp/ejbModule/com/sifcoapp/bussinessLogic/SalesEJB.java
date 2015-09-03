@@ -72,7 +72,6 @@ public class SalesEJB implements SalesEJBRemote {
 	}
 
 	public List getSales(SalesInTO param) throws Exception {
-		System.out.println("llego al sales ejb");
 		// TODO Auto-generated method stub
 		List _return;
 		SalesDAO DAO = new SalesDAO();
@@ -1332,7 +1331,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO validateSale(SalesTO parameters) throws EJBException {
 		// Variables
-		System.out.println("llego al validateSAle ");
+	
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -1448,7 +1447,6 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ salesDetail.getLinenum());
-				System.out.println(valid);
 				return _return;
 
 			}
@@ -1470,7 +1468,7 @@ public class SalesEJB implements SalesEJBRemote {
 						+ " " + salesDetail.getDscription()
 
 						+ " No esta activo. linea :" + salesDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -1550,8 +1548,7 @@ public class SalesEJB implements SalesEJBRemote {
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				if (branch1.getWhscode().equals(salesDetail.getWhscode())) {
-					System.out.println("sumatoria" + stocks + "base"
-							+ branch1.getOnhand());
+					
 					if (stocks <= branch1.getOnhand()) {
 						valid = true;
 					}
@@ -2109,7 +2106,7 @@ public class SalesEJB implements SalesEJBRemote {
 	public ResultOutTO validateClientCredi(ClientCrediTO parameters)
 			throws EJBException {
 		// Variables
-		System.out.println("llego al validateClientCredi ");
+		
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -2183,7 +2180,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ ClientCrediDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -2207,7 +2204,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ ClientCrediDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -3575,7 +3572,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO Validateinv_Delivery(DeliveryTO parameters)
 			throws EJBException {
-		System.out.println("llego al vav_Delivery ");
+		
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -3671,7 +3668,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ DeliveryDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -3695,7 +3692,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ DeliveryDetail.getLinenum());
-				System.out.println(valid);
+				
 				return _return;
 
 			}
@@ -3830,8 +3827,7 @@ public class SalesEJB implements SalesEJBRemote {
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				if (branch1.getWhscode().equals(parameters.getFromwhscode())) {
-					System.out.println("sumatoria" + stocks + "base"
-							+ branch1.getOnhand());
+					
 					if (stocks <= branch1.getOnhand()) {
 						valid = true;
 					}

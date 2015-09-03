@@ -54,8 +54,7 @@ public class SecurityEJBClient implements SecurityEJBRemote {
 			UserAppOutTO usrOutTO = new UserAppOutTO();
 			UserAppInTO usr = new UserAppInTO();
 			usrOutTO = bean.UserValidate(usr);
-			System.out.println(usrOutTO);
-			System.out.println(usrOutTO.getValidUser());
+			
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

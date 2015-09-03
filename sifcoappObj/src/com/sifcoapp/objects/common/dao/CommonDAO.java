@@ -216,13 +216,7 @@ public class CommonDAO {
 				dtParameterTmp = (DetailParameter) this.inParameters
 						.get(v_position);
 
-				System.out.println("detail: position " + v_position);
-				System.out.println("detail: getColName "
-						+ dtParameterTmp.getColName());
-				System.out.println("detail: getColValue "
-						+ dtParameterTmp.getColValue());
-				System.out.println("detail: getColType ");
-				System.out.println(dtParameterTmp.getColType());
+				
 
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPESTRING)) {
@@ -284,8 +278,8 @@ public class CommonDAO {
 			 */
 
 			v_result = statementToExecute.executeUpdate();
-			// System.out.println("resultado");
-			// System.out.println(statementToExecute.getInt(1));
+			// //("resultado");
+			// //(statementToExecute.getInt(1));
 			/*
 			 * if (this.getTypeReturn().equals(Common.TYPERETURN_INT)){
 			 * this.outParameters.put(new Integer(1), new
@@ -345,14 +339,7 @@ public class CommonDAO {
 				dtParameterTmp = (DetailParameter) this.inParameters
 						.get(v_position);
 
-				System.out.println("detail: position " + v_position);
-				System.out.println("detail: getColName "
-						+ dtParameterTmp.getColName());
-				System.out.println("detail: getColValue "
-						+ dtParameterTmp.getColValue());
-				System.out.println("detail: getColType ");
-				System.out.println(dtParameterTmp.getColType());
-
+				
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPESTRING)) {
 					statementToExecute.setString(v_position.intValue(),
@@ -405,19 +392,16 @@ public class CommonDAO {
 			}
 
 			v_haveResultsets = statementToExecute.execute();
-			// System.out.println("resultado");
-			// System.out.println(statementToExecute.getInt(1));
+			
 			if (this.getTypeReturn().equals(Common.TYPERETURN_INT)) {
 				this.outParameters.put(new Integer(1), new Integer(
 						statementToExecute.getInt(1)));
 			}
 
 			// analizando resultsets recibidos
-			System.out.println("v_haveResultsets");
-			System.out.println(v_haveResultsets);
+			
 			if (v_haveResultsets
 					|| this.getTypeReturn().equals(Common.TYPERETURN_CURSOR)) {
-				System.out.println("tiene resultsets");
 				if (this.getTypeReturn().equals(Common.TYPERETURN_RESULTSET)) {
 					rsData = statementToExecute.getResultSet();
 				}
@@ -491,14 +475,7 @@ public class CommonDAO {
 				dtParameterTmp = (DetailParameter) this.inParameters
 						.get(v_position);
 
-				System.out.println("detail: position " + v_position);
-				System.out.println("detail: getColName "
-						+ dtParameterTmp.getColName());
-				System.out.println("detail: getColValue "
-						+ dtParameterTmp.getColValue());
-				System.out.println("detail: getColType ");
-				System.out.println(dtParameterTmp.getColType());
-
+				
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPESTRING)) {
 					statementToExecute.setString(v_position.intValue(),
@@ -543,11 +520,8 @@ public class CommonDAO {
 			}
 
 			rsData = statementToExecute.executeQuery();
-			// System.out.println("resultado");
-			// System.out.println(statementToExecute.getInt(1));
-
+			
 			if (rsData != null) {
-				System.out.println("encontró datos");
 				rsData.clearWarnings();
 				crsData = new CachedRowSetImpl();
 				crsData.populate(rsData);
@@ -608,13 +582,7 @@ public class CommonDAO {
 				dtParameterTmp = (DetailParameter) this.inParameters
 						.get(v_position);
 
-				System.out.println("detail: position " + v_position);
-				System.out.println("detail: getColName "
-						+ dtParameterTmp.getColName());
-				System.out.println("detail: getColValue "
-						+ dtParameterTmp.getColValue());
-				System.out.println("detail: getColType ");
-				System.out.println(dtParameterTmp.getColType());
+				
 
 				if (dtParameterTmp.getColType().equalsIgnoreCase(
 						Common.TYPESTRING)) {
@@ -659,19 +627,7 @@ public class CommonDAO {
 
 			}
 			 rsData = statementToExecute.executeUpdate();
-			// System.out.println("resultado");
-			// System.out.println(statementToExecute.getInt(1));
-
-			/*if (rsData != null) {
-				System.out.println("encontró datos");
-				rsData.clearWarnings();
-				crsData = new CachedRowSetImpl();
-				crsData.populate(rsData);
-				rsDataList.add(crsData);
-				// closeToDB (rsData);
-				rsData = null;
-				crsData = null;
-			}*/
+			
 
 			// Cerramos la conexion
 			if (statementToExecute != null) {

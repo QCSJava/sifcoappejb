@@ -46,7 +46,7 @@ public class SecurityEJB implements SecurityEJBRemote {
 
 			if (usrValid.getValidUser() == 0) {
 				// usuario Valido
-				System.out.println("validate " + usr.getIdUserApp());
+				
 				userdao.initCommon();
 				usrprofile = userdao.getUsrProfileHeader(usr.getIdUserApp());
 				usrValid.setUsrprofile(usrprofile);

@@ -250,8 +250,7 @@ public class TransactionDAO extends CommonDAO {
 	
 		lstResultSet = this.runQueryPrepared();
 		
-		System.out.println("return psg");
-
+	
 		CachedRowSetImpl rowsetActual;
 
 		ListIterator liRowset = null;
@@ -273,7 +272,7 @@ public class TransactionDAO extends CommonDAO {
 			}
 		}
 
-		System.out.println("numero de registros" + "-" + i);
+		
 		return i;
 		
 	}

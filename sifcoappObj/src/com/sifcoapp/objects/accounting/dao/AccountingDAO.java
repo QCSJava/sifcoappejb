@@ -76,7 +76,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -191,7 +191,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -245,7 +245,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -299,7 +299,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -363,8 +363,7 @@ public class AccountingDAO extends CommonDAO {
 		this.setString(3, "_postable", postable);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
-
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -421,7 +420,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -576,7 +575,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -747,7 +746,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -958,7 +957,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -1483,7 +1482,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -1574,8 +1573,7 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
-
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 		Hashtable _values = new Hashtable();

@@ -118,7 +118,7 @@ public class JournalEntryDAO extends CommonDAO {
 			e1.printStackTrace();
 		}
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -198,7 +198,7 @@ public class JournalEntryDAO extends CommonDAO {
 			e1.printStackTrace();
 		}
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 		JournalEntryLinesDAO Detail = new JournalEntryLinesDAO();
@@ -447,7 +447,7 @@ public class JournalEntryDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -523,7 +523,7 @@ public class JournalEntryDAO extends CommonDAO {
 		this.setInt(1, "_docentry", new Integer(transid));
 	    lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		System.out.println("return psg");
+		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 		JournalEntryLinesDAO Detail = new JournalEntryLinesDAO();

@@ -114,7 +114,7 @@ public class ColecturiaDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -164,7 +164,7 @@ public class ColecturiaDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 
-		System.out.println("return psg");
+		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
