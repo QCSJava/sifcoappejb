@@ -62,7 +62,7 @@ public class UserDAO extends CommonDAO {
 
 		ProfileOutTO v_return = new ProfileOutTO();
 		List lstResultSets = new Vector();
-		System.out.println("Desde DAO");
+		
 		this.setTypeReturn(Common.TYPERETURN_RESULTSET);
 		this.setDbObject("{call sp_get_usr_profiles(?)}");
 		// this.setString(1, "return");
