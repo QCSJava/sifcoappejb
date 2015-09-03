@@ -550,7 +550,8 @@ public class AccountingTest {
 
 		fecha = formatoDelTexto.parse(strFecha);
 
-		AccountingEJBService.update_tree(fecha, "-1");
+		//AccountingEJBService.update_tree(fecha, "-1");
+		AccountingEJBService.Update_endTotal();
 
 		System.out.println(_result.getMensaje());
 	}
