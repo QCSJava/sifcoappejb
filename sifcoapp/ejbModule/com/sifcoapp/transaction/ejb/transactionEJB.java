@@ -119,7 +119,7 @@ public class transactionEJB {
 		inventory.setExpenseslc(zero);
 		inventory.setDocduedate(transaction.getDocduedate());
 		inventory.setItemcode(transaction.getItemcode());
-		inventory.setBpcardcode(transaction.getAcctcode());
+		inventory.setBpcardcode(transaction.getOcrcode());
 		inventory.setDocdate(transaction.getDocdate());
 		inventory.setComment(transaction.getComment());
 		inventory.setJrnlmemo(transaction.getJrnlmemo());
@@ -129,7 +129,7 @@ public class transactionEJB {
 		inventory.setSnbtype(-1);
 		// inventory.setCreatetime();
 		// inventory.setCreatetime();
-		inventory.setOcrcode(transaction.getOcrcode());
+		inventory.setOcrcode(transaction.getWhscode());
 		// inventory.setOcrcode2();
 		// inventory.setOcrcode3();
 		inventory.setCardname(transaction.getCardname());
