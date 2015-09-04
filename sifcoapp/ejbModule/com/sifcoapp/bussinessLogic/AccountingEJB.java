@@ -130,33 +130,37 @@ public class AccountingEJB implements AccountingEJBRemote {
 		AccountingDAO DAO = new AccountingDAO();
 		// para el manejo de transacciones
 		DAO.setIstransaccional(true);
+		try {
+			
+			for (int i = 1; i <= 12; i++) {
 
-		for (int i = 1; i <= 12; i++) {
+				AccPeriodTO periodo = new AccPeriodTO();
+				periodo.setAcccode(Integer.toString(i));
+				periodo.setAccname(Integer.toString(parameters)
+						+ String.format("%02d", i));
+				periodo.setF_duedate(Common.getPrimerDiaDelMes(parameters, i));
+				periodo.setF_refdate(periodo.getF_duedate());
+				periodo.setF_taxdate(periodo.getF_duedate());
+				periodo.setPeriodstat(1);
+				periodo.setT_duedate(periodo.getF_duedate());
+				periodo.setT_refdate(periodo.getF_duedate());
+				periodo.setT_taxdate(periodo.getF_duedate());
+				periodo.setUsersign(usersign);
 
-			AccPeriodTO periodo = new AccPeriodTO();
-			periodo.setAcccode(Integer.toString(i));
-			periodo.setAccname(Integer.toString(parameters)
-					+ String.format("%02d", i));
-			periodo.setF_duedate(Common.getPrimerDiaDelMes(parameters, i));
-			periodo.setF_refdate(Common.getPrimerDiaDelMes(parameters, i));
-			periodo.setF_taxdate(Common.getPrimerDiaDelMes(parameters, i));
-			periodo.setPeriodstat(1);
-			periodo.setT_duedate(Common.getUltimoDiaDelMes(parameters, i));
-			periodo.setT_refdate(Common.getUltimoDiaDelMes(parameters, i));
-			periodo.setT_taxdate(Common.getUltimoDiaDelMes(parameters, i));
-			periodo.setUsersign(usersign);
-			try {
 				_return = DAO.cat_accPeriod_mtto(periodo, action);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				throw (EJBException) new EJBException(e);
 			}
+			
+			DAO.forceCommit();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		} finally {
+			DAO.forceCloseConnection();
 		}
 
-		DAO.forceCommit();
-		DAO.forceCloseConnection();
-
 		return _return;
+
 	}
 
 	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters,
@@ -499,8 +503,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 							+ line.getLine_id() + "codigo de cuenta"
 							+ line.getAccount());
 		}
-	// C es para credito(haber) y D debito(debe)
-		
+		// C es para credito(haber) y D debito(debe)
+
 		if (line.getDebcred().equals("C")) {
 			saldo = account1.getCurrtotal() - line.getCredit();
 
@@ -624,7 +628,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 					RecurringPostingsDetailTO Detalle = (RecurringPostingsDetailTO) iterator
 							.next();
 					// Para articulos nuevos
-					
+
 					Detalle.setRcurcode(parameters.getRcurcode());
 					if (Detalle.getCredit() == null) {
 						Detalle.setCredit(zero);
