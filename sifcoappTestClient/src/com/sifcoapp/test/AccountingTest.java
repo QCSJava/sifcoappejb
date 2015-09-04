@@ -611,20 +611,20 @@ public class AccountingTest {
 		ResultOutTO nuevo = new ResultOutTO();
 		List consul = new Vector();
 
-		for (int i = 1; i < 1000; i++) {
+		for (int i = 3880; i < 3888; i++) {
 			JournalEntryTO result = new JournalEntryTO();
 
 			result = AccountingEJBService.getpruebaByKey(i);
+			if (result.getTransid() != 0) {
 
-			nuevo = AccountingEJBService.journalEntry_mtto(result,
-			Common.MTTOINSERT);
+				nuevo = AccountingEJBService.journalEntry_mtto(result,
+						Common.MTTOINSERT);
 
-			if (nuevo.getCodigoError() != 0) {
-				System.out.println(nuevo.getMensaje());
-				break;
+				if (nuevo.getCodigoError() != 0) {
+					
+					break;
+				}		
 			}
-
-			System.out.println(nuevo.getDocentry() + " - "+ result.getTransid() + " - " + nuevo.getMensaje());
 		}
 
 	}
