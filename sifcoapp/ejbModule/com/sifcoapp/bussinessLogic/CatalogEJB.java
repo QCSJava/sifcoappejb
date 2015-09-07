@@ -244,8 +244,9 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 		AccountingDAO DAO = new AccountingDAO();
 
 		try {
-			acc = DAO.getAccountByKey(parameters.getCtlaccount());
+			
 			partner = DAO1.get_businesspartnerByKey(parameters.getCardcode());
+			acc = DAO.getAccountByKey(partner.getDebpayacct());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -272,7 +273,7 @@ public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {
 
 		} else {
 			_return.setCodigoError(1);
-			_return.setMensaje("sobrepasa el credito perrmitido");
+			_return.setMensaje("sobrepasa el credito permitido");
 
 		}
 

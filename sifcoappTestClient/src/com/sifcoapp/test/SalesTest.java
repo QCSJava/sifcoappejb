@@ -144,11 +144,11 @@ public class SalesTest {
 		SalesDetailTO document1 = new SalesDetailTO();
 
 		document.setLinenum(1);
-		document.setItemcode("001-004-545-6114");
+		document.setItemcode("INV0000001");
 		document.setDscription("A");
 		document.setQuantity(2.0);
 		document.setPrice(3.56);
-		document.setWhscode("ALM-001");
+		document.setWhscode("REP-001");
 		document.setDiscprcnt(0.0000);
 		document.setLinetotal(0.0000);
 		document.setPricebefdi(0.00000);
@@ -164,7 +164,7 @@ public class SalesTest {
 
 		prueba.add(document);
 
-		document1.setLinenum(2);
+		/*document1.setLinenum(2);
 		document1.setItemcode("001-004-545-6114");
 		document1.setDscription("A");
 		document1.setQuantity(6.0);
@@ -179,23 +179,23 @@ public class SalesTest {
 		document1.setVatsum(0.0000);
 		document1.setGrssprofit(0.000000);
 		document1.setGtotal(6.275);
-		document1.setObjtype("10");
+		//document1.setObjtype("10");
 		document1.setTaxstatus("N");
 		document1.setTaxcode("IVA");
 
-		prueba.add(document1);
+		prueba.add(document1);*/
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
 
-		parameters.setTowhscode("ALM-001");
+		parameters.setTowhscode("REP-001");
 		parameters.setDocdate(sqlDate);
 		parameters.setDocduedate(sqlDate);
 
 		parameters.setTaxdate(sqlDate);
 		parameters.setSeries(2);
 		parameters.setUsersign(1);
-		parameters.setCardcode("00001");
+		parameters.setCardcode("CF00000555");
 		parameters.setDoctotal(10000.00);
 		parameters.setDiscsum(0.00000);
 		parameters.setNret(0.00000);
@@ -204,7 +204,7 @@ public class SalesTest {
 		parameters.setObjtype("10");
 
 		parameters.setVatsum(0.000000);
-		parameters.setCtlaccount("110602");
+		parameters.setCtlaccount("11020903");
 		parameters.setPeymethod("1");
 
 		parameters.setSalesDetails(prueba);

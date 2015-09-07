@@ -688,14 +688,23 @@ public class SalesEJB implements SalesEJBRemote {
 					"No hay una cuenta contable de Inventario asignada al almacen");
 		}
 
-		// buscando cuenta asignada para IVA y FOVIAL
 
 		// cuenta asignada a ventas
 		AccassignmentTO acc = new AccassignmentTO();
 		AccountingDAO accDAO = new AccountingDAO();
 		acc = accDAO.getAccAssignment();
+		
 		V_local = acc.getLinkact_1();
+		if (V_local == null) {
+			throw new Exception(
+					"No hay una cuenta contable asignada a Ventas ");
+		}
 		costo_venta = acc.getCogm_act();
+		
+		if (costo_venta == null) {
+			throw new Exception(
+					"No hay una cuenta contable asignada a Ventas ");
+		}
 
 		// asiento contable
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
