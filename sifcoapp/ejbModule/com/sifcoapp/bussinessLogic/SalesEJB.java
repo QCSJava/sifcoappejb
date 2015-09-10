@@ -697,13 +697,13 @@ public class SalesEJB implements SalesEJBRemote {
 		V_local = acc.getLinkact_1();
 		if (V_local == null) {
 			throw new Exception(
-					"No hay una cuenta contable asignada a Ventas ");
+					"No hay una cuenta contable asignada a ingreso por Venta ");
 		}
 		costo_venta = acc.getCogm_act();
 		
 		if (costo_venta == null) {
 			throw new Exception(
-					"No hay una cuenta contable asignada a Ventas ");
+					"No hay una cuenta contable asignada a Costo de Ventas ");
 		}
 
 		// asiento contable

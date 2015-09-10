@@ -1493,25 +1493,34 @@ public class AccountingEJB implements AccountingEJBRemote {
 	}
 
 	public ResultOutTO Update_endTotal() throws EJBException {
-		AccountingDAO DAO = new AccountingDAO();
-
+		AccountingDAO DAO1 = new AccountingDAO();
+		DAO1.setIstransaccional(true);
+		AccountingDAO DAO2 = new AccountingDAO(DAO1.getConn());
+		DAO2.setIstransaccional(true);
 		List accountlist = new Vector();
+		
 		ResultOutTO _return = new ResultOutTO();
 		try {
-			DAO.setIstransaccional(true);
-
-			DAO.update_TreeTotal();
+			
+			//inicializa a cero
+			
+			DAO1.inicial_endTotal();
+			
+			//actualiza el endtotal con el arbol 
+			
+			DAO2.update_TreeTotal();
+			
 
 			_return.setCodigoError(0);
 			_return.setMensaje("datos almacenados correctamente");
 
-			DAO.forceCommit();
+			DAO1.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			DAO.rollBackConnection();
+			DAO1.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
-			DAO.forceCloseConnection();
+			DAO1.forceCloseConnection();
 		}
 
 		return _return;

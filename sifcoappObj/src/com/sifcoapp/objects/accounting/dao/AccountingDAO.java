@@ -1472,12 +1472,14 @@ public class AccountingDAO extends CommonDAO {
 
 	public void update_TreeTotal() throws Exception {
 
+		
+		
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_acc0_account()}");
-		// this.setInt(1, "_type", 1); // para devolver todas las cuentas
+		this.setDbObject("{? = call sp_get_acc0_account()}");
+		
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
