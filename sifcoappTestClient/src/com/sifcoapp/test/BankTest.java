@@ -163,7 +163,7 @@ public class BankTest {
 		ResultOutTO resp = null;
 		ColecturiaTO bus = new ColecturiaTO();
 		
-		bus.setCardcode("00001");
+		bus.setCardcode("CL31010123");
 		bus.setCardname("nombre del socio ");
 		bus.setDoctotal(100.00);
 		bus.setSeries(1);
@@ -174,7 +174,7 @@ public class BankTest {
 		// nuevo.setDocentry(1);
 
 		try {
-			lstPeriods4 = catalog.get_ges_colecturiaConcept1("00001");
+			lstPeriods4 = catalog.get_ges_colecturiaConcept1("CL31010123");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

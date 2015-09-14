@@ -607,7 +607,8 @@ public class SalesEJB implements SalesEJBRemote {
 			SalesDetailTO good = (SalesDetailTO) obj;
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
-
+			// consultando la cuenta de iva y porcentajes de impuestos
+			// --------------------------------------------------------------------------------
 			admin = new AdminDAO();
 			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
 			// calculando los impuestos y saldo de las cuentas
@@ -616,13 +617,16 @@ public class SalesEJB implements SalesEJBRemote {
 			arti = good.getArticle();
 			branch = branch + (arti.getAvgPrice() * good.getQuantity());
 			sale = sale + good.getLinetotal();
-			// calculando el iva validando si el producto esta exento o de iva
+			// calculando el iva validando si el producto esta exento o no de
+			// iva
 			if (good.getTaxstatus().equals("Y")) {
 				// validar si es FOV
 				if (good.getTaxcode().equals("FOV")) {
 
 					admin = new AdminDAO();
 
+					// cuentas contables por tipos de documentos
+					
 					Catalog1 = admin.findCatalogByKey("FOV1", 10);
 					if (Catalog1.getCatvalue3() == null) {
 						throw new Exception(
@@ -640,6 +644,7 @@ public class SalesEJB implements SalesEJBRemote {
 					fovial = Catalog1.getCatvalue2();
 					iva_c = Catalog1.getCatvalue();
 
+					// calculo de impuestos consultados anteriormente en Catalog
 					impuesto = good.getLinetotal()
 							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
 					fovc = fovc
@@ -649,17 +654,30 @@ public class SalesEJB implements SalesEJBRemote {
 							+ (Double.parseDouble(Catalog.getCatvalue3()) * good
 									.getQuantity());
 					tax = tax + impuesto;
-
+					// -----------------------------------------------------------------
 				} else {
-
+                  if(parameters.getSeries()==1){
+					
 					if (Catalog.getCatvalue2() == null) {
 						throw new Exception(
 								"No tiene cuenta asignada para impuestos");
 					}
+								
+					
 					iva_c = Catalog.getCatvalue2();
 					impuesto = good.getLinetotal()
 							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
-
+                  }else{
+                	  if (Catalog.getCatvalue3() == null) {
+  						throw new Exception(
+  								"No tiene cuenta asignada para impuestos");
+  					}
+  								
+  					
+  					iva_c = Catalog.getCatvalue3();
+  					impuesto = good.getLinetotal()
+  							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+                  }
 					tax = tax + impuesto;
 				}
 
@@ -688,19 +706,18 @@ public class SalesEJB implements SalesEJBRemote {
 					"No hay una cuenta contable de Inventario asignada al almacen");
 		}
 
-
 		// cuenta asignada a ventas
 		AccassignmentTO acc = new AccassignmentTO();
 		AccountingDAO accDAO = new AccountingDAO();
 		acc = accDAO.getAccAssignment();
-		
+
 		V_local = acc.getLinkact_1();
 		if (V_local == null) {
 			throw new Exception(
 					"No hay una cuenta contable asignada a ingreso por Venta ");
 		}
 		costo_venta = acc.getCogm_act();
-		
+
 		if (costo_venta == null) {
 			throw new Exception(
 					"No hay una cuenta contable asignada a Costo de Ventas ");
@@ -1340,7 +1357,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO validateSale(SalesTO parameters) throws EJBException {
 		// Variables
-	
+
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -1477,7 +1494,7 @@ public class SalesEJB implements SalesEJBRemote {
 						+ " " + salesDetail.getDscription()
 
 						+ " No esta activo. linea :" + salesDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -1557,7 +1574,7 @@ public class SalesEJB implements SalesEJBRemote {
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				if (branch1.getWhscode().equals(salesDetail.getWhscode())) {
-					
+
 					if (stocks <= branch1.getOnhand()) {
 						valid = true;
 					}
@@ -2115,7 +2132,7 @@ public class SalesEJB implements SalesEJBRemote {
 	public ResultOutTO validateClientCredi(ClientCrediTO parameters)
 			throws EJBException {
 		// Variables
-		
+
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -2189,7 +2206,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ ClientCrediDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -2213,7 +2230,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ ClientCrediDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -3083,7 +3100,8 @@ public class SalesEJB implements SalesEJBRemote {
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// -----------------------------------------------------------------------------------------------------------------------------------------------
+	// ----------------------------------------------------------
+	// -------------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------------------------------------------------------------------
 	// consultas de nota de credito
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3581,7 +3599,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 	public ResultOutTO Validateinv_Delivery(DeliveryTO parameters)
 			throws EJBException {
-		
+
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -3677,7 +3695,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ DeliveryDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -3701,7 +3719,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ DeliveryDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -3836,7 +3854,7 @@ public class SalesEJB implements SalesEJBRemote {
 			for (Object object : branch) {
 				BranchArticlesTO branch1 = (BranchArticlesTO) object;
 				if (branch1.getWhscode().equals(parameters.getFromwhscode())) {
-					
+
 					if (stocks <= branch1.getOnhand()) {
 						valid = true;
 					}

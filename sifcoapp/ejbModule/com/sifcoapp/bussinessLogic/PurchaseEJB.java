@@ -685,7 +685,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			List lisHija = new Vector();
 			CatalogTO Catalog = new CatalogTO();
 			admin = new AdminDAO();
-			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
+			Catalog = admin.findCatalogByKey(good.getTaxcode(), 12);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
 
@@ -699,7 +699,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 					admin = new AdminDAO();
 					CatalogTO Catalog1 = new CatalogTO();
-					Catalog1 = admin.findCatalogByKey("FOV1", 10);
+					Catalog1 = admin.findCatalogByKey("FOV1", 12);
 					if (Catalog1.getCatvalue3() == null) {
 						throw new Exception(
 								"No tiene cuenta asignada para  impuestos");
@@ -779,11 +779,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// LLenado del padre
 		List detail = new Vector();
 		nuevo.setObjtype("5");
-		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
-		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setMemo("Compra de mercaderia " + parameters.getCardcode());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());
 		nuevo.setTaxdate(parameters.getTaxdate());
@@ -1095,7 +1094,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
-			art1.setLinememo("Pago de Colecturia");
+			art1.setLinememo(parameters.getMemo());
 			art1.setRefdate(parameters.getDuedate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
