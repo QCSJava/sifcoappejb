@@ -312,4 +312,10 @@ public class AccountingEJBClient {
 
 		return _return;
 	}
+	public boolean if_transaction(String account)throws EJBException{
+		boolean trans=false;
+		trans=bean.if_transaction(account);
+		return trans;
+		
+	}
 }

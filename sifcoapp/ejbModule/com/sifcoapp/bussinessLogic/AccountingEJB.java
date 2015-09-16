@@ -1764,4 +1764,21 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+public boolean if_transaction(String account)throws EJBException{
+	boolean transaction=false;
+	JournalEntryLinesDAO dao=new JournalEntryLinesDAO();
+	
+	try {
+		int trans=dao.getTransaction(account);
+	if(trans>0){
+		transaction=true;
+	}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	return transaction;
+}
+
 }
