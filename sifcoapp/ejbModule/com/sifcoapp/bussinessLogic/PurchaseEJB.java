@@ -1183,7 +1183,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// recorre la lista de detalles
 		admin = new AdminDAO();
 		CatalogTO Catalog = new CatalogTO();
-		Catalog = admin.findCatalogByKey("IVA", 10);
+		Catalog = admin.findCatalogByKey("IVA", 12);
 
 		admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
@@ -2301,7 +2301,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			List lisHija = new Vector();
 			CatalogTO Catalog = new CatalogTO();
 			admin = new AdminDAO();
-			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
+			Catalog = admin.findCatalogByKey(good.getTaxcode(), 12);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
 
@@ -2315,7 +2315,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 					admin = new AdminDAO();
 					CatalogTO Catalog1 = new CatalogTO();
-					Catalog1 = admin.findCatalogByKey("FOV1", 10);
+					Catalog1 = admin.findCatalogByKey("FOV1", 12);
 					if (Catalog1.getCatvalue3() == null) {
 						throw new Exception(
 								"No tiene cuenta asignada para  impuestos");
@@ -2801,7 +2801,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// recorre la lista de detalles
 		admin = new AdminDAO();
 		CatalogTO Catalog = new CatalogTO();
-		Catalog = admin.findCatalogByKey("IVA", 10);
+		Catalog = admin.findCatalogByKey("IVA", 12);
 
 		admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();

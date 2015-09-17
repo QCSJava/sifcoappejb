@@ -586,7 +586,7 @@ public class AccountingTest {
 	public static void cierre_contable() {
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-		String strFecha = "2015-06-07";
+		String strFecha = "2015-06-01";
 		Date fecha = null;
 		JournalEntryTO parameters = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();

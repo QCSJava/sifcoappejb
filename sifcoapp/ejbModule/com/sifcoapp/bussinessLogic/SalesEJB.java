@@ -1436,6 +1436,7 @@ public class SalesEJB implements SalesEJBRemote {
 			e.printStackTrace();
 		}
 
+		//si es necesaria una validacion de credito respecto a la foma de pago 
 		if (!cat.getCatvalue3().equals("N")) {
 
 			_return = Businesspartner.validate_limit(parameters);
