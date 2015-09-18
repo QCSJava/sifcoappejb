@@ -106,5 +106,5 @@ public interface AccountingEJBRemote {
 	public Double devolver_saldo(AccountTO account) throws Exception;
 
 	public void update_tree(Date refdate, String transtype) throws EJBException;
-	public boolean if_transaction(String account)throws EJBException;
+	
 }

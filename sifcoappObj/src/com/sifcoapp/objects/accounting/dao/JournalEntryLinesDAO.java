@@ -131,7 +131,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -292,7 +292,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -410,7 +410,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -497,8 +497,6 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		}
 		lstResultSet = this.runQueryPrepared();
 
-		
-
 		CachedRowSetImpl rowsetActual;
 
 		ListIterator liRowset = null;
@@ -521,7 +519,6 @@ public class JournalEntryLinesDAO extends CommonDAO {
 			}
 		}
 
-		
 		return journal;
 
 	}
@@ -537,7 +534,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		this.setString(3, "_account", account);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -643,8 +640,6 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQueryPrepared();
 
-		
-
 		CachedRowSetImpl rowsetActual;
 
 		ListIterator liRowset = null;
@@ -680,8 +675,6 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQueryPrepared();
 
-		
-
 		CachedRowSetImpl rowsetActual;
 
 		ListIterator liRowset = null;
@@ -715,7 +708,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -792,11 +785,41 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 		this.setDbObject("SELECT COUNT(*) FROM cat_jdt1_journalentrylines where  account=?;");
 		this.setString(1, "account", account);
-		
 
 		lstResultSet = this.runQueryPrepared();
 
-		
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					num_transaction = rowsetActual.getInt(1);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return num_transaction;
+
+	}
+
+	public int getHijos(String fathernum) throws Exception {
+		int num_transaction = -1;
+
+		List lstResultSet = null;
+		this.setDbObject("SELECT COUNT(*) FROM cat_acc0_account where fathernum=?;");
+		this.setString(1, "account", fathernum);
+
+		lstResultSet = this.runQueryPrepared();
 
 		CachedRowSetImpl rowsetActual;
 

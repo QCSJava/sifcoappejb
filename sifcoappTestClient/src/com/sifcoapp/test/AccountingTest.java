@@ -545,13 +545,13 @@ public class AccountingTest {
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-		String strFecha = "2015-06-01";
+		String strFecha = "2015-08-31";
 		Date fecha = null;
 
 		fecha = formatoDelTexto.parse(strFecha);
 
-		//AccountingEJBService.update_tree(fecha, "-1");
-		AccountingEJBService.Update_endTotal();
+		AccountingEJBService.update_tree(fecha,null);
+		//AccountingEJBService.Update_endTotal();
 
 		System.out.println(_result.getMensaje());
 	}
@@ -586,7 +586,7 @@ public class AccountingTest {
 	public static void cierre_contable() {
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-		String strFecha = "2015-06-01";
+		String strFecha = "2015-08-31";
 		Date fecha = null;
 		JournalEntryTO parameters = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();

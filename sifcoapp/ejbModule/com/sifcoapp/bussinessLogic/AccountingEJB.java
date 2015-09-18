@@ -131,7 +131,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// para el manejo de transacciones
 		DAO.setIstransaccional(true);
 		try {
-			
+
 			for (int i = 1; i <= 12; i++) {
 
 				AccPeriodTO periodo = new AccPeriodTO();
@@ -149,7 +149,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 				_return = DAO.cat_accPeriod_mtto(periodo, action);
 			}
-			
+
 			DAO.forceCommit();
 
 		} catch (Exception e) {
@@ -746,9 +746,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		AccountingDAO DAO = new AccountingDAO();
 		DAO.setIstransaccional(true);
+		List cuentas = new Vector();
+
 		AccountTO node = new AccountTO();
 		AccountTO account = new AccountTO();
 		try {
+			// consultando todas las cuentas del catalogo para compararlas con
+			// la lista recibida en los parametros
+			cuentas = DAO.getAccount_Endtotal();
+
+			// limpiando la conexion
+
+			DAO = new AccountingDAO();
+			DAO.setIstransaccional(true);
 
 			for (Object object : parameters) {
 				AccountingDAO DAO1 = new AccountingDAO(DAO.getConn());
@@ -769,6 +779,45 @@ public class AccountingEJB implements AccountingEJBRemote {
 				}
 
 			}
+			// para eliminar cuentas
+			List aux = new Vector();
+			boolean ind = false;
+			for (Object object : cuentas) {
+				AccountTO cuenta = new AccountTO();
+				ind = false;
+				cuenta = (AccountTO) object;
+
+				for (Object object1 : parameters) {
+					AccountTO Account = new AccountTO();
+					Account = (AccountTO) object1;
+					if (cuenta.getAcctcode().equals(Account.getAcctcode())) {
+						ind = true;
+					}
+				}
+				// validando si la cuenta ya no existe en la nueva lista de
+				// cuentas
+				// si ya no existe entonces add a la lista de cuentas por
+				// eliminar
+				if (!ind) {
+					aux.add(cuenta);
+				}
+			}
+			// Eliminando cuentas
+			AccountingDAO DAO2 = new AccountingDAO(DAO.getConn());
+			DAO2.setIstransaccional(true);
+			for (Object object2 : aux) {
+				AccountTO aux_acc = new AccountTO();
+				aux_acc = (AccountTO) object2;
+				boolean valido=false;
+				valido=if_removable(aux_acc, DAO.getConn());
+				//validar si la cuenta se puede eliminar sino enviar mensaje a usuario 
+				if(valido){
+				int i = DAO2.cat_acc0_ACCOUNT_mtto(aux_acc, Common.MTTODELETE);
+				}else{
+					throw new Exception("La Cuenta No se puede Eliminar del Catalogo cuenta= " + aux_acc.getAcctcode() );
+				}
+			}
+
 			DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -1003,6 +1052,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		AccountingDAO acount = new AccountingDAO();
 		acount.setIstransaccional(true);
 		acount.inicial_endTotal();
+		acount = new AccountingDAO();
+		acount.setIstransaccional(true);
 		acount.update_TreeTotal_date(parameters.getTaxdate(), null);
 
 		List list_param = getAccount_Toclose();
@@ -1245,184 +1296,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// -----------------------------------------------------------------------------------
 			// encontrando el saldo si es deudor o acreedor
 			// -----------------------------------------------------------------------------------
-			Double saldo = Math.abs(sum_debe) - Math.abs(sum_credit);
+			Double saldo = sum_debe - sum_credit;
 			if (saldo != 0) {
-				if (saldo > 0) {
-					art1.setDebit(saldo);
-					art1.setBalduedeb(saldo);
-					art1.setBalduecred(zero);
-				} else {
-					saldo = saldo * -1;
-					art1.setCredit(saldo);
-					art1.setBalduecred(saldo);
-					art1.setBalduedeb(zero);
-				}
-				/*
-				 * else { art1.setDebit(zero); art1.setBalduedeb(saldo);
-				 * art1.setBalduecred(zero); }
-				 */
 
-				// --------------------------------------------------------------------------------------------------------------------------------------------------------
-				// llenado del asiento contable
-				// --------------------------------------------------------------------------------------------------------------------------------------------------------
-
-				art1.setLine_id(n);
-				art1.setAccount(acc);
-				art1.setDuedate(parameters.getDuedate());
-				art1.setShortname(acc);
-				art1.setContraact(c_acc);
-				art1.setLinememo("asiento de cierre de periodo contable");
-				art1.setRefdate(parameters.getDuedate());
-				art1.setRef1(parameters.getRef1());
-				// art1.setRef2();
-				art1.setBaseref(parameters.getRef1());
-				art1.setTaxdate(parameters.getTaxdate());
-				// art1.setFinncpriod(finncpriod);
-				art1.setReltransid(-1);
-				art1.setRellineid(-1);
-				art1.setReltype("N");
-				art1.setObjtype("5");
-				art1.setVatline("N");
-				art1.setVatamount(zero);
-				art1.setClosed("N");
-				art1.setGrossvalue(zero);
-				art1.setIsnet("Y");
-				art1.setTaxtype(0);
-				art1.setTaxpostacc("N");
-				art1.setTotalvat(0.0);
-				art1.setWtliable("N");
-				art1.setWtline("N");
-				art1.setPayblock("N");
-				art1.setOrdered("N");
-				art1.setTranstype(parameters.getTranstype());
-				detail.add(art1);
-				n++;
-			}
-		}
-		nuevo.setBtfstatus("O");
-		nuevo.setTranstype(parameters.getTranstype());
-		nuevo.setBaseref(parameters.getBaseref());
-		nuevo.setRefdate(parameters.getRefdate());
-		nuevo.setMemo(parameters.getMemo());
-		nuevo.setRef1(parameters.getRef1());
-		nuevo.setRef2(parameters.getRef2());
-		nuevo.setLoctotal(parameters.getLoctotal());
-		nuevo.setSystotal(parameters.getSystotal());
-		nuevo.setTransrate(zero);
-		nuevo.setDuedate(parameters.getDuedate());
-		nuevo.setTaxdate(parameters.getTaxdate());
-		nuevo.setFinncpriod(0);
-		nuevo.setUsersign(parameters.getUsersign());
-		nuevo.setRefndrprt("N");
-		nuevo.setObjtype("5");
-		nuevo.setAdjtran("N");
-		nuevo.setAutostorno("N");
-		nuevo.setSeries(0);
-		nuevo.setAutovat("N");
-
-		nuevo.setDocseries(0);
-		nuevo.setPrinted("N");
-		nuevo.setAutowt("N");
-		nuevo.setDeferedtax("N");
-		nuevo.setJournalentryList(detail);
-
-		return nuevo;
-
-	}
-
-	public JournalEntryTO fill_JournalEntry_Unir_Toclose2(
-			JournalEntryTO parameters) throws Exception {
-		JournalEntryTO nuevo = new JournalEntryTO();
-		ResultOutTO _result = new ResultOutTO();
-		boolean ind = false;
-		Double total = zero;
-		Double sum_debe = 0.0;
-		Double sum_credit = 0.0;
-		int n = 1;
-		// copiando la lista de los detalles de el asiento contable
-		List list = parameters.getJournalentryList();
-		// --------------------------------------------------------
-		List aux = new Vector();
-		List<List> listas = new Vector();
-		List aux1 = new Vector();
-
-		// recorre la lista de detalles
-		for (Object obj : list) {
-			ind = false;
-			JournalEntryLinesTO good = (JournalEntryLinesTO) obj;
-			String cod = good.getAccount();
-			List lisHija = new Vector();
-
-			// comparando lista aux de nodos visitados
-			for (Object obj2 : aux) {
-				JournalEntryLinesTO good2 = (JournalEntryLinesTO) obj2;
-				if (cod.equals(good2.getAccount())) {
-					ind = true;
-				}
-			}
-			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
-			// en otra lista
-			if (ind == false) {
-				for (Object obj3 : list) {
-					JournalEntryLinesTO good3 = (JournalEntryLinesTO) obj3;
-					if (cod.equals(good3.getAccount())) {
-						lisHija.add(good3);
-					}
-				}
-				// guarda en la lista de listas
-				listas.add(lisHija);
-			}
-
-			aux.add(good);
-
-		}
-
-		// recorre la lista de listas para encontrar los detalles de el asiento
-		// contable
-		List detail = new Vector();
-		for (List obj1 : listas) {
-			List listaDet = obj1;
-			Double sum = zero;
-			String acc = null;
-			String c_acc = null;
-			sum_debe = zero;
-			sum_credit = zero;
-			for (Object obj2 : listaDet) {
-				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
-				if (oldjournal.getDebit() == null) {
-					oldjournal.setDebit(0.0);
-				}
-				if (oldjournal.getCredit() == null) {
-					oldjournal.setCredit(zero);
-				}
-				sum_debe = sum_debe + oldjournal.getDebit();
-				sum_credit = sum_credit + oldjournal.getCredit();
-				acc = oldjournal.getAccount();
-				c_acc = oldjournal.getContraact();
-			}
-
-			// asiento contable
-
-			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-			// -----------------------------------------------------------------------------------
-			// encontrando el saldo si es deudor o acreedor
-			// -----------------------------------------------------------------------------------
-			Double saldo = Math.abs(sum_debe) - Math.abs(sum_credit);
-			if (saldo != 0) {
-				if (saldo > 0) {
-					art1.setDebit(saldo);
-					art1.setBalduedeb(saldo);
-					art1.setBalduecred(zero);
-				} else {
-					saldo = saldo * -1;
-					art1.setCredit(saldo);
-					art1.setBalduecred(saldo);
-					art1.setBalduedeb(zero);
-				}
-				/*
-				 * else { art1.setDebit(zero); art1.setBalduedeb(saldo);
-				 * art1.setBalduecred(zero); }
-				 */
+				art1.setDebit(saldo);
+				art1.setBalduedeb(saldo);
+				art1.setBalduecred(zero);
 
 				// --------------------------------------------------------------------------------------------------------------------------------------------------------
 				// llenado del asiento contable
@@ -1498,18 +1377,17 @@ public class AccountingEJB implements AccountingEJBRemote {
 		AccountingDAO DAO2 = new AccountingDAO(DAO1.getConn());
 		DAO2.setIstransaccional(true);
 		List accountlist = new Vector();
-		
+
 		ResultOutTO _return = new ResultOutTO();
 		try {
-			
-			//inicializa a cero
-			
+
+			// inicializa a cero
+
 			DAO1.inicial_endTotal();
-			
-			//actualiza el endtotal con el arbol 
-			
+
+			// actualiza el endtotal con el arbol
+
 			DAO2.update_TreeTotal();
-			
 
 			_return.setCodigoError(0);
 			_return.setMensaje("datos almacenados correctamente");
@@ -1764,21 +1642,26 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-public boolean if_transaction(String account)throws EJBException{
-	boolean transaction=false;
-	JournalEntryLinesDAO dao=new JournalEntryLinesDAO();
-	
-	try {
-		int trans=dao.getTransaction(account);
-	if(trans>0){
-		transaction=true;
+	public boolean if_removable(AccountTO account, Connection conn)
+			throws EJBException {
+		boolean transaction = true;
+		JournalEntryLinesDAO dao = new JournalEntryLinesDAO(conn);
+
+		try {
+			int trans = dao.getTransaction(account.getAcctcode());
+			dao = new JournalEntryLinesDAO(conn);
+			int hijos=dao.getHijos(account.getAcctcode());
+			
+			if (trans > 0 && hijos>0) {
+				transaction = false;
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return transaction;
 	}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	return transaction;
-}
 
 }
