@@ -1817,7 +1817,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
 		parameters
 				.setJrnlmemo("Nota de Credito  - " + parameters.getCardcode());
-		parameters.setReceiptnum(0);
+		//parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
@@ -2372,17 +2372,31 @@ public class SalesEJB implements SalesEJBRemote {
 					tax = tax + impuesto;
 
 				} else {
+	                  if(parameters.getSeries()==1){
+	  					
+	  					if (Catalog.getCatvalue2() == null) {
+	  						throw new Exception(
+	  								"No tiene cuenta asignada para impuestos");
+	  					}
+	  								
+	  					
+	  					iva_c = Catalog.getCatvalue2();
+	  					impuesto = good.getLinetotal()
+	  							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+	                    }else{
+	                  	  if (Catalog.getCatvalue3() == null) {
+	    						throw new Exception(
+	    								"No tiene cuenta asignada para impuestos");
+	    					}
+	    								
+	    					
+	    					iva_c = Catalog.getCatvalue3();
+	    					impuesto = good.getLinetotal()
+	    							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+	                    }
+	  					tax = tax + impuesto;
+	  				}
 
-					if (Catalog.getCatvalue2() == null) {
-						throw new Exception(
-								"No tiene cuenta asignada para impuestos");
-					}
-					iva_c = Catalog.getCatvalue2();
-					impuesto = good.getLinetotal()
-							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
-
-					tax = tax + impuesto;
-				}
 
 			}
 
