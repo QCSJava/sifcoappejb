@@ -1054,7 +1054,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		acount.inicial_endTotal();
 		acount = new AccountingDAO();
 		acount.setIstransaccional(true);
-		acount.update_TreeTotal_date(parameters.getTaxdate(), null);
+		acount.update_TreeTotal_date(parameters.getDuedate(), null);
 
 		List list_param = getAccount_Toclose();
 		// recorre la lista de listas para encontrar los detalles de el asiento
