@@ -808,13 +808,17 @@ public class AccountingEJB implements AccountingEJBRemote {
 			for (Object object2 : aux) {
 				AccountTO aux_acc = new AccountTO();
 				aux_acc = (AccountTO) object2;
-				boolean valido=false;
-				valido=if_removable(aux_acc, DAO.getConn());
-				//validar si la cuenta se puede eliminar sino enviar mensaje a usuario 
-				if(valido){
-				int i = DAO2.cat_acc0_ACCOUNT_mtto(aux_acc, Common.MTTODELETE);
-				}else{
-					throw new Exception("La Cuenta No se puede Eliminar del Catalogo cuenta= " + aux_acc.getAcctcode() );
+				boolean valido = false;
+				valido = if_removable(aux_acc, DAO.getConn());
+				// validar si la cuenta se puede eliminar sino enviar mensaje a
+				// usuario
+				if (valido) {
+					int i = DAO2.cat_acc0_ACCOUNT_mtto(aux_acc,
+							Common.MTTODELETE);
+				} else {
+					throw new Exception(
+							"La Cuenta No se puede Eliminar del Catalogo cuenta= "
+									+ aux_acc.getAcctcode());
 				}
 			}
 
@@ -1075,7 +1079,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 				JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 
-				total_sum = total_sum + Math.abs(account.getEndtotal());
+				total_sum = total_sum + account.getEndtotal();
 
 				// comparando con el group mask para encontrar el saldo de la
 				// cuenta
@@ -1092,13 +1096,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 				}
 
 				if (account.getGroupmask() == 5) {
-					art1.setDebit(account.getEndtotal() * -1);
+					art1.setDebit(account.getEndtotal());
 					art1.setBalduecred(0.0);
-					art1.setBalduedeb(account.getEndtotal() * -1);
+					art1.setBalduedeb(account.getEndtotal());
 					// cuenta perdidas y ganancias
-					art2.setCredit(account.getEndtotal() * -1);
+					art2.setCredit(account.getEndtotal());
 					art2.setBalduedeb(0.0);
-					art2.setBalduecred(account.getEndtotal() * -1);
+					art2.setBalduecred(account.getEndtotal());
 				}
 
 				art1.setLine_id(n);
@@ -1298,11 +1302,16 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// -----------------------------------------------------------------------------------
 			Double saldo = sum_debe - sum_credit;
 			if (saldo != 0) {
-
-				art1.setDebit(saldo);
-				art1.setBalduedeb(saldo);
-				art1.setBalduecred(zero);
-
+				if (saldo > 0) {
+					art1.setDebit(saldo);
+					art1.setBalduedeb(saldo);
+					art1.setBalduecred(zero);
+				}
+				if (saldo < 0) {
+					art1.setCredit(saldo);
+					art1.setBalduecred(saldo);
+					art1.setBalduedeb(zero);
+				}
 				// --------------------------------------------------------------------------------------------------------------------------------------------------------
 				// llenado del asiento contable
 				// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1650,12 +1659,12 @@ public class AccountingEJB implements AccountingEJBRemote {
 		try {
 			int trans = dao.getTransaction(account.getAcctcode());
 			dao = new JournalEntryLinesDAO(conn);
-			int hijos=dao.getHijos(account.getAcctcode());
-			
-			if (trans > 0 && hijos>0) {
+			int hijos = dao.getHijos(account.getAcctcode());
+
+			if (trans > 0 && hijos > 0) {
 				transaction = false;
 			}
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

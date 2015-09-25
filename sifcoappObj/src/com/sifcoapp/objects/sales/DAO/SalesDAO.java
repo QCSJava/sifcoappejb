@@ -319,7 +319,7 @@ public class SalesDAO extends CommonDAO{
 		this.setString(12,"_cardname", parameters.getCardname());
 		this.setDouble(13,"_vatsum", parameters.getVatsum());
 		this.setDouble(14,"_discsum",new Double(parameters.getDiscsum()));
-		this.setDouble(15,"_doctotal", new Double(parameters.getDoctotal()));
+		this.setDouble(15,"_doctotal", new Double(parameters.getDoctotal()));   
 		this.setString(16,"_ref1", parameters.getRef1());
 		this.setString(17,"_ref2", parameters.getRef2());
 		this.setString(18,"_comments", parameters.getComments());

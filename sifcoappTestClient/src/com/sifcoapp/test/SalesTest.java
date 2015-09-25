@@ -343,6 +343,7 @@ public class SalesTest {
 				SalesDetailTO periodo2 = (SalesDetailTO) iterator
 						.next();
 				ClientCrediDetailTO ClientCredi = new ClientCrediDetailTO();
+				
 				ClientCredi.setDocentry(periodo2.getDocentry());
 				ClientCredi.setLinenum(periodo2.getLinenum());
 				ClientCredi.setTargettype(periodo2.getTargettype());
@@ -380,6 +381,9 @@ public class SalesTest {
 			//haciendo la nota de credito 
 			
 			parameters.setclientDetails(prueba);
+			
+			//parameters=sales.getClientCrediByKey(19);
+			
 			_result = sales.inv_ClientCredi_mtto(parameters, 1);
 			
 		} catch (Exception e) {
