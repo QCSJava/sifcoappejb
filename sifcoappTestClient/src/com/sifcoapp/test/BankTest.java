@@ -163,18 +163,18 @@ public class BankTest {
 		ResultOutTO resp = null;
 		ColecturiaTO bus = new ColecturiaTO();
 		
-		bus.setCardcode("CL31010123");
-		bus.setCardname("nombre del socio ");
+		bus.setCardcode("SN00000001");
+		bus.setCardname("JOSE MAURICIO GARCIA");
 		bus.setDoctotal(100.00);
-		bus.setSeries(1);
-		bus.setReceiptnum(194);
+		bus.setSeries(2);
+		bus.setReceiptnum(2);
 		
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods4= null;
 		// nuevo.setDocentry(1);
 
 		try {
-			lstPeriods4 = catalog.get_ges_colecturiaConcept1("CL31010123");
+			lstPeriods4 = catalog.get_ges_colecturiaConcept1("SN00000001");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,7 +218,7 @@ public class BankTest {
 		bus.setColecturiaDetail(prueba);
 
 		try {
-			resp = catalog.ges_ges_col0_colecturia_mtto(bus, 1);
+			resp = catalog.ges_ges_col0_colecturia_mtto(bus,1);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

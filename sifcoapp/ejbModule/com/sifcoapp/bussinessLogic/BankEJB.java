@@ -149,8 +149,13 @@ public class BankEJB implements BankEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		JournalEntryTO journal = new JournalEntryTO();
 		ResultOutTO res_jour = new ResultOutTO();
+		// ---------------------------------------------------------------------------
+		// conexion principal
+		// ---------------------------------------------------------------------------
 		ColecturiaDAO DAO = new ColecturiaDAO();
 		DAO.setIstransaccional(true);
+		//---------------------------------------------------------------------------
+		//---------------------------------------------------------------------------
 		ColecturiaDetailDAO DAO1 = new ColecturiaDetailDAO(DAO.getConn());
 		DAO1.setIstransaccional(true);
 		List sale = new Vector();
@@ -1449,8 +1454,8 @@ public class BankEJB implements BankEJBRemote {
 
 		return Days;
 	}
-	public int dias_prestamo(String cuenta, Connection conn)
-			throws Exception {
+
+	public int dias_prestamo(String cuenta, Connection conn) throws Exception {
 
 		int Days = 0;
 		JournalEntryLinesDAO DAO = new JournalEntryLinesDAO(conn);
@@ -1516,11 +1521,10 @@ public class BankEJB implements BankEJBRemote {
 		account = accounting.getAccountByKey(cuenta);
 
 		if (account.getCurrtotal() != null && account.getCurrtotal() > 0.0) {
-			
-			
+
 			parameterTO = parameter.getParameterbykey(12);
-			
-			dias_prestamo=dias_prestamo(cuenta, conn);
+
+			dias_prestamo = dias_prestamo(cuenta, conn);
 
 			// codigo del concepto de interes moratorio
 			codpres = parameterTO.getValue1();
@@ -1531,16 +1535,16 @@ public class BankEJB implements BankEJBRemote {
 			// prestamospor socio
 			busines = DAO.get_businesspartnerAcount_FCredit(busines);
 			cuenta = busines.getAcctcode();
-			
-			
+
 			int days = get_dias(cuenta, "50", conn);
-			
-			//validacion si es el primer asiento que se realizas o si es un refinanciamiento
-			//si days=-1 no existe transaccion 
-			//si days > dias_prestamo ... se ha realizado un nuevo prestamo
-			if(days==-1||(days>dias_prestamo)){
-				days=dias_prestamo;
-							}
+
+			// validacion si es el primer asiento que se realizas o si es un
+			// refinanciamiento
+			// si days=-1 no existe transaccion
+			// si days > dias_prestamo ... se ha realizado un nuevo prestamo
+			if (days == -1 || (days > dias_prestamo)) {
+				days = dias_prestamo;
+			}
 			// si ya se hiso el registro mostrara day=0
 
 			if (days == 0) {
@@ -1559,7 +1563,7 @@ public class BankEJB implements BankEJBRemote {
 			conceptos = concept.get_ges_colecturiaConcept();
 			for (Object object : conceptos) {
 				colecturia = (ColecturiaConceptTO) object;
-				if (colecturia.getLinenum()== Integer.parseInt(codpres)) {
+				if (colecturia.getLinenum() == Integer.parseInt(codpres)) {
 					concepto = colecturia;
 				}
 

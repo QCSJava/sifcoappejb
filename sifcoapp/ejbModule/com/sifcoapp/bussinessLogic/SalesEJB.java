@@ -300,7 +300,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
 		parameters.setJrnlmemo("Facturas de venta a clientes - "
 				+ parameters.getCardcode());
-		parameters.setReceiptnum(0);
+		parameters.setReceiptnum(parameters.getReceiptnum());
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
@@ -415,7 +415,8 @@ public class SalesEJB implements SalesEJBRemote {
 		if (Sales.getReceiptnum() != 0) {
 			DeliveryTO delivery = new DeliveryTO();
 			delivery = getDeliveryByKey(Sales.getReceiptnum());
-			delivery.setCanceled("C");
+			delivery.setCanceled("Y");
+			delivery.setDocstatus("C");
 			delivery.setCanceldate(Sales.getTaxdate());
 			_return = inv_Delivery_update(delivery, Common.MTTOUPDATE, conn);
 		}

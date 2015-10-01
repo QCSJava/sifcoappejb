@@ -68,7 +68,7 @@ public class SalesDAO extends CommonDAO{
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		//(_docnum integer, _docdate date, _series integer, _towhscode character varying, _ref1 character varying, _ref2 character varying, _comments character varying, _docduedate date, _cardcode character varying, _cardname character varying, _taxdate date, _doctype character, _peymethod character varying, _docstatus character)
-		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_sales(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -110,6 +110,7 @@ public class SalesDAO extends CommonDAO{
 		this.setString(14, "_docstatus", param.getDocstatus());
 		this.setInt(15,"_receiptnum",param.getReceiptnum());
 		this.setString(16,"_canceled", param.getCanceled());
+		this.setString(17,"_numatcard",param.getNumatcard());
 		
 		lstResultSet = this.runQuery();
 
