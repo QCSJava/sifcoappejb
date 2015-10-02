@@ -107,4 +107,57 @@ public class ColecturiaDetailDAO extends CommonDAO {
 		}
 		return _return;
 	}
+	public List get_ges_colecturiaDetailByKey_print(int parameters) throws Exception {
+		List _return = new Vector();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_ges_colecturiadetail_by_key_print(?)}");
+		this.setInt(1, "_docentry", parameters);
+
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+
+		
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ColecturiaDetailTO colecturia = new ColecturiaDetailTO();
+					colecturia.setDocentry(rowsetActual.getInt(1));
+					colecturia.setLinenum(rowsetActual.getInt(2));
+					colecturia.setLinestatus(rowsetActual.getString(3));
+					colecturia.setObjtype(rowsetActual.getString(4));
+					colecturia.setDscription(rowsetActual.getString(5));
+					colecturia.setAcctcode(rowsetActual.getString(6));
+					colecturia.setAcctcode2(rowsetActual.getString(7));
+					colecturia.setAcctcode3(rowsetActual.getString(8));
+					colecturia.setCtlaccount(rowsetActual.getString(9));
+					colecturia.setOcrcode(rowsetActual.getString(10));
+					colecturia.setTransid(rowsetActual.getInt(11));
+					colecturia.setConfirmed(rowsetActual.getString(12));
+					colecturia.setPeymethod(rowsetActual.getString(13));
+					colecturia.setPaidsum(rowsetActual.getDouble(14));
+					colecturia.setVatsum(rowsetActual.getDouble(15));
+					colecturia.setDocsubtype(rowsetActual.getString(16));
+					colecturia.setValue1(rowsetActual.getString(17));
+					colecturia.setValue2(rowsetActual.getString(18));
+					colecturia.setValue3(rowsetActual.getString(19));
+					colecturia.setTaxstatus(rowsetActual.getString(20));
+					colecturia.setAditional_account(rowsetActual.getString(21));
+
+					_return.add(colecturia);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 }

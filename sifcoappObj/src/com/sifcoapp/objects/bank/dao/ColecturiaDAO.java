@@ -204,6 +204,58 @@ public class ColecturiaDAO extends CommonDAO {
 		}
 		return _return;
 	}
-//metodo para regresara el numero de dias desde la ultima transaccion de interese moratorios 
+
 	
+	public ColecturiaTO get_ges_colecturiaByKey_print(int parameters)
+			throws Exception {
+		ColecturiaTO _return = new ColecturiaTO();
+		List lstResultSet = null;
+
+		this.setTypeReturn(Common.TYPERETURN_CURSOR);
+		this.setDbObject("{call sp_get_ges_colecturia_by_key(?)}");
+		this.setInt(1, "_docentry", parameters);
+
+		lstResultSet = this.runQuery();
+		CachedRowSetImpl rowsetActual;
+
+		
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		ColecturiaDetailDAO Detail = new ColecturiaDetailDAO();
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					ColecturiaTO colecturia = new ColecturiaTO();
+					colecturia.setDocentry(rowsetActual.getInt(1));
+					colecturia.setTranstype(rowsetActual.getInt(2));
+					colecturia.setDocnum(rowsetActual.getInt(3));
+					colecturia.setReceiptnum(rowsetActual.getInt(4));
+					colecturia.setPrinted(rowsetActual.getString(5));
+					colecturia.setDocdate(rowsetActual.getDate(6));
+					colecturia.setDocduedate(rowsetActual.getDate(7));
+					colecturia.setCardcode(rowsetActual.getString(8));
+					colecturia.setCardname(rowsetActual.getString(9));
+					colecturia.setComments(rowsetActual.getString(10));
+					colecturia.setJrnlmemo(rowsetActual.getString(11));
+					colecturia.setSeries(rowsetActual.getInt(12));
+					colecturia.setDoctotal(rowsetActual.getDouble(13));
+					colecturia.setTaxdate(rowsetActual.getDate(14));
+					colecturia.setRef1(rowsetActual.getString(15));
+					colecturia.setRef2(rowsetActual.getString(16));
+					colecturia.setUsersign(rowsetActual.getInt(17));
+					colecturia.setColecturiaDetail(Detail
+							.get_ges_colecturiaDetailByKey_print(rowsetActual
+									.getInt(1)));
+					_return = colecturia;
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _return;
+	}
 }

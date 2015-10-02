@@ -154,8 +154,8 @@ public class BankEJB implements BankEJBRemote {
 		// ---------------------------------------------------------------------------
 		ColecturiaDAO DAO = new ColecturiaDAO();
 		DAO.setIstransaccional(true);
-		//---------------------------------------------------------------------------
-		//---------------------------------------------------------------------------
+		// ---------------------------------------------------------------------------
+		// ---------------------------------------------------------------------------
 		ColecturiaDetailDAO DAO1 = new ColecturiaDetailDAO(DAO.getConn());
 		DAO1.setIstransaccional(true);
 		List sale = new Vector();
@@ -222,6 +222,14 @@ public class BankEJB implements BankEJBRemote {
 					ResultOutTO nuevo = new ResultOutTO();
 					if (sale.size() != 0) {
 						nuevo = actualizar_sale(sale, DAO.getConn(), parameters);
+					}
+					// para unidades propias
+					if(parameters.getPrinted().equals("2")){
+						journal=fill_JournalEntry_liquidacion(parameters); 
+						account = new AccountingEJB();
+							res_jour = account.journalEntry_mtto(journal,
+									Common.MTTOINSERT, DAO.getConn());
+							
 					}
 				}
 
@@ -292,6 +300,21 @@ public class BankEJB implements BankEJBRemote {
 		ColecturiaDAO DAO = new ColecturiaDAO();
 		try {
 			_return = DAO.get_ges_colecturiaByKey(parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+
+		return _return;
+	}
+
+	public ColecturiaTO get_ges_colecturiaByKey_print(int parameters)
+			throws EJBException {
+		// TODO Auto-generated method stub
+		ColecturiaTO _return = new ColecturiaTO();
+		ColecturiaDAO DAO = new ColecturiaDAO();
+		try {
+			_return = DAO.get_ges_colecturiaByKey_print(parameters);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -419,7 +442,7 @@ public class BankEJB implements BankEJBRemote {
 		aux = bDAO.get_businesspartnerAcount(parameters.getCardcode());
 
 		ParameterDAO DAO = new ParameterDAO();
-		cuentas = DAO.getParameterbykey(10);
+		cuentas = DAO.getParameterbykey(15);
 
 		// recorre la lista de listas para encontrar los detalles de el asiento
 		// contable
@@ -452,6 +475,9 @@ public class BankEJB implements BankEJBRemote {
 			// que tienen asignadas
 
 			// codigo de cuenta del socio de negocio
+			if (colecturia_c.getLinenum() != Integer.parseInt(cuentas
+					.getValue1())){
+				
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			art1.setLine_id(n);
 			art1.setAccount(business);
@@ -542,7 +568,7 @@ public class BankEJB implements BankEJBRemote {
 			n = n + 1;
 			//
 			detail.add(art2);
-
+			
 			// if (colec)
 
 			// falta condicion de cuando llevar
@@ -687,7 +713,7 @@ public class BankEJB implements BankEJBRemote {
 				n++;
 
 			}
-
+			}
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// llenado del asiento contable
@@ -1229,8 +1255,202 @@ public class BankEJB implements BankEJBRemote {
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-	//
+	// Asiento contable para la liquidacion de unidades propias
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	public JournalEntryTO fill_JournalEntry_liquidacion(ColecturiaTO parameters)
+			throws Exception {
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+		parameterTO cuentas = new parameterTO();
+		parameterTO cuota_mot = new parameterTO();
+		String Objtype = "";
+		boolean ind = false;
+		Double total = zero;
+		int n = 1;
+		int count = 1;
+		double total_sum = 0.0;
+		List list_param = parameters.getColecturiaDetail();
+
+		List<List> listas = new Vector();
+		List aux1 = new Vector();
+
+		// consultando numero de concepto de ingreso
+		ParameterDAO DAO = new ParameterDAO();
+		cuentas = DAO.getParameterbykey(14);
+		DAO = new ParameterDAO();
+		cuentas = DAO.getParameterbykey(14);
+		// recorre la lista de listas para encontrar los detalles de el asiento
+		// contable
+		List detail = new Vector();
+		String ingreso = null;
+		double t_ingreso = 0.0;
+		String objtype = null;
+
+		for (Object obj2 : list_param) {
+
+			ColecturiaDetailTO colecturia_c = (ColecturiaDetailTO) obj2;
+			String linememo = " ";
+			Double sum = zero;
+			sum = colecturia_c.getPaidsum();
+			t_ingreso = t_ingreso + sum;
+			ingreso = colecturia_c.getObjtype();
+
+			if (colecturia_c.getLinenum() == Integer.parseInt(cuentas
+					.getValue1())) {
+				ingreso = colecturia_c.getAcctcode();
+			}
+
+			linememo = colecturia_c.getDscription();
+
+			// llenado de las cuentas por concepto de colecturia segun la cuenta
+			// que tienen asignadas
+
+			// codigo de cuenta del socio de negocio
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			art1.setLine_id(n);
+			art1.setAccount(colecturia_c.getCtlaccount());
+			art1.setDebit(colecturia_c.getPaidsum());
+			art1.setDuedate(parameters.getDocdate());
+			art1.setShortname(colecturia_c.getCtlaccount());
+			art1.setContraact("");
+			art1.setLinememo("liquidacion de unidades propias "
+					+ parameters.getCardname());
+			art1.setRefdate(parameters.getDocdate());
+			art1.setRef1(Integer.toString(parameters.getDocentry()));
+			// art1.setRef2();
+			art1.setBaseref(parameters.getRef1());
+			art1.setTaxdate(parameters.getTaxdate());
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(0.0);
+			art1.setClosed("N");
+			art1.setGrossvalue(0.0);
+			art1.setBalduedeb(art1.getDebit());
+			art1.setBalduecred(0.0);
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(0.0);
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");
+			art1.setTranstype(colecturia_c.getObjtype());
+			detail.add(art1);
+
+			n++;
+
+		}
+		// ----------------------------------------------------------------------------------------------------------------------------------
+		// consulta del concepto de ingreso
+		// ----------------------------------------------------------------------------------------------------------------------------------
+		List conceptos = new Vector();
+		conceptos = get_ges_colecturiaConcept1(parameters.getCardcode());
+
+		for (Object object : conceptos) {
+			ColecturiaConceptTO concepto = (ColecturiaConceptTO) object;
+			if (concepto.getLinenum() == Integer.parseInt(cuentas.getValue1())) {
+				ingreso = concepto.getOcrcode();
+			}
+
+		}
+
+		if (ingreso.equals(null)) {
+			throw new Exception(
+					"no existe cuenta asiganada a ingresos para la liquidacion");
+		}
+
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		art2.setLine_id(n);
+		art2.setAccount(ingreso);
+		art2.setCredit(t_ingreso);
+		art2.setDuedate(parameters.getDocdate());
+		art2.setShortname(ingreso);
+		art2.setContraact("");
+		art2.setLinememo("liquidacion de unidades propias "
+				+ parameters.getCardname());
+		art2.setRefdate(parameters.getDocduedate());
+		art2.setRef1(Integer.toString(parameters.getDocentry()));
+		// art2.setRef2();
+		art2.setBaseref(parameters.getRef1());
+		art2.setTaxdate(parameters.getTaxdate());
+		// art1.setFinncpriod(finncpriod);
+		art2.setReltransid(-1);
+		art2.setRellineid(-1);
+		art2.setReltype("N");
+		art2.setObjtype("5");
+		art2.setVatline("N");
+		art2.setVatamount(0.0);
+		art2.setClosed("N");
+		art2.setGrossvalue(0.0);
+		art2.setBalduedeb(0.0);
+		art2.setBalduecred(t_ingreso);
+		art2.setIsnet("Y");
+		art2.setTaxtype(0);
+		art2.setTaxpostacc("N");
+		art2.setTotalvat(0.0);
+		art2.setWtliable("N");
+		art2.setWtline("N");
+		art2.setPayblock("N");
+		art2.setOrdered("N");
+		art2.setTranstype(objtype);
+
+		//
+		detail.add(art2);
+
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// llenado del asiento contable
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// LLenado del padre
+
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(objtype);
+		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
+		nuevo.setRefdate(parameters.getDocdate());
+		nuevo.setMemo("liquidacion de unidades propias "
+				+ parameters.getCardname());
+		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
+		nuevo.setRef2(parameters.getRef1());
+		nuevo.setLoctotal(t_ingreso);
+		nuevo.setSystotal(t_ingreso);
+		nuevo.setTransrate(0.0);
+		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setFinncpriod(0);
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setRefndrprt("N");
+		nuevo.setObjtype("5");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setSeries(0);
+		nuevo.setAutovat("N");
+		nuevo.setDocseries(0);
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+		nuevo.setJournalentryList(detail);
+		nuevo.setTranstype("41");
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		// metodo para reagrupar cuentas del mismo codigo
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		JournalEntryTO journal = new JournalEntryTO();
+		journal = fill_JournalEntry_Unir(nuevo);
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		return journal;
+
+	}
+
+	     // --------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public List filtro_consulta(List sales) throws EJBException {
 		List lista = new Vector();
 		if (sales != null) {

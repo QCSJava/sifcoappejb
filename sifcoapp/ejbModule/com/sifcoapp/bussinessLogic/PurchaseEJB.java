@@ -691,7 +691,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			arti = good.getArticle();
 			branch = branch + (good.getPrice() * good.getQuantity());
-			sale = sale + good.getLinetotal();
+			//sale = sale + good.getLinetotal();
 			// calculando el iva validando si el producto esta exento o de iva
 			if (good.getTaxstatus().equals("Y")) {
 				// validar si es FOV
@@ -741,7 +741,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			}
 
-			// sacando el total de venta
+			// sacando el total de compra
 
 			bussines = bussines
 					+ ((good.getVatsum() - impuesto) + impuesto + good

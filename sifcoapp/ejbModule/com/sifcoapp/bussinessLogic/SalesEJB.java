@@ -627,7 +627,7 @@ public class SalesEJB implements SalesEJBRemote {
 					admin = new AdminDAO();
 
 					// cuentas contables por tipos de documentos
-					
+
 					Catalog1 = admin.findCatalogByKey("FOV1", 10);
 					if (Catalog1.getCatvalue3() == null) {
 						throw new Exception(
@@ -657,28 +657,26 @@ public class SalesEJB implements SalesEJBRemote {
 					tax = tax + impuesto;
 					// -----------------------------------------------------------------
 				} else {
-                  if(parameters.getSeries()==1){
-					
-					if (Catalog.getCatvalue2() == null) {
-						throw new Exception(
-								"No tiene cuenta asignada para impuestos");
+					if (parameters.getSeries() == 1) {
+
+						if (Catalog.getCatvalue2() == null) {
+							throw new Exception(
+									"No tiene cuenta asignada para impuestos");
+						}
+
+						iva_c = Catalog.getCatvalue2();
+						impuesto = good.getLinetotal()
+								* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+					} else {
+						if (Catalog.getCatvalue3() == null) {
+							throw new Exception(
+									"No tiene cuenta asignada para impuestos");
+						}
+
+						iva_c = Catalog.getCatvalue3();
+						impuesto = good.getLinetotal()
+								* (Double.parseDouble(Catalog.getCatvalue()) / 100);
 					}
-								
-					
-					iva_c = Catalog.getCatvalue2();
-					impuesto = good.getLinetotal()
-							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
-                  }else{
-                	  if (Catalog.getCatvalue3() == null) {
-  						throw new Exception(
-  								"No tiene cuenta asignada para impuestos");
-  					}
-  								
-  					
-  					iva_c = Catalog.getCatvalue3();
-  					impuesto = good.getLinetotal()
-  							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
-                  }
 					tax = tax + impuesto;
 				}
 
@@ -1437,7 +1435,7 @@ public class SalesEJB implements SalesEJBRemote {
 			e.printStackTrace();
 		}
 
-		//si es necesaria una validacion de credito respecto a la foma de pago 
+		// si es necesaria una validacion de credito respecto a la foma de pago
 		if (!cat.getCatvalue3().equals("N")) {
 
 			_return = Businesspartner.validate_limit(parameters);
@@ -1818,7 +1816,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
 		parameters
 				.setJrnlmemo("Nota de Credito  - " + parameters.getCardcode());
-		//parameters.setReceiptnum(0);
+		// parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
@@ -2373,31 +2371,28 @@ public class SalesEJB implements SalesEJBRemote {
 					tax = tax + impuesto;
 
 				} else {
-	                  if(parameters.getSeries()==1){
-	  					
-	  					if (Catalog.getCatvalue2() == null) {
-	  						throw new Exception(
-	  								"No tiene cuenta asignada para impuestos");
-	  					}
-	  								
-	  					
-	  					iva_c = Catalog.getCatvalue2();
-	  					impuesto = good.getLinetotal()
-	  							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
-	                    }else{
-	                  	  if (Catalog.getCatvalue3() == null) {
-	    						throw new Exception(
-	    								"No tiene cuenta asignada para impuestos");
-	    					}
-	    								
-	    					
-	    					iva_c = Catalog.getCatvalue3();
-	    					impuesto = good.getLinetotal()
-	    							* (Double.parseDouble(Catalog.getCatvalue()) / 100);
-	                    }
-	  					tax = tax + impuesto;
-	  				}
+					if (parameters.getSeries() == 1) {
 
+						if (Catalog.getCatvalue2() == null) {
+							throw new Exception(
+									"No tiene cuenta asignada para impuestos");
+						}
+
+						iva_c = Catalog.getCatvalue2();
+						impuesto = good.getLinetotal()
+								* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+					} else {
+						if (Catalog.getCatvalue3() == null) {
+							throw new Exception(
+									"No tiene cuenta asignada para impuestos");
+						}
+
+						iva_c = Catalog.getCatvalue3();
+						impuesto = good.getLinetotal()
+								* (Double.parseDouble(Catalog.getCatvalue()) / 100);
+					}
+					tax = tax + impuesto;
+				}
 
 			}
 
@@ -3367,8 +3362,8 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
 		parameters.setJrnlmemo("Nota De Remision  - "
 				+ parameters.getCardcode());
-		parameters.setReceiptnum(0);
-		parameters.setGroupnum(0);
+		parameters.setReceiptnum(parameters.getReceiptnum());
+		parameters.setGroupnum(parameters.getGroupnum());
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
 		// parameters.setSeries(0);
@@ -3466,6 +3461,23 @@ public class SalesEJB implements SalesEJBRemote {
 					conn);
 		}
 
+		// -----------------------------------------------------------------------------------
+		// actualizacion de la nota de remision original groupnum = 2 anulacion de nota de remision
+		if(Delivery.getSeries()==4){
+			DeliveryTO remision= new DeliveryTO();
+			remision=getDeliveryByKey(Delivery.getReceiptnum());
+			if(remision.getDocentry()!=0){
+				remision.setCanceled("Y");
+				remision.setCanceldate(Delivery.getDocdate());
+				inv_Delivery_mtto(remision,Common.MTTOUPDATE);
+			}else{
+				throw new Exception(
+						"No se encuentra nota de remision "+Delivery.getReceiptnum());
+			}
+			
+		}
+		// -----------------------------------------------------------------------------------
+		
 		// -----------------------------------------------------------------------------------
 		// registro del asiento contable y actualización de saldos
 		// -----------------------------------------------------------------------------------
@@ -3975,6 +3987,180 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setLine_id(2);
 		admin = new AdminDAO();
 		BranchTO branch1 = new BranchTO();
+		branch1 = admin.getBranchByKey(parameters.getTowhscode());
+		art2.setAccount(branch1.getBalinvntac());
+
+		art1.setCredit(sum);
+		art1.setDuedate(parameters.getDocduedate());
+		art1.setShortname(branch.getBalinvntac());
+		art1.setContraact(branch1.getBalinvntac());
+		art1.setLinememo("nota  de remision ");
+		art1.setRefdate(parameters.getDocduedate());
+		art1.setRef1(parameters.getRef1());
+		// art1.setRef2();
+		art1.setBaseref(parameters.getRef1());
+		art1.setTaxdate(parameters.getDocduedate());
+		// art1.setFinncpriod(finncpriod);
+		art1.setReltransid(-1);
+		art1.setRellineid(-1);
+		art1.setReltype("N");
+		art1.setObjtype("5");
+		art1.setVatline("N");
+		art1.setVatamount(0.0);
+		art1.setClosed("N");
+		art1.setGrossvalue(0.0);
+		art1.setBalduedeb(0.0);
+		art1.setBalduecred(sum);
+		art1.setIsnet("Y");
+		art1.setTaxtype(0);
+		art1.setTaxpostacc("N");
+		art1.setTotalvat(0.0);
+		art1.setWtliable("N");
+		art1.setWtline("N");
+		art1.setPayblock("N");
+		art1.setOrdered("N");
+		art1.setTranstype(parameters.getObjtype());
+
+		detail.add(art1);
+
+		art2.setDebit(sum);
+		art2.setDuedate(parameters.getDocduedate());
+		art2.setShortname(branch1.getBalinvntac());
+		art2.setContraact(branch.getBalinvntac());
+		art2.setLinememo("nota de remision ");
+		art2.setRefdate(parameters.getDocduedate());
+		art2.setRef1(parameters.getRef1());
+		// art2.setRef2();
+		art2.setBaseref(parameters.getRef1());
+		art2.setTaxdate(parameters.getDocduedate());
+		// art1.setFinncpriod(finncpriod);
+		art2.setReltransid(-1);
+		art2.setRellineid(-1);
+		art2.setReltype("N");
+		art2.setObjtype("5");
+		art2.setVatline("N");
+		art2.setVatamount(0.0);
+		art2.setClosed("N");
+		art2.setGrossvalue(0.0);
+		art2.setBalduedeb(sum);
+		art2.setBalduecred(0.0);
+		art2.setIsnet("Y");
+		art2.setTaxtype(0);
+		art2.setTaxpostacc("N");
+		art2.setTotalvat(0.0);
+		art2.setWtliable("N");
+		art2.setWtline("N");
+		art2.setPayblock("N");
+		art2.setOrdered("N");
+		art2.setTranstype(parameters.getObjtype());
+
+		detail.add(art2);
+
+		nuevo.setObjtype("5");
+		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setUsersign(parameters.getUsersign());
+		nuevo.setLoctotal(sum);
+		nuevo.setSystotal(sum);
+		nuevo.setBtfstatus("O");
+		nuevo.setTranstype(parameters.getObjtype());
+		nuevo.setBaseref(parameters.getRef1());
+		nuevo.setRefdate(parameters.getDocdate());
+		nuevo.setRef1(parameters.getRef1());
+		nuevo.setDuedate(parameters.getDocduedate());
+		nuevo.setTaxdate(parameters.getTaxdate());
+		nuevo.setRefndrprt("N");
+		nuevo.setAdjtran("N");
+		nuevo.setAutostorno("N");
+		nuevo.setAutovat("N");
+		nuevo.setPrinted("N");
+		nuevo.setAutowt("N");
+		nuevo.setDeferedtax("N");
+		nuevo.setJournalentryList(detail);
+		return nuevo;
+
+		// #endregion
+	}
+
+	public JournalEntryTO fill_JournalEntry_cancellation(DeliveryTO parameters)
+			throws Exception {
+		JournalEntryTO nuevo = new JournalEntryTO();
+		ResultOutTO _result = new ResultOutTO();
+		boolean ind = false;
+		Double total = zero;
+		Double sum = zero;
+		String acc = null;
+		List list = parameters.getDeliveryDetails();
+		List aux = new Vector();
+		List<List> listas = new Vector();
+		List aux1 = new Vector();
+		// recorre la lista de detalles
+		for (Object obj : list) {
+			DeliveryDetailTO good = (DeliveryDetailTO) obj;
+			String cod = good.getAcctcode();
+			List lisHija = new Vector();
+
+			// comparando lista aux de nodos visitados
+			for (Object obj2 : aux) {
+				DeliveryDetailTO good2 = (DeliveryDetailTO) obj2;
+				if (cod.equals(good2.getAcctcode())) {
+					ind = true;
+				}
+			}
+			// compara el codigo de cuenta para hacer una sumatoria y guardarlo
+			// en otra lista
+			if (ind == false) {
+				for (Object obj3 : list) {
+					DeliveryDetailTO good3 = (DeliveryDetailTO) obj3;
+					if (cod.equals(good3.getAcctcode())) {
+						lisHija.add(good3);
+					}
+				}
+				// guarda en la lista de listas
+				listas.add(lisHija);
+			}
+
+			aux.add(good);
+
+		}
+		// recorre la lista de listas para encontrar los detalles de el asiento
+		// contable
+		List detail = new Vector();
+		for (List obj1 : listas) {
+			List listaDet = obj1;
+			sum = zero;
+			acc = null;
+			for (Object obj2 : listaDet) {
+				DeliveryDetailTO newGood = (DeliveryDetailTO) obj2;
+				sum = sum + (newGood.getQuantity() * newGood.getPrice());
+				acc = newGood.getAcctcode();
+			}
+		}
+		// asiento contable
+
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+		// llenado del asiento contable
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		// llenado de los hijos
+		art1.setLine_id(1);
+		// buscar la cuenta asignada al almacen
+		AdminDAO admin = new AdminDAO();
+		BranchTO branch = new BranchTO();
+		// buscando la cuenta asignada de cuenta de existencias al almacen
+
+		branch = admin.getBranchByKey(parameters.getFromwhscode());
+		if (branch.getBalinvntac() == null) {
+			throw new Exception(
+					"No hay una cuenta de Inventario asignada al almacen");
+		}
+		art1.setAccount(branch.getBalinvntac());
+		// -----------------------------------------------------------------------------------------------------------------------------------------------
+		art2.setLine_id(2);
+		admin = new AdminDAO();
+		BranchTO branch1 = new BranchTO();
+
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		art2.setAccount(branch1.getBalinvntac());
 

@@ -87,6 +87,13 @@ public class BankEJBClient {
 		lstPeriods = bean.get_ges_colecturiaByKey(parameters);
 		return lstPeriods;
 	}
+	public ColecturiaTO get_ges_colecturiaByKey_print(int parameters)
+			throws Exception {
+		// TODO Auto-generated method stub
+		ColecturiaTO lstPeriods = new ColecturiaTO();
+		lstPeriods = bean.get_ges_colecturiaByKey_print(parameters);
+		return lstPeriods;
+	}
 	
 	public List get_ges_colecturiaConcept()
 			throws Exception {
