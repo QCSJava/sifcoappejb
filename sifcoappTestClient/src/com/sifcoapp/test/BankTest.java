@@ -166,8 +166,9 @@ public class BankTest {
 		bus.setCardcode("SN00000001");
 		bus.setCardname("JOSE MAURICIO GARCIA");
 		bus.setDoctotal(100.00);
-		bus.setSeries(1);
-		bus.setReceiptnum(2);
+		bus.setSeries(2);
+		bus.setReceiptnum(11);
+		bus.setPrinted("2");
 		
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods4= null;
@@ -296,7 +297,7 @@ List lista= new Vector();
 		ColecturiaTO lstPeriods3 = new ColecturiaTO();
 
 		try {
-			lstPeriods3 = catalog.get_ges_colecturiaByKey_print(277);
+			lstPeriods3 = catalog.get_ges_colecturiaByKey_print(10);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
