@@ -166,7 +166,7 @@ public class BankTest {
 		bus.setCardcode("SN00000001");
 		bus.setCardname("JOSE MAURICIO GARCIA");
 		bus.setDoctotal(100.00);
-		bus.setSeries(2);
+		bus.setSeries(1);
 		bus.setReceiptnum(11);
 		bus.setPrinted("2");
 		

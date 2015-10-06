@@ -2053,7 +2053,7 @@ public class BankEJB implements BankEJBRemote {
 			art1.setDuedate(sqlDate);
 			art1.setShortname(cuenta);
 			art1.setContraact(concepto.getAcctcode2());
-			art1.setLinememo("emision de cheque a proveedor ");
+			art1.setLinememo("registro de interes moratorio a la fecha");
 			art1.setRefdate(sqlDate);
 			art1.setRef1(Integer.toString(concepto.getLinenum()));
 			// art1.setRef2();

@@ -1043,6 +1043,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		double total_sum = 0.0;
 		double ingreso = 0.0;
 		double costos = 0.0;
+		double debe = 0.0;
+		double haber = 0.0;
 
 		List aux = new Vector();
 		List aux1 = new Vector();
@@ -1084,7 +1086,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// comparando con el group mask para encontrar el saldo de la
 				// cuenta
 				if (account.getGroupmask() == 4) {
-
+					haber = haber + account.getEndtotal();
 					art1.setCredit(account.getEndtotal());
 					art1.setBalduecred(account.getEndtotal());
 					art1.setBalduedeb(0.0);
@@ -1096,6 +1098,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				}
 
 				if (account.getGroupmask() == 5) {
+					debe = debe + account.getEndtotal();
 					art1.setDebit(account.getEndtotal());
 					art1.setBalduecred(0.0);
 					art1.setBalduedeb(account.getEndtotal());
@@ -1177,6 +1180,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				detail.add(art2);
 			}
 		}
+
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// llenado del asiento contable
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1210,9 +1214,15 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		// metodo para reagrupar cuentas del mismo codigo
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		double calculo = debe - haber;
 		JournalEntryTO journal = new JournalEntryTO();
-		journal = fill_JournalEntry_Unir_Toclose(nuevo);
+		journal = fill_JournalEntry_Unir_Toclose(nuevo, cuenta.getValue1(),
+				calculo);
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		// llenado y calculo de las cuentas correspondientes a las reservas
+
+		// --------------------------------------------------------------------------------------------------------------------------------------------------------
+
 		ResultOutTO _return = new ResultOutTO();
 
 		_return = journalEntry_mtto(journal, Common.MTTOINSERT);
@@ -1222,13 +1232,21 @@ public class AccountingEJB implements AccountingEJBRemote {
 	}
 
 	public JournalEntryTO fill_JournalEntry_Unir_Toclose(
-			JournalEntryTO parameters) throws Exception {
+			JournalEntryTO parameters, String account, double calculo)
+			throws Exception {
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		boolean ind = false;
 		Double total = zero;
 		Double sum_debe = 0.0;
 		Double sum_credit = 0.0;
+		double debe_total = 0.0;
+		String cuenta = null;
+		double reserva = 0;
+		double educacion = 0;
+		double ctas_incobrables = 0;
+		parameterTO catalogo = new parameterTO();
+
 		int n = 1;
 		// copiando la lista de los detalles de el asiento contable
 		List list = parameters.getJournalentryList();
@@ -1276,9 +1294,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 			List listaDet = obj1;
 			Double sum = zero;
 			String acc = null;
+			
 			String c_acc = null;
 			sum_debe = zero;
 			sum_credit = zero;
+			
 			for (Object obj2 : listaDet) {
 				JournalEntryLinesTO oldjournal = (JournalEntryLinesTO) obj2;
 				if (oldjournal.getDebit() == null) {
@@ -1302,15 +1322,56 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// -----------------------------------------------------------------------------------
 			Double saldo = sum_debe - sum_credit;
 			if (saldo != 0) {
-				if (saldo > 0) {
-					art1.setDebit(saldo);
-					art1.setBalduedeb(saldo);
-					art1.setBalduecred(zero);
-				}
-				if (saldo < 0) {
-					art1.setCredit(saldo);
-					art1.setBalduecred(saldo);
-					art1.setBalduedeb(zero);
+
+				if (acc.equals(account)) {
+					// ----------------------------------------------------------------------------------------------------------------------------------------------------------
+					
+					ParameterDAO DAO = new ParameterDAO();
+					catalogo = DAO.getParameterbykey(17);
+					// validacion que el saldo calculado sea igual al que traela
+					// cuenta perdidas y ganancias
+					if (calculo > 0.0 && calculo == (saldo * -1)) {
+						
+						cuenta=acc;
+						
+						reserva = (saldo*-1)
+								*( Double.parseDouble(catalogo.getValue1())/100);
+						 educacion = (saldo*-1)
+								*( Double.parseDouble(catalogo.getValue2())/100);
+						ctas_incobrables = (saldo*-1)
+								* (Double.parseDouble(catalogo.getValue3())/100);
+
+						if (saldo > 0) {
+							//saldo = saldo
+									//- (reserva + educacion + ctas_incobrables);
+							art1.setDebit(saldo);
+							art1.setBalduedeb(saldo);
+							art1.setBalduecred(zero);
+
+						}
+						if (saldo < 0) {
+							saldo = (saldo * -1)
+									- (reserva + educacion + ctas_incobrables);
+							art1.setCredit(saldo);
+							art1.setBalduecred(saldo);
+							art1.setBalduedeb(zero);
+
+						}
+					}// fin de if (calculo > 0.0) {
+				} else {// si no es la cuenta de perdidas y ganancias fin de if
+					// (acc.equals(cuenta))
+
+					if (saldo > 0) {
+						art1.setDebit(saldo);
+						art1.setBalduedeb(saldo);
+						art1.setBalduecred(zero);
+					}
+					if (saldo < 0) {
+						art1.setCredit(saldo * -1);
+						art1.setBalduecred(saldo * -1);
+						art1.setBalduedeb(zero);
+
+					}
 				}
 				// --------------------------------------------------------------------------------------------------------------------------------------------------------
 				// llenado del asiento contable
@@ -1348,6 +1409,121 @@ public class AccountingEJB implements AccountingEJBRemote {
 				detail.add(art1);
 				n++;
 			}
+		}
+		
+		if(reserva>0.0 && educacion >0.0 && ctas_incobrables> 0.0){
+		//incluyendo en las lineas del asiento contable los impuestos calculados 
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		ParameterDAO DAO = new ParameterDAO();
+		catalogo = DAO.getParameterbykey(18);
+		
+		art1.setLine_id(n);
+		art1.setCredit(reserva);
+		art1.setBalduecred(reserva);
+		art1.setBalduedeb(0.0);
+		art1.setAccount(catalogo.getValue1());
+		art1.setDuedate(parameters.getDuedate());
+		art1.setShortname(catalogo.getValue1());
+		art1.setContraact(cuenta);
+		art1.setLinememo(" Reserva Legal ");
+		art1.setRefdate(parameters.getDuedate());
+		art1.setRef1(parameters.getRef1());
+		// art1.setRef2();
+		art1.setBaseref(parameters.getRef1());
+		art1.setTaxdate(parameters.getTaxdate());
+		// art1.setFinncpriod(finncpriod);
+		art1.setReltransid(-1);
+		art1.setRellineid(-1);
+		art1.setReltype("N");
+		art1.setObjtype("5");
+		art1.setVatline("N");
+		art1.setVatamount(zero);
+		art1.setClosed("N");
+		art1.setGrossvalue(zero);
+		art1.setIsnet("Y");
+		art1.setTaxtype(0);
+		art1.setTaxpostacc("N");
+		art1.setTotalvat(0.0);
+		art1.setWtliable("N");
+		art1.setWtline("N");
+		art1.setPayblock("N");
+		art1.setOrdered("N");
+		art1.setTranstype(parameters.getTranstype());
+		detail.add(art1);
+		n++;
+		
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		art2.setLine_id(n);
+		art2.setCredit(educacion);
+		art2.setBalduecred(educacion);
+		art2.setBalduedeb(0.0);
+		art2.setAccount(catalogo.getValue2());
+		art2.setDuedate(parameters.getDuedate());
+		art2.setShortname(catalogo.getValue2());
+		art2.setContraact(cuenta);
+		art2.setLinememo(" Reserva de educacion ");
+		art2.setRefdate(parameters.getDuedate());
+		art2.setRef1(parameters.getRef1());
+		// art1.setRef2();
+		art2.setBaseref(parameters.getRef1());
+		art2.setTaxdate(parameters.getTaxdate());
+		// art1.setFinncpriod(finncpriod);
+		art2.setReltransid(-1);
+		art2.setRellineid(-1);
+		art2.setReltype("N");
+		art2.setObjtype("5");
+		art2.setVatline("N");
+		art2.setVatamount(zero);
+		art2.setClosed("N");
+		art2.setGrossvalue(zero);
+		art2.setIsnet("Y");
+		art2.setTaxtype(0);
+		art2.setTaxpostacc("N");
+		art2.setTotalvat(0.0);
+		art2.setWtliable("N");
+		art2.setWtline("N");
+		art2.setPayblock("N");
+		art2.setOrdered("N");
+		art2.setTranstype(parameters.getTranstype());
+		detail.add(art2);
+		n++;
+		
+		JournalEntryLinesTO art3 = new JournalEntryLinesTO();
+		
+		art3.setLine_id(n);
+		art3.setCredit(ctas_incobrables);
+		art3.setBalduecred(ctas_incobrables);
+		art3.setBalduedeb(0.0);
+		art3.setAccount(catalogo.getValue3());
+		art3.setDuedate(parameters.getDuedate());
+		art3.setShortname(catalogo.getValue3());
+		art3.setContraact(cuenta);
+		art3.setLinememo(" reserva cuentas incobrables ");
+		art3.setRefdate(parameters.getDuedate());
+		art3.setRef1(parameters.getRef1());
+		// art1.setRef2();
+		art3.setBaseref(parameters.getRef1());
+		art3.setTaxdate(parameters.getTaxdate());
+		// art1.setFinncpriod(finncpriod);
+		art3.setReltransid(-1);
+		art3.setRellineid(-1);
+		art3.setReltype("N");
+		art3.setObjtype("5");
+		art3.setVatline("N");
+		art3.setVatamount(zero);
+		art3.setClosed("N");
+		art3.setGrossvalue(zero);
+		art3.setIsnet("Y");
+		art3.setTaxtype(0);
+		art3.setTaxpostacc("N");
+		art3.setTotalvat(0.0);
+		art3.setWtliable("N");
+		art3.setWtline("N");
+		art3.setPayblock("N");
+		art3.setOrdered("N");
+		art3.setTranstype(parameters.getTranstype());
+		detail.add(art3);
+		n++;
 		}
 		nuevo.setBtfstatus("O");
 		nuevo.setTranstype(parameters.getTranstype());

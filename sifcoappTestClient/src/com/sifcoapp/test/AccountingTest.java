@@ -594,7 +594,7 @@ public class AccountingTest {
 		try {
 			fecha = formatoDelTexto.parse(strFecha);
 			parameters.setDuedate(fecha);
-			parameters.setUsersign(53);
+			parameters.setUsersign(564);
 			_result = AccountingEJBService.fill_Journal_close(parameters);
 
 		} catch (ParseException e) {
