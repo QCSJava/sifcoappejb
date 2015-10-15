@@ -224,12 +224,12 @@ public class BankEJB implements BankEJBRemote {
 						nuevo = actualizar_sale(sale, DAO.getConn(), parameters);
 					}
 					// para unidades propias
-					if(parameters.getPrinted().equals("2")){
-						journal=fill_JournalEntry_liquidacion(parameters); 
+					if (parameters.getPrinted().equals("1")) {
+						journal = fill_JournalEntry_liquidacion(parameters);
 						account = new AccountingEJB();
-							res_jour = account.journalEntry_mtto(journal,
-									Common.MTTOINSERT, DAO.getConn());
-							
+						res_jour = account.journalEntry_mtto(journal,
+								Common.MTTOINSERT, DAO.getConn());
+
 					}
 				}
 
@@ -254,13 +254,13 @@ public class BankEJB implements BankEJBRemote {
 					// cancelado
 					ResultOutTO nuevo1 = new ResultOutTO();
 					nuevo1 = actualizar_sale2(DAO.getConn(), parameters);
-					
-					if(parameters.getPrinted().equals("2")){
-						journal=fill_JournalEntry_liquidacion_anulacion(parameters); 
+
+					if (parameters.getPrinted().equals("2")) {
+						journal = fill_JournalEntry_liquidacion_anulacion(parameters);
 						account1 = new AccountingEJB();
-							res_jour = account1.journalEntry_mtto(journal,
-									Common.MTTOINSERT, DAO.getConn());
-							
+						res_jour = account1.journalEntry_mtto(journal,
+								Common.MTTOINSERT, DAO.getConn());
+
 					}
 				}
 
@@ -474,255 +474,256 @@ public class BankEJB implements BankEJBRemote {
 				}
 			}
 
-			
-
 			// llenado de las cuentas por concepto de colecturia segun la cuenta
 			// que tienen asignadas
 
 			// codigo de cuenta del socio de negocio
 			if (colecturia_c.getLinenum() != Integer.parseInt(cuentas
-					.getValue1())){
-				
+					.getValue1())) {
+
 				sum = colecturia_c.getPaidsum();
 				total_sum = total_sum + sum;
 				acc = colecturia_c.getAcctcode();
 				linememo = colecturia_c.getDscription();
-				
-			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-			art1.setLine_id(n);
-			art1.setAccount(business);
-			art1.setCredit(sum);
-			art1.setDuedate(parameters.getDocdate());
-			art1.setShortname(business);
-			art1.setContraact(colecturia_c.getAcctcode());
-			art1.setLinememo("pago de colecturia");
-			art1.setRefdate(parameters.getDocdate());
-			art1.setRef1(Integer.toString(parameters.getDocentry()));
-			// art1.setRef2();
-			art1.setBaseref(parameters.getRef1());
-			art1.setTaxdate(parameters.getTaxdate());
-			// art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);
-			art1.setRellineid(-1);
-			art1.setReltype("N");
-			art1.setObjtype("5");
-			art1.setVatline("N");
-			art1.setVatamount(0.0);
-			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(0.0);
-			art1.setBalduecred(art1.getCredit());
-			art1.setIsnet("Y");
-			art1.setTaxtype(0);
-			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);
-			art1.setWtliable("N");
-			art1.setWtline("N");
-			art1.setPayblock("N");
-			art1.setOrdered("N");
-			art1.setTranstype(colecturia_c.getObjtype());
-			detail.add(art1);
 
-			n++;
-
-			// consulta para encontrar la cuenta asignada para el IVA tomando
-			// como
-			// venta iva debito
-			admin = new AdminDAO();
-
-			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("IVA", 10);
-			if (Catalog.getCatvalue2() == null) {
-				throw new Exception("No tiene cuenta asignada para impuestos");
-			}
-			String iva_c = Catalog.getCatvalue2();
-
-			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
-
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			// cuenta de efectivo y caja
-			// ----------------------------------------------------------------------------------------------------------------------------------
-
-			art2.setLine_id(n);
-			art2.setAccount(colecturia_c.getAcctcode());
-			art2.setDebit(sum);
-			art2.setDuedate(parameters.getDocdate());
-			art2.setShortname(colecturia_c.getAcctcode());
-			art2.setContraact(business);
-			art2.setLinememo("pago de colecturia ");
-			art2.setRefdate(parameters.getDocduedate());
-			art2.setRef1(Integer.toString(parameters.getDocentry()));
-			// art2.setRef2();
-			art2.setBaseref(parameters.getRef1());
-			art2.setTaxdate(parameters.getTaxdate());
-			// art1.setFinncpriod(finncpriod);
-			art2.setReltransid(-1);
-			art2.setRellineid(-1);
-			art2.setReltype("N");
-			art2.setObjtype("5");
-			art2.setVatline("N");
-			art2.setVatamount(0.0);
-			art2.setClosed("N");
-			art2.setGrossvalue(0.0);
-			art2.setBalduedeb(sum);
-			art2.setBalduecred(0.0);
-			art2.setIsnet("Y");
-			art2.setTaxtype(0);
-			art2.setTaxpostacc("N");
-			art2.setTotalvat(0.0);
-			art2.setWtliable("N");
-			art2.setWtline("N");
-			art2.setPayblock("N");
-			art2.setOrdered("N");
-			art2.setTranstype(colecturia_c.getObjtype());
-			n = n + 1;
-			//
-			detail.add(art2);
-			
-			// if (colec)
-
-			// falta condicion de cuando llevar
-			if (colecturia_c.getAditional_account() != null
-					&& colecturia_c.getAditional_account().equals("Y")) {
-
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				// calculo del iva y del ingreso administrativo segundo asiento
-				// contable
-				// ----------------------------------------------------------------------------------------------------------------------------------
-
-				JournalEntryLinesTO art3 = new JournalEntryLinesTO();
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				// pasivo administrativo
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				art3.setLine_id(n);
-				art3.setAccount(colecturia_c.getAcctcode2());
-				art3.setDebit(sum);
-				art3.setDuedate(parameters.getDocdate());
-				art3.setShortname(colecturia_c.getAcctcode2());
-				art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
-				art3.setLinememo("pago de colecturia");
-				art3.setRefdate(parameters.getDocdate());
-				art3.setRef1(Integer.toString(parameters.getDocentry()));
-				// art2.setRef2();
-				art3.setBaseref(parameters.getRef1());
-				art3.setTaxdate(parameters.getTaxdate());
+				JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+				art1.setLine_id(n);
+				art1.setAccount(business);
+				art1.setCredit(sum);
+				art1.setDuedate(parameters.getDocdate());
+				art1.setShortname(business);
+				art1.setContraact(colecturia_c.getAcctcode());
+				art1.setLinememo("pago de colecturia");
+				art1.setRefdate(parameters.getDocdate());
+				art1.setRef1(Integer.toString(parameters.getDocentry()));
+				// art1.setRef2();
+				art1.setBaseref(parameters.getRef1());
+				art1.setTaxdate(parameters.getDocdate());
 				// art1.setFinncpriod(finncpriod);
-				art3.setReltransid(-1);
-				art3.setRellineid(-1);
-				art3.setReltype("N");
-				art3.setObjtype("5");
-				art3.setVatline("N");
-				art3.setVatamount(0.0);
-				art3.setClosed("N");
-				art3.setGrossvalue(0.0);
-				art3.setBalduedeb(sum);
-				art3.setBalduecred(0.0);
-				art3.setIsnet("Y");
-				art3.setTaxtype(0);
-				art3.setTaxpostacc("N");
-				art3.setTotalvat(0.0);
-				art3.setWtliable("N");
-				art3.setWtline("N");
-				art3.setPayblock("N");
-				art3.setOrdered("N");
+				art1.setReltransid(-1);
+				art1.setRellineid(-1);
+				art1.setReltype("N");
+				art1.setObjtype("5");
+				art1.setVatline("N");
+				art1.setVatamount(0.0);
+				art1.setClosed("N");
+				art1.setGrossvalue(0.0);
+				art1.setBalduedeb(0.0);
+				art1.setBalduecred(art1.getCredit());
+				art1.setIsnet("Y");
+				art1.setTaxtype(0);
+				art1.setTaxpostacc("N");
+				art1.setTotalvat(0.0);
+				art1.setWtliable("N");
+				art1.setWtline("N");
+				art1.setPayblock("N");
+				art1.setOrdered("N");
+				art1.setTranstype(colecturia_c.getObjtype());
+				detail.add(art1);
 
-				art3.setTranstype(colecturia_c.getObjtype());
-				n = n + 1;
-				detail.add(art3);
-
-				if (colecturia_c.getTaxstatus() != null
-						&& colecturia_c.getTaxstatus().equals("Y")) {
-					// ----------------------------------------------------------------------------------------------------------------------------------
-					// iva debito fiscal
-					// ----------------------------------------------------------------------------------------------------------------------------------
-
-					Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
-					ingreso = sum / (1 + iva);
-					Double t_iva = ingreso * iva;
-
-					JournalEntryLinesTO art4 = new JournalEntryLinesTO();
-
-					art4.setLine_id(n);
-					art4.setAccount(iva_c);
-
-					art4.setCredit(t_iva);
-
-					art4.setDuedate(parameters.getDocdate());
-					art4.setShortname(iva_c);
-					art4.setContraact(colecturia_c.getAcctcode2());
-					art4.setLinememo("pago de colecturia");
-					art4.setRefdate(parameters.getDocdate());
-					art4.setRef1(parameters.getRef1());
-					// rt2.setRef2();
-					art4.setBaseref(parameters.getRef1());
-					art4.setTaxdate(parameters.getTaxdate());
-					// art1.setFinncpriod(finncpriod);
-					art4.setReltransid(-1);
-					art4.setRellineid(-1);
-					art4.setReltype("N");
-					art4.setObjtype("5");
-					art4.setVatline("N");
-					art4.setVatamount(0.0);
-					art4.setClosed("N");
-					art4.setGrossvalue(0.0);
-					art4.setBalduedeb(0.0);
-					art4.setBalduecred(t_iva);
-					art4.setIsnet("Y");
-					art4.setTaxtype(0);
-					art4.setTaxpostacc("N");
-					art4.setTotalvat(0.0);
-					art4.setWtliable("N");
-					art4.setWtline("N");
-					art4.setPayblock("N");
-					art4.setOrdered("N");
-					art4.setTranstype(colecturia_c.getObjtype());
-					n = n + 1;
-					detail.add(art4);
-				} else {
-
-					ingreso = sum;
-				}
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				// ingreso administrativo
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				JournalEntryLinesTO art5 = new JournalEntryLinesTO();
-
-				art5.setLine_id(n);
-				art5.setAccount(colecturia_c.getAcctcode3());
-				art5.setCredit(ingreso);
-				art5.setDuedate(parameters.getDocdate());
-				art5.setShortname(colecturia_c.getAcctcode3());
-				art5.setContraact(colecturia_c.getAcctcode2());
-				art5.setLinememo("pago de colecturia");
-				art5.setRefdate(parameters.getDocdate());
-				art5.setRef1(Integer.toString(parameters.getDocentry()));
-				// art2.setRef2();
-				art5.setBaseref(parameters.getRef1());
-				art5.setTaxdate(parameters.getDocduedate());
-				// art1.setFinncpriod(finncpriod);
-				art5.setReltransid(-1);
-				art5.setRellineid(-1);
-				art5.setReltype("N");
-				art5.setObjtype("5");
-				art5.setVatline("N");
-				art5.setVatamount(0.0);
-				art5.setClosed("N");
-				art5.setGrossvalue(0.0);
-				art5.setBalduedeb(0.0);
-				art5.setBalduecred(ingreso);
-				art5.setIsnet("Y");
-				art5.setTaxtype(0);
-				art5.setTaxpostacc("N");
-				art5.setTotalvat(0.0);
-				art5.setWtliable("N");
-				art5.setWtline("N");
-				art5.setPayblock("N");
-				art5.setOrdered("N");
-				// 5.setTranstype(parameters.getObjtype());
-				detail.add(art5);
 				n++;
 
-			}
+				// consulta para encontrar la cuenta asignada para el IVA
+				// tomando
+				// como
+				// venta iva debito
+				admin = new AdminDAO();
+
+				CatalogTO Catalog = new CatalogTO();
+				Catalog = admin.findCatalogByKey("IVA", 10);
+				if (Catalog.getCatvalue2() == null) {
+					throw new Exception(
+							"No tiene cuenta asignada para impuestos");
+				}
+				String iva_c = Catalog.getCatvalue2();
+
+				JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				// cuenta de efectivo y caja
+				// ----------------------------------------------------------------------------------------------------------------------------------
+
+				art2.setLine_id(n);
+				art2.setAccount(colecturia_c.getAcctcode());
+				art2.setDebit(sum);
+				art2.setDuedate(parameters.getDocdate());
+				art2.setShortname(colecturia_c.getAcctcode());
+				art2.setContraact(business);
+				art2.setLinememo("pago de colecturia ");
+				art2.setRefdate(parameters.getDocdate());
+				art2.setRef1(Integer.toString(parameters.getDocentry()));
+				// art2.setRef2();
+				art2.setBaseref(parameters.getRef1());
+				art2.setTaxdate(parameters.getDocdate());
+				// art1.setFinncpriod(finncpriod);
+				art2.setReltransid(-1);
+				art2.setRellineid(-1);
+				art2.setReltype("N");
+				art2.setObjtype("5");
+				art2.setVatline("N");
+				art2.setVatamount(0.0);
+				art2.setClosed("N");
+				art2.setGrossvalue(0.0);
+				art2.setBalduedeb(sum);
+				art2.setBalduecred(0.0);
+				art2.setIsnet("Y");
+				art2.setTaxtype(0);
+				art2.setTaxpostacc("N");
+				art2.setTotalvat(0.0);
+				art2.setWtliable("N");
+				art2.setWtline("N");
+				art2.setPayblock("N");
+				art2.setOrdered("N");
+				art2.setTranstype(colecturia_c.getObjtype());
+				n = n + 1;
+				//
+				detail.add(art2);
+
+				// if (colec)
+
+				// falta condicion de cuando llevar
+				if (colecturia_c.getAditional_account() != null
+						&& colecturia_c.getAditional_account().equals("Y")) {
+
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					// calculo del iva y del ingreso administrativo segundo
+					// asiento
+					// contable
+					// ----------------------------------------------------------------------------------------------------------------------------------
+
+					JournalEntryLinesTO art3 = new JournalEntryLinesTO();
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					// pasivo administrativo
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					art3.setLine_id(n);
+					art3.setAccount(colecturia_c.getAcctcode2());
+					art3.setDebit(sum);
+					art3.setDuedate(parameters.getDocdate());
+					art3.setShortname(colecturia_c.getAcctcode2());
+					art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
+					art3.setLinememo("pago de colecturia");
+					art3.setRefdate(parameters.getDocdate());
+					art3.setRef1(Integer.toString(parameters.getDocentry()));
+					// art2.setRef2();
+					art3.setBaseref(parameters.getRef1());
+					art3.setTaxdate(parameters.getDocdate());
+					// art1.setFinncpriod(finncpriod);
+					art3.setReltransid(-1);
+					art3.setRellineid(-1);
+					art3.setReltype("N");
+					art3.setObjtype("5");
+					art3.setVatline("N");
+					art3.setVatamount(0.0);
+					art3.setClosed("N");
+					art3.setGrossvalue(0.0);
+					art3.setBalduedeb(sum);
+					art3.setBalduecred(0.0);
+					art3.setIsnet("Y");
+					art3.setTaxtype(0);
+					art3.setTaxpostacc("N");
+					art3.setTotalvat(0.0);
+					art3.setWtliable("N");
+					art3.setWtline("N");
+					art3.setPayblock("N");
+					art3.setOrdered("N");
+
+					art3.setTranstype(colecturia_c.getObjtype());
+					n = n + 1;
+					detail.add(art3);
+
+					if (colecturia_c.getTaxstatus() != null
+							&& colecturia_c.getTaxstatus().equals("Y")) {
+						// ----------------------------------------------------------------------------------------------------------------------------------
+						// iva debito fiscal
+						// ----------------------------------------------------------------------------------------------------------------------------------
+
+						Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
+						ingreso = sum / (1 + iva);
+						Double t_iva = ingreso * iva;
+
+						JournalEntryLinesTO art4 = new JournalEntryLinesTO();
+
+						art4.setLine_id(n);
+						art4.setAccount(iva_c);
+
+						art4.setCredit(t_iva);
+
+						art4.setDuedate(parameters.getDocdate());
+						art4.setShortname(iva_c);
+						art4.setContraact(colecturia_c.getAcctcode2());
+						art4.setLinememo("pago de colecturia");
+						art4.setRefdate(parameters.getDocdate());
+						art4.setRef1(parameters.getRef1());
+						// rt2.setRef2();
+						art4.setBaseref(parameters.getRef1());
+						art4.setTaxdate(parameters.getDocdate());
+						// art1.setFinncpriod(finncpriod);
+						art4.setReltransid(-1);
+						art4.setRellineid(-1);
+						art4.setReltype("N");
+						art4.setObjtype("5");
+						art4.setVatline("N");
+						art4.setVatamount(0.0);
+						art4.setClosed("N");
+						art4.setGrossvalue(0.0);
+						art4.setBalduedeb(0.0);
+						art4.setBalduecred(t_iva);
+						art4.setIsnet("Y");
+						art4.setTaxtype(0);
+						art4.setTaxpostacc("N");
+						art4.setTotalvat(0.0);
+						art4.setWtliable("N");
+						art4.setWtline("N");
+						art4.setPayblock("N");
+						art4.setOrdered("N");
+						art4.setTranstype(colecturia_c.getObjtype());
+						n = n + 1;
+						detail.add(art4);
+					} else {
+
+						ingreso = sum;
+					}
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					// ingreso administrativo
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					JournalEntryLinesTO art5 = new JournalEntryLinesTO();
+
+					art5.setLine_id(n);
+					art5.setAccount(colecturia_c.getAcctcode3());
+					art5.setCredit(ingreso);
+					art5.setDuedate(parameters.getDocdate());
+					art5.setShortname(colecturia_c.getAcctcode3());
+					art5.setContraact(colecturia_c.getAcctcode2());
+					art5.setLinememo("pago de colecturia");
+					art5.setRefdate(parameters.getDocdate());
+					art5.setRef1(Integer.toString(parameters.getDocentry()));
+					// art2.setRef2();
+					art5.setBaseref(parameters.getRef1());
+					art5.setTaxdate(parameters.getDocdate());
+					// art1.setFinncpriod(finncpriod);
+					art5.setReltransid(-1);
+					art5.setRellineid(-1);
+					art5.setReltype("N");
+					art5.setObjtype("5");
+					art5.setVatline("N");
+					art5.setVatamount(0.0);
+					art5.setClosed("N");
+					art5.setGrossvalue(0.0);
+					art5.setBalduedeb(0.0);
+					art5.setBalduecred(ingreso);
+					art5.setIsnet("Y");
+					art5.setTaxtype(0);
+					art5.setTaxpostacc("N");
+					art5.setTotalvat(0.0);
+					art5.setWtliable("N");
+					art5.setWtline("N");
+					art5.setPayblock("N");
+					art5.setOrdered("N");
+					art5.setTranstype(colecturia_c.getObjtype());
+					detail.add(art5);
+					n++;
+
+				}
 			}
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -761,6 +762,7 @@ public class BankEJB implements BankEJBRemote {
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		JournalEntryTO journal = new JournalEntryTO();
 		journal = fill_JournalEntry_Unir(nuevo);
+		// journal=nuevo;
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		return journal;
@@ -978,255 +980,254 @@ public class BankEJB implements BankEJBRemote {
 				}
 			}
 
-			
-
 			// llenado de las cuentas por concepto de colecturia segun la cuenta
 			// que tienen asignadas
 
-			
 			if (colecturia_c.getLinenum() != Integer.parseInt(cuentas
-					.getValue1())){
-				
-				
+					.getValue1())) {
+
 				sum = colecturia_c.getPaidsum();
 				total_sum = total_sum + sum;
 				acc = colecturia_c.getAcctcode();
 				linememo = colecturia_c.getDscription();
-				
-			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-			art1.setLine_id(n);
-			art1.setAccount(business);
-			// art1.setCredit(sum);
-			art1.setDebit(sum);
-			art1.setDuedate(parameters.getDocdate());
-			art1.setShortname(business);
-			art1.setContraact(colecturia_c.getAcctcode());
-			art1.setLinememo("reversion de pago de colecturia");
-			art1.setRefdate(parameters.getDocdate());
-			art1.setRef1(Integer.toString(parameters.getDocentry()));
-			// art1.setRef2();
-			art1.setBaseref(parameters.getRef1());
-			art1.setTaxdate(parameters.getTaxdate());
-			// art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);
-			art1.setRellineid(-1);
-			art1.setReltype("N");
-			art1.setObjtype("5");
-			art1.setVatline("N");
-			art1.setVatamount(0.0);
-			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(art1.getCredit());
-			art1.setBalduecred(0.0);
-			art1.setIsnet("Y");
-			art1.setTaxtype(0);
-			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);
-			art1.setWtliable("N");
-			art1.setWtline("N");
-			art1.setPayblock("N");
-			art1.setOrdered("N");
-			art1.setTranstype(colecturia_c.getObjtype());
-			detail.add(art1);
 
-			n++;
-
-			// consulta para encontrar la cuenta asignada para el IVA tomando
-			// como
-			// venta iva debito
-			admin = new AdminDAO();
-
-			CatalogTO Catalog = new CatalogTO();
-			Catalog = admin.findCatalogByKey("IVA", 10);
-			if (Catalog.getCatvalue2() == null) {
-				throw new Exception("No tiene cuenta asignada para impuestos");
-			}
-			String iva_c = Catalog.getCatvalue2();
-
-			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
-
-			// ----------------------------------------------------------------------------------------------------------------------------------
-			// cuenta de efectivo y caja
-			// ----------------------------------------------------------------------------------------------------------------------------------
-
-			art2.setLine_id(n);
-			art2.setAccount(colecturia_c.getAcctcode());
-			// art2.setDebit(sum);
-			art2.setCredit(sum);
-			art2.setDuedate(parameters.getDocdate());
-			art2.setShortname(colecturia_c.getAcctcode());
-			art2.setContraact(business);
-			art2.setLinememo("Reversion pago de colecturia ");
-			art2.setRefdate(parameters.getDocdate());
-			art2.setRef1(Integer.toString(parameters.getDocentry()));
-			// art2.setRef2();
-			art2.setBaseref(parameters.getRef1());
-			art2.setTaxdate(parameters.getTaxdate());
-			// art1.setFinncpriod(finncpriod);
-			art2.setReltransid(-1);
-			art2.setRellineid(-1);
-			art2.setReltype("N");
-			art2.setObjtype("5");
-			art2.setVatline("N");
-			art2.setVatamount(zero);
-			art2.setClosed("N");
-			art2.setGrossvalue(zero);
-			art2.setBalduedeb(zero);
-			art2.setBalduecred(sum);
-			art2.setIsnet("Y");
-			art2.setTaxtype(0);
-			art2.setTaxpostacc("N");
-			art2.setTotalvat(zero);
-			art2.setWtliable("N");
-			art2.setWtline("N");
-			art2.setPayblock("N");
-			art2.setOrdered("N");
-			art2.setTranstype(colecturia_c.getObjtype());
-			n = n + 1;
-			//
-			detail.add(art2);
-
-			// falta condicion de cuando llevar
-			if (colecturia_c.getAditional_account().equals("Y")) {
-
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				// calculo del iva y del ingreso administrativo segundo asiento
-				// contable
-				// ----------------------------------------------------------------------------------------------------------------------------------
-
-				JournalEntryLinesTO art3 = new JournalEntryLinesTO();
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				// pasivo administrativo
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				art3.setLine_id(n);
-				art3.setAccount(colecturia_c.getAcctcode2());
-				// art3.setDebit(sum);
-				art3.setCredit(sum);
-				art3.setDuedate(parameters.getDocdate());
-				art3.setShortname(colecturia_c.getAcctcode2());
-				art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
-				art3.setLinememo("Reversion pago de colecturia");
-				art3.setRefdate(parameters.getDocdate());
-				art3.setRef1(Integer.toString(parameters.getDocentry()));
-				// art2.setRef2();
-				art3.setBaseref(parameters.getRef1());
-				art3.setTaxdate(parameters.getDocduedate());
+				JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+				art1.setLine_id(n);
+				art1.setAccount(business);
+				// art1.setCredit(sum);
+				art1.setDebit(sum);
+				art1.setDuedate(parameters.getDocdate());
+				art1.setShortname(business);
+				art1.setContraact(colecturia_c.getAcctcode());
+				art1.setLinememo("reversion de pago de colecturia");
+				art1.setRefdate(parameters.getDocdate());
+				art1.setRef1(Integer.toString(parameters.getDocentry()));
+				// art1.setRef2();
+				art1.setBaseref(parameters.getRef1());
+				art1.setTaxdate(parameters.getTaxdate());
 				// art1.setFinncpriod(finncpriod);
-				art3.setReltransid(-1);
-				art3.setRellineid(-1);
-				art3.setReltype("N");
-				art3.setObjtype("5");
-				art3.setVatline("N");
-				art3.setVatamount(zero);
-				art3.setClosed("N");
-				art3.setGrossvalue(zero);
-				art3.setBalduedeb(zero);
-				art3.setBalduecred(sum);
-				art3.setIsnet("Y");
-				art3.setTaxtype(0);
-				art3.setTaxpostacc("N");
-				art3.setTotalvat(zero);
-				art3.setWtliable("N");
-				art3.setWtline("N");
-				art3.setPayblock("N");
-				art3.setOrdered("N");
-				art3.setTranstype(colecturia_c.getObjtype());
-				n = n + 1;
-				detail.add(art3);
+				art1.setReltransid(-1);
+				art1.setRellineid(-1);
+				art1.setReltype("N");
+				art1.setObjtype("5");
+				art1.setVatline("N");
+				art1.setVatamount(0.0);
+				art1.setClosed("N");
+				art1.setGrossvalue(0.0);
+				art1.setBalduedeb(art1.getCredit());
+				art1.setBalduecred(0.0);
+				art1.setIsnet("Y");
+				art1.setTaxtype(0);
+				art1.setTaxpostacc("N");
+				art1.setTotalvat(0.0);
+				art1.setWtliable("N");
+				art1.setWtline("N");
+				art1.setPayblock("N");
+				art1.setOrdered("N");
+				art1.setTranstype(colecturia_c.getObjtype());
+				detail.add(art1);
 
-				if (colecturia_c.getTaxstatus().equals("Y")) {
-					// ----------------------------------------------------------------------------------------------------------------------------------
-					// iva debito fiscal
-					// ----------------------------------------------------------------------------------------------------------------------------------
-
-					Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
-					ingreso = sum / (1 + iva);
-					Double t_iva = ingreso * iva;
-
-					JournalEntryLinesTO art4 = new JournalEntryLinesTO();
-
-					art4.setLine_id(n);
-					art4.setAccount(iva_c);
-
-					// art4.setCredit(0.0);
-					art4.setDebit(t_iva);
-					art4.setDuedate(parameters.getDocdate());
-					art4.setShortname(iva_c);
-					art4.setContraact(colecturia_c.getAcctcode2());
-					art4.setLinememo("reversion pago de colecturia");
-					art4.setRefdate(parameters.getDocdate());
-					art4.setRef1(Integer.toString(parameters.getDocentry()));
-					// rt2.setRef2();
-					art4.setBaseref(parameters.getRef1());
-					art4.setTaxdate(parameters.getTaxdate());
-					// art1.setFinncpriod(finncpriod);
-					art4.setReltransid(-1);
-					art4.setRellineid(-1);
-					art4.setReltype("N");
-					art4.setObjtype("5");
-					art4.setVatline("N");
-					art4.setVatamount(zero);
-					art4.setClosed("N");
-					art4.setGrossvalue(zero);
-					art4.setBalduedeb(t_iva);
-					art4.setBalduecred(zero);
-					art4.setIsnet("Y");
-					art4.setTaxtype(0);
-					art4.setTaxpostacc("N");
-					art4.setTotalvat(zero);
-					art4.setWtliable("N");
-					art4.setWtline("N");
-					art4.setPayblock("N");
-					art4.setOrdered("N");
-					art4.setTranstype(colecturia_c.getObjtype());
-					n = n + 1;
-					detail.add(art4);
-				} else {
-
-					ingreso = sum;
-				}
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				// ingreso administrativo
-				// ----------------------------------------------------------------------------------------------------------------------------------
-				JournalEntryLinesTO art5 = new JournalEntryLinesTO();
-
-				art5.setLine_id(n);
-				art5.setAccount(colecturia_c.getAcctcode3());
-				// art5.setCredit(ingreso);
-				art5.setDebit(ingreso);
-				art5.setDuedate(parameters.getDocdate());
-				art5.setShortname(colecturia_c.getAcctcode3());
-				art5.setContraact(colecturia_c.getAcctcode2());
-				art5.setLinememo("Reversion  pago de colecturia");
-				art5.setRefdate(parameters.getDocdate());
-				art5.setRef1(Integer.toString(parameters.getDocentry()));
-				// art2.setRef2();
-				art5.setBaseref(parameters.getRef1());
-				art5.setTaxdate(parameters.getDocdate());
-				// art1.setFinncpriod(finncpriod);
-				art5.setReltransid(-1);
-				art5.setRellineid(-1);
-				art5.setReltype("N");
-				art5.setObjtype("5");
-				art5.setVatline("N");
-				art5.setVatamount(zero);
-				art5.setClosed("N");
-				art5.setGrossvalue(zero);
-				art5.setBalduedeb(ingreso);
-				art5.setBalduecred(0.0);
-				art5.setIsnet("Y");
-				art5.setTaxtype(0);
-				art5.setTaxpostacc("N");
-				art5.setTotalvat(zero);
-				art5.setWtliable("N");
-				art5.setWtline("N");
-				art5.setPayblock("N");
-				art5.setOrdered("N");
-				art5.setTranstype(colecturia_c.getObjtype());
-				detail.add(art5);
 				n++;
 
-			}
+				// consulta para encontrar la cuenta asignada para el IVA
+				// tomando
+				// como
+				// venta iva debito
+				admin = new AdminDAO();
+
+				CatalogTO Catalog = new CatalogTO();
+				Catalog = admin.findCatalogByKey("IVA", 10);
+				if (Catalog.getCatvalue2() == null) {
+					throw new Exception(
+							"No tiene cuenta asignada para impuestos");
+				}
+				String iva_c = Catalog.getCatvalue2();
+
+				JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+				// ----------------------------------------------------------------------------------------------------------------------------------
+				// cuenta de efectivo y caja
+				// ----------------------------------------------------------------------------------------------------------------------------------
+
+				art2.setLine_id(n);
+				art2.setAccount(colecturia_c.getAcctcode());
+				// art2.setDebit(sum);
+				art2.setCredit(sum);
+				art2.setDuedate(parameters.getDocdate());
+				art2.setShortname(colecturia_c.getAcctcode());
+				art2.setContraact(business);
+				art2.setLinememo("Reversion pago de colecturia ");
+				art2.setRefdate(parameters.getDocdate());
+				art2.setRef1(Integer.toString(parameters.getDocentry()));
+				// art2.setRef2();
+				art2.setBaseref(parameters.getRef1());
+				art2.setTaxdate(parameters.getTaxdate());
+				// art1.setFinncpriod(finncpriod);
+				art2.setReltransid(-1);
+				art2.setRellineid(-1);
+				art2.setReltype("N");
+				art2.setObjtype("5");
+				art2.setVatline("N");
+				art2.setVatamount(zero);
+				art2.setClosed("N");
+				art2.setGrossvalue(zero);
+				art2.setBalduedeb(zero);
+				art2.setBalduecred(sum);
+				art2.setIsnet("Y");
+				art2.setTaxtype(0);
+				art2.setTaxpostacc("N");
+				art2.setTotalvat(zero);
+				art2.setWtliable("N");
+				art2.setWtline("N");
+				art2.setPayblock("N");
+				art2.setOrdered("N");
+				art2.setTranstype(colecturia_c.getObjtype());
+				n = n + 1;
+				//
+				detail.add(art2);
+
+				// falta condicion de cuando llevar
+				if (colecturia_c.getAditional_account().equals("Y")) {
+
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					// calculo del iva y del ingreso administrativo segundo
+					// asiento
+					// contable
+					// ----------------------------------------------------------------------------------------------------------------------------------
+
+					JournalEntryLinesTO art3 = new JournalEntryLinesTO();
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					// pasivo administrativo
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					art3.setLine_id(n);
+					art3.setAccount(colecturia_c.getAcctcode2());
+					// art3.setDebit(sum);
+					art3.setCredit(sum);
+					art3.setDuedate(parameters.getDocdate());
+					art3.setShortname(colecturia_c.getAcctcode2());
+					art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
+					art3.setLinememo("Reversion pago de colecturia");
+					art3.setRefdate(parameters.getDocdate());
+					art3.setRef1(Integer.toString(parameters.getDocentry()));
+					// art2.setRef2();
+					art3.setBaseref(parameters.getRef1());
+					art3.setTaxdate(parameters.getDocdate());
+					// art1.setFinncpriod(finncpriod);
+					art3.setReltransid(-1);
+					art3.setRellineid(-1);
+					art3.setReltype("N");
+					art3.setObjtype("5");
+					art3.setVatline("N");
+					art3.setVatamount(zero);
+					art3.setClosed("N");
+					art3.setGrossvalue(zero);
+					art3.setBalduedeb(zero);
+					art3.setBalduecred(sum);
+					art3.setIsnet("Y");
+					art3.setTaxtype(0);
+					art3.setTaxpostacc("N");
+					art3.setTotalvat(zero);
+					art3.setWtliable("N");
+					art3.setWtline("N");
+					art3.setPayblock("N");
+					art3.setOrdered("N");
+					art3.setTranstype(colecturia_c.getObjtype());
+					n = n + 1;
+					detail.add(art3);
+
+					if (colecturia_c.getTaxstatus().equals("Y")) {
+						// ----------------------------------------------------------------------------------------------------------------------------------
+						// iva debito fiscal
+						// ----------------------------------------------------------------------------------------------------------------------------------
+
+						Double iva = Double.parseDouble(Catalog.getCatvalue()) / 100;
+						ingreso = sum / (1 + iva);
+						Double t_iva = ingreso * iva;
+
+						JournalEntryLinesTO art4 = new JournalEntryLinesTO();
+
+						art4.setLine_id(n);
+						art4.setAccount(iva_c);
+
+						// art4.setCredit(0.0);
+						art4.setDebit(t_iva);
+						art4.setDuedate(parameters.getDocdate());
+						art4.setShortname(iva_c);
+						art4.setContraact(colecturia_c.getAcctcode2());
+						art4.setLinememo("reversion pago de colecturia");
+						art4.setRefdate(parameters.getDocdate());
+						art4.setRef1(Integer.toString(parameters.getDocentry()));
+						// rt2.setRef2();
+						art4.setBaseref(parameters.getRef1());
+						art4.setTaxdate(parameters.getTaxdate());
+						// art1.setFinncpriod(finncpriod);
+						art4.setReltransid(-1);
+						art4.setRellineid(-1);
+						art4.setReltype("N");
+						art4.setObjtype("5");
+						art4.setVatline("N");
+						art4.setVatamount(zero);
+						art4.setClosed("N");
+						art4.setGrossvalue(zero);
+						art4.setBalduedeb(t_iva);
+						art4.setBalduecred(zero);
+						art4.setIsnet("Y");
+						art4.setTaxtype(0);
+						art4.setTaxpostacc("N");
+						art4.setTotalvat(zero);
+						art4.setWtliable("N");
+						art4.setWtline("N");
+						art4.setPayblock("N");
+						art4.setOrdered("N");
+						art4.setTranstype(colecturia_c.getObjtype());
+						n = n + 1;
+						detail.add(art4);
+					} else {
+
+						ingreso = sum;
+					}
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					// ingreso administrativo
+					// ----------------------------------------------------------------------------------------------------------------------------------
+					JournalEntryLinesTO art5 = new JournalEntryLinesTO();
+
+					art5.setLine_id(n);
+					art5.setAccount(colecturia_c.getAcctcode3());
+					// art5.setCredit(ingreso);
+					art5.setDebit(ingreso);
+					art5.setDuedate(parameters.getDocdate());
+					art5.setShortname(colecturia_c.getAcctcode3());
+					art5.setContraact(colecturia_c.getAcctcode2());
+					art5.setLinememo("Reversion  pago de colecturia");
+					art5.setRefdate(parameters.getDocdate());
+					art5.setRef1(Integer.toString(parameters.getDocentry()));
+					// art2.setRef2();
+					art5.setBaseref(parameters.getRef1());
+					art5.setTaxdate(parameters.getDocdate());
+					// art1.setFinncpriod(finncpriod);
+					art5.setReltransid(-1);
+					art5.setRellineid(-1);
+					art5.setReltype("N");
+					art5.setObjtype("5");
+					art5.setVatline("N");
+					art5.setVatamount(zero);
+					art5.setClosed("N");
+					art5.setGrossvalue(zero);
+					art5.setBalduedeb(ingreso);
+					art5.setBalduecred(0.0);
+					art5.setIsnet("Y");
+					art5.setTaxtype(0);
+					art5.setTaxpostacc("N");
+					art5.setTotalvat(zero);
+					art5.setWtliable("N");
+					art5.setWtline("N");
+					art5.setPayblock("N");
+					art5.setOrdered("N");
+					art5.setTranstype(colecturia_c.getObjtype());
+					detail.add(art5);
+					n++;
+
+				}
 			}
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1264,6 +1265,7 @@ public class BankEJB implements BankEJBRemote {
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		JournalEntryTO journal = new JournalEntryTO();
 		journal = fill_JournalEntry_Unir(nuevo);
+		// journal=nuevo;
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		return journal;
@@ -1307,67 +1309,65 @@ public class BankEJB implements BankEJBRemote {
 
 			ColecturiaDetailTO colecturia_c = (ColecturiaDetailTO) obj2;
 			String linememo = " ";
-			
-			
-			
+
 			ingreso = colecturia_c.getObjtype();
 
-		
 			linememo = colecturia_c.getDscription();
 
 			// llenado de las cuentas por concepto de colecturia segun la cuenta
 			// que tienen asignadas
 
-		//filtrando que no sea el concepto de ingreso 
+			// filtrando que no sea el concepto de ingreso
 			if (colecturia_c.getLinenum() != Integer.parseInt(cuentas
 					.getValue1())) {
-				
-//filtrando solo los conceptos que tengas cuentas para liquidacion de ingresos
-			if(colecturia_c.getCtlaccount()!=null){
-				// sumando el valor de la liquidacion para compararla con el ingreso 
-				sum = sum + colecturia_c.getPaidsum();
-				
-				JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-			art1.setLine_id(n);
-			art1.setAccount(colecturia_c.getCtlaccount());
-			art1.setDebit(colecturia_c.getPaidsum());
-			art1.setDuedate(parameters.getDocdate());
-			art1.setShortname(colecturia_c.getCtlaccount());
-			art1.setContraact("");
-			art1.setLinememo("liquidacion de unidades propias "
-					+ parameters.getCardname());
-			art1.setRefdate(parameters.getDocdate());
-			art1.setRef1(Integer.toString(parameters.getDocentry()));
-			// art1.setRef2();
-			art1.setBaseref(parameters.getRef1());
-			art1.setTaxdate(parameters.getTaxdate());
-			// art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);
-			art1.setRellineid(-1);
-			art1.setReltype("N");
-			art1.setObjtype("5");
-			art1.setVatline("N");
-			art1.setVatamount(0.0);
-			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(art1.getDebit());
-			art1.setBalduecred(0.0);
-			art1.setIsnet("Y");
-			art1.setTaxtype(0);
-			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);
-			art1.setWtliable("N");
-			art1.setWtline("N");
-			art1.setPayblock("N");
-			art1.setOrdered("N");
-			art1.setTranstype(colecturia_c.getObjtype());
-			detail.add(art1);
 
-			n++;
-			}
-			}else{
+				// filtrando solo los conceptos que tengas cuentas para
+				// liquidacion de ingresos
+				if (colecturia_c.getCtlaccount() != null) {
+					// sumando el valor de la liquidacion para compararla con el
+					// ingreso
+					sum = sum + colecturia_c.getPaidsum();
+
+					JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+					art1.setLine_id(n);
+					art1.setAccount(colecturia_c.getCtlaccount());
+					art1.setDebit(colecturia_c.getPaidsum());
+					art1.setDuedate(parameters.getDocdate());
+					art1.setShortname(colecturia_c.getCtlaccount());
+					art1.setContraact("");
+					art1.setLinememo("liquidacion de unidades propias ");
+					art1.setRefdate(parameters.getDocdate());
+					art1.setRef1(Integer.toString(parameters.getDocentry()));
+					// art1.setRef2();
+					art1.setBaseref(parameters.getRef1());
+					art1.setTaxdate(parameters.getTaxdate());
+					// art1.setFinncpriod(finncpriod);
+					art1.setReltransid(-1);
+					art1.setRellineid(-1);
+					art1.setReltype("N");
+					art1.setObjtype("5");
+					art1.setVatline("N");
+					art1.setVatamount(0.0);
+					art1.setClosed("N");
+					art1.setGrossvalue(0.0);
+					art1.setBalduedeb(art1.getDebit());
+					art1.setBalduecred(0.0);
+					art1.setIsnet("Y");
+					art1.setTaxtype(0);
+					art1.setTaxpostacc("N");
+					art1.setTotalvat(0.0);
+					art1.setWtliable("N");
+					art1.setWtline("N");
+					art1.setPayblock("N");
+					art1.setOrdered("N");
+					art1.setTranstype(colecturia_c.getObjtype());
+					detail.add(art1);
+
+					n++;
+				}
+			} else {
 				ingreso = colecturia_c.getAcctcode();
-				
+
 			}
 		}
 		// ----------------------------------------------------------------------------------------------------------------------------------
@@ -1392,13 +1392,12 @@ public class BankEJB implements BankEJBRemote {
 		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 		art2.setLine_id(n);
 		art2.setAccount(ingreso);
-		art2.setCredit(sum );
+		art2.setCredit(sum);
 		art2.setDuedate(parameters.getDocdate());
 		art2.setShortname(ingreso);
 		art2.setContraact("");
-		art2.setLinememo("liquidacion de unidades propias "
-				+ parameters.getCardname());
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setLinememo("liquidacion de unidades propias ");
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(Integer.toString(parameters.getDocentry()));
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
@@ -1422,7 +1421,7 @@ public class BankEJB implements BankEJBRemote {
 		art2.setWtline("N");
 		art2.setPayblock("N");
 		art2.setOrdered("N");
-		art2.setTranstype(objtype);
+		art2.setTranstype("41");
 
 		//
 		detail.add(art2);
@@ -1436,8 +1435,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setTranstype(objtype);
 		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo("liquidacion de unidades propias "
-				+ parameters.getCardname());
+		nuevo.setMemo("liquidacion de unidades propias ");
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(sum);
@@ -1464,13 +1462,15 @@ public class BankEJB implements BankEJBRemote {
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		JournalEntryTO journal = new JournalEntryTO();
 		journal = fill_JournalEntry_Unir(nuevo);
+		// journal=nuevo;
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		return journal;
 
 	}
-	public JournalEntryTO fill_JournalEntry_liquidacion_anulacion(ColecturiaTO parameters)
-			throws Exception {
+
+	public JournalEntryTO fill_JournalEntry_liquidacion_anulacion(
+			ColecturiaTO parameters) throws Exception {
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		parameterTO cuentas = new parameterTO();
@@ -1503,68 +1503,66 @@ public class BankEJB implements BankEJBRemote {
 
 			ColecturiaDetailTO colecturia_c = (ColecturiaDetailTO) obj2;
 			String linememo = " ";
-			
-			
-			
+
 			ingreso = colecturia_c.getObjtype();
 
-		
 			linememo = colecturia_c.getDscription();
 
 			// llenado de las cuentas por concepto de colecturia segun la cuenta
 			// que tienen asignadas
 
-		//filtrando que no sea el concepto de ingreso 
+			// filtrando que no sea el concepto de ingreso
 			if (colecturia_c.getLinenum() != Integer.parseInt(cuentas
 					.getValue1())) {
-				
-//filtrando solo los conceptos que tengas cuentas para liquidacion de ingresos
-			if(colecturia_c.getCtlaccount()!=null){
-				// sumando el valor de la liquidacion para compararla con el ingreso 
-				sum = sum + colecturia_c.getPaidsum();
-				
-				JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-			art1.setLine_id(n);
-			art1.setAccount(colecturia_c.getCtlaccount());
-			//art1.setDebit(colecturia_c.getPaidsum());
-			art1.setCredit(colecturia_c.getPaidsum());
-			art1.setDuedate(parameters.getDocdate());
-			art1.setShortname(colecturia_c.getCtlaccount());
-			art1.setContraact("");
-			art1.setLinememo("Anulacion liquidacion de unidades propias "
-					+ parameters.getCardname());
-			art1.setRefdate(parameters.getDocdate());
-			art1.setRef1(Integer.toString(parameters.getDocentry()));
-			// art1.setRef2();
-			art1.setBaseref(parameters.getRef1());
-			art1.setTaxdate(parameters.getTaxdate());
-			// art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);
-			art1.setRellineid(-1);
-			art1.setReltype("N");
-			art1.setObjtype("5");
-			art1.setVatline("N");
-			art1.setVatamount(0.0);
-			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(0.0);
-			art1.setBalduecred(art1.getCredit());
-			art1.setIsnet("Y");
-			art1.setTaxtype(0);
-			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);
-			art1.setWtliable("N");
-			art1.setWtline("N");
-			art1.setPayblock("N");
-			art1.setOrdered("N");
-			art1.setTranstype(colecturia_c.getObjtype());
-			detail.add(art1);
 
-			n++;
-			}
-			}else{
+				// filtrando solo los conceptos que tengas cuentas para
+				// liquidacion de ingresos
+				if (colecturia_c.getCtlaccount() != null) {
+					// sumando el valor de la liquidacion para compararla con el
+					// ingreso
+					sum = sum + colecturia_c.getPaidsum();
+
+					JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+					art1.setLine_id(n);
+					art1.setAccount(colecturia_c.getCtlaccount());
+					// art1.setDebit(colecturia_c.getPaidsum());
+					art1.setCredit(colecturia_c.getPaidsum());
+					art1.setDuedate(parameters.getDocdate());
+					art1.setShortname(colecturia_c.getCtlaccount());
+					art1.setContraact("");
+					art1.setLinememo("Anulacion liquidacion de unidades propias ");
+					art1.setRefdate(parameters.getDocdate());
+					art1.setRef1(Integer.toString(parameters.getDocentry()));
+					// art1.setRef2();
+					art1.setBaseref(parameters.getRef1());
+					art1.setTaxdate(parameters.getTaxdate());
+					// art1.setFinncpriod(finncpriod);
+					art1.setReltransid(-1);
+					art1.setRellineid(-1);
+					art1.setReltype("N");
+					art1.setObjtype("5");
+					art1.setVatline("N");
+					art1.setVatamount(0.0);
+					art1.setClosed("N");
+					art1.setGrossvalue(0.0);
+					art1.setBalduedeb(0.0);
+					art1.setBalduecred(art1.getCredit());
+					art1.setIsnet("Y");
+					art1.setTaxtype(0);
+					art1.setTaxpostacc("N");
+					art1.setTotalvat(0.0);
+					art1.setWtliable("N");
+					art1.setWtline("N");
+					art1.setPayblock("N");
+					art1.setOrdered("N");
+					art1.setTranstype(colecturia_c.getObjtype());
+					detail.add(art1);
+
+					n++;
+				}
+			} else {
 				ingreso = colecturia_c.getAcctcode();
-				
+
 			}
 		}
 		// ----------------------------------------------------------------------------------------------------------------------------------
@@ -1589,13 +1587,12 @@ public class BankEJB implements BankEJBRemote {
 		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 		art2.setLine_id(n);
 		art2.setAccount(ingreso);
-		//art2.setCredit();
+		// art2.setCredit();
 		art2.setDebit(sum);
 		art2.setDuedate(parameters.getDocdate());
 		art2.setShortname(ingreso);
 		art2.setContraact("");
-		art2.setLinememo("Anulacion liquidacion de unidades propias "
-				+ parameters.getCardname());
+		art2.setLinememo("Anulacion liquidacion de unidades propias ");
 		art2.setRefdate(parameters.getDocduedate());
 		art2.setRef1(Integer.toString(parameters.getDocentry()));
 		// art2.setRef2();
@@ -1634,8 +1631,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setTranstype(objtype);
 		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo("Anulacion liquidacion de unidades propias "
-				+ parameters.getCardname());
+		nuevo.setMemo("Anulacion liquidacion de unidades propias ");
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(sum);
@@ -1662,12 +1658,12 @@ public class BankEJB implements BankEJBRemote {
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		JournalEntryTO journal = new JournalEntryTO();
 		journal = fill_JournalEntry_Unir(nuevo);
+		// journal=nuevo;
 		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		return journal;
 
 	}
-
 
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------

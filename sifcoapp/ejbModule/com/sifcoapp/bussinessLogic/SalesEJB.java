@@ -3288,8 +3288,15 @@ public class SalesEJB implements SalesEJBRemote {
 		// buscando la cuenta asignada de cuenta de existencias al almacen
 
 		try {
-			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+			if(parameters.getSeries()==4){
+				param = parameter.getParameterbykey(6);
+				branch1 = admin.getBranchByKey(param.getValue1());
+				
+			}else{
+			//alamacen de notas de remision 
 			param = parameter.getParameterbykey(6);
+			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3322,10 +3329,16 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setLinestatus("O");
 			articleDetalle.setDscription(DBArticle.getItemName());
 			articleDetalle.setDiscprcnt(zero);
-			articleDetalle.setWhscode(parameters.getTowhscode());
 			// articleDetalle.setAcctcode(acctcode);
 			articleDetalle.setTaxstatus("Y");
-			articleDetalle.setOcrcode(parameters.getTowhscode());
+			if(parameters.getSeries()==4){
+				articleDetalle.setWhscode(param.getValue1());
+				articleDetalle.setOcrcode(param.getValue1());	
+			}else{
+				articleDetalle.setWhscode(parameters.getTowhscode());
+				articleDetalle.setOcrcode(parameters.getTowhscode());
+			}
+			
 			articleDetalle.setFactor1(zero);
 			articleDetalle.setObjtype("12");
 			articleDetalle.setGrssprofit(zero);
@@ -3360,8 +3373,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
-		parameters.setJrnlmemo("Nota De Remision  - "
-				+ parameters.getCardcode());
+		parameters.setJrnlmemo("Nota De Remision  - ");
 		parameters.setReceiptnum(parameters.getReceiptnum());
 		parameters.setGroupnum(parameters.getGroupnum());
 		parameters.setConfirmed("Y");
@@ -3373,9 +3385,15 @@ public class SalesEJB implements SalesEJBRemote {
 		// consulta he incluirse la cuenta contables
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
+		if(parameters.getSeries()==4){
+			parameters.setFromwhscode(param.getValue1());
+			parameters.setTowhscode(parameters.getTowhscode());
+			parameters.setJrnlmemo("Nota De Remision  - "); 
+			
+		}else{
 		parameters.setFromwhscode(parameters.getTowhscode());
 		parameters.setTowhscode(param.getValue1());
-
+		}
 		return parameters;
 	}
 
@@ -3466,16 +3484,25 @@ public class SalesEJB implements SalesEJBRemote {
 		if(Delivery.getSeries()==4){
 			DeliveryTO remision= new DeliveryTO();
 			remision=getDeliveryByKey(Delivery.getReceiptnum());
-			if(remision.getDocentry()!=0){
+			if(remision.getDoctotal()>0.0 && remision.getDoctotal()!=null){
 				remision.setCanceled("Y");
+				remision.setDocstatus("C");
+				
+				
 				remision.setCanceldate(Delivery.getDocdate());
-				inv_Delivery_mtto(remision,Common.MTTOUPDATE);
+				inv_Delivery_update(remision,Common.MTTOUPDATE,conn);
+				
+				journal = fill_JournalEntry_cancellation(Delivery);
+
+				AccountingEJB account = new AccountingEJB();
+				res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT, conn);
+				
 			}else{
 				throw new Exception(
 						"No se encuentra nota de remision "+Delivery.getReceiptnum());
 			}
 			
-		}
+		}else{
 		// -----------------------------------------------------------------------------------
 		
 		// -----------------------------------------------------------------------------------
@@ -3486,7 +3513,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		AccountingEJB account = new AccountingEJB();
 		res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT, conn);
-
+		}
 		// -----------------------------------------------------------------------------------
 		// Actualización de documento con datos de Asiento contable
 		// -----------------------------------------------------------------------------------

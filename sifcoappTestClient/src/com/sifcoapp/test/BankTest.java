@@ -164,11 +164,11 @@ public class BankTest {
 		ColecturiaTO bus = new ColecturiaTO();
 		
 		bus.setCardcode("SN00000001");
-		bus.setCardname("JOSE MAURICIO GARCIA");
+		bus.setCardname("hjfuh");
 		bus.setDoctotal(100.00);
 		bus.setSeries(1);
-		bus.setReceiptnum(11);
-		bus.setPrinted("2");
+		bus.setReceiptnum(1);
+		bus.setPrinted("1");
 		
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods4= null;
@@ -202,8 +202,13 @@ public class BankTest {
 			colecturia.setTransid(concept.getTransid());
 			colecturia.setConfirmed(concept.getConfirmed());
 			colecturia.setPeymethod(concept.getPeymethod());
-			colecturia.setPaidsum(concept.getPaidsum());
+			
 			colecturia.setVatsum(concept.getVatsum());
+			if(concept.getLinenum()==17){
+				colecturia.setPaidsum(22.37);
+			}else{
+				colecturia.setPaidsum(concept.getPaidsum());
+			}
 			colecturia.setDocsubtype(concept.getDocsubtype());
 			colecturia.setValue1(concept.getValue1());
 			colecturia.setValue2(concept.getValue2());

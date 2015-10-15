@@ -1942,7 +1942,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
 		parameters.setJrnlmemo("Facturas de proveedores - "
 				+ parameters.getCardcode());
-		parameters.setReceiptnum(0);
+		//parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
@@ -2051,7 +2051,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		PurchaseTO purch = new PurchaseTO();
 		purch = getPurchaseByKey(purchase.getReceiptnum());
 
-		if (purch.equals(null)) {
+		if (!purch.equals(null)) {
 
 			if (!purch.getDocstatus().equals("C")) {
 				// -----------------------------------------------------------------------------------

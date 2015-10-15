@@ -335,7 +335,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// validando que debe y haber sean iguales.....
 
 		double valor = Math.abs(debe - haber);
-		if (valor > 0.00001) {
+		if (valor > 0.0001) {
 			_return.setCodigoError(1);
 			_return.setMensaje("No coincide los montos del Debe y Haber");
 			throw new Exception("No coincide los montos del Debe y Haber");

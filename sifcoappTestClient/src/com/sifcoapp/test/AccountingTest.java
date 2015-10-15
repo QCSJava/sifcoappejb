@@ -266,8 +266,8 @@ public class AccountingTest {
 		List lstPeriods = new Vector();
 		// 558,7954
 		try {
-			lstPeriods = AccountingEJBService.getAccountByFilter(null,
-					"ingresos", "Y");
+			lstPeriods = AccountingEJBService.getAccountByFilter("11",
+					null,null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -614,7 +614,7 @@ public class AccountingTest {
 		ResultOutTO nuevo = new ResultOutTO();
 		List consul = new Vector();
 
-		for (int i = 3880; i < 3888; i++) {
+		for (int i =3854; i < 4360; i++) {
 			JournalEntryTO result = new JournalEntryTO();
 
 			result = AccountingEJBService.getpruebaByKey(i);

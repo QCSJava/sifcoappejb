@@ -144,10 +144,10 @@ public class PurchaseTest {
 		
 		//document.setDocentry(1);
 		document.setLinenum(1);
-		document.setItemcode("001-004-545-6114");
+		document.setItemcode("INV0001709");
 		document.setDscription("A");
 		document.setQuantity(10.0);
-		document.setPrice(0.95);
+		document.setPrice(5.55);
 		document.setDiscprcnt(0.0);
 		document.setLinetotal(9.50);			
 		document.setPricebefdi(0.5);

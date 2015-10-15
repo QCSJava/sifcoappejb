@@ -143,74 +143,111 @@ public class SalesTest {
 		SalesDetailTO document = new SalesDetailTO();
 		SalesDetailTO document1 = new SalesDetailTO();
 
-		document.setLinenum(1);
-		document.setItemcode("INV0000001");
-		document.setDscription("A");
-		document.setQuantity(2.0);
-		document.setPrice(3.56);
-		document.setWhscode("REP-001");
-		document.setDiscprcnt(0.0000);
-		document.setLinetotal(0.0000);
-		document.setPricebefdi(0.00000);
-		document.setPriceafvat(0.0000);
-		document.setStockpricestockprice(0.00000);
-		document.setVatappld(0.000000);
-		document.setVatsum(0.0000);
-		document.setGrssprofit(0.000000);
-		document.setGtotal(0.000000);
-		document.setObjtype("10");
-		document.setTaxstatus("N");
-		document.setTaxcode("IVA");
-
-		prueba.add(document);
-
-		/*document1.setLinenum(2);
-		document1.setItemcode("001-004-545-6114");
-		document1.setDscription("A");
-		document1.setQuantity(6.0);
-		document1.setPrice(11.25);
-		document1.setWhscode("ALM-001");
-
-		document1.setLinetotal(0.0000);
-		document1.setPricebefdi(0.00000);
-		document1.setPriceafvat(0.0000);
-		document1.setStockpricestockprice(0.00000);
-		document1.setVatappld(0.000000);
-		document1.setVatsum(0.0000);
-		document1.setGrssprofit(0.000000);
-		document1.setGtotal(6.275);
-		//document1.setObjtype("10");
-		document1.setTaxstatus("N");
-		document1.setTaxcode("IVA");
-
-		prueba.add(document1);*/
-		java.util.Date utilDate = new java.util.Date(); // fecha actual
+		java.util.Date utilDate = new java.util.Date();
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
 
-		parameters.setTowhscode("REP-001");
-		parameters.setDocdate(sqlDate);
-		parameters.setDocduedate(sqlDate);
+	
 
-		parameters.setTaxdate(sqlDate);
-		parameters.setSeries(2);
-		parameters.setUsersign(1);
-		parameters.setCardcode("CF00000555");
-		parameters.setDoctotal(10000.00);
-		parameters.setDiscsum(0.00000);
-		parameters.setNret(0.00000);
-		parameters.setPaidsum(0.0000);
-		parameters.setRounddif(0.00000);
-		parameters.setObjtype("10");
-
-		parameters.setVatsum(0.000000);
-		parameters.setCtlaccount("11020903");
-		parameters.setPeymethod("1");
-
-		parameters.setSalesDetails(prueba);
-
-		System.out.println(document1.getItemcode());
-
+		 DeliveryTO sale=new DeliveryTO();
+		 try {
+			sale=sales.getDeliveryByKey(11);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		    parameters.setDocnum(sale.getDocnum());
+			parameters.setDoctype(sale.getDoctype());
+			parameters.setCanceled(sale.getCanceled());
+			parameters.setDocstatus(sale.getDocstatus());
+			parameters.setObjtype(sale.getObjtype());
+			parameters.setDocdate(sale.getDocdate());
+			parameters.setDocduedate(sale.getDocduedate());
+			parameters.setCardcode(sale.getCardcode());
+			parameters.setNumatcard(sale.getNumatcard());
+			parameters.setCardname(sale.getCardname());
+			parameters.setVatsum(sale.getVatsum());
+			parameters.setDiscsum(sale.getDiscsum());
+			parameters.setDoctotal(sale.getDoctotal());
+			parameters.setRef1(sale.getRef1());
+			parameters.setRef2(sale.getRef2());
+			parameters.setComments(sale.getComments());
+			parameters.setJrnlmemo(sale.getJrnlmemo());
+			parameters.setPaidtodate(sale.getPaidtodate());
+			parameters.setTransid(sale.getTransid());
+			parameters.setReceiptnum(11);
+			parameters.setGroupnum(sale.getGroupnum());
+			parameters.setConfirmed(sale.getConfirmed());
+			parameters.setCreatetran(sale.getCreatetran());
+			parameters.setSeries(sale.getSeries());
+			parameters.setTaxdate(sale.getTaxdate());
+			parameters.setFiller(sale.getFiller());
+			parameters.setRounddif(sale.getRounddif());
+			parameters.setRounding(sale.getRounding());
+			parameters.setCanceldate(sale.getCanceldate());
+			parameters.setPeymethod(sale.getPeymethod());
+			parameters.setCtlaccount(sale.getCtlaccount());
+			parameters.setBplname(sale.getBplname());
+			parameters.setVatregnum(sale.getVatregnum());
+			parameters.setPaidsum(sale.getPaidsum());
+			parameters.setTowhscode(sale.getTowhscode());
+			parameters.setNret(sale.getNret());
+			parameters.setNamenp(sale.getNamenp());
+			parameters.setQuedan(sale.getQuedan());
+			parameters.setFechreciva(sale.getFechreciva());
+			parameters.setFquedan(sale.getFquedan());
+			parameters.setUsersign(sale.getUsersign());
+		
+			List lstPeriods = new Vector();
+			lstPeriods = sale.getDeliveryDetails();
+			
+			//parameters.setclientDetails(lstPeriods);
+			
+			Iterator<DeliveryDetailTO> iterator = lstPeriods.iterator();
+			while (iterator.hasNext()) {
+				DeliveryDetailTO periodo2 = (DeliveryDetailTO) iterator
+						.next();
+				SalesDetailTO ClientCredi = new SalesDetailTO();
+				
+				ClientCredi.setDocentry(periodo2.getDocentry());
+				ClientCredi.setLinenum(periodo2.getLinenum());
+				ClientCredi.setTargettype(periodo2.getTargettype());
+				ClientCredi.setBaseref(periodo2.getBaseref());
+				ClientCredi.setBasetype(periodo2.getBasetype());
+				ClientCredi.setBaseentry(periodo2.getBaseentry());
+				ClientCredi.setBaseline(periodo2.getBaseline());
+				ClientCredi.setLinestatus(periodo2.getLinestatus());
+				ClientCredi.setItemcode(periodo2.getItemcode());
+				ClientCredi.setDscription(periodo2.getDscription());
+				ClientCredi.setQuantity(periodo2.getQuantity());
+				ClientCredi.setOpenqty(periodo2.getOpenqty());
+				ClientCredi.setPrice(periodo2.getPrice());
+				ClientCredi.setDiscprcnt(periodo2.getDiscprcnt());
+				ClientCredi.setLinetotal(periodo2.getLinetotal());
+				ClientCredi.setWhscode(periodo2.getWhscode());
+				ClientCredi.setAcctcode(periodo2.getAcctcode());
+				ClientCredi.setTaxstatus(periodo2.getTaxstatus());
+				ClientCredi.setPricebefdi(periodo2.getPricebefdi());
+				ClientCredi.setOcrcode(periodo2.getOcrcode());
+				ClientCredi.setVatgroup(periodo2.getVatgroup());
+				ClientCredi.setPriceafvat(periodo2.getPriceafvat());
+				ClientCredi.setFactor1(periodo2.getFactor1());
+				ClientCredi.setVatsum(periodo2.getVatsum());
+				ClientCredi.setObjtype(periodo2.getObjtype());
+				ClientCredi.setGrssprofit(periodo2.getGrssprofit());
+				ClientCredi.setTaxcode(periodo2.getTaxcode());
+				ClientCredi.setVatappld(periodo2.getVatappld());
+				ClientCredi.setUnitmsr(periodo2.getUnitmsr());
+				ClientCredi.setStockpricestockprice(periodo2.getStockpricestockprice());
+				ClientCredi.setGtotal(periodo2.getGtotal());
+				
+				prueba.add(ClientCredi);
+			}
+			//haciendo la nota de credito 
+			
+			parameters.setSalesDetails(prueba);
+		
 		try {
 			_result = sales.inv_Sales_mtto(parameters, 1);
 		} catch (Exception e) {
@@ -452,70 +489,112 @@ public class SalesTest {
 		DeliveryTO parameters = new DeliveryTO();
 
 		List prueba = new Vector();
-		DeliveryDetailTO document = new DeliveryDetailTO();
-		DeliveryDetailTO document1 = new DeliveryDetailTO();
+		List lstPeriods = new Vector();
 
-		document.setLinenum(1);
-		document.setItemcode("001-004-545-6114");
-		document.setDscription("A");
-		document.setQuantity(2.0);
-		document.setPrice(3.56);
-		document.setWhscode("ALM-001");
-		document.setDiscprcnt(0.0000);
-		document.setLinetotal(0.0000);
-		document.setPricebefdi(0.00000);
-		document.setPriceafvat(0.0000);
-		document.setStockpricestockprice(0.00000);
-		document.setVatappld(0.000000);
-		document.setVatsum(0.0000);
-		document.setGrssprofit(0.000000);
-		document.setGtotal(0.000000);
-		document.setObjtype("10");
-		prueba.add(document);
-
-		document1.setLinenum(2);
-		document1.setItemcode("001-004-545-6114");
-		document1.setDscription("A");
-		document1.setQuantity(6.0);
-		document1.setPrice(11.25);
-		document1.setWhscode("ALM-001");
-
-		document1.setLinetotal(0.0000);
-		document1.setPricebefdi(0.00000);
-		document1.setPriceafvat(0.0000);
-		document1.setStockpricestockprice(0.00000);
-		document1.setVatappld(0.000000);
-		document1.setVatsum(0.0000);
-		document1.setGrssprofit(0.000000);
-		document1.setGtotal(6.275);
-		document1.setObjtype("10");
-		prueba.add(document1);
-		java.util.Date utilDate = new java.util.Date(); // fecha actual
-		long lnMilisegundos = utilDate.getTime();
-		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-
-		parameters.setTowhscode("ALM-001");
-		parameters.setDocdate(sqlDate);
-		parameters.setDocduedate(sqlDate);
-		parameters.setTaxdate(sqlDate);
-		parameters.setSeries(2);
-		parameters.setUsersign(1);
-		parameters.setCardcode("00001");
-		parameters.setDoctotal(10000.00);
-		parameters.setDiscsum(0.00000);
-		parameters.setNret(0.00000);
-		parameters.setPaidsum(0.0000);
-		parameters.setRounddif(0.00000);
-		parameters.setObjtype("10");
-		parameters.setPeymethod("2");
-		parameters.setVatsum(0.000000);
-		parameters.setCtlaccount("110602");
+		DeliveryTO sale=new DeliveryTO();
+		 try {
+			sale=sales.getDeliveryByKey(2);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		    parameters.setDocnum(sale.getDocnum());
+			parameters.setDoctype(sale.getDoctype());
+			parameters.setCanceled(sale.getCanceled());
+			parameters.setDocstatus(sale.getDocstatus());
+			parameters.setObjtype(sale.getObjtype());
+			parameters.setDocdate(sale.getDocdate());
+			parameters.setDocduedate(sale.getDocduedate());
+			parameters.setCardcode(sale.getCardcode());
+			parameters.setNumatcard(sale.getNumatcard());
+			parameters.setCardname(sale.getCardname());
+			parameters.setVatsum(sale.getVatsum());
+			parameters.setDiscsum(sale.getDiscsum());
+			parameters.setDoctotal(sale.getDoctotal());
+			parameters.setRef1(sale.getRef1());
+			parameters.setRef2(sale.getRef2());
+			parameters.setComments(sale.getComments());
+			parameters.setJrnlmemo(sale.getJrnlmemo());
+			parameters.setPaidtodate(sale.getPaidtodate());
+			parameters.setTransid(sale.getTransid());
+			parameters.setReceiptnum(2);
+			parameters.setGroupnum(sale.getGroupnum());
+			parameters.setConfirmed(sale.getConfirmed());
+			parameters.setCreatetran(sale.getCreatetran());
+			parameters.setSeries(4);
+			parameters.setTaxdate(sale.getTaxdate());
+			parameters.setFiller(sale.getFiller());
+			parameters.setRounddif(sale.getRounddif());
+			parameters.setRounding(sale.getRounding());
+			parameters.setCanceldate(sale.getCanceldate());
+			parameters.setPeymethod(sale.getPeymethod());
+			parameters.setCtlaccount(sale.getCtlaccount());
+			parameters.setBplname(sale.getBplname());
+			parameters.setVatregnum(sale.getVatregnum());
+			parameters.setPaidsum(sale.getPaidsum());
+			parameters.setTowhscode(sale.getTowhscode());
+			parameters.setNret(sale.getNret());
+			parameters.setNamenp(sale.getNamenp());
+			parameters.setQuedan(sale.getQuedan());
+			parameters.setFechreciva(sale.getFechreciva());
+			parameters.setFquedan(sale.getFquedan());
+			parameters.setUsersign(sale.getUsersign());
+		
+			
+			
+			lstPeriods = sale.getDeliveryDetails();
+			
+		
+			Iterator<DeliveryDetailTO> iterator = lstPeriods.iterator();
+			
+			while (iterator.hasNext()) {
+				DeliveryDetailTO periodo2 = (DeliveryDetailTO) iterator
+						.next();
+				DeliveryDetailTO ClientCredi = new DeliveryDetailTO();
+				
+				ClientCredi.setDocentry(periodo2.getDocentry());
+				ClientCredi.setLinenum(periodo2.getLinenum());
+				ClientCredi.setTargettype(periodo2.getTargettype());
+				ClientCredi.setBaseref(periodo2.getBaseref());
+				ClientCredi.setBasetype(periodo2.getBasetype());
+				ClientCredi.setBaseentry(periodo2.getBaseentry());
+				ClientCredi.setBaseline(periodo2.getBaseline());
+				ClientCredi.setLinestatus(periodo2.getLinestatus());
+				ClientCredi.setItemcode(periodo2.getItemcode());
+				ClientCredi.setDscription(periodo2.getDscription());
+				ClientCredi.setQuantity(periodo2.getQuantity());
+				ClientCredi.setOpenqty(periodo2.getOpenqty());
+				ClientCredi.setPrice(periodo2.getPrice());
+				ClientCredi.setDiscprcnt(periodo2.getDiscprcnt());
+				ClientCredi.setLinetotal(periodo2.getLinetotal());
+				ClientCredi.setWhscode(periodo2.getWhscode());
+				ClientCredi.setAcctcode(periodo2.getAcctcode());
+				ClientCredi.setTaxstatus(periodo2.getTaxstatus());
+				ClientCredi.setPricebefdi(periodo2.getPricebefdi());
+				ClientCredi.setOcrcode(periodo2.getOcrcode());
+				ClientCredi.setVatgroup(periodo2.getVatgroup());
+				ClientCredi.setPriceafvat(periodo2.getPriceafvat());
+				ClientCredi.setFactor1(periodo2.getFactor1());
+				ClientCredi.setVatsum(periodo2.getVatsum());
+				ClientCredi.setObjtype(periodo2.getObjtype());
+				ClientCredi.setGrssprofit(periodo2.getGrssprofit());
+				ClientCredi.setTaxcode(periodo2.getTaxcode());
+				ClientCredi.setVatappld(periodo2.getVatappld());
+				ClientCredi.setUnitmsr(periodo2.getUnitmsr());
+				ClientCredi.setStockpricestockprice(periodo2.getStockpricestockprice());
+				ClientCredi.setGtotal(periodo2.getGtotal());
+				
+				prueba.add(ClientCredi);
+			}
+			//haciendo la nota de credito 
+			
+			
+		
 
 		parameters.setDeliveryDetails(prueba);
 		try {
-			SalesEJBClient nuevo = new SalesEJBClient();
-			_result = nuevo.inv_Delivery_mtto(parameters, 1);
-			// sales.inv_Delivery_mtto(parameters, 1);
+			sales.inv_Delivery_mtto(parameters, 1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error EJB " + e.getMessage());
