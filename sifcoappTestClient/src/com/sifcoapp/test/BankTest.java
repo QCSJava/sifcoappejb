@@ -349,7 +349,7 @@ List lista= new Vector();
 		// nuevo.setDocentry(1);
 
 		try {
-			lstPeriods3 = catalog.get_ges_colecturiaConcept1("00001");
+			lstPeriods3 = catalog.get_ges_colecturiaConcept1("SN00000001");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -160,8 +160,10 @@ public class BankEJB implements BankEJBRemote {
 		DAO1.setIstransaccional(true);
 		List sale = new Vector();
 		parameterTO parameter = new parameterTO();
+		
 		ParameterEJB ejb = new ParameterEJB();
 		parameter = ejb.getParameterbykey(9);
+		
 		List aux = new Vector();
 
 		if (parameters.getDoctotal() == null) {
@@ -190,7 +192,7 @@ public class BankEJB implements BankEJBRemote {
 						if (detail.getVatsum() == null) {
 							detail.setVatsum(zero);
 						}
-						// Para articulos nuevos
+					
 						detail.setObjtype("41");
 						detail.setDocentry(_return.getDocentry());
 						if (action == Common.MTTOINSERT) {
@@ -212,7 +214,9 @@ public class BankEJB implements BankEJBRemote {
 				}
 
 				parameters.setColecturiaDetail(aux);
-
+				// ---------------------------------------------------------------------------
+				// Asiento de coelcturia Series = 2
+				// ---------------------------------------------------------------------------
 				if (parameters.getSeries() == 1) {
 
 					journal = fill_JournalEntry(parameters);
@@ -223,7 +227,7 @@ public class BankEJB implements BankEJBRemote {
 					if (sale.size() != 0) {
 						nuevo = actualizar_sale(sale, DAO.getConn(), parameters);
 					}
-					// para unidades propias
+					// Generar asiento de liquidación para unidades propias
 					if (parameters.getPrinted().equals("1")) {
 						journal = fill_JournalEntry_liquidacion(parameters);
 						account = new AccountingEJB();
@@ -232,7 +236,9 @@ public class BankEJB implements BankEJBRemote {
 
 					}
 				}
-
+				// ---------------------------------------------------------------------------
+				// Asiento de reversión Series = 2
+				// ---------------------------------------------------------------------------
 				if (parameters.getSeries() == 2) {
 
 					journal = fill_JournalEntry_anular(parameters);
@@ -353,7 +359,6 @@ public class BankEJB implements BankEJBRemote {
 		ResultOutTO resultado = new ResultOutTO();
 		List _return = new Vector();
 		ColecturiaConceptDAO DAO = new ColecturiaConceptDAO();
-		DAO.setIstransaccional(true);
 		ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
 		List facturas = new Vector();
 		SalesInTO aux = new SalesInTO();
@@ -361,13 +366,13 @@ public class BankEJB implements BankEJBRemote {
 		SalesEJB sales = new SalesEJB();
 		try {
 			// actualizando intereses moratorios
-			resultado = interes_moratorio(Code);
+			//resultado = interes_moratorio(Code);
 
 			// consulta para devolver facturas de diesel del socio
 			facturas = sales.getSales(aux);
 
 			// cosulta del colecturia concept con su saldo de la cuenta
-			_return = DAO.get_ges_colecturiaConcept1(Code);
+ 			_return = DAO.get_ges_colecturiaConcept1(Code);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -441,14 +446,14 @@ public class BankEJB implements BankEJBRemote {
 		List aux = new Vector();
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
-		AdminDAO admin = new AdminDAO();
 		// consulta para encontrar todas las cuentas asignadas para el asiento
 		// contable
 		// cuenta de pasivo administrativo
 		BusinesspartnerDAO bDAO = new BusinesspartnerDAO();
 
 		aux = bDAO.get_businesspartnerAcount(parameters.getCardcode());
-
+		
+		//Concepto que identifica la cuota del motorista
 		ParameterDAO DAO = new ParameterDAO();
 		cuentas = DAO.getParameterbykey(15);
 
@@ -466,6 +471,7 @@ public class BankEJB implements BankEJBRemote {
 			double ingreso;
 			String caja;
 			String business = null;
+			
 			for (Object obj : aux) {
 				BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) obj;
 				// pendiente de confirmar si
@@ -527,7 +533,7 @@ public class BankEJB implements BankEJBRemote {
 				// tomando
 				// como
 				// venta iva debito
-				admin = new AdminDAO();
+				AdminDAO admin = new AdminDAO();
 
 				CatalogTO Catalog = new CatalogTO();
 				Catalog = admin.findCatalogByKey("IVA", 10);
@@ -1295,8 +1301,7 @@ public class BankEJB implements BankEJBRemote {
 		// consultando numero de concepto de ingreso
 		ParameterDAO DAO = new ParameterDAO();
 		cuentas = DAO.getParameterbykey(14);
-		DAO = new ParameterDAO();
-		cuentas = DAO.getParameterbykey(14);
+
 		// recorre la lista de listas para encontrar los detalles de el asiento
 		// contable
 		List detail = new Vector();
@@ -1938,7 +1943,7 @@ public class BankEJB implements BankEJBRemote {
 		parameter.setIstransaccional(true);
 		AccountingDAO accounting = new AccountingDAO(conn);
 		accounting.setIstransaccional(true);
-		ColecturiaConceptDAO concept = new ColecturiaConceptDAO();
+		ColecturiaConceptDAO concept = new ColecturiaConceptDAO(conn);
 		concept.setIstransaccional(true);
 
 		// consultando el numero de concepto correspondiente a prestamos

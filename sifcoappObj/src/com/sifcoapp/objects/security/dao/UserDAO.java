@@ -414,7 +414,6 @@ public class UserDAO extends CommonDAO {
 		CachedRowSetImpl rowsetActual;
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		GoodsissuesDetailDAO Detail = new GoodsissuesDetailDAO();
 		while (liRowset.hasNext()) {
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
 			try {

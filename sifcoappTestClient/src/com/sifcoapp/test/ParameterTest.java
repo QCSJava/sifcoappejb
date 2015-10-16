@@ -77,7 +77,7 @@ public class ParameterTest {
 		String code = null;
 
 		try {
-			branch = AdminEJBService.getParameterbykey(6);
+			branch = AdminEJBService.getParameterbykey(9);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

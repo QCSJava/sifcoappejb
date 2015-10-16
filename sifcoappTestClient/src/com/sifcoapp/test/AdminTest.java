@@ -397,7 +397,7 @@ public class AdminTest {
 	public static void getArticlesByKey() {
 		ArticlesTO article = null;
 
-		String code = "001-004-545-6114";
+		String code = "INV0000002";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);
