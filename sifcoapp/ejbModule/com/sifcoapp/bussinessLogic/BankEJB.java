@@ -33,6 +33,7 @@ import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalog.to.BusinesspartnerTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
+import com.sifcoapp.objects.sales.to.SalesDetailTO;
 import com.sifcoapp.objects.sales.to.SalesInTO;
 import com.sifcoapp.objects.sales.to.SalesTO;
 
@@ -160,10 +161,10 @@ public class BankEJB implements BankEJBRemote {
 		DAO1.setIstransaccional(true);
 		List sale = new Vector();
 		parameterTO parameter = new parameterTO();
-		
+
 		ParameterEJB ejb = new ParameterEJB();
 		parameter = ejb.getParameterbykey(9);
-		
+
 		List aux = new Vector();
 
 		if (parameters.getDoctotal() == null) {
@@ -192,7 +193,7 @@ public class BankEJB implements BankEJBRemote {
 						if (detail.getVatsum() == null) {
 							detail.setVatsum(zero);
 						}
-					
+
 						detail.setObjtype("41");
 						detail.setDocentry(_return.getDocentry());
 						if (action == Common.MTTOINSERT) {
@@ -366,26 +367,74 @@ public class BankEJB implements BankEJBRemote {
 		SalesEJB sales = new SalesEJB();
 		try {
 			// actualizando intereses moratorios
-			//resultado = interes_moratorio(Code);
+			resultado = interes_moratorio(Code);
 
 			// consulta para devolver facturas de diesel del socio
 			facturas = sales.getSales(aux);
 
 			// cosulta del colecturia concept con su saldo de la cuenta
- 			_return = DAO.get_ges_colecturiaConcept1(Code);
+			_return = DAO.get_ges_colecturiaConcept1(Code);
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
 		// filtra las facturas
 		facturas = filtro_consulta(facturas);
 		if (facturas != null) {
 			parameterTO parameter = new parameterTO();
+			parameterTO Ap = new parameterTO();
+			parameterTO Ah = new parameterTO();
+			parameterTO Ut = new parameterTO();
+			// para cosultar el busines partner para saber si es socio o propio
+			BusinesspartnerTO busines=new BusinesspartnerTO();
+			BusinesspartnerDAO Bus= new BusinesspartnerDAO();
+			busines=Bus.get_businesspartnerByKey(Code);
+			
 			ParameterEJB ejb = new ParameterEJB();
 			parameter = ejb.getParameterbykey(9);
+			
 
+			double ahorro;
+			double aportacion;
+			double utilidad;
+			double GLs = 0.0;
+			double Total_sales = 0.0;
+			// -------------------------------------------------------------------------------------------------------------------------------------
+			// cosultando los conceptos correspondientes a ahorro,aportacion y
+			// utilidad de diesel
+			// -------------------------------------------------------------------------------------------------------------------------------------
+			Ap = ejb.getParameterbykey(23);
+			Ah = ejb.getParameterbykey(24);
+			Ut = ejb.getParameterbykey(25);
+
+			for (Object object : facturas) {
+				SalesTO sale = (SalesTO) object;
+				SalesTO salebykey=new SalesTO();
+				salebykey=sales.getSalesByKey(sale.getDocentry());
+				
+				List detalle = new Vector();
+				Total_sales = Total_sales + sale.getDoctotal();
+				
+				detalle = salebykey.getSalesDetails();
+				
+				for (Object object2 : detalle) {
+					SalesDetailTO detail = (SalesDetailTO) object2;
+					GLs = GLs + detail.getQuantity();
+				}
+			}
+
+			// -------------------------------------------------------------------------------------------------------------------------------------
+			// calculando
+			// -------------------------------------------------------------------------------------------------------------------------------------
+			// para el ahorro
+			ahorro = GLs * ((Integer.parseInt(Ah.getValue2()))/100.0);
+			// para el aporte
+			aportacion = GLs * ((Integer.parseInt(Ap.getValue2()))/100.0);
+			// para la utilidad
+			utilidad = GLs * ((Integer.parseInt(Ut.getValue1()))/100.0);
+			// -------------------------------------------------------------------------------------------------------------------------------------
+
+			// -------------------------------------------------------------------------------------------------------------------------------------
 			Iterator<ColecturiaConceptTO> iterator = _return.iterator();
+			
+			
 			while (iterator.hasNext()) {
 				ColecturiaConceptTO concept = (ColecturiaConceptTO) iterator
 						.next();
@@ -399,11 +448,38 @@ public class BankEJB implements BankEJBRemote {
 				if (concept.getLinenum() == Integer.parseInt(parameter
 						.getValue1())) {
 					concept.setFacturas(facturas);
+					concept.setPaidsum(Total_sales);
 
 				}
+				// ahorro diesel
+				if(concept.getLinenum()==Integer.parseInt(Ah.getValue1())){
+					concept.setPaidsum(ahorro);
+				}
+				
+				// ahorro diesel
+				if(concept.getLinenum()==Integer.parseInt(Ap.getValue1())){
+					// si groupcode es igual a 1 entonces es unidad propia sino es unidad asociado 
+					if(busines.getGroupcode().equals("1")){
+						aportacion=aportacion+utilidad;
+						concept.setPaidsum(aportacion);
+					}else{
+						concept.setPaidsum(aportacion);	
+					}
+					
+				}
+				
 
 			}
 		}
+		
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		
+		
+		
 		return _return;
 	}
 
@@ -452,8 +528,8 @@ public class BankEJB implements BankEJBRemote {
 		BusinesspartnerDAO bDAO = new BusinesspartnerDAO();
 
 		aux = bDAO.get_businesspartnerAcount(parameters.getCardcode());
-		
-		//Concepto que identifica la cuota del motorista
+
+		// Concepto que identifica la cuota del motorista
 		ParameterDAO DAO = new ParameterDAO();
 		cuentas = DAO.getParameterbykey(15);
 
@@ -471,7 +547,7 @@ public class BankEJB implements BankEJBRemote {
 			double ingreso;
 			String caja;
 			String business = null;
-			
+
 			for (Object obj : aux) {
 				BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) obj;
 				// pendiente de confirmar si

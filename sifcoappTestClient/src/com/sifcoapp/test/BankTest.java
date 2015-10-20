@@ -163,19 +163,19 @@ public class BankTest {
 		ResultOutTO resp = null;
 		ColecturiaTO bus = new ColecturiaTO();
 		
-		bus.setCardcode("SN00000001");
+		bus.setCardcode("SN00000002");
 		bus.setCardname("hjfuh");
 		bus.setDoctotal(100.00);
 		bus.setSeries(1);
 		bus.setReceiptnum(1);
-		bus.setPrinted("1");
+		bus.setPrinted("2");
 		
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods4= null;
 		// nuevo.setDocentry(1);
 
 		try {
-			lstPeriods4 = catalog.get_ges_colecturiaConcept1("SN00000001");
+			lstPeriods4 = catalog.get_ges_colecturiaConcept1("SN00000002");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -204,11 +204,9 @@ public class BankTest {
 			colecturia.setPeymethod(concept.getPeymethod());
 			
 			colecturia.setVatsum(concept.getVatsum());
-			if(concept.getLinenum()==17){
-				colecturia.setPaidsum(22.37);
-			}else{
+			
 				colecturia.setPaidsum(concept.getPaidsum());
-			}
+			
 			colecturia.setDocsubtype(concept.getDocsubtype());
 			colecturia.setValue1(concept.getValue1());
 			colecturia.setValue2(concept.getValue2());
@@ -349,7 +347,7 @@ List lista= new Vector();
 		// nuevo.setDocentry(1);
 
 		try {
-			lstPeriods3 = catalog.get_ges_colecturiaConcept1("SN00000001");
+			lstPeriods3 = catalog.get_ges_colecturiaConcept1("SN00000002");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -363,7 +361,7 @@ List lista= new Vector();
 				Iterator<SalesTO> iterator1 = periodo.getFacturas().iterator();
 				while (iterator1.hasNext()) {
 					SalesTO sale = (SalesTO) iterator1.next();
-					System.out.println("Lista de facturas de venta"+"-"+sale.getDoctotal());
+					
 					fac=fac+sale.getDoctotal();
 			
 			}
@@ -372,7 +370,7 @@ List lista= new Vector();
 			System.out.println("lista de conceptos" +"-"+periodo.getAcctcode() + "  "+periodo.getAcctcode2() + "  "+periodo.getAcctcode3() + "  "	+
 					+
 					+ periodo.getLinenum() + " - " + periodo.getObjtype()
-					+ " - " + periodo.getDscription());
+					+ " - " + periodo.getDscription()+ " - " + periodo.getPaidsum());
 			
 			System.out.println("total facturas"+"----"+fac);
 			
