@@ -404,7 +404,7 @@ public class AdminEJB implements AdminEJBRemote {
 		adminDAO.setIstransaccional(true);
 		try {
 			_return = adminDAO.getArticlesByKey(itemcode);
-			adminDAO.forceCloseConnection();
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);

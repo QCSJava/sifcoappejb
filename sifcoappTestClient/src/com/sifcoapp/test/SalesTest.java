@@ -149,16 +149,15 @@ public class SalesTest {
 
 	
 
-		 DeliveryTO sale=new DeliveryTO();
+		 SalesTO sale=new SalesTO();
 		 try {
-			sale=sales.getDeliveryByKey(11);
+			sale=sales.getSalesByKey(6);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		    parameters.setDocnum(sale.getDocnum());
-			parameters.setDoctype(sale.getDoctype());
+		 
+		    parameters.setDoctype(sale.getDoctype());
 			parameters.setCanceled(sale.getCanceled());
 			parameters.setDocstatus(sale.getDocstatus());
 			parameters.setObjtype(sale.getObjtype());
@@ -176,7 +175,7 @@ public class SalesTest {
 			parameters.setJrnlmemo(sale.getJrnlmemo());
 			parameters.setPaidtodate(sale.getPaidtodate());
 			parameters.setTransid(sale.getTransid());
-			parameters.setReceiptnum(11);
+			parameters.setReceiptnum(sale.getReceiptnum());
 			parameters.setGroupnum(sale.getGroupnum());
 			parameters.setConfirmed(sale.getConfirmed());
 			parameters.setCreatetran(sale.getCreatetran());
@@ -200,13 +199,12 @@ public class SalesTest {
 			parameters.setUsersign(sale.getUsersign());
 		
 			List lstPeriods = new Vector();
-			lstPeriods = sale.getDeliveryDetails();
+			lstPeriods = sale.getSalesDetails();
 			
-			//parameters.setclientDetails(lstPeriods);
 			
-			Iterator<DeliveryDetailTO> iterator = lstPeriods.iterator();
+			Iterator<SalesDetailTO> iterator = lstPeriods.iterator();
 			while (iterator.hasNext()) {
-				DeliveryDetailTO periodo2 = (DeliveryDetailTO) iterator
+				SalesDetailTO periodo2 = (SalesDetailTO) iterator
 						.next();
 				SalesDetailTO ClientCredi = new SalesDetailTO();
 				
@@ -218,7 +216,7 @@ public class SalesTest {
 				ClientCredi.setBaseentry(periodo2.getBaseentry());
 				ClientCredi.setBaseline(periodo2.getBaseline());
 				ClientCredi.setLinestatus(periodo2.getLinestatus());
-				ClientCredi.setItemcode(periodo2.getItemcode());
+				ClientCredi.setItemcode("INV0000001");
 				ClientCredi.setDscription(periodo2.getDscription());
 				ClientCredi.setQuantity(periodo2.getQuantity());
 				ClientCredi.setOpenqty(periodo2.getOpenqty());

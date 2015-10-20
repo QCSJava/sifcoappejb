@@ -21,6 +21,7 @@ import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchTO;
 import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.parameterTO;
+import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.GoodsReceiptDAO;
@@ -110,7 +111,7 @@ public class SalesEJB implements SalesEJBRemote {
 		ResultOutTO _valid = new ResultOutTO();
 
 		ResultOutTO _return = new ResultOutTO();
-		SalesDAO DAO = new SalesDAO();
+
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Validar acción a realizar
@@ -146,8 +147,9 @@ public class SalesEJB implements SalesEJBRemote {
 		// debe tener una opción para ejecutarlo como parte de una transacción
 		// global
 		// --------------------------------------------------------------------------------------------------------------------------------
-
+		SalesDAO DAO = new SalesDAO();
 		try {
+			
 			DAO.setIstransaccional(true);
 			_return = save_TransactionSales(parameters, action, DAO.getConn());
 			DAO.forceCommit();
@@ -282,6 +284,64 @@ public class SalesEJB implements SalesEJBRemote {
 			}
 		}
 
+		
+		
+		
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// consultando si es venta de diesel ; si lo es cambio de cuenta
+		// asignada en el concepto de diesel por cliente
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------------------------------------------
+		ParameterDAO parameter = new ParameterDAO();
+		parameterTO param = new parameterTO();
+		try {
+			param = parameter.getParameterbykey(2);
+
+			if (parameters.getSeries() == Integer.parseInt(param.getValue1())) {
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// cosultando el concepto diesel
+				// --------------------------------------------------------------------------------------------------------------------------------
+				parameter = new ParameterDAO();
+				param = parameter.getParameterbykey(9);
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// --------------------------------------------------------------------------------------------------------------------------------
+				BusinesspartnerAcountTO busines = new BusinesspartnerAcountTO();
+				List list = new Vector();
+				CatalogEJB catalogo = new CatalogEJB();
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// --------------------------------------------------------------------------------------------------------------------------------
+				list = catalogo.get_businesspartnerAcount(parameters
+						.getCardcode());
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// recorriendo la lista de businespartneraccount para encontrar
+				// el concepto de diesel y su correspondiente cuenta
+				// --------------------------------------------------------------------------------------------------------------------------------
+				for (Object object : list) {
+					BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) object;
+					if (bus.getAcctype() == Integer.parseInt(param.getValue1())) {
+						// --------------------------------------------------------------------------------------------------------------------------------
+						// asignando la cuenta correspondiente a diesel segun el
+						// socio de negocio
+						// --------------------------------------------------------------------------------------------------------------------------------
+						parameters.setCtlaccount(bus.getAcctcode());
+						// --------------------------------------------------------------------------------------------------------------------------------
+						// --------------------------------------------------------------------------------------------------------------------------------
+					}
+
+				}
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto encabezado
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -304,11 +364,10 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
-		// parameters.setSeries(0);
+		
 		parameters.setRounddif(zero);
 		parameters.setRounding("N");
-		// parameters.setCtlaccount(ctlaccount); Aqui deberia de hacerse la
-		// consulta he incluirse la cuenta contables
+	
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
 
@@ -3288,14 +3347,14 @@ public class SalesEJB implements SalesEJBRemote {
 		// buscando la cuenta asignada de cuenta de existencias al almacen
 
 		try {
-			if(parameters.getSeries()==4){
+			if (parameters.getSeries() == 4) {
 				param = parameter.getParameterbykey(6);
 				branch1 = admin.getBranchByKey(param.getValue1());
-				
-			}else{
-			//alamacen de notas de remision 
-			param = parameter.getParameterbykey(6);
-			branch1 = admin.getBranchByKey(parameters.getTowhscode());
+
+			} else {
+				// alamacen de notas de remision
+				param = parameter.getParameterbykey(6);
+				branch1 = admin.getBranchByKey(parameters.getTowhscode());
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -3331,14 +3390,14 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setDiscprcnt(zero);
 			// articleDetalle.setAcctcode(acctcode);
 			articleDetalle.setTaxstatus("Y");
-			if(parameters.getSeries()==4){
+			if (parameters.getSeries() == 4) {
 				articleDetalle.setWhscode(param.getValue1());
-				articleDetalle.setOcrcode(param.getValue1());	
-			}else{
+				articleDetalle.setOcrcode(param.getValue1());
+			} else {
 				articleDetalle.setWhscode(parameters.getTowhscode());
 				articleDetalle.setOcrcode(parameters.getTowhscode());
 			}
-			
+
 			articleDetalle.setFactor1(zero);
 			articleDetalle.setObjtype("12");
 			articleDetalle.setGrssprofit(zero);
@@ -3385,14 +3444,14 @@ public class SalesEJB implements SalesEJBRemote {
 		// consulta he incluirse la cuenta contables
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
-		if(parameters.getSeries()==4){
+		if (parameters.getSeries() == 4) {
 			parameters.setFromwhscode(param.getValue1());
 			parameters.setTowhscode(parameters.getTowhscode());
-			parameters.setJrnlmemo("Nota De Remision  - "); 
-			
-		}else{
-		parameters.setFromwhscode(parameters.getTowhscode());
-		parameters.setTowhscode(param.getValue1());
+			parameters.setJrnlmemo("Nota De Remision  - ");
+
+		} else {
+			parameters.setFromwhscode(parameters.getTowhscode());
+			parameters.setTowhscode(param.getValue1());
 		}
 		return parameters;
 	}
@@ -3480,39 +3539,41 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 
 		// -----------------------------------------------------------------------------------
-		// actualizacion de la nota de remision original groupnum = 2 anulacion de nota de remision
-		if(Delivery.getSeries()==4){
-			DeliveryTO remision= new DeliveryTO();
-			remision=getDeliveryByKey(Delivery.getReceiptnum());
-			if(remision.getDoctotal()>0.0 && remision.getDoctotal()!=null){
+		// actualizacion de la nota de remision original groupnum = 2 anulacion
+		// de nota de remision
+		if (Delivery.getSeries() == 4) {
+			DeliveryTO remision = new DeliveryTO();
+			remision = getDeliveryByKey(Delivery.getReceiptnum());
+			if (remision.getDoctotal() > 0.0 && remision.getDoctotal() != null) {
 				remision.setCanceled("Y");
 				remision.setDocstatus("C");
-				
-				
+
 				remision.setCanceldate(Delivery.getDocdate());
-				inv_Delivery_update(remision,Common.MTTOUPDATE,conn);
-				
+				inv_Delivery_update(remision, Common.MTTOUPDATE, conn);
+
 				journal = fill_JournalEntry_cancellation(Delivery);
 
 				AccountingEJB account = new AccountingEJB();
-				res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT, conn);
-				
-			}else{
-				throw new Exception(
-						"No se encuentra nota de remision "+Delivery.getReceiptnum());
+				res_jour = account.journalEntry_mtto(journal,
+						Common.MTTOINSERT, conn);
+
+			} else {
+				throw new Exception("No se encuentra nota de remision "
+						+ Delivery.getReceiptnum());
 			}
-			
-		}else{
-		// -----------------------------------------------------------------------------------
-		
-		// -----------------------------------------------------------------------------------
-		// registro del asiento contable y actualización de saldos
-		// -----------------------------------------------------------------------------------
 
-		journal = fill_JournalEntry(Delivery);
+		} else {
+			// -----------------------------------------------------------------------------------
 
-		AccountingEJB account = new AccountingEJB();
-		res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT, conn);
+			// -----------------------------------------------------------------------------------
+			// registro del asiento contable y actualización de saldos
+			// -----------------------------------------------------------------------------------
+
+			journal = fill_JournalEntry(Delivery);
+
+			AccountingEJB account = new AccountingEJB();
+			res_jour = account.journalEntry_mtto(journal, Common.MTTOINSERT,
+					conn);
 		}
 		// -----------------------------------------------------------------------------------
 		// Actualización de documento con datos de Asiento contable
