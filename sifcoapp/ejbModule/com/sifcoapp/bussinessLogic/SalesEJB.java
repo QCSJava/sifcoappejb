@@ -649,7 +649,7 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -660,7 +660,7 @@ public class SalesEJB implements SalesEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		admin = new AdminDAO();
+		
 		CatalogTO Catalog = new CatalogTO();
 		CatalogTO Catalog1 = new CatalogTO();
 		for (Object obj : list) {
@@ -669,7 +669,7 @@ public class SalesEJB implements SalesEJBRemote {
 			List lisHija = new Vector();
 			// consultando la cuenta de iva y porcentajes de impuestos
 			// --------------------------------------------------------------------------------
-			admin = new AdminDAO();
+			AdminDAO admin = new AdminDAO();
 			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
@@ -756,7 +756,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
-		admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		branch_c = branch1.getBalinvntac();
 		if (branch1.getBalinvntac() == null) {
