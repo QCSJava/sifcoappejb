@@ -578,7 +578,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -2156,7 +2156,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());

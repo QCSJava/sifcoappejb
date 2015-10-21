@@ -525,7 +525,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -2081,7 +2081,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -3605,7 +3605,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -3645,7 +3645,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction2.setJrnlmemo(document.getJrnlmemo());
 			transaction2.setUsersign(document.getUsersign());
 			transaction2.setRef1(Integer.toString(document.getDocnum()));
-			transaction2.setRef2(document.getRef1());
+			transaction2.setRef2(document.getNumatcard());
 			transaction2.setLinenum(detail.getLinenum());
 			transaction2.setItemcode(detail.getItemcode());
 			transaction2.setDscription(detail.getDscription());
