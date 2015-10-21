@@ -578,7 +578,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -665,7 +665,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		boolean ind = false;
@@ -675,7 +675,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		admin = new AdminDAO();
+	
 
 		ArticlesTO arti = new ArticlesTO();
 
@@ -684,7 +684,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
 			CatalogTO Catalog = new CatalogTO();
-			admin = new AdminDAO();
+			AdminDAO admin = new AdminDAO();
 			Catalog = admin.findCatalogByKey(good.getTaxcode(), 12);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
@@ -752,7 +752,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// cuenta de bussines partner
 		buss_c = parameters.getCtlaccount();
 		// buscar la cuenta asignada al almacen
-		admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
@@ -1169,8 +1169,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
-		ParameterDAO admin1 = new ParameterDAO();
+		
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -1181,11 +1181,11 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 		CatalogTO Catalog = new CatalogTO();
 		Catalog = admin.findCatalogByKey("IVA", 12);
 
-		admin1 = new ParameterDAO();
+		ParameterDAO admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
 		Catalog1 = admin1.getParameterbykey(7);
 
@@ -2156,7 +2156,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -2281,7 +2281,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		boolean ind = false;
@@ -2291,8 +2291,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		admin = new AdminDAO();
-
+		
 		ArticlesTO arti = new ArticlesTO();
 
 		for (Object obj : list) {
@@ -2300,7 +2299,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
 			CatalogTO Catalog = new CatalogTO();
-			admin = new AdminDAO();
+			AdminDAO admin = new AdminDAO();
 			Catalog = admin.findCatalogByKey(good.getTaxcode(), 12);
 			// calculando los impuestos y saldo de las cuentas
 			// --------------------------------------------------------------------------------
@@ -2368,7 +2367,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// cuenta de bussines partner
 		buss_c = parameters.getCtlaccount();
 		// buscar la cuenta asignada al almacen
-		admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
@@ -2787,8 +2786,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
-		ParameterDAO admin1 = new ParameterDAO();
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -2799,11 +2797,11 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 		CatalogTO Catalog = new CatalogTO();
 		Catalog = admin.findCatalogByKey("IVA", 12);
 
-		admin1 = new ParameterDAO();
+		ParameterDAO admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
 		Catalog1 = admin1.getParameterbykey(7);
 

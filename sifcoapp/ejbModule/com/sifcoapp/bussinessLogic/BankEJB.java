@@ -1029,7 +1029,7 @@ public class BankEJB implements BankEJBRemote {
 		List aux = new Vector();
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
-		AdminDAO admin = new AdminDAO();
+		
 		// consulta para encontrar todas las cuentas asignadas para el asiento
 		// contable
 		// cuenta de pasivo administrativo
@@ -1115,7 +1115,7 @@ public class BankEJB implements BankEJBRemote {
 				// tomando
 				// como
 				// venta iva debito
-				admin = new AdminDAO();
+				 AdminDAO admin = new AdminDAO();
 
 				CatalogTO Catalog = new CatalogTO();
 				Catalog = admin.findCatalogByKey("IVA", 10);

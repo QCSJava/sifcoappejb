@@ -525,7 +525,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -1262,8 +1262,8 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
-		ParameterDAO admin1 = new ParameterDAO();
+		
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 
 		ArticlesTO arti = new ArticlesTO();
@@ -1271,11 +1271,11 @@ public class SalesEJB implements SalesEJBRemote {
 		List list = parameters.getSalesDetails();
 
 		// recorre la lista de detalles
-		admin = new AdminDAO();
+		 AdminDAO admin = new AdminDAO();
 		CatalogTO Catalog = new CatalogTO();
 		Catalog = admin.findCatalogByKey("IVA", 10);
 
-		admin1 = new ParameterDAO();
+		 ParameterDAO admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
 		Catalog1 = admin1.getParameterbykey(7);
 
@@ -2081,7 +2081,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -2369,7 +2369,7 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -2386,7 +2386,7 @@ public class SalesEJB implements SalesEJBRemote {
 			String cod = good.getAcctcode();
 			List lisHija = new Vector();
 			CatalogTO Catalog = new CatalogTO();
-			admin = new AdminDAO();
+			AdminDAO admin = new AdminDAO();
 
 			Catalog = admin.findCatalogByKey(good.getTaxcode(), 10);
 			// calculando los impuestos y saldo de las cuentas
@@ -2470,7 +2470,7 @@ public class SalesEJB implements SalesEJBRemote {
 
 		BranchTO branch1 = new BranchTO();
 		// buscando la cuenta asignada de cuenta de existencias al almacen
-		admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		branch_c = branch1.getBalinvntac();
 		if (branch1.getBalinvntac() == null) {
@@ -2972,8 +2972,8 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		AdminDAO admin = new AdminDAO();
-		ParameterDAO admin1 = new ParameterDAO();
+		
+		
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -2984,11 +2984,11 @@ public class SalesEJB implements SalesEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 		CatalogTO Catalog = new CatalogTO();
 		Catalog = admin.findCatalogByKey("IVA", 10);
 
-		admin1 = new ParameterDAO();
+		 ParameterDAO admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
 		Catalog1 = admin1.getParameterbykey(7);
 
@@ -3605,7 +3605,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setJrnlmemo(document.getJrnlmemo());
 			transaction.setUsersign(document.getUsersign());
 			transaction.setRef1(Integer.toString(document.getDocnum()));
-			transaction.setRef2(document.getRef1());
+			transaction.setRef2(document.getNumatcard());
 			transaction.setLinenum(detail.getLinenum());
 			transaction.setItemcode(detail.getItemcode());
 			transaction.setDscription(detail.getDscription());
@@ -3645,7 +3645,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction2.setJrnlmemo(document.getJrnlmemo());
 			transaction2.setUsersign(document.getUsersign());
 			transaction2.setRef1(Integer.toString(document.getDocnum()));
-			transaction2.setRef2(document.getRef1());
+			transaction2.setRef2(document.getNumatcard());
 			transaction2.setLinenum(detail.getLinenum());
 			transaction2.setItemcode(detail.getItemcode());
 			transaction2.setDscription(detail.getDscription());
@@ -4073,7 +4073,7 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 		// -----------------------------------------------------------------------------------------------------------------------------------------------
 		art2.setLine_id(2);
-		admin = new AdminDAO();
+		 admin = new AdminDAO();
 		BranchTO branch1 = new BranchTO();
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		art2.setAccount(branch1.getBalinvntac());
