@@ -220,10 +220,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			articleDetalle.setOcrcode(parameters.getTowhscode());
 			articleDetalle.setFactor1(zero);
 			articleDetalle.setObjtype("20");
-			articleDetalle.setGrssprofit(zero);
-			articleDetalle.setVatappld(zero);
+			articleDetalle.setGrssprofit(articleDetalle.getGrssprofit());
+			articleDetalle.setVatappld(articleDetalle.getVatappld());
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
-			articleDetalle.setStockpricestockprice(zero);
+			articleDetalle.setStockpricestockprice(articleDetalle.getStockpricestockprice());
 
 			// Calculo de impuesto
 			vatsum = vatsum + articleDetalle.getVatsum();
@@ -1911,10 +1911,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			articleDetalle.setOcrcode(parameters.getTowhscode());
 			articleDetalle.setFactor1(zero);
 			articleDetalle.setObjtype("20");
-			articleDetalle.setGrssprofit(zero);
-			articleDetalle.setVatappld(zero);
+			articleDetalle.setGrssprofit(articleDetalle.getGrssprofit());
+			articleDetalle.setVatappld(articleDetalle.getVatappld());
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
-			articleDetalle.setStockpricestockprice(zero);
+			articleDetalle.setStockpricestockprice(articleDetalle.getStockpricestockprice());
 
 			// Calculo de impuesto
 			vatsum = vatsum + articleDetalle.getVatsum();
