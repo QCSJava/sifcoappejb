@@ -3341,6 +3341,7 @@ public class SalesEJB implements SalesEJBRemote {
 		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO admin = new AdminDAO();
 		ParameterDAO parameter = new ParameterDAO();
+		String branch=null;
 
 		BranchTO branch1 = new BranchTO();
 		parameterTO param = new parameterTO();
@@ -3391,6 +3392,7 @@ public class SalesEJB implements SalesEJBRemote {
 			// articleDetalle.setAcctcode(acctcode);
 			articleDetalle.setTaxstatus("Y");
 			if (parameters.getSeries() == 4) {
+				branch=articleDetalle.getWhscode();
 				articleDetalle.setWhscode(param.getValue1());
 				articleDetalle.setOcrcode(param.getValue1());
 			} else {
@@ -3445,8 +3447,8 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
 		if (parameters.getSeries() == 4) {
-			parameters.setFromwhscode(param.getValue1());
-			parameters.setTowhscode(parameters.getTowhscode());
+			parameters.setFromwhscode(parameters.getTowhscode());
+			parameters.setTowhscode(branch);
 			parameters.setJrnlmemo("Nota De Remision  - ");
 
 		} else {

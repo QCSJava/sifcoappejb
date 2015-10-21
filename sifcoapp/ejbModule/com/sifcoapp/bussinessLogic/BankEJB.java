@@ -2074,7 +2074,7 @@ public class BankEJB implements BankEJBRemote {
 			// cuenta
 
 			parameterTO = parameter.getParameterbykey(13);
-			i = (Double.parseDouble(parameterTO.getValue1())) / 100;
+			i = ((Double.parseDouble(parameterTO.getValue1())) / 100)/30;
 			interes = (i * account.getCurrtotal()) * days;
 			ColecturiaConceptTO concepto = new ColecturiaConceptTO();
 			conceptos = concept.get_ges_colecturiaConcept();
