@@ -3449,7 +3449,7 @@ public class SalesEJB implements SalesEJBRemote {
 		if (parameters.getSeries() == 4) {
 			parameters.setFromwhscode(parameters.getTowhscode());
 			parameters.setTowhscode(branch);
-			parameters.setJrnlmemo("Nota De Remision  - ");
+			parameters.setJrnlmemo("Anulacion Remision-"+parameters.getReceiptnum());
 
 		} else {
 			parameters.setFromwhscode(parameters.getTowhscode());
