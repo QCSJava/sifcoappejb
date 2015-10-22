@@ -262,7 +262,7 @@ public class BankEJB implements BankEJBRemote {
 					ResultOutTO nuevo1 = new ResultOutTO();
 					nuevo1 = actualizar_sale2(DAO.getConn(), parameters);
 
-					if (parameters.getPrinted().equals("2")) {
+					if (parameters.getPrinted().equals("1")) {
 						journal = fill_JournalEntry_liquidacion_anulacion(parameters);
 						account1 = new AccountingEJB();
 						res_jour = account1.journalEntry_mtto(journal,

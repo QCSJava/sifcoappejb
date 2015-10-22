@@ -112,7 +112,6 @@ public class SalesEJB implements SalesEJBRemote {
 
 		ResultOutTO _return = new ResultOutTO();
 
-
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Validar acción a realizar
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -149,7 +148,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// --------------------------------------------------------------------------------------------------------------------------------
 		SalesDAO DAO = new SalesDAO();
 		try {
-			
+
 			DAO.setIstransaccional(true);
 			_return = save_TransactionSales(parameters, action, DAO.getConn());
 			DAO.forceCommit();
@@ -268,7 +267,8 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setGrssprofit(articleDetalle.getGrssprofit());
 			articleDetalle.setVatappld(zero);
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
-			articleDetalle.setStockpricestockprice(articleDetalle.getStockpricestockprice());
+			articleDetalle.setStockpricestockprice(articleDetalle
+					.getStockpricestockprice());
 
 			// Calculo de impuesto
 			vatsum = vatsum + articleDetalle.getVatsum();
@@ -284,9 +284,6 @@ public class SalesEJB implements SalesEJBRemote {
 			}
 		}
 
-		
-		
-		
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// consultando si es venta de diesel ; si lo es cambio de cuenta
 		// asignada en el concepto de diesel por cliente
@@ -336,10 +333,7 @@ public class SalesEJB implements SalesEJBRemote {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------------------------------------------------------
@@ -364,10 +358,10 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
-		
+
 		parameters.setRounddif(zero);
 		parameters.setRounding("N");
-	
+
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
 
@@ -649,7 +643,7 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -660,7 +654,7 @@ public class SalesEJB implements SalesEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		
+
 		CatalogTO Catalog = new CatalogTO();
 		CatalogTO Catalog1 = new CatalogTO();
 		for (Object obj : list) {
@@ -1262,8 +1256,7 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 
 		double impuesto = 0.0;
-		
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 
 		ArticlesTO arti = new ArticlesTO();
@@ -1271,11 +1264,11 @@ public class SalesEJB implements SalesEJBRemote {
 		List list = parameters.getSalesDetails();
 
 		// recorre la lista de detalles
-		 AdminDAO admin = new AdminDAO();
+		AdminDAO admin = new AdminDAO();
 		CatalogTO Catalog = new CatalogTO();
 		Catalog = admin.findCatalogByKey("IVA", 10);
 
-		 ParameterDAO admin1 = new ParameterDAO();
+		ParameterDAO admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
 		Catalog1 = admin1.getParameterbykey(7);
 
@@ -1843,7 +1836,8 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setGrssprofit(articleDetalle.getGrssprofit());
 			articleDetalle.setVatappld(zero);
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
-			articleDetalle.setStockpricestockprice(articleDetalle.getStockpricestockprice());
+			articleDetalle.setStockpricestockprice(articleDetalle
+					.getStockpricestockprice());
 
 			// Calculo de impuesto
 			vatsum = vatsum + articleDetalle.getVatsum();
@@ -2369,7 +2363,7 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -2972,8 +2966,7 @@ public class SalesEJB implements SalesEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -2988,7 +2981,7 @@ public class SalesEJB implements SalesEJBRemote {
 		CatalogTO Catalog = new CatalogTO();
 		Catalog = admin.findCatalogByKey("IVA", 10);
 
-		 ParameterDAO admin1 = new ParameterDAO();
+		ParameterDAO admin1 = new ParameterDAO();
 		parameterTO Catalog1 = new parameterTO();
 		Catalog1 = admin1.getParameterbykey(7);
 
@@ -3341,7 +3334,7 @@ public class SalesEJB implements SalesEJBRemote {
 		ArticlesTO DBArticle = new ArticlesTO();
 		AdminDAO admin = new AdminDAO();
 		ParameterDAO parameter = new ParameterDAO();
-		String branch=null;
+		String branch = null;
 
 		BranchTO branch1 = new BranchTO();
 		parameterTO param = new parameterTO();
@@ -3392,7 +3385,7 @@ public class SalesEJB implements SalesEJBRemote {
 			// articleDetalle.setAcctcode(acctcode);
 			articleDetalle.setTaxstatus("Y");
 			if (parameters.getSeries() == 4) {
-				branch=articleDetalle.getWhscode();
+				branch = articleDetalle.getWhscode();
 				articleDetalle.setWhscode(param.getValue1());
 				articleDetalle.setOcrcode(param.getValue1());
 			} else {
@@ -3405,7 +3398,8 @@ public class SalesEJB implements SalesEJBRemote {
 			articleDetalle.setGrssprofit(articleDetalle.getGrssprofit());
 			articleDetalle.setVatappld(zero);
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
-			articleDetalle.setStockpricestockprice(articleDetalle.getStockpricestockprice());
+			articleDetalle.setStockpricestockprice(articleDetalle
+					.getStockpricestockprice());
 
 			// Calculo de impuesto
 			vatsum = vatsum + articleDetalle.getVatsum();
@@ -3449,7 +3443,8 @@ public class SalesEJB implements SalesEJBRemote {
 		if (parameters.getSeries() == 4) {
 			parameters.setFromwhscode(parameters.getTowhscode());
 			parameters.setTowhscode(branch);
-			parameters.setJrnlmemo("Anulacion Remision-"+parameters.getReceiptnum());
+			parameters.setJrnlmemo("Anulacion Remision-"
+					+ parameters.getReceiptnum());
 
 		} else {
 			parameters.setFromwhscode(parameters.getTowhscode());
@@ -3544,9 +3539,16 @@ public class SalesEJB implements SalesEJBRemote {
 		// actualizacion de la nota de remision original groupnum = 2 anulacion
 		// de nota de remision
 		if (Delivery.getSeries() == 4) {
+			
 			DeliveryTO remision = new DeliveryTO();
 			remision = getDeliveryByKey(Delivery.getReceiptnum());
-			if (remision.getDoctotal() > 0.0 && remision.getDoctotal() != null) {
+			
+			if(remision.getCanceled().equals("Y") && remision.getDocstatus().equals("O")){
+				throw new Exception("Nota de Remision ya se encuentra Anulada "
+						+ Delivery.getReceiptnum());
+			}
+			
+			if (remision.getDoctotal() != null && remision.getDoctotal() > 0.0  ) {
 				remision.setCanceled("Y");
 				remision.setDocstatus("C");
 
@@ -4075,7 +4077,7 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 		// -----------------------------------------------------------------------------------------------------------------------------------------------
 		art2.setLine_id(2);
-		 admin = new AdminDAO();
+		admin = new AdminDAO();
 		BranchTO branch1 = new BranchTO();
 		branch1 = admin.getBranchByKey(parameters.getTowhscode());
 		art2.setAccount(branch1.getBalinvntac());
