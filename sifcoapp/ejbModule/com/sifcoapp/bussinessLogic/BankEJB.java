@@ -424,11 +424,11 @@ public class BankEJB implements BankEJBRemote {
 			// calculando
 			// -------------------------------------------------------------------------------------------------------------------------------------
 			// para el ahorro
-			ahorro = GLs * ((Integer.parseInt(Ah.getValue2()))/100.0);
+			ahorro = GLs * (Double.parseDouble(Ah.getValue2()));
 			// para el aporte
-			aportacion = GLs * ((Integer.parseInt(Ap.getValue2()))/100.0);
+			aportacion = GLs * (Double.parseDouble(Ap.getValue2()));
 			// para la utilidad
-			utilidad = GLs * ((Integer.parseInt(Ut.getValue1()))/100.0);
+			utilidad = GLs * (Double.parseDouble(Ut.getValue1()));
 			// -------------------------------------------------------------------------------------------------------------------------------------
 
 			// -------------------------------------------------------------------------------------------------------------------------------------
