@@ -281,10 +281,10 @@ public class AccountingEJBClient {
 
 	}
 
-	public ResultOutTO traslado_caja(AccountTO account) throws Exception {
+	public ResultOutTO traslado_caja_colecturia(Date fecha) throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 
-		_return = bean.traslado_caja(account);
+		_return = bean.traslado_caja_colecturia(fecha);
 
 		return _return;
 

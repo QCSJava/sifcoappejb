@@ -491,7 +491,7 @@ public class SalesTest {
 
 		DeliveryTO sale=new DeliveryTO();
 		 try {
-			sale=sales.getDeliveryByKey(2);
+			sale=sales.getDeliveryByKey(4);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -516,7 +516,7 @@ public class SalesTest {
 			parameters.setJrnlmemo(sale.getJrnlmemo());
 			parameters.setPaidtodate(sale.getPaidtodate());
 			parameters.setTransid(sale.getTransid());
-			parameters.setReceiptnum(2);
+			parameters.setReceiptnum(4);
 			parameters.setGroupnum(sale.getGroupnum());
 			parameters.setConfirmed(sale.getConfirmed());
 			parameters.setCreatetran(sale.getCreatetran());

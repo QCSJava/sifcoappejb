@@ -101,7 +101,7 @@ public interface AccountingEJBRemote {
 
 	public ResultOutTO Update_endTotal() throws Exception;
 
-	public ResultOutTO traslado_caja(AccountTO account) throws Exception;
+	public ResultOutTO traslado_caja_colecturia(Date fecha) throws Exception;
 
 	public Double devolver_saldo(AccountTO account) throws Exception;
 

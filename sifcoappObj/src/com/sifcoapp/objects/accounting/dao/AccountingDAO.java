@@ -20,6 +20,7 @@ import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
+import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -75,8 +76,6 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -191,8 +190,6 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		
-
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -245,8 +242,6 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		
-
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -298,8 +293,6 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -363,7 +356,7 @@ public class AccountingDAO extends CommonDAO {
 		this.setString(3, "_postable", postable);
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
-		
+
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 
@@ -419,8 +412,6 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -574,8 +565,6 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -745,8 +734,6 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -956,8 +943,6 @@ public class AccountingDAO extends CommonDAO {
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -1472,19 +1457,15 @@ public class AccountingDAO extends CommonDAO {
 
 	public void update_TreeTotal() throws Exception {
 
-		
-		
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
 		this.setDbObject("{? = call sp_get_acc0_account()}");
-		
+
 		lstResultSet = this.runQuery();
 
 		CachedRowSetImpl rowsetActual;
-
-		
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
@@ -1575,7 +1556,6 @@ public class AccountingDAO extends CommonDAO {
 
 		CachedRowSetImpl rowsetActual;
 
-		
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
 		Hashtable _values = new Hashtable();
@@ -1680,4 +1660,51 @@ public class AccountingDAO extends CommonDAO {
 		update_endTotal(parent);
 	}
 
+	public ColecturiaConceptTO getCloseColecturia(Date fecha) throws Exception {
+
+		ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
+
+		List days = new Vector();
+		int dias = -1;
+		List lstResult = new Vector();
+		List lstResultSet = null;
+
+		this.setDbObject("select B.linenum,A.dscription,sum(B.paidsum) as paidsum,A.acctcode,A.ctlaccount from   ges_col2_colecturiaconcept A join ges_col1_colecturiadetail B on B.linenum=A.linenum join ges_col0_colecturia C on B.docentry=C.docentry where docdate=? group by B.linenum,A.dscription,A.ctlaccount,A.acctcode order by linenum ");
+		if (fecha == null) {
+			this.setDate(1, "_docdate",fecha);
+		} else {
+			java.sql.Date fecha1 = new java.sql.Date(fecha
+					.getTime());
+			this.setDate(1, "_docdate", fecha1);
+		}
+
+		lstResultSet = this.runQueryPrepared();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					colecturia.setLinenum(rowsetActual.getInt(1));
+					colecturia.setDscription(rowsetActual.getString(2));
+					colecturia.setPaidsum(rowsetActual.getDouble(3));
+					colecturia.setAcctcode(rowsetActual.getString(4));
+					colecturia.setCtlaccount(rowsetActual.getString(5));
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return colecturia;
+
+	}
 }

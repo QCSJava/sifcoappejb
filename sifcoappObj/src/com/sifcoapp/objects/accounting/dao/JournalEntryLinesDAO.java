@@ -2,6 +2,7 @@ package com.sifcoapp.objects.accounting.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -664,6 +665,48 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 	}
 
+	public int getvalidatecloseColecturia(String objtype, Date fecha)
+			throws Exception {
+		List days = new Vector();
+		int cuenta = -1;
+		List lstResult = new Vector();
+		List lstResultSet = null;
+
+		this.setDbObject("SELECT count(*) from cat_jdt1_journalentrylines where transtype=? and duedate=?");
+		this.setString(1, "_transtype", objtype);
+		if (fecha == null) {
+			this.setDate(2, "_duedate", fecha);
+		} else {
+			java.sql.Date fecha1 = new java.sql.Date(fecha.getTime());
+			this.setDate(2, "_duedate", fecha1);
+		}
+
+		lstResultSet = this.runQueryPrepared();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					cuenta = rowsetActual.getInt(1);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// si es mayor que cero es porque se realizo el cierre diario de caja
+		return cuenta;
+
+	}
+
 	public int getdays_credit(String account) throws Exception {
 		List days = new Vector();
 		int dias = -1;
@@ -671,7 +714,7 @@ public class JournalEntryLinesDAO extends CommonDAO {
 		List lstResultSet = null;
 
 		this.setDbObject("SELECT (current_date-duedate)as dias FROM cat_jdt1_journalentrylines where account=? and debit > 0.0 order by transid desc limit 1");
-		this.setString(1, "account", account);
+		this.setString(1, "_account", account);
 
 		lstResultSet = this.runQueryPrepared();
 

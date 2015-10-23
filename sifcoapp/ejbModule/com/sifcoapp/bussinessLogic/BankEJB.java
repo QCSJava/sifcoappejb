@@ -1,6 +1,8 @@
 package com.sifcoapp.bussinessLogic;
 
 import java.sql.Connection;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -166,6 +168,8 @@ public class BankEJB implements BankEJBRemote {
 		parameter = ejb.getParameterbykey(9);
 
 		List aux = new Vector();
+		// aqui la validacion de abono a capital si no se ha pagado por completo
+		// el interes
 
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
@@ -289,6 +293,70 @@ public class BankEJB implements BankEJBRemote {
 		return _return;
 	}
 
+	public ResultOutTO validateColecturia(ColecturiaTO parameter) {
+		ResultOutTO result = new ResultOutTO();
+		// asingnacion de variables;
+		ParameterDAO DAO = new ParameterDAO();
+		parameterTO prestamo = new parameterTO();
+		parameterTO interes = new parameterTO();
+
+		try {
+			prestamo = DAO.getParameterbykey(15);
+
+			DAO = new ParameterDAO();
+			interes = DAO.getParameterbykey(15);
+
+			List list = new Vector();
+			list = parameter.getColecturiaDetail();
+			for (Object object : list) {
+			
+				ColecturiaDetailTO colecturia = (ColecturiaDetailTO) object;
+				
+				//consulta el concepto de prestamos 
+				if (prestamo.getValue1().equals(colecturia.getLinenum())) {
+					
+					//cosulta si existe un monto a pagar en el concepto de prestamo
+					if(colecturia.getPaidsum()>0.0){
+						//si el pago de prestamos > 0.0 
+                    	 for (Object object2 : list) {
+                    	
+							ColecturiaDetailTO colecturia2 = (ColecturiaDetailTO) object2 ;
+                    		 if(interes.getValue1().equals(colecturia2.getLinenum())){
+                    			 // si el saldo del interes es igual a cero o el saldo - paidsum=0
+                    			 if(Double.parseDouble(colecturia2.getValue1())<=0.0 || (Double.parseDouble(colecturia2.getValue1())-colecturia2.getPaidsum())==0.0 ){
+                    				 result.setMensaje("colecturia valida");
+                    				 result.setCodigoError(0);
+                    			 }
+                    		 }else{
+                    			 result.setMensaje("Debe Pagar los interese antes que el capital del prestamo ");
+                    			 result.setCodigoError(1);
+                    			 return result;
+                    		 }
+						}
+                     }
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	public ResultOutTO validateCloseDiary(){
+		ResultOutTO result = new ResultOutTO();
+		// fecha del dia anterior		
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DATE, -1);
+		Date date = c.getTime();
+		//objctype cierre diario de colecturia se encuentra en transtype de las lineas del asiento contable 
+		String objtype="45";
+		
+		
+		return result;
+	}
+	
 	public List get_ges_colecturia(ColecturiaInTO parameters)
 			throws EJBException {
 		List _return = new Vector();
@@ -375,111 +443,110 @@ public class BankEJB implements BankEJBRemote {
 			// cosulta del colecturia concept con su saldo de la cuenta
 			_return = DAO.get_ges_colecturiaConcept1(Code);
 
-		// filtra las facturas
-		facturas = filtro_consulta(facturas);
-		if (facturas != null) {
-			parameterTO parameter = new parameterTO();
-			parameterTO Ap = new parameterTO();
-			parameterTO Ah = new parameterTO();
-			parameterTO Ut = new parameterTO();
-			// para cosultar el busines partner para saber si es socio o propio
-			BusinesspartnerTO busines=new BusinesspartnerTO();
-			BusinesspartnerDAO Bus= new BusinesspartnerDAO();
-			busines=Bus.get_businesspartnerByKey(Code);
-			
-			ParameterEJB ejb = new ParameterEJB();
-			parameter = ejb.getParameterbykey(9);
-			
+			// filtra las facturas
+			facturas = filtro_consulta(facturas);
+			if (facturas != null) {
+				parameterTO parameter = new parameterTO();
+				parameterTO Ap = new parameterTO();
+				parameterTO Ah = new parameterTO();
+				parameterTO Ut = new parameterTO();
+				// para cosultar el busines partner para saber si es socio o
+				// propio
+				BusinesspartnerTO busines = new BusinesspartnerTO();
+				BusinesspartnerDAO Bus = new BusinesspartnerDAO();
+				busines = Bus.get_businesspartnerByKey(Code);
 
-			double ahorro;
-			double aportacion;
-			double utilidad;
-			double GLs = 0.0;
-			double Total_sales = 0.0;
-			// -------------------------------------------------------------------------------------------------------------------------------------
-			// cosultando los conceptos correspondientes a ahorro,aportacion y
-			// utilidad de diesel
-			// -------------------------------------------------------------------------------------------------------------------------------------
-			Ap = ejb.getParameterbykey(23);
-			Ah = ejb.getParameterbykey(24);
-			Ut = ejb.getParameterbykey(25);
+				ParameterEJB ejb = new ParameterEJB();
+				parameter = ejb.getParameterbykey(9);
 
-			for (Object object : facturas) {
-				SalesTO sale = (SalesTO) object;
-				SalesTO salebykey=new SalesTO();
-				salebykey=sales.getSalesByKey(sale.getDocentry());
-				
-				List detalle = new Vector();
-				Total_sales = Total_sales + sale.getDoctotal();
-				
-				detalle = salebykey.getSalesDetails();
-				
-				for (Object object2 : detalle) {
-					SalesDetailTO detail = (SalesDetailTO) object2;
-					GLs = GLs + detail.getQuantity();
-				}
-			}
+				double ahorro;
+				double aportacion;
+				double utilidad;
+				double GLs = 0.0;
+				double Total_sales = 0.0;
+				// -------------------------------------------------------------------------------------------------------------------------------------
+				// cosultando los conceptos correspondientes a ahorro,aportacion
+				// y
+				// utilidad de diesel
+				// -------------------------------------------------------------------------------------------------------------------------------------
+				Ap = ejb.getParameterbykey(23);
+				Ah = ejb.getParameterbykey(24);
+				Ut = ejb.getParameterbykey(25);
 
-			// -------------------------------------------------------------------------------------------------------------------------------------
-			// calculando
-			// -------------------------------------------------------------------------------------------------------------------------------------
-			// para el ahorro
-			ahorro = GLs * (Double.parseDouble(Ah.getValue2()));
-			// para el aporte
-			aportacion = GLs * (Double.parseDouble(Ap.getValue2()));
-			// para la utilidad
-			utilidad = GLs * (Double.parseDouble(Ut.getValue1()));
-			// -------------------------------------------------------------------------------------------------------------------------------------
+				for (Object object : facturas) {
+					SalesTO sale = (SalesTO) object;
+					SalesTO salebykey = new SalesTO();
+					salebykey = sales.getSalesByKey(sale.getDocentry());
 
-			// -------------------------------------------------------------------------------------------------------------------------------------
-			Iterator<ColecturiaConceptTO> iterator = _return.iterator();
-			
-			
-			while (iterator.hasNext()) {
-				ColecturiaConceptTO concept = (ColecturiaConceptTO) iterator
-						.next();
-				// para ver si hay una cuenta para el asiento contable
+					List detalle = new Vector();
+					Total_sales = Total_sales + sale.getDoctotal();
 
-				if (concept.getObjtype() != null
-						&& !concept.getObjtype().isEmpty()) {
-					concept.setAcctcode3(concept.getObjtype());
-				}
-				// CONCEPTO CORRESPONDIENTE A LAS FACTURAS DE DIESEL
-				if (concept.getLinenum() == Integer.parseInt(parameter
-						.getValue1())) {
-					concept.setFacturas(facturas);
-					concept.setPaidsum(Total_sales);
+					detalle = salebykey.getSalesDetails();
 
-				}
-				// ahorro diesel
-				if(concept.getLinenum()==Integer.parseInt(Ah.getValue1())){
-					concept.setPaidsum(ahorro);
-				}
-				
-				// ahorro diesel
-				if(concept.getLinenum()==Integer.parseInt(Ap.getValue1())){
-					// si groupcode es igual a 1 entonces es unidad propia sino es unidad asociado 
-					if(busines.getGroupcode().equals("1")){
-						aportacion=aportacion+utilidad;
-						concept.setPaidsum(aportacion);
-					}else{
-						concept.setPaidsum(aportacion);	
+					for (Object object2 : detalle) {
+						SalesDetailTO detail = (SalesDetailTO) object2;
+						GLs = GLs + detail.getQuantity();
 					}
-					
 				}
-				
 
+				// -------------------------------------------------------------------------------------------------------------------------------------
+				// calculando
+				// -------------------------------------------------------------------------------------------------------------------------------------
+				// para el ahorro
+				ahorro = GLs * (Double.parseDouble(Ah.getValue2()));
+				// para el aporte
+				aportacion = GLs * (Double.parseDouble(Ap.getValue2()));
+				// para la utilidad
+				utilidad = GLs * (Double.parseDouble(Ut.getValue1()));
+				// -------------------------------------------------------------------------------------------------------------------------------------
+
+				// -------------------------------------------------------------------------------------------------------------------------------------
+				Iterator<ColecturiaConceptTO> iterator = _return.iterator();
+
+				while (iterator.hasNext()) {
+					ColecturiaConceptTO concept = (ColecturiaConceptTO) iterator
+							.next();
+					// para ver si hay una cuenta para el asiento contable
+
+					if (concept.getObjtype() != null
+							&& !concept.getObjtype().isEmpty()) {
+						concept.setAcctcode3(concept.getObjtype());
+					}
+					// CONCEPTO CORRESPONDIENTE A LAS FACTURAS DE DIESEL
+					if (concept.getLinenum() == Integer.parseInt(parameter
+							.getValue1())) {
+						concept.setFacturas(facturas);
+						concept.setPaidsum(Total_sales);
+
+					}
+					// ahorro diesel
+					if (concept.getLinenum() == Integer
+							.parseInt(Ah.getValue1())) {
+						concept.setPaidsum(ahorro);
+					}
+
+					// ahorro diesel
+					if (concept.getLinenum() == Integer
+							.parseInt(Ap.getValue1())) {
+						// si groupcode es igual a 1 entonces es unidad propia
+						// sino es unidad asociado
+						if (busines.getGroupcode().equals("1")) {
+							aportacion = aportacion + utilidad;
+							concept.setPaidsum(aportacion);
+						} else {
+							concept.setPaidsum(aportacion);
+						}
+
+					}
+
+				}
 			}
-		}
-		
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
-		
-		
-		
+
 		return _return;
 	}
 
@@ -1029,7 +1096,7 @@ public class BankEJB implements BankEJBRemote {
 		List aux = new Vector();
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
-		
+
 		// consulta para encontrar todas las cuentas asignadas para el asiento
 		// contable
 		// cuenta de pasivo administrativo
@@ -1115,7 +1182,7 @@ public class BankEJB implements BankEJBRemote {
 				// tomando
 				// como
 				// venta iva debito
-				 AdminDAO admin = new AdminDAO();
+				AdminDAO admin = new AdminDAO();
 
 				CatalogTO Catalog = new CatalogTO();
 				Catalog = admin.findCatalogByKey("IVA", 10);
@@ -2074,7 +2141,7 @@ public class BankEJB implements BankEJBRemote {
 			// cuenta
 
 			parameterTO = parameter.getParameterbykey(13);
-			i = ((Double.parseDouble(parameterTO.getValue1())) / 100)/30;
+			i = ((Double.parseDouble(parameterTO.getValue1())) / 100) / 30;
 			interes = (i * account.getCurrtotal()) * days;
 			ColecturiaConceptTO concepto = new ColecturiaConceptTO();
 			conceptos = concept.get_ges_colecturiaConcept();

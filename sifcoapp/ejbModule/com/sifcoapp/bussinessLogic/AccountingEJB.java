@@ -1590,8 +1590,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 	}
 
-	public ResultOutTO traslado_caja(AccountTO account) throws Exception {
-
+	public ResultOutTO traslado_caja_colecturia(Date fecha) throws Exception {
+    AccountTO account= new AccountTO();
 		double debe = 0.0;
 		double haber = 0.0;
 		double saldo = 0.0;
@@ -1797,6 +1797,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	
 	public void update_tree(Date refdate, String transtype) throws EJBException {
 		AccountingDAO acc = new AccountingDAO();
 		acc.setIstransaccional(true);
