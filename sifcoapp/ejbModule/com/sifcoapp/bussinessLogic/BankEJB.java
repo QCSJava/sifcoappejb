@@ -170,13 +170,21 @@ public class BankEJB implements BankEJBRemote {
 		List aux = new Vector();
 		// aqui la validacion de abono a capital si no se ha pagado por completo
 		// el interes
+		
 
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
 		}
 
 		try {
-
+			
+			_return=validateColecturia(parameters);
+			if(_return.getCodigoError()!=0){
+				_return.setCodigoError(1);
+				_return.setMensaje("pago de colecturia no valido");
+			}else{
+			
+			
 			if (action == Common.MTTOINSERT) {
 
 				_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(
@@ -278,8 +286,13 @@ public class BankEJB implements BankEJBRemote {
 			} else {
 				DAO.ges_ges_col0_colecturia_mtto(parameters, Common.MTTOUPDATE);
 			}
-
-			DAO.forceCommit();
+			
+				_return.setCodigoError(0);
+				_return.setMensaje("Datos ingresados con exito");
+			
+			
+			}// fin del if de la validacion 
+				DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
@@ -288,8 +301,7 @@ public class BankEJB implements BankEJBRemote {
 
 			DAO.forceCloseConnection();
 		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos ingresados correctamente");
+		
 		return _return;
 	}
 
@@ -301,6 +313,14 @@ public class BankEJB implements BankEJBRemote {
 		parameterTO interes = new parameterTO();
 
 		try {
+			// validacion si el cierre de caja del dia anterior ya se realizo
+			result = validateCloseDiary_colecturia(parameter.getUsersign());
+			if (result.getCodigoError() != 0) {
+				result.setCodigoError(1);
+				result.setMensaje("no se ha realizado el cierre de caja de el dia anterior");
+				return result;
+			}
+			// validacion de prestamos
 			prestamo = DAO.getParameterbykey(15);
 
 			DAO = new ParameterDAO();
@@ -309,31 +329,37 @@ public class BankEJB implements BankEJBRemote {
 			List list = new Vector();
 			list = parameter.getColecturiaDetail();
 			for (Object object : list) {
-			
+
 				ColecturiaDetailTO colecturia = (ColecturiaDetailTO) object;
-				
-				//consulta el concepto de prestamos 
+
+				// consulta el concepto de prestamos
 				if (prestamo.getValue1().equals(colecturia.getLinenum())) {
-					
-					//cosulta si existe un monto a pagar en el concepto de prestamo
-					if(colecturia.getPaidsum()>0.0){
-						//si el pago de prestamos > 0.0 
-                    	 for (Object object2 : list) {
-                    	
-							ColecturiaDetailTO colecturia2 = (ColecturiaDetailTO) object2 ;
-                    		 if(interes.getValue1().equals(colecturia2.getLinenum())){
-                    			 // si el saldo del interes es igual a cero o el saldo - paidsum=0
-                    			 if(Double.parseDouble(colecturia2.getValue1())<=0.0 || (Double.parseDouble(colecturia2.getValue1())-colecturia2.getPaidsum())==0.0 ){
-                    				 result.setMensaje("colecturia valida");
-                    				 result.setCodigoError(0);
-                    			 }
-                    		 }else{
-                    			 result.setMensaje("Debe Pagar los interese antes que el capital del prestamo ");
-                    			 result.setCodigoError(1);
-                    			 return result;
-                    		 }
+
+					// cosulta si existe un monto a pagar en el concepto de
+					// prestamo
+					if (colecturia.getPaidsum() > 0.0) {
+						// si el pago de prestamos > 0.0
+						for (Object object2 : list) {
+
+							ColecturiaDetailTO colecturia2 = (ColecturiaDetailTO) object2;
+							if (interes.getValue1().equals(
+									colecturia2.getLinenum())) {
+								// si el saldo del interes es igual a cero o el
+								// saldo - paidsum=0
+								if (Double.parseDouble(colecturia2.getValue1()) <= 0.0
+										|| (Double.parseDouble(colecturia2
+												.getValue1()) - colecturia2
+												.getPaidsum()) == 0.0) {
+									result.setMensaje("colecturia valida");
+									result.setCodigoError(0);
+								}
+							} else {
+								result.setMensaje("Debe Pagar los intereses antes que el capital del préstamo ");
+								result.setCodigoError(1);
+								return result;
+							}
 						}
-                     }
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -342,21 +368,25 @@ public class BankEJB implements BankEJBRemote {
 		}
 		return result;
 	}
-	
-	
-	public ResultOutTO validateCloseDiary(){
+
+	public ResultOutTO validateCloseDiary_colecturia(int usersign)
+			throws Exception {
 		ResultOutTO result = new ResultOutTO();
-		// fecha del dia anterior		
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DATE, -1);
-		Date date = c.getTime();
-		//objctype cierre diario de colecturia se encuentra en transtype de las lineas del asiento contable 
-		String objtype="45";
-		
-		
+
+		ColecturiaDAO DAO = new ColecturiaDAO();
+
+		int num = DAO.getvalidatecloseColecturia(usersign);
+		if (num > 0) {
+			result.setCodigoError(0);
+			result.setMensaje("Cierre realizado");
+		} else {
+			result.setCodigoError(1);
+			result.setMensaje("cierre de colecturia no realizad");
+		}
+
 		return result;
 	}
-	
+
 	public List get_ges_colecturia(ColecturiaInTO parameters)
 			throws EJBException {
 		List _return = new Vector();

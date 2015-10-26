@@ -665,48 +665,6 @@ public class JournalEntryLinesDAO extends CommonDAO {
 
 	}
 
-	public int getvalidatecloseColecturia(String objtype, Date fecha)
-			throws Exception {
-		List days = new Vector();
-		int cuenta = -1;
-		List lstResult = new Vector();
-		List lstResultSet = null;
-
-		this.setDbObject("SELECT count(*) from cat_jdt1_journalentrylines where transtype=? and duedate=?");
-		this.setString(1, "_transtype", objtype);
-		if (fecha == null) {
-			this.setDate(2, "_duedate", fecha);
-		} else {
-			java.sql.Date fecha1 = new java.sql.Date(fecha.getTime());
-			this.setDate(2, "_duedate", fecha1);
-		}
-
-		lstResultSet = this.runQueryPrepared();
-
-		CachedRowSetImpl rowsetActual;
-
-		ListIterator liRowset = null;
-		liRowset = lstResultSet.listIterator();
-		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
-		while (liRowset.hasNext()) {
-
-			rowsetActual = (CachedRowSetImpl) liRowset.next();
-
-			try {
-				while (rowsetActual.next()) {
-					cuenta = rowsetActual.getInt(1);
-				}
-				rowsetActual.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		// si es mayor que cero es porque se realizo el cierre diario de caja
-		return cuenta;
-
-	}
-
 	public int getdays_credit(String account) throws Exception {
 		List days = new Vector();
 		int dias = -1;

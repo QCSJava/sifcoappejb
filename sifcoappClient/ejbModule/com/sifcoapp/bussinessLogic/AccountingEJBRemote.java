@@ -17,6 +17,8 @@ import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
+import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 @Remote
@@ -101,10 +103,10 @@ public interface AccountingEJBRemote {
 
 	public ResultOutTO Update_endTotal() throws Exception;
 
-	public ResultOutTO traslado_caja_colecturia(Date fecha) throws Exception;
-
-	public Double devolver_saldo(AccountTO account) throws Exception;
-
+	public ResultOutTO traslado_caja_colecturia(ColecturiaTO colecturia)throws Exception;
+	
 	public void update_tree(Date refdate, String transtype) throws EJBException;
+	
+	public List devolver_saldo_colecturia(Date fecha,int usersign)throws Exception;
 	
 }

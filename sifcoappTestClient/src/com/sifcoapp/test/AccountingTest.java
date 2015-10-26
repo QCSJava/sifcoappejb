@@ -573,7 +573,7 @@ public class AccountingTest {
 		account.setObjtype("10");
 		account.setUsersing(53);
 
-		_result = AccountingEJBService.devolver_saldo(account);
+		detail = AccountingEJBService.
 		System.out.println(_result);
 
 		account.setCurrtotal(_result);

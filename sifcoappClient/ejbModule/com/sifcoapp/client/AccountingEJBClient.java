@@ -21,6 +21,8 @@ import com.sifcoapp.objects.accounting.to.JournalEntryLinesTO;
 import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
+import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
 public class AccountingEJBClient {
@@ -281,19 +283,19 @@ public class AccountingEJBClient {
 
 	}
 
-	public ResultOutTO traslado_caja_colecturia(Date fecha) throws Exception {
+	public ResultOutTO traslado_caja_colecturia(ColecturiaTO colecturia) throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 
-		_return = bean.traslado_caja_colecturia(fecha);
+		_return = bean.traslado_caja_colecturia(colecturia);
 
 		return _return;
 
 	}
 
-	public double devolver_saldo(AccountTO account) throws Exception {
-		double _return;
-
-		_return = bean.devolver_saldo(account);
+	public List devolver_saldo_colecturia(Date fecha,
+			int usersign) throws Exception {
+		List _return = new Vector();
+		_return = bean.devolver_saldo_colecturia(fecha, usersign);
 
 		return _return;
 

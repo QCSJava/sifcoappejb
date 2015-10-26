@@ -1,10 +1,12 @@
 package com.sifcoapp.objects.bank.dao;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import com.sifcoapp.objects.accounting.to.AccountTO;
 import com.sifcoapp.objects.bank.to.ColecturiaInTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalogos.Common;
@@ -205,6 +207,62 @@ public class ColecturiaDAO extends CommonDAO {
 		return _return;
 	}
 
+	public int update_colecturia(int usersign,Date fecha) throws Exception {
+
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE ges_col0_colecturia SET  transtype=1 WHERE usersign=? and docdate=?");
+		this.setInt(1, "_usersign", usersign);
+		
+		if (fecha == null) {
+			this.setDate(2, "_docdate",fecha);
+		} else {
+			java.sql.Date fecha1 = new java.sql.Date(fecha
+					.getTime());
+			this.setDate(2, "_docdate", fecha1);
+		}
+		
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
+	}
+
+	public int getvalidatecloseColecturia(int usersign)
+			throws Exception {
+		List days = new Vector();
+		int cuenta = -1;
+		List lstResult = new Vector();
+		List lstResultSet = null;
+
+		this.setDbObject("SELECT count(*) from ges_col0_colecturia where docdate < current_date and transtype<>1 usersign=?");
+		
+		this.setInt(1, "_usersign", usersign);
+		
+		lstResultSet = this.runQueryPrepared();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+		while (liRowset.hasNext()) {
+
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+
+			try {
+				while (rowsetActual.next()) {
+					cuenta = rowsetActual.getInt(1);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// si es mayor que cero es porque se realizo el cierre diario de caja
+		return cuenta;
+
+	}
 	
 	public ColecturiaTO get_ges_colecturiaByKey_print(int parameters)
 			throws Exception {

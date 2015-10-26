@@ -21,6 +21,7 @@ import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
+import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
@@ -1660,16 +1661,16 @@ public class AccountingDAO extends CommonDAO {
 		update_endTotal(parent);
 	}
 
-	public ColecturiaConceptTO getCloseColecturia(Date fecha) throws Exception {
+	public List getCloseColecturia(Date fecha,int usersign) throws Exception {
 
-		ColecturiaConceptTO colecturia = new ColecturiaConceptTO();
+		ColecturiaDetailTO colecturia = new ColecturiaDetailTO();
 
-		List days = new Vector();
+		List conceptos = new Vector();
 		int dias = -1;
 		List lstResult = new Vector();
 		List lstResultSet = null;
 
-		this.setDbObject("select B.linenum,A.dscription,sum(B.paidsum) as paidsum,A.acctcode,A.ctlaccount from   ges_col2_colecturiaconcept A join ges_col1_colecturiadetail B on B.linenum=A.linenum join ges_col0_colecturia C on B.docentry=C.docentry where docdate=? group by B.linenum,A.dscription,A.ctlaccount,A.acctcode order by linenum ");
+		this.setDbObject("select B.linenum,A.dscription,sum(B.paidsum) as paidsum,A.acctcode,A.ctlaccount from   ges_col2_colecturiaconcept A join ges_col1_colecturiadetail B on B.linenum=A.linenum join ges_col0_colecturia C on B.docentry=C.docentry where C.docdate=? and C.usersign=? and C.transtype = 0 group by B.linenum,A.dscription,A.ctlaccount,A.acctcode order by linenum ");
 		if (fecha == null) {
 			this.setDate(1, "_docdate",fecha);
 		} else {
@@ -1677,6 +1678,7 @@ public class AccountingDAO extends CommonDAO {
 					.getTime());
 			this.setDate(1, "_docdate", fecha1);
 		}
+		this.setInt(2,"_usersign", usersign);
 
 		lstResultSet = this.runQueryPrepared();
 
@@ -1696,6 +1698,7 @@ public class AccountingDAO extends CommonDAO {
 					colecturia.setPaidsum(rowsetActual.getDouble(3));
 					colecturia.setAcctcode(rowsetActual.getString(4));
 					colecturia.setCtlaccount(rowsetActual.getString(5));
+					conceptos.add(colecturia);
 				}
 				rowsetActual.close();
 			} catch (SQLException e) {
@@ -1704,7 +1707,7 @@ public class AccountingDAO extends CommonDAO {
 			}
 		}
 
-		return colecturia;
+		return conceptos;
 
 	}
 }
