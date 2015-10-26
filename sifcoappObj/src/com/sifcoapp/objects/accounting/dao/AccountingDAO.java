@@ -1663,8 +1663,7 @@ public class AccountingDAO extends CommonDAO {
 
 	public List getCloseColecturia(Date fecha,int usersign) throws Exception {
 
-		ColecturiaDetailTO colecturia = new ColecturiaDetailTO();
-
+		
 		List conceptos = new Vector();
 		int dias = -1;
 		List lstResult = new Vector();
@@ -1686,13 +1685,13 @@ public class AccountingDAO extends CommonDAO {
 
 		ListIterator liRowset = null;
 		liRowset = lstResultSet.listIterator();
-		// Iterator<CachedRowSetImpl> iterator = lstResult.iterator();
+
 		while (liRowset.hasNext()) {
-
 			rowsetActual = (CachedRowSetImpl) liRowset.next();
-
 			try {
 				while (rowsetActual.next()) {
+					ColecturiaDetailTO colecturia = new ColecturiaDetailTO();
+
 					colecturia.setLinenum(rowsetActual.getInt(1));
 					colecturia.setDscription(rowsetActual.getString(2));
 					colecturia.setPaidsum(rowsetActual.getDouble(3));

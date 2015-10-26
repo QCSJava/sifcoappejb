@@ -1601,14 +1601,15 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
-		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
-		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		
 		List detalles = new Vector();
 		detalles = colecturia.getColecturiaDetail();
 
 		for (Object object : detalles) {
 			ColecturiaDetailTO detalle = (ColecturiaDetailTO) object;
-
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+			
 			art1.setLine_id(n);
 			// art1.setDebit(bussines);
 			art1.setCredit(detalle.getPaidsum());
@@ -1644,9 +1645,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art1.setIntrnmatch(1);
 			art1.setMthdate(art1.getDuedate());
 			art1.setTranstype("45");
+			
 			detail.add(art1);
 
-			n++;
+			n=n+1;
 			// cuenta Bancos..........
 
 			art2.setLine_id(n);
@@ -1684,8 +1686,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art2.setIntrnmatch(1);
 			art2.setMthdate(art2.getDuedate());
 			art2.setTranstype("45");
+			
 			detail.add(art2);
-			n++;
+			
+			n=n+1;
 			sum = sum + detalle.getPaidsum();
 		}
 

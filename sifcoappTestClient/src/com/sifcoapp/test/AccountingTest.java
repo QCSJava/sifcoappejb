@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
 import javax.ejb.EJBException;
+
 import com.sifcoapp.client.AccountingEJBClient;
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
@@ -21,6 +23,8 @@ import com.sifcoapp.objects.accounting.to.JournalEntryTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
+import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
+import com.sifcoapp.objects.bank.to.ColecturiaTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 
@@ -559,28 +563,36 @@ public class AccountingTest {
 	public static void traslado_bancos() throws Exception {
 		double _result;
 		List detail = new Vector();
+		List detail2 = new Vector();
 		JournalEntryTO nuevo = new JournalEntryTO();
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+		String strFecha = "2015-10-21";
+		Date fecha = null;
+		
 
-		java.util.Date utilDate = new java.util.Date(); // fecha actual
-		long lnMilisegundos = utilDate.getTime();
-		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
+		fecha = formatoDelTexto.parse(strFecha);
 
-		AccountTO account = new AccountTO();
-		account.setCreatedate(sqlDate);
-		account.setAcctcode("1101020202");
-		account.setObjtype("10");
-		account.setUsersing(53);
-
-		detail = AccountingEJBService.
-		System.out.println(_result);
-
-		account.setCurrtotal(_result);
+		detail = AccountingEJBService.devolver_saldo_colecturia(fecha, 3);
+		int n=1;
+		for (Object object : detail) {
+			ColecturiaDetailTO colecturia=(ColecturiaDetailTO)object;
+			detail2.add(colecturia);
+			System.out.println(n);
+			System.out.println(colecturia.getLinenum() +" "+colecturia.getDscription()+" "+colecturia.getPaidsum()+" "+colecturia.getAcctcode()+" "+colecturia.getCtlaccount() );
+		n++;
+		
+		}
+		
+		ColecturiaTO padre=new ColecturiaTO();
+		padre.setUsersign(3);
+		padre.setDocdate(fecha);
+		padre.setColecturiaDetail(detail);
 
 		ResultOutTO result = new ResultOutTO();
 
-		result = AccountingEJBService.traslado_caja(account);
+		result = AccountingEJBService.traslado_caja_colecturia(padre);
 	}
 
 	public static void cierre_contable() {
