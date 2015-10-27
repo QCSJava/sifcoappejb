@@ -3591,7 +3591,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction2.setGrssprofit(detail.getGrssprofit());
 			transaction2.setTaxcode(detail.getTaxcode());
 			transaction2.setVatappld(detail.getVatappld());
-			transaction2.setStockprice(detail.getPrice());
+			transaction2.setStockprice(detail.getStockpricestockprice());
 			transaction2.setGtotal(detail.getGtotal());
 			transaction2.setInqty(zero);
 			transaction2.setOutqty(detail.getQuantity());

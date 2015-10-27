@@ -263,7 +263,8 @@ public class transactionEJB {
 		avgPrice = DBArticle.getAvgPrice();
 		onhand = DBArticle.getOnHand();
 		whsCode = transaction.getWhscode();
-
+		transQuantity = transaction.getQuantity();
+		
 		// Validar factores de conversión
 		if (DBArticle.getNumInBuy() == null || DBArticle.getNumInBuy() <= 0) {
 			DBArticle.setNumInBuy(1.0);
@@ -290,7 +291,7 @@ public class transactionEJB {
 
 			// Existencias
 			// --------------------------------------------------------------------------------------------------------
-			transQuantity = transaction.getQuantity();
+			
 			newOnhand = onhand + transQuantity;
 			newWhsOnhand = whsOnhand + transQuantity;
 
@@ -324,7 +325,6 @@ public class transactionEJB {
 
 			// Existencias
 			// --------------------------------------------------------------------------------------------------------
-			transQuantity = transaction.getQuantity();
 			newOnhand = onhand - transQuantity;
 			newWhsOnhand = whsOnhand - transQuantity;
 
@@ -358,7 +358,7 @@ public class transactionEJB {
 
 			// Existencias
 			// ---------------------------------------------------------------------------------------------------
-
+			
 			newOnhand = onhand + (transQuantity * DBArticle.getNumInBuy());
 			newWhsOnhand = whsOnhand
 					+ (transQuantity * DBArticle.getNumInBuy());
