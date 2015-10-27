@@ -536,7 +536,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setGrssprofit(detail.getGrssprofit());
 			transaction.setTaxcode(detail.getTaxcode());
 			transaction.setVatappld(detail.getVatappld());
-			transaction.setStockprice(detail.getPrice());
+			transaction.setStockprice(detail.getStockpricestockprice());
 			transaction.setSumStock(zero);
 			transaction.setGtotal(detail.getGtotal());
 			transaction.setInqty(zero);
@@ -2055,7 +2055,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setGrssprofit(detail.getGrssprofit());
 			transaction.setTaxcode(detail.getTaxcode());
 			transaction.setVatappld(detail.getVatappld());
-			transaction.setStockprice(detail.getPrice());
+			transaction.setStockprice(detail.getStockpricestockprice());
 			transaction.setGtotal(detail.getGtotal());
 			transaction.setInqty(zero);
 			transaction.setOutqty(zero);
@@ -3551,7 +3551,7 @@ public class SalesEJB implements SalesEJBRemote {
 			transaction.setGrssprofit(detail.getGrssprofit());
 			transaction.setTaxcode(detail.getTaxcode());
 			transaction.setVatappld(detail.getVatappld());
-			transaction.setStockprice(detail.getPrice());
+			transaction.setStockprice(detail.getStockpricestockprice());
 			transaction.setGtotal(detail.getGtotal());
 			transaction.setInqty(detail.getQuantity());
 			transaction.setOutqty(zero);

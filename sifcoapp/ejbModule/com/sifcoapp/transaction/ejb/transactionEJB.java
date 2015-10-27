@@ -169,8 +169,7 @@ public class transactionEJB {
 		// WarehouseJournal.setClearact();
 		// WarehouseJournal.setCostact(costact);
 		// WarehouseJournal.setWipact(wipact);
-		// WarehouseJournal.setOpenstock(transaction.); //TODO Este esta mal
-		// cambiarlo
+		WarehouseJournal.setOpenstock(transaction.getSumStock()); 
 		WarehouseJournal.setPricediff(zero);
 		WarehouseJournal.setTransseq(-1);
 		WarehouseJournal.setInvntact(transaction.getInvntact());
@@ -189,7 +188,7 @@ public class transactionEJB {
 		WarehouseJournal.setBtransval(zero);
 		WarehouseJournal.setVarval(zero);
 		WarehouseJournal.setBexpval(zero);
-		WarehouseJournal.setCogsval(zero);
+		WarehouseJournal.setCogsval(transaction.getSumStock());
 		WarehouseJournal.setBnegaval(zero);
 		WarehouseJournal.setIoffincacc(transaction.getAcctcode());
 		WarehouseJournal.setIoffincval(zero);
@@ -208,7 +207,7 @@ public class transactionEJB {
 		WarehouseJournal.setLoccode(transaction.getWhscode());
 		WarehouseJournal.setOutqty(transaction.getOutqty());
 		WarehouseJournal.setPoststatus("N");
-		WarehouseJournal.setSumstock(transaction.getLinetotal());
+		WarehouseJournal.setSumstock(transaction.getSumStock());
 		WarehouseJournal.setOpenqty(transaction.getQuantity());
 		// WarehouseJournal.setPaoffacc(paoffacc);
 		WarehouseJournal.setPaoffval(zero);
@@ -228,7 +227,7 @@ public class transactionEJB {
 		WarehouseJournalLayer.setLayerid(0);
 		WarehouseJournalLayer.setCalcprice(transaction.getPrice());
 		WarehouseJournalLayer.setBalance(transaction.getBalance());
-		WarehouseJournalLayer.setTransvalue(transaction.getLinetotal());
+		WarehouseJournalLayer.setTransvalue(transaction.getSumStock());
 		WarehouseJournalLayer.setLayerinqty(transaction.getInqty());
 		WarehouseJournalLayer.setLayeroutq(transaction.getOutqty());
 		WarehouseJournalLayer.setRevaltotal(zero);
