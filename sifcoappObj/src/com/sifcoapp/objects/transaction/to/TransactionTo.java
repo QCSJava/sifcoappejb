@@ -40,6 +40,7 @@ public class TransactionTo extends CommonTO {
 	private String taxcode;
 	private Double vatappld;
 	private Double stockprice;
+	private Double SumStock;
 	private Double gtotal;
 	private Double inqty;
 	private Double outqty;
@@ -279,6 +280,14 @@ public class TransactionTo extends CommonTO {
 
 	public void setStockprice(Double stockprice) {
 		this.stockprice = stockprice;
+	}
+
+	public Double getSumStock() {
+		return SumStock;
+	}
+
+	public void setSumStock(Double sumStock) {
+		SumStock = sumStock;
 	}
 
 	public Double getGtotal() {

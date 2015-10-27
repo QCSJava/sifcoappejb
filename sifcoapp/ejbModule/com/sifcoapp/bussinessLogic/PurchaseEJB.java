@@ -2185,45 +2185,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			transaction.setArticle(detail.getArticle());
 
 			_return.add(transaction);
-
-			/*
-			 * transaction.setTransseq(detail.getTransseq());
-			 * transaction.setDocentry(detail.getDocentry());
-			 * transaction.setDocnum(detail.getDocnum());
-			 * transaction.setDocduedate(detail.getDocduedate());
-			 * transaction.setDocdate(detail.getDocdate());
-			 * transaction.setComment(detail.getComment());
-			 * transaction.setJrnlmemo(detail.getJrnlmemo());
-			 * transaction.setUsersign(detail.getUsersign());
-			 * transaction.setRef1(detail.getRef1());
-			 * transaction.setRef2(detail.getRef2());
-			 * transaction.setLinenum(detail.getLinenum());
-			 * transaction.setItemcode(detail.getItemcode());
-			 * transaction.setDscription(detail.getDscription());
-			 * transaction.setQuantity(detail.getQuantity());
-			 * transaction.setPrice(detail.getPrice());
-			 * transaction.setLinetotal(detail.getLinetotal());
-			 * transaction.setWhscode(detail.getWhscode());
-			 * transaction.setAcctcode(detail.getAcctcode());
-			 * transaction.setOcrcode(detail.getOcrcode());
-			 * transaction.setVatgroup(detail.getVatgroup());
-			 * transaction.setPriceafvat(detail.getPriceafvat());
-			 * transaction.setVatsum(detail.getVatsum());
-			 * transaction.setObjtype(detail.getObjtype());
-			 * transaction.setGrssprofit(detail.getGrssprofit());
-			 * transaction.setTaxcode(detail.getTaxcode());
-			 * transaction.setVatappld(detail.getVatappld());
-			 * transaction.setStockprice(detail.getStockprice());
-			 * transaction.setGtotal(detail.getGtotal());
-			 * transaction.setInqty(detail.getInqty());
-			 * transaction.setOutqty(detail.getOutqty());
-			 * transaction.setMessageid(detail.getMessageid());
-			 * transaction.setBalance(detail.getBalance());
-			 * transaction.setNewonhand(detail.getNewonhand());
-			 * transaction.setNewwhsonhand(detail.getNewwhsonhand());
-			 * transaction.setNewavgprice(detail.getNewavgprice());
-			 */
-
 		}
 		return _return;
 	}

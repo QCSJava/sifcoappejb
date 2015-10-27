@@ -159,7 +159,7 @@ public class TransactionDAO extends CommonDAO {
 		ArticlesTO articles = new ArticlesTO();
 		articles = transaction.getArticle();
 
-		// si es una nota de remision
+		// Validando si son Notas de Remisión o Transferencias de stock
 		if (transaction.getObjtype().equals("12")|| transaction.getObjtype().equals("32")) {
 
 			this.setDbObject("UPDATE cat_art1_brancharticles SET onhand=? WHERE itemcode=? and whscode=?");
