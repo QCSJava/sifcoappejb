@@ -356,7 +356,7 @@ public class SalesEJB implements SalesEJBRemote {
 				+ parameters.getCardcode());
 		parameters.setReceiptnum(parameters.getReceiptnum());
 		parameters.setGroupnum(0);
-		parameters.setConfirmed("Y");
+		parameters.setConfirmed("N");
 		parameters.setCreatetran("Y");
 
 		parameters.setRounddif(zero);

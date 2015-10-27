@@ -211,7 +211,7 @@ public class ColecturiaDAO extends CommonDAO {
 
 		int lstResultSet = 0;
 
-		this.setDbObject("UPDATE ges_col0_colecturia SET  transtype=1 WHERE usersign=? and docdate=?");
+		this.setDbObject("UPDATE ges_col0_colecturia SET docnum=1 WHERE usersign=? and docdate=?");
 		this.setInt(1, "_usersign", usersign);
 		
 		if (fecha == null) {

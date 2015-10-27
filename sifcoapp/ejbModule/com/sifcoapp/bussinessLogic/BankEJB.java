@@ -178,12 +178,12 @@ public class BankEJB implements BankEJBRemote {
 
 		try {
 			
-			_return=validateColecturia(parameters);
-			if(_return.getCodigoError()!=0){
+			/*_return=validateColecturia(parameters);
+			if(_return.getCodigoError()==0){
 				_return.setCodigoError(1);
 				_return.setMensaje("pago de colecturia no valido");
 			}else{
-			
+			*/
 			
 			if (action == Common.MTTOINSERT) {
 
@@ -291,7 +291,7 @@ public class BankEJB implements BankEJBRemote {
 				_return.setMensaje("Datos ingresados con exito");
 			
 			
-			}// fin del if de la validacion 
+			//}// fin del if de la validacion 
 				DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

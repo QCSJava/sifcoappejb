@@ -1661,23 +1661,21 @@ public class AccountingDAO extends CommonDAO {
 		update_endTotal(parent);
 	}
 
-	public List getCloseColecturia(Date fecha,int usersign) throws Exception {
+	public List getCloseColecturia(Date fecha, int usersign) throws Exception {
 
-		
 		List conceptos = new Vector();
 		int dias = -1;
 		List lstResult = new Vector();
 		List lstResultSet = null;
 
-		this.setDbObject("select B.linenum,A.dscription,sum(B.paidsum) as paidsum,A.acctcode,A.ctlaccount from   ges_col2_colecturiaconcept A join ges_col1_colecturiadetail B on B.linenum=A.linenum join ges_col0_colecturia C on B.docentry=C.docentry where C.docdate=? and C.usersign=? and C.transtype = 0 group by B.linenum,A.dscription,A.ctlaccount,A.acctcode order by linenum ");
+		this.setDbObject("select B.linenum,A.dscription,sum(B.paidsum) as paidsum,A.acctcode,A.ctlaccount from   ges_col2_colecturiaconcept A join ges_col1_colecturiadetail B on B.linenum=A.linenum join ges_col0_colecturia C on B.docentry=C.docentry where C.docdate=? and C.usersign=? and C.docnum = 0 and transtype = 1 group by B.linenum,A.dscription,A.ctlaccount,A.acctcode order by linenum ");
 		if (fecha == null) {
-			this.setDate(1, "_docdate",fecha);
+			this.setDate(1, "_docdate", fecha);
 		} else {
-			java.sql.Date fecha1 = new java.sql.Date(fecha
-					.getTime());
+			java.sql.Date fecha1 = new java.sql.Date(fecha.getTime());
 			this.setDate(1, "_docdate", fecha1);
 		}
-		this.setInt(2,"_usersign", usersign);
+		this.setInt(2, "_usersign", usersign);
 
 		lstResultSet = this.runQueryPrepared();
 
@@ -1707,6 +1705,48 @@ public class AccountingDAO extends CommonDAO {
 		}
 
 		return conceptos;
+
+	}
+
+	public double getSaldoSales(Date fecha, int usersign) throws Exception {
+
+		double saldo = 0.0;
+		List conceptos = new Vector();
+		int dias = -1;
+		List lstResult = new Vector();
+		List lstResultSet = null;
+
+		this.setDbObject("select sum(doctotal) from sal_sal0_sales where peymethod='1' and confirmed='N' and  usersign=? and docdate = ? and canceled ='N'");
+		this.setInt(1, "_usersign", usersign);
+
+		if (fecha == null) {
+			this.setDate(2, "_docdate", fecha);
+		} else {
+			java.sql.Date fecha1 = new java.sql.Date(fecha.getTime());
+			this.setDate(2, "_docdate", fecha1);
+		}
+
+		lstResultSet = this.runQueryPrepared();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					saldo = rowsetActual.getDouble(1);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return saldo;
 
 	}
 }

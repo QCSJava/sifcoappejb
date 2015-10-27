@@ -236,10 +236,10 @@ public class AccountingEJBClient {
 		return _return;
 	}
 
-	public JournalEntryLinesTO getsaldo(EntryTO parameters) throws EJBException {
-		JournalEntryLinesTO _return = new JournalEntryLinesTO();
+	public double getSaldoSales(Date fecha, int usersign) throws EJBException {
+		double _return = 0.0;
 		try {
-			_return = bean.getsaldo(parameters);
+			_return = bean.getSaldoSales(fecha, usersign);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -291,7 +291,14 @@ public class AccountingEJBClient {
 		return _return;
 
 	}
+	public ResultOutTO traslado_caja_venta(double saldo,Date fecha, int usersign) throws Exception {
+		ResultOutTO _return = new ResultOutTO();
 
+		_return = bean.traslado_caja_venta(saldo, fecha, usersign);
+
+		return _return;
+
+	}
 	public List devolver_saldo_colecturia(Date fecha,
 			int usersign) throws Exception {
 		List _return = new Vector();

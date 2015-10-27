@@ -2,6 +2,7 @@ package com.sifcoapp.objects.sales.DAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -349,6 +350,26 @@ public class SalesDAO extends CommonDAO{
 		v_resp = this.runQuery();
 
 		return this.getInt();
+	}
+
+	public int update_sales_traslado(int usersign,Date fecha) throws Exception {
+
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE sal_sal0_sales SET confirmed='Y' WHERE peymethod='1' and confirmed='N' and canceled ='N' and usersign=? and docdate=? ");
+		this.setInt(1, "_usersign", usersign);
+		
+		if (fecha == null) {
+			this.setDate(2, "_docdate",fecha);
+		} else {
+			java.sql.Date fecha1 = new java.sql.Date(fecha
+					.getTime());
+			this.setDate(2, "_docdate", fecha1);
+		}
+		
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
 	}
 
 }

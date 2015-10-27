@@ -560,6 +560,34 @@ public class AccountingTest {
 		System.out.println(_result.getMensaje());
 	}
 
+	public static void traslado_bancos_ventas() throws Exception {
+		ResultOutTO  _result= new ResultOutTO();
+		double detail =0.0;
+		List detail2 = new Vector();
+		JournalEntryTO nuevo = new JournalEntryTO();
+		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+		String strFecha = "2015-10-15";
+		Date fecha = null;
+		
+
+		fecha = formatoDelTexto.parse(strFecha);
+
+		detail = AccountingEJBService.getSaldoSales(fecha, 3);
+		int n=1;
+		
+			System.out.println("saldo a tansferir "+ detail );
+			
+		
+		
+		_result= AccountingEJBService.traslado_caja_venta(detail, fecha, 3);
+		
+		System.out.println(_result.getMensaje() );
+
+		
+	}
+	
 	public static void traslado_bancos() throws Exception {
 		double _result;
 		List detail = new Vector();
@@ -568,7 +596,7 @@ public class AccountingTest {
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-		String strFecha = "2015-10-21";
+		String strFecha = "2015-10-27";
 		Date fecha = null;
 		
 
