@@ -225,7 +225,7 @@ public class transactionEJB {
 		WarehouseJournalLayerTO WarehouseJournalLayer = new WarehouseJournalLayerTO();
 		WarehouseJournalLayer.setTransseq(transaction.getTransseq());
 		WarehouseJournalLayer.setLayerid(0);
-		WarehouseJournalLayer.setCalcprice(transaction.getPrice());
+		WarehouseJournalLayer.setCalcprice(transaction.getNewAvgprice());
 		WarehouseJournalLayer.setBalance(transaction.getBalance());
 		WarehouseJournalLayer.setTransvalue(transaction.getSumStock());
 		WarehouseJournalLayer.setLayerinqty(transaction.getInqty());
@@ -476,7 +476,8 @@ public class transactionEJB {
 				// -----------------------------------------------------------------------------------------------
 
 				// Calculando el costo total de la transacción
-				transValue = transaction.getLinetotal();
+				transValue = transaction.getStockprice()
+						* (transQuantity * DBArticle.getNumInSale());
 
 				oldTotalArticle = onhand * avgPrice;
 				newTotalArticle = oldTotalArticle + transValue;
@@ -503,7 +504,8 @@ public class transactionEJB {
 				// -----------------------------------------------------------------------------------------------
 
 				// Calculando el costo total de la transacción
-				transValue = transaction.getLinetotal();
+				transValue = transaction.getStockprice()
+						* (transQuantity * DBArticle.getNumInSale());
 
 				oldTotalArticle = onhand * avgPrice;
 				newTotalArticle = oldTotalArticle - transValue;
