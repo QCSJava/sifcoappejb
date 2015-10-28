@@ -294,9 +294,9 @@ public class BankreconciliationauxDAO extends CommonDAO {
 				journal.setBplname(rowsetActual.getString(50));
 				journal.setVatregnum(rowsetActual.getString(51));
 				journal.setSledgerf(rowsetActual.getString(52));
-				journal.setAcctname(rowsetActual.getString(53));
+				/*journal.setAcctname(rowsetActual.getString(53));
 				journal.setIntrnmatch(rowsetActual.getInt(54));
-				journal.setExtrmatch(rowsetActual.getInt(55));
+				journal.setExtrmatch(rowsetActual.getInt(55));*/
 
 				_return.add(journal);
 			}
