@@ -1,7 +1,9 @@
 package com.sifcoapp.test;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -79,22 +81,17 @@ public class BankReconciliationTest {
 
 		ExternalReconciliationTO conciliate = new ExternalReconciliationTO();
 		conciliate.setAccount("1101010104");
+
 		
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 		String strFecha = "2015-10-27";
 		Date fecha = null;
-		
-
-		
-			
-
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		
 		try {
 			fecha = formatoDelTexto.parse(strFecha);
 			conciliate.setRefDate(fecha);
 
-			
 			conciliate = catalog.get_newExternalReconciliation(conciliate);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
