@@ -181,7 +181,7 @@ public class BankEJB implements BankEJBRemote {
 			_return=validateColecturia(parameters);
 			if(_return.getCodigoError()!=0){
 				_return.setCodigoError(1);
-				_return.setMensaje("pago de colecturia no valido");
+				
 			}else{
 			
 			
