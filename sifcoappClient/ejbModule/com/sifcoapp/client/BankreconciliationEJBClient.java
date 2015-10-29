@@ -1,5 +1,6 @@
 package com.sifcoapp.client;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -75,5 +76,10 @@ public class BankreconciliationEJBClient {
 
 		return parameter;
 
+	}
+	public double getsaldo(String account,Date fecha)throws EJBException{
+		double saldo = 0;
+		saldo=bean.getsaldo(account, fecha);
+		return saldo;
 	}
 }

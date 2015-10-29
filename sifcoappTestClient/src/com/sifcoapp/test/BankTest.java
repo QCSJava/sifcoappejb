@@ -163,19 +163,19 @@ public class BankTest {
 		ResultOutTO resp = null;
 		ColecturiaTO bus = new ColecturiaTO();
 		
-		bus.setCardcode("SN00000002");
+		bus.setCardcode("SN00000001");
 		bus.setCardname("hjfuh");
 		bus.setDoctotal(100.00);
 		bus.setSeries(1);
 		bus.setReceiptnum(1);
-		bus.setPrinted("2");
+		bus.setPrinted("1");
 		
 		ColecturiaConceptTO lstPeriods = new ColecturiaConceptTO();
 		List lstPeriods4= null;
 		// nuevo.setDocentry(1);
 
 		try {
-			lstPeriods4 = catalog.get_ges_colecturiaConcept1("SN00000002");
+			lstPeriods4 = catalog.get_ges_colecturiaConcept1("SN00000001");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -204,9 +204,11 @@ public class BankTest {
 			colecturia.setPeymethod(concept.getPeymethod());
 			
 			colecturia.setVatsum(concept.getVatsum());
-			
+			if(concept.getLinenum()==16){
+				colecturia.setPaidsum(4055.00);
+			}else {
 				colecturia.setPaidsum(concept.getPaidsum());
-			
+			}
 			colecturia.setDocsubtype(concept.getDocsubtype());
 			colecturia.setValue1(concept.getValue1());
 			colecturia.setValue2(concept.getValue2());

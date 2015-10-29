@@ -1,5 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -22,5 +23,5 @@ public interface ExternalReconciliationEJBRemote {
 	public List getBankreconciliationaux(bankreconciliationauxInTO parameters)throws EJBException;
 	public ExternalReconciliationTO get_newExternalReconciliation(ExternalReconciliationTO parameters)throws EJBException;
 	public ResultOutTO UpdateExternalReconciliation(ExternalReconciliationTO parameters) throws EJBException;
-	
+	public double getsaldo(String account,Date fecha)throws EJBException;
 }

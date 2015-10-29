@@ -2,6 +2,7 @@ package com.sifcoapp.objects.ExternalReconciliation.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -387,5 +388,53 @@ public class BankreconciliationauxDAO extends CommonDAO {
 
 		}
 		return _return;
+	}
+
+	public double getSaldo(String account,Date fecha) throws Exception {
+
+		double saldo = 0.0;
+		
+		List conceptos = new Vector();
+		int groupmask = -1;
+		List lstResult = new Vector();
+		List lstResultSet = null;
+
+		this.setDbObject("SELECT sum(debit)-sum(credit)as currtotal,t1.groupmask FROM cat_jdt1_journalentrylines t0 join cat_acc0_account t1 on t0.account=t1.acctcode  where t0.account=? and t0.duedate <=? group by t0.account,t1.acctname,t1.groupmask");
+		this.setString(1, "_account", account);
+
+		if (fecha == null) {
+			this.setDate(2, "_docdate", fecha);
+		} else {
+			java.sql.Date fecha1 = new java.sql.Date(fecha.getTime());
+			this.setDate(2, "_docdate", fecha1);
+		}
+
+		lstResultSet = this.runQueryPrepared();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					saldo = rowsetActual.getDouble(1);
+					groupmask=rowsetActual.getInt(2);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(groupmask==2||groupmask==3||groupmask==5){
+			saldo=saldo*-1;
+		}
+		
+		return saldo;
+
 	}
 }

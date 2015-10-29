@@ -178,12 +178,12 @@ public class BankEJB implements BankEJBRemote {
 
 		try {
 			
-			/*_return=validateColecturia(parameters);
-			if(_return.getCodigoError()==0){
+			_return=validateColecturia(parameters);
+			if(_return.getCodigoError()!=0){
 				_return.setCodigoError(1);
 				_return.setMensaje("pago de colecturia no valido");
 			}else{
-			*/
+			
 			
 			if (action == Common.MTTOINSERT) {
 
@@ -291,7 +291,7 @@ public class BankEJB implements BankEJBRemote {
 				_return.setMensaje("Datos ingresados con exito");
 			
 			
-			//}// fin del if de la validacion 
+			}// fin del if de la validacion 
 				DAO.forceCommit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -314,17 +314,17 @@ public class BankEJB implements BankEJBRemote {
 
 		try {
 			// validacion si el cierre de caja del dia anterior ya se realizo
-			result = validateCloseDiary_colecturia(parameter.getUsersign());
+			/*result = validateCloseDiary_colecturia(parameter.getUsersign());
 			if (result.getCodigoError() != 0) {
 				result.setCodigoError(1);
 				result.setMensaje("no se ha realizado el cierre de caja de el dia anterior");
 				return result;
-			}
+			}*/
 			// validacion de prestamos
-			prestamo = DAO.getParameterbykey(15);
+			prestamo = DAO.getParameterbykey(11);
 
 			DAO = new ParameterDAO();
-			interes = DAO.getParameterbykey(15);
+			interes = DAO.getParameterbykey(12);
 
 			List list = new Vector();
 			list = parameter.getColecturiaDetail();
@@ -333,7 +333,7 @@ public class BankEJB implements BankEJBRemote {
 				ColecturiaDetailTO colecturia = (ColecturiaDetailTO) object;
 
 				// consulta el concepto de prestamos
-				if (prestamo.getValue1().equals(colecturia.getLinenum())) {
+				if (prestamo.getValue1().equals(Integer.toString(colecturia.getLinenum()))) {
 
 					// cosulta si existe un monto a pagar en el concepto de
 					// prestamo
@@ -342,8 +342,7 @@ public class BankEJB implements BankEJBRemote {
 						for (Object object2 : list) {
 
 							ColecturiaDetailTO colecturia2 = (ColecturiaDetailTO) object2;
-							if (interes.getValue1().equals(
-									colecturia2.getLinenum())) {
+							if (interes.getValue1().equals(Integer.toString(colecturia2.getLinenum()))) {
 								// si el saldo del interes es igual a cero o el
 								// saldo - paidsum=0
 								if (Double.parseDouble(colecturia2.getValue1()) <= 0.0
@@ -352,12 +351,12 @@ public class BankEJB implements BankEJBRemote {
 												.getPaidsum()) == 0.0) {
 									result.setMensaje("colecturia valida");
 									result.setCodigoError(0);
+								}else {
+									result.setMensaje("Debe Pagar los intereses antes que el capital del préstamo ");
+									result.setCodigoError(1);
+									return result;
 								}
-							} else {
-								result.setMensaje("Debe Pagar los intereses antes que el capital del préstamo ");
-								result.setCodigoError(1);
-								return result;
-							}
+							} 
 						}
 					}
 				}

@@ -81,7 +81,7 @@ public class BankReconciliationTest {
 
 		ExternalReconciliationTO conciliate = new ExternalReconciliationTO();
 		conciliate.setAccount("1101010104");
-
+        double saldo=0.0;
 		
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 		String strFecha = "2015-10-27";
@@ -93,6 +93,9 @@ public class BankReconciliationTest {
 			conciliate.setRefDate(fecha);
 
 			conciliate = catalog.get_newExternalReconciliation(conciliate);
+			saldo=catalog.getsaldo("1101010104",fecha);
+			System.out.println("saldo de la cuenta " + saldo); 
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.sifcoapp.bussinessLogic;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -214,5 +215,22 @@ public class ExternalReconciliationEJB implements
 			DAO.forceCloseConnection();
 		}
 	}
-
+    
+	public double getsaldo(String account,Date fecha)throws EJBException{
+		double saldo = 0;
+		
+		BankreconciliationauxDAO DAO =new BankreconciliationauxDAO();
+		try {
+			saldo=DAO.getSaldo(account, fecha);
+		    
+		
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return saldo;
+	}
 }
