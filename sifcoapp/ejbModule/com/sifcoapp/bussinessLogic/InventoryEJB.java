@@ -167,7 +167,6 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		parameters.setConfirmed("Y");
 		parameters.setDocduedate(parameters.getDocdate());
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
-		parameters.setJrnlmemo("entrada de inventario");
 
 		return parameters;
 	}
@@ -733,7 +732,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
 		parameters.setDoctype("I");
-		parameters.setJrnlmemo("Salida de de Mercancia");
+		parameters.setJrnlmemo("Salida de Mercancia");
 		parameters.setConfirmed("Y");
 		parameters.setDocduedate(parameters.getDocdate());
 		parameters.setObjtype(parameters.getObjtype());
@@ -1260,12 +1259,12 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setDuedate(parameters.getDocduedate());
 			art2.setShortname(acc);
 			art2.setContraact(branch.getBalinvntac());
-			art2.setLinememo("salida de inventario ");
-			art2.setRefdate(parameters.getDocduedate());
+			art2.setLinememo(parameters.getJrnlmemo());
+			art2.setRefdate(parameters.getDocdate());
 			art2.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art2.setBaseref(parameters.getRef1());
-			art2.setTaxdate(parameters.getDocduedate());
+			art2.setTaxdate(parameters.getDocdate());
 			// art1.setFinncpriod(finncpriod);
 			art2.setReltransid(-1);
 			art2.setRellineid(-1);
@@ -1307,8 +1306,8 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(branch.getBalinvntac());
 		art1.setContraact(acc);
-		art1.setLinememo("salida de inventario");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setLinememo(parameters.getJrnlmemo());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// art1.setRef2();
 		art1.setBaseref(parameters.getRef1());
@@ -1526,7 +1525,7 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
 		parameters.setDoctype("I");
-		parameters.setJrnlmemo("Salida de de Mercancia");
+		parameters.setJrnlmemo("Tranferencias de Mercancias");
 		parameters.setConfirmed("Y");
 		parameters.setDocduedate(parameters.getDocdate());
 
@@ -1878,12 +1877,12 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(branch.getBalinvntac());
 		art1.setContraact(branch1.getBalinvntac());
-		art1.setLinememo("entrada de mercancias");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setLinememo(parameters.getJrnlmemo());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// art1.setRef2();
 		art1.setBaseref(parameters.getRef1());
-		art1.setTaxdate(parameters.getDocduedate());
+		art1.setTaxdate(parameters.getDocdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);
@@ -1914,12 +1913,12 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch1.getBalinvntac());
 		art2.setContraact(branch.getBalinvntac());
-		art2.setLinememo("entrada de mercancias");
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setLinememo(parameters.getJrnlmemo());
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
-		art2.setTaxdate(parameters.getDocduedate());
+		art2.setTaxdate(parameters.getDocdate());
 		// art1.setFinncpriod(finncpriod);
 		art2.setReltransid(-1);
 		art2.setRellineid(-1);
@@ -2287,12 +2286,12 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 			art2.setDuedate(parameters.getDocduedate());
 			art2.setShortname(acc);
 			art2.setContraact(branch.getBalinvntac());
-			art2.setLinememo("entrada de mercancias");
-			art2.setRefdate(parameters.getDocduedate());
+			art2.setLinememo(parameters.getJrnlmemo());
+			art2.setRefdate(parameters.getDocdate());
 			art2.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art2.setBaseref(parameters.getRef1());
-			art2.setTaxdate(parameters.getDocduedate());
+			art2.setTaxdate(parameters.getDocdate());
 			// art1.setFinncpriod(finncpriod);
 			art2.setReltransid(-1);
 			art2.setRellineid(-1);
@@ -2334,12 +2333,12 @@ public class InventoryEJB implements InventoryEJBRemote, InventoryEJBLocal {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(branch.getBalinvntac());
 		art1.setContraact(acc);
-		art1.setLinememo("entrada de mercancias");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setLinememo(parameters.getJrnlmemo());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// art1.setRef2();
 		art1.setBaseref(parameters.getRef1());
-		art1.setTaxdate(parameters.getDocduedate());
+		art1.setTaxdate(parameters.getDocdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);

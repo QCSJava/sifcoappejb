@@ -295,6 +295,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) {
 		ResultOutTO _return = new ResultOutTO();
 		JournalEntryDAO DAO = new JournalEntryDAO();
+		
+		//Cuando se crea un asientop contalbe por defecto se el asignara el transtype igual al objecttype
+		parameters.setTranstype("5");
+		
 		try {
 			_return = journalEntry_mtto(parameters, action, DAO.getConn());
 			DAO.forceCommit();
@@ -399,6 +403,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				Detalle.setRellineid(-1);
 				Detalle.setReltype("N");
 				Detalle.setObjtype("5");
+				Detalle.setTranstype(parameters.getTranstype());
 				Detalle.setVatline("N");
 				Detalle.setVatamount(0.0);
 				Detalle.setClosed("N");
@@ -1117,7 +1122,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				// art1.setDuedate(parameters.getDocduedate());
 				art1.setShortname(account.getAcctcode());
 				art1.setContraact(cuenta.getValue1());
-				art1.setLinememo("Asiento de cierre");
+				art1.setLinememo("Asiento de cierre de periodo contable");
 				art1.setRefdate(parameters.getDuedate());
 				// art1.setRef1(parameters.getRef1());
 				// art1.setRef2();
@@ -1154,7 +1159,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 				art2.setDuedate(parameters.getDuedate());
 				art2.setShortname(cuenta.getValue1());
 				art2.setContraact(account.getAcctcode());
-				art2.setLinememo("asiento de cierre de periodo contable ");
+				art2.setLinememo("Asiento de cierre de periodo contable");
 				// art2.setRefdate();
 				// art2.setRef1(parameters.getRef1());
 				// art2.setRef2();
@@ -1385,8 +1390,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 				art1.setDuedate(parameters.getDuedate());
 				art1.setShortname(acc);
 				art1.setContraact(c_acc);
-				art1.setLinememo("asiento de cierre de periodo contable");
-				art1.setRefdate(parameters.getDuedate());
+				art1.setLinememo(parameters.getMemo());
+				art1.setRefdate(parameters.getRefdate());
 				art1.setRef1(parameters.getRef1());
 				// art1.setRef2();
 				art1.setBaseref(parameters.getRef1());
@@ -1429,7 +1434,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(catalogo.getValue1());
 			art1.setContraact(cuenta);
-			art1.setLinememo(" Reserva Legal ");
+			art1.setLinememo(parameters.getMemo());
 			art1.setRefdate(parameters.getDuedate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
@@ -1465,7 +1470,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art2.setDuedate(parameters.getDuedate());
 			art2.setShortname(catalogo.getValue2());
 			art2.setContraact(cuenta);
-			art2.setLinememo(" Reserva de educacion ");
+			art2.setLinememo(parameters.getMemo());
 			art2.setRefdate(parameters.getDuedate());
 			art2.setRef1(parameters.getRef1());
 			// art1.setRef2();
@@ -1502,7 +1507,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art3.setDuedate(parameters.getDuedate());
 			art3.setShortname(catalogo.getValue3());
 			art3.setContraact(cuenta);
-			art3.setLinememo(" reserva cuentas incobrables ");
+			art3.setLinememo(parameters.getMemo());
 			art3.setRefdate(parameters.getDuedate());
 			art3.setRef1(parameters.getRef1());
 			// art1.setRef2();
@@ -1844,7 +1849,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
 			art1.setLinememo(parameters.getMemo());
-			art1.setRefdate(parameters.getDuedate());
+			art1.setRefdate(parameters.getRefdate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
@@ -2001,7 +2006,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		art1.setDuedate(fecha);
 		art1.setShortname(caja.getValue1());
 		art1.setContraact(banco.getValue1());
-		art1.setLinememo("traslado de caja a bancos");
+		art1.setLinememo("Traslado de caja a Bancos");
 		art1.setRefdate(fecha);
 		art1.setRef1(Integer.toString(usersign));
 		// ar1.setRef2();
@@ -2041,7 +2046,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		art2.setDuedate(fecha);
 		art2.setShortname(banco.getValue1());
 		art2.setContraact(caja.getValue1());
-		art2.setLinememo("traslado de caja a bancos");
+		art2.setLinememo("Traslado de caja a Bancos");
 		art2.setRefdate(fecha);
 		art2.setRef1(Integer.toString(usersign));
 		// r1.setRef2();
@@ -2078,7 +2083,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// LLenado del padre
 
 		nuevo.setObjtype("5");
-		nuevo.setMemo("traslado de caja a Bancos");
+		nuevo.setMemo("Traslado de caja a Bancos");
 		nuevo.setUsersign(usersign);
 		nuevo.setLoctotal(saldo);
 		nuevo.setSystotal(saldo);

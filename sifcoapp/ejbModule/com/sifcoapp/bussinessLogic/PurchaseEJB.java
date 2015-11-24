@@ -193,9 +193,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		@SuppressWarnings("unchecked")
 		Iterator<PurchaseDetailTO> iterator = parameters.getpurchaseDetails()
 				.iterator();
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Valores por defecto encabezado
-		// --------------------------------------------------------------------------------------------------------------------------------
+
 		while (iterator.hasNext()) {
 			PurchaseDetailTO articleDetalle = (PurchaseDetailTO) iterator
 					.next();
@@ -782,14 +780,14 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
-		nuevo.setMemo("Compra de mercaderia " + parameters.getCardcode());
+		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
-		nuevo.setDuedate(parameters.getDocdate());
+		nuevo.setDuedate(parameters.getDocduedate());
 		nuevo.setTaxdate(parameters.getTaxdate());
 		nuevo.setBtfstatus("O");
 		nuevo.setTranstype(parameters.getObjtype());
 		nuevo.setBaseref(parameters.getRef1());
-		nuevo.setRefdate(parameters.getDocduedate());
+		nuevo.setRefdate(parameters.getDocdate());
 		nuevo.setRef1(parameters.getRef1());
 		nuevo.setRefndrprt("N");
 		nuevo.setAdjtran("N");
@@ -808,12 +806,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(branch_c);
-		art1.setLinememo("Compra  de mercancias");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setLinememo(parameters.getJrnlmemo());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
 		art1.setBaseref(parameters.getRef1());
-		art1.setTaxdate(parameters.getDocduedate());
+		art1.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);
@@ -843,12 +841,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
-		art2.setLinememo("Compra  de mercancias");
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setLinememo(parameters.getJrnlmemo());
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
-		art2.setTaxdate(parameters.getDocduedate());
+		art2.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art2.setReltransid(-1);
 		art2.setRellineid(-1);
@@ -879,12 +877,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art3.setDuedate(parameters.getDocduedate());
 			art3.setShortname(iva_c);
 			art3.setContraact(buss_c);
-			art3.setLinememo("Compra de mercancias");
-			art3.setRefdate(parameters.getDocduedate());
+			art3.setLinememo(parameters.getJrnlmemo());
+			art3.setRefdate(parameters.getDocdate());
 			art3.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art3.setBaseref(parameters.getRef1());
-			art3.setTaxdate(parameters.getDocduedate());
+			art3.setTaxdate(parameters.getTaxdate());
 			// 3art1.setFinncpriod(finncpriod);
 			art3.setReltransid(-1);
 			art3.setRellineid(-1);
@@ -919,12 +917,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art4.setDuedate(parameters.getDocduedate());
 			art4.setShortname(fovial);
 			art4.setContraact(buss_c);
-			art4.setLinememo("compra  de mercancias");
-			art4.setRefdate(parameters.getDocduedate());
+			art4.setLinememo(parameters.getJrnlmemo());
+			art4.setRefdate(parameters.getDocdate());
 			art4.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art4.setBaseref(parameters.getRef1());
-			art4.setTaxdate(parameters.getDocduedate());
+			art4.setTaxdate(parameters.getTaxdate());
 			// rt1.setFinncpriod(finncpriod);
 			art4.setReltransid(-1);
 			art4.setRellineid(-1);
@@ -956,12 +954,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art5.setDuedate(parameters.getDocduedate());
 			art5.setShortname(cotrans_C);
 			art5.setContraact(buss_c);
-			art5.setLinememo("compra de mercancias");
-			art5.setRefdate(parameters.getDocduedate());
+			art5.setLinememo(parameters.getJrnlmemo());
+			art5.setRefdate(parameters.getDocdate());
 			art5.setRef1(parameters.getRef1());
 			// 5rt2.setRef2();
 			art5.setBaseref(parameters.getRef1());
-			art5.setTaxdate(parameters.getDocduedate());
+			art5.setTaxdate(parameters.getTaxdate());
 			// 54rt1.setFinncpriod(finncpriod);
 			art5.setReltransid(-1);
 			art5.setRellineid(-1);
@@ -1095,7 +1093,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
 			art1.setLinememo(parameters.getMemo());
-			art1.setRefdate(parameters.getDuedate());
+			art1.setRefdate(parameters.getRefdate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
@@ -1229,7 +1227,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// LLenado del padre
 		List detail = new Vector();
 		nuevo.setObjtype("5");
-		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
@@ -1257,7 +1254,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// art1.setCredit(bussines);
 		art1.setDebit(bussines);
 		art1.setAccount(buss_c);
-		art1.setDuedate(parameters.getDocdate());
+		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(Catalog1.getValue1());
 		art1.setLinememo("Pago de Factura");
@@ -1294,7 +1291,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// art2.setDebit(bussines);
 		art2.setCredit(bussines);
 		art2.setAccount(Catalog1.getValue1());
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(Catalog1.getValue1());
 		art2.setContraact(buss_c);
 		art2.setLinememo("Pago de Factura");
@@ -1884,9 +1881,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		@SuppressWarnings("unchecked")
 		Iterator<SupplierDetailTO> iterator = parameters.getsupplierDetails()
 				.iterator();
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Valores por defecto encabezado
-		// --------------------------------------------------------------------------------------------------------------------------------
+
 		while (iterator.hasNext()) {
 			SupplierDetailTO articleDetalle = (SupplierDetailTO) iterator
 					.next();
@@ -2359,7 +2354,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
-		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());
 		nuevo.setTaxdate(parameters.getTaxdate());
@@ -2386,12 +2380,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(branch_c);
-		art1.setLinememo("anulacion de compra");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setLinememo(parameters.getJrnlmemo());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
 		art1.setBaseref(parameters.getRef1());
-		art1.setTaxdate(parameters.getDocduedate());
+		art1.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);
@@ -2422,12 +2416,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
-		art2.setLinememo("anulacion de compras");
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setLinememo(parameters.getJrnlmemo());
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
-		art2.setTaxdate(parameters.getDocduedate());
+		art2.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art2.setReltransid(-1);
 		art2.setRellineid(-1);
@@ -2459,12 +2453,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art3.setDuedate(parameters.getDocduedate());
 			art3.setShortname(iva_c);
 			art3.setContraact(buss_c);
-			art3.setLinememo("anulacion de compras");
-			art3.setRefdate(parameters.getDocduedate());
+			art3.setLinememo(parameters.getJrnlmemo());
+			art3.setRefdate(parameters.getDocdate());
 			art3.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art3.setBaseref(parameters.getRef1());
-			art3.setTaxdate(parameters.getDocduedate());
+			art3.setTaxdate(parameters.getTaxdate());
 			// 3art1.setFinncpriod(finncpriod);
 			art3.setReltransid(-1);
 			art3.setRellineid(-1);
@@ -2497,12 +2491,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art4.setDuedate(parameters.getDocduedate());
 			art4.setShortname(fovial);
 			art4.setContraact(buss_c);
-			art4.setLinememo("anulacion de compras");
-			art4.setRefdate(parameters.getDocduedate());
+			art4.setLinememo(parameters.getJrnlmemo());
+			art4.setRefdate(parameters.getDocdate());
 			art4.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art4.setBaseref(parameters.getRef1());
-			art4.setTaxdate(parameters.getDocduedate());
+			art4.setTaxdate(parameters.getTaxdate());
 			// rt1.setFinncpriod(finncpriod);
 			art4.setReltransid(-1);
 			art4.setRellineid(-1);
@@ -2534,12 +2528,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art5.setDuedate(parameters.getDocduedate());
 			art5.setShortname(cotrans_C);
 			art5.setContraact(buss_c);
-			art5.setLinememo("anulacion de compras");
-			art5.setRefdate(parameters.getDocduedate());
+			art5.setLinememo(parameters.getJrnlmemo());
+			art5.setRefdate(parameters.getDocdate());
 			art5.setRef1(parameters.getRef1());
 			// 5rt2.setRef2();
 			art5.setBaseref(parameters.getRef1());
-			art5.setTaxdate(parameters.getDocduedate());
+			art5.setTaxdate(parameters.getTaxdate());
 			// 54rt1.setFinncpriod(finncpriod);
 			art5.setReltransid(-1);
 			art5.setRellineid(-1);
@@ -2672,8 +2666,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
-			art1.setLinememo("anulacion de compra");
-			art1.setRefdate(parameters.getDuedate());
+			art1.setLinememo(parameters.getMemo());
+			art1.setRefdate(parameters.getRefdate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
@@ -2806,11 +2800,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// LLenado del padre
 		List detail = new Vector();
 		nuevo.setObjtype("5");
-		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
-		nuevo.setMemo("anulacion por Pago de factura de compras");
+		nuevo.setMemo("Anulación pago de factura de compra");
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());
 		nuevo.setTaxdate(parameters.getTaxdate());
@@ -2833,10 +2826,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art1.setLine_id(1);
 		art1.setCredit(bussines);
 		art1.setAccount(buss_c);
-		art1.setDuedate(parameters.getDocdate());
+		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(Catalog1.getValue1());
-		art1.setLinememo("anulacion por Pago de Factura de compra");
+		art1.setLinememo("Anulación pago de factura de compra");
 		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
@@ -2869,10 +2862,10 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		art2.setLine_id(2);
 		art2.setDebit(bussines);
 		art2.setAccount(Catalog1.getValue1());
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(Catalog1.getValue1());
 		art2.setContraact(buss_c);
-		art2.setLinememo("anulacion pago de factura de compra ");
+		art2.setLinememo("Anulación pago de factura de compra");
 		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// r1.setRef2();

@@ -238,9 +238,7 @@ public class SalesEJB implements SalesEJBRemote {
 		@SuppressWarnings("unchecked")
 		Iterator<SalesDetailTO> iterator = parameters.getSalesDetails()
 				.iterator();
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Valores por defecto encabezado
-		// --------------------------------------------------------------------------------------------------------------------------------
+
 		while (iterator.hasNext()) {
 			SalesDetailTO articleDetalle = (SalesDetailTO) iterator.next();
 
@@ -342,7 +340,7 @@ public class SalesEJB implements SalesEJBRemote {
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-		parameters.setDocduedate(sqlDate);
+		parameters.setDocduedate(parameters.getDocdate());
 		parameters.setDocnum(parameters.getDocentry());
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
@@ -757,7 +755,7 @@ public class SalesEJB implements SalesEJBRemote {
 		nuevo.setLoctotal(bussines + branch);
 		nuevo.setSystotal(bussines + branch);
 
-		nuevo.setMemo(parameters.getJrnlmemo());
+
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());
 		nuevo.setTaxdate(parameters.getTaxdate());
@@ -782,10 +780,10 @@ public class SalesEJB implements SalesEJBRemote {
 
 		art1.setDebit(bussines);
 		art1.setAccount(buss_c);
-		art1.setDuedate(parameters.getDocdate());
+		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(V_local);
-		art1.setLinememo("venta de mercancias");
+		art1.setLinememo(parameters.getJrnlmemo());
 		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
@@ -818,10 +816,10 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setAccount(branch_c);
 
 		art2.setCredit(branch);
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
-		art2.setLinememo("venta  de mercancias");
+		art2.setLinememo(parameters.getJrnlmemo());
 		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
@@ -860,12 +858,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art4.setDuedate(parameters.getDocduedate());
 		art4.setShortname(V_local);
 		art4.setContraact(buss_c);
-		art4.setLinememo("venta de mercancias");
-		art4.setRefdate(parameters.getDocduedate());
+		art4.setLinememo(parameters.getJrnlmemo());
+		art4.setRefdate(parameters.getDocdate());
 		art4.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art4.setBaseref(parameters.getRef1());
-		art4.setTaxdate(parameters.getDocduedate());
+		art4.setTaxdate(parameters.getTaxdate());
 		// 4art1.setFinncpriod(finncpriod);
 		art4.setReltransid(-1);
 		art4.setRellineid(-1);
@@ -898,12 +896,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setDuedate(parameters.getDocduedate());
 		art5.setShortname(costo_venta);
 		art5.setContraact(branch_c);
-		art5.setLinememo("venta de mercancias");
-		art5.setRefdate(parameters.getDocduedate());
+		art5.setLinememo(parameters.getJrnlmemo());
+		art5.setRefdate(parameters.getDocdate());
 		art5.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art5.setBaseref(parameters.getRef1());
-		art5.setTaxdate(parameters.getDocduedate());
+		art5.setTaxdate(parameters.getTaxdate());
 		// 4art1.setFinncpriod(finncpriod);
 		art5.setReltransid(-1);
 		art5.setRellineid(-1);
@@ -936,12 +934,12 @@ public class SalesEJB implements SalesEJBRemote {
 			art3.setDuedate(parameters.getDocduedate());
 			art3.setShortname(iva_c);
 			art3.setContraact(buss_c);
-			art3.setLinememo("venta de mercancias");
-			art3.setRefdate(parameters.getDocduedate());
+			art3.setLinememo(parameters.getJrnlmemo());
+			art3.setRefdate(parameters.getDocdate());
 			art3.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art3.setBaseref(parameters.getRef1());
-			art3.setTaxdate(parameters.getDocduedate());
+			art3.setTaxdate(parameters.getTaxdate());
 			// 3art1.setFinncpriod(finncpriod);
 			art3.setReltransid(-1);
 			art3.setRellineid(-1);
@@ -974,12 +972,12 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setDuedate(parameters.getDocduedate());
 			art6.setShortname(fovial);
 			art6.setContraact(buss_c);
-			art6.setLinememo("Venta  de mercancias");
-			art6.setRefdate(parameters.getDocduedate());
+			art6.setLinememo(parameters.getJrnlmemo());
+			art6.setRefdate(parameters.getDocdate());
 			art6.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art6.setBaseref(parameters.getRef1());
-			art6.setTaxdate(parameters.getDocduedate());
+			art6.setTaxdate(parameters.getTaxdate());
 			// 4rt1.setFinncpriod(finncpriod);
 			art6.setReltransid(-1);
 			art6.setRellineid(-1);
@@ -1010,12 +1008,12 @@ public class SalesEJB implements SalesEJBRemote {
 			art7.setDuedate(parameters.getDocduedate());
 			art7.setShortname(cotrans_C);
 			art7.setContraact(buss_c);
-			art7.setLinememo("venta de mercancias");
-			art7.setRefdate(parameters.getDocduedate());
+			art7.setLinememo(parameters.getJrnlmemo());
+			art7.setRefdate(parameters.getDocdate());
 			art7.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art7.setBaseref(parameters.getRef1());
-			art7.setTaxdate(parameters.getDocduedate());
+			art7.setTaxdate(parameters.getTaxdate());
 			// 4rt1.setFinncpriod(finncpriod);
 			art7.setReltransid(-1);
 			art7.setRellineid(-1);
@@ -1148,8 +1146,8 @@ public class SalesEJB implements SalesEJBRemote {
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
-			art1.setLinememo("venta de mercaderia");
-			art1.setRefdate(parameters.getDuedate());
+			art1.setLinememo(parameters.getMemo());
+			art1.setRefdate(parameters.getRefdate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
@@ -1271,7 +1269,6 @@ public class SalesEJB implements SalesEJBRemote {
 		// LLenado del padre
 		List detail = new Vector();
 		nuevo.setObjtype("5");
-		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
@@ -1298,10 +1295,10 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setLine_id(1);
 		art1.setCredit(bussines);
 		art1.setAccount(buss_c);
-		art1.setDuedate(parameters.getDocdate());
+		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(Catalog1.getValue1());
-		art1.setLinememo("Pago de Factura");
+		art1.setLinememo("Pago de factura");
 		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
@@ -1334,10 +1331,10 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setLine_id(2);
 		art2.setDebit(bussines);
 		art2.setAccount(Catalog1.getValue1());
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(Catalog1.getValue1());
 		art2.setContraact(buss_c);
-		art2.setLinememo("Pago de Factura");
+		art2.setLinememo("Pago de factura");
 		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// r1.setRef2();
@@ -1769,9 +1766,7 @@ public class SalesEJB implements SalesEJBRemote {
 		@SuppressWarnings("unchecked")
 		Iterator<ClientCrediDetailTO> iterator = parameters.getclientDetails()
 				.iterator();
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Valores por defecto encabezado
-		// --------------------------------------------------------------------------------------------------------------------------------
+
 		while (iterator.hasNext()) {
 			ClientCrediDetailTO articleDetalle = (ClientCrediDetailTO) iterator
 					.next();
@@ -1815,12 +1810,65 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
+		// consultando si es venta de diesel ; si lo es cambio de cuenta
+		// asignada en el concepto de diesel por cliente
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------------------------------------------
+		ParameterDAO parameter = new ParameterDAO();
+		parameterTO param = new parameterTO();
+		try {
+			param = parameter.getParameterbykey(2);
+
+			if (parameters.getSeries() == Integer.parseInt(param.getValue1())) {
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// cosultando el concepto diesel
+				// --------------------------------------------------------------------------------------------------------------------------------
+				parameter = new ParameterDAO();
+				param = parameter.getParameterbykey(9);
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// --------------------------------------------------------------------------------------------------------------------------------
+				BusinesspartnerAcountTO busines = new BusinesspartnerAcountTO();
+				List list = new Vector();
+				CatalogEJB catalogo = new CatalogEJB();
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// --------------------------------------------------------------------------------------------------------------------------------
+				list = catalogo.get_businesspartnerAcount(parameters
+						.getCardcode());
+				// --------------------------------------------------------------------------------------------------------------------------------
+				// recorriendo la lista de businespartneraccount para encontrar
+				// el concepto de diesel y su correspondiente cuenta
+				// --------------------------------------------------------------------------------------------------------------------------------
+				for (Object object : list) {
+					BusinesspartnerAcountTO bus = (BusinesspartnerAcountTO) object;
+					if (bus.getAcctype() == Integer.parseInt(param.getValue1())) {
+						// --------------------------------------------------------------------------------------------------------------------------------
+						// asignando la cuenta correspondiente a diesel segun el
+						// socio de negocio
+						// --------------------------------------------------------------------------------------------------------------------------------
+						parameters.setCtlaccount(bus.getAcctcode());
+						// --------------------------------------------------------------------------------------------------------------------------------
+						// --------------------------------------------------------------------------------------------------------------------------------
+					}
+
+				}
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------------------------------------------
 		// Valores por defecto encabezado
 		// --------------------------------------------------------------------------------------------------------------------------------
+
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-		parameters.setDocduedate(sqlDate);
+		parameters.setDocduedate(parameters.getDocdate());
 		parameters.setDocnum(parameters.getDocentry());
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
@@ -2419,7 +2467,6 @@ public class SalesEJB implements SalesEJBRemote {
 		// LLenado del padre
 		List detail = new Vector();
 		nuevo.setObjtype("5");
-		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines + branch);
 		nuevo.setSystotal(bussines + branch);
@@ -2450,10 +2497,10 @@ public class SalesEJB implements SalesEJBRemote {
 		// art1.setDebit(bussines);
 		art1.setCredit(bussines);
 		art1.setAccount(buss_c);
-		art1.setDuedate(parameters.getDocdate());
+		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(V_local);
-		art1.setLinememo("anulacion de ventas ");
+		art1.setLinememo(parameters.getJrnlmemo());
 		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
@@ -2486,10 +2533,10 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setAccount(branch_c);
 		art2.setDebit(branch);
 		// art2.setCredit(branch);
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch_c);
 		art2.setContraact(buss_c);
-		art2.setLinememo("anulacion de venta");
+		art2.setLinememo(parameters.getJrnlmemo());
 		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
@@ -2528,12 +2575,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art4.setDuedate(parameters.getDocduedate());
 		art4.setShortname(V_local);
 		art4.setContraact(buss_c);
-		art4.setLinememo("anulacion de venta");
-		art4.setRefdate(parameters.getDocduedate());
+		art4.setLinememo(parameters.getJrnlmemo());
+		art4.setRefdate(parameters.getDocdate());
 		art4.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art4.setBaseref(parameters.getRef1());
-		art4.setTaxdate(parameters.getDocduedate());
+		art4.setTaxdate(parameters.getTaxdate());
 		// 4art1.setFinncpriod(finncpriod);
 		art4.setReltransid(-1);
 		art4.setRellineid(-1);
@@ -2566,12 +2613,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art5.setDuedate(parameters.getDocduedate());
 		art5.setShortname(costo_venta);
 		art5.setContraact(branch_c);
-		art5.setLinememo("anulacion de venta");
-		art5.setRefdate(parameters.getDocduedate());
+		art5.setLinememo(parameters.getJrnlmemo());
+		art5.setRefdate(parameters.getDocdate());
 		art5.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art5.setBaseref(parameters.getRef1());
-		art5.setTaxdate(parameters.getDocduedate());
+		art5.setTaxdate(parameters.getTaxdate());
 		// 4art1.setFinncpriod(finncpriod);
 		art5.setReltransid(-1);
 		art5.setRellineid(-1);
@@ -2602,12 +2649,12 @@ public class SalesEJB implements SalesEJBRemote {
 			art3.setDuedate(parameters.getDocduedate());
 			art3.setShortname(iva_c);
 			art3.setContraact(buss_c);
-			art3.setLinememo("anulacion de venta");
-			art3.setRefdate(parameters.getDocduedate());
+			art3.setLinememo(parameters.getJrnlmemo());
+			art3.setRefdate(parameters.getDocdate());
 			art3.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art3.setBaseref(parameters.getRef1());
-			art3.setTaxdate(parameters.getDocduedate());
+			art3.setTaxdate(parameters.getTaxdate());
 			// 3art1.setFinncpriod(finncpriod);
 			art3.setReltransid(-1);
 			art3.setRellineid(-1);
@@ -2640,12 +2687,12 @@ public class SalesEJB implements SalesEJBRemote {
 			art6.setDuedate(parameters.getDocduedate());
 			art6.setShortname(fovial);
 			art6.setContraact(buss_c);
-			art6.setLinememo("anulacion de venta");
-			art6.setRefdate(parameters.getDocduedate());
+			art6.setLinememo(parameters.getJrnlmemo());
+			art6.setRefdate(parameters.getDocdate());
 			art6.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art6.setBaseref(parameters.getRef1());
-			art6.setTaxdate(parameters.getDocduedate());
+			art6.setTaxdate(parameters.getTaxdate());
 			// 4rt1.setFinncpriod(finncpriod);
 			art6.setReltransid(-1);
 			art6.setRellineid(-1);
@@ -2677,12 +2724,12 @@ public class SalesEJB implements SalesEJBRemote {
 			art7.setDuedate(parameters.getDocduedate());
 			art7.setShortname(cotrans_C);
 			art7.setContraact(buss_c);
-			art7.setLinememo("anulacion de venta");
-			art7.setRefdate(parameters.getDocduedate());
+			art7.setLinememo(parameters.getJrnlmemo());
+			art7.setRefdate(parameters.getDocdate());
 			art7.setRef1(parameters.getRef1());
 			// art2.setRef2();
 			art7.setBaseref(parameters.getRef1());
-			art7.setTaxdate(parameters.getDocduedate());
+			art7.setTaxdate(parameters.getTaxdate());
 			// 4rt1.setFinncpriod(finncpriod);
 			art7.setReltransid(-1);
 			art7.setRellineid(-1);
@@ -2815,8 +2862,8 @@ public class SalesEJB implements SalesEJBRemote {
 			art1.setDuedate(parameters.getDuedate());
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
-			art1.setLinememo("anulacion de venta");
-			art1.setRefdate(parameters.getDuedate());
+			art1.setLinememo(parameters.getMemo());
+			art1.setRefdate(parameters.getRefdate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
@@ -2949,11 +2996,10 @@ public class SalesEJB implements SalesEJBRemote {
 		// LLenado del padre
 		List detail = new Vector();
 		nuevo.setObjtype("5");
-		nuevo.setMemo(parameters.getJrnlmemo());
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setLoctotal(bussines);
 		nuevo.setSystotal(bussines);
-		nuevo.setMemo("anulacion pago de factura de venta");
+		nuevo.setMemo("Anulación pago de factura de venta");
 		nuevo.setUsersign(parameters.getUsersign());
 		nuevo.setDuedate(parameters.getDocdate());
 		nuevo.setTaxdate(parameters.getTaxdate());
@@ -2977,10 +3023,10 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setDebit(bussines);
 		// art1.setCredit(bussines);
 		art1.setAccount(buss_c);
-		art1.setDuedate(parameters.getDocdate());
+		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(buss_c);
 		art1.setContraact(Catalog1.getValue1());
-		art1.setLinememo("Pago de Factura");
+		art1.setLinememo("Anulación pago de factura de venta");
 		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// ar1.setRef2();
@@ -3014,10 +3060,10 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setCredit(bussines);
 		// art2.setDebit(bussines);
 		art2.setAccount(Catalog1.getValue1());
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(Catalog1.getValue1());
 		art2.setContraact(buss_c);
-		art2.setLinememo(" Anulacion Pago de Factura de ventas");
+		art2.setLinememo("Anulación pago de factura de venta");
 		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// r1.setRef2();
@@ -3285,9 +3331,7 @@ public class SalesEJB implements SalesEJBRemote {
 		@SuppressWarnings("unchecked")
 		Iterator<DeliveryDetailTO> iterator = parameters.getDeliveryDetails()
 				.iterator();
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Valores por defecto encabezado
-		// --------------------------------------------------------------------------------------------------------------------------------
+
 		while (iterator.hasNext()) {
 			DeliveryDetailTO articleDetalle = (DeliveryDetailTO) iterator
 					.next();
@@ -3342,7 +3386,7 @@ public class SalesEJB implements SalesEJBRemote {
 		java.util.Date utilDate = new java.util.Date(); // fecha actual
 		long lnMilisegundos = utilDate.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(lnMilisegundos);
-		parameters.setDocduedate(sqlDate);
+		parameters.setDocduedate(parameters.getDocdate());
 		parameters.setDocnum(parameters.getDocentry());
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
@@ -4011,12 +4055,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(branch.getBalinvntac());
 		art1.setContraact(branch1.getBalinvntac());
-		art1.setLinememo("nota  de remision ");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setLinememo(parameters.getJrnlmemo());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// art1.setRef2();
 		art1.setBaseref(parameters.getRef1());
-		art1.setTaxdate(parameters.getDocduedate());
+		art1.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);
@@ -4044,12 +4088,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch1.getBalinvntac());
 		art2.setContraact(branch.getBalinvntac());
-		art2.setLinememo("nota de remision ");
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setLinememo(parameters.getJrnlmemo());
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
-		art2.setTaxdate(parameters.getDocduedate());
+		art2.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art2.setReltransid(-1);
 		art2.setRellineid(-1);
@@ -4185,12 +4229,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art1.setDuedate(parameters.getDocduedate());
 		art1.setShortname(branch.getBalinvntac());
 		art1.setContraact(branch1.getBalinvntac());
-		art1.setLinememo("nota  de remision ");
-		art1.setRefdate(parameters.getDocduedate());
+		art1.setLinememo(parameters.getJrnlmemo());
+		art1.setRefdate(parameters.getDocdate());
 		art1.setRef1(parameters.getRef1());
 		// art1.setRef2();
 		art1.setBaseref(parameters.getRef1());
-		art1.setTaxdate(parameters.getDocduedate());
+		art1.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art1.setReltransid(-1);
 		art1.setRellineid(-1);
@@ -4218,12 +4262,12 @@ public class SalesEJB implements SalesEJBRemote {
 		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(branch1.getBalinvntac());
 		art2.setContraact(branch.getBalinvntac());
-		art2.setLinememo("nota de remision ");
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setLinememo(parameters.getJrnlmemo());
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(parameters.getRef1());
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
-		art2.setTaxdate(parameters.getDocduedate());
+		art2.setTaxdate(parameters.getTaxdate());
 		// art1.setFinncpriod(finncpriod);
 		art2.setReltransid(-1);
 		art2.setRellineid(-1);

@@ -71,6 +71,7 @@ public class BankEJB implements BankEJBRemote {
 				_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(
 						parameters, action));
 				parameters.setCheckkey(_return.getDocentry());
+
 				// llenado del asiento contable del chekforapayment
 
 				AccountingEJB acounting = new AccountingEJB();
@@ -80,9 +81,11 @@ public class BankEJB implements BankEJBRemote {
 				ResultOutTO resultado = acounting.journalEntry_mtto(journal,
 						Common.MTTOINSERT, DAO.getConn());
 
-				// Actualizando el documento de Contrl de cheques emitidos con
+				// Actualizando el documento de Control de cheques emitidos con
 				// el transid del journalEntry
-				parameters.setTransref(resultado.getDocentry() + "");
+				parameters
+						.setTransref(Integer.toString(resultado.getDocentry()));
+				parameters.setTransnum(resultado.getDocentry());
 				int result = DAO.ges_cfp0_checkforpayment_mtto(parameters,
 						Common.MTTOUPDATE);
 
@@ -94,7 +97,6 @@ public class BankEJB implements BankEJBRemote {
 
 			DAO.forceCommit();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
@@ -153,7 +155,7 @@ public class BankEJB implements BankEJBRemote {
 		JournalEntryTO journal = new JournalEntryTO();
 		ResultOutTO res_jour = new ResultOutTO();
 		// ---------------------------------------------------------------------------
-		// conexion principal
+		// Conexión principal
 		// ---------------------------------------------------------------------------
 		ColecturiaDAO DAO = new ColecturiaDAO();
 		DAO.setIstransaccional(true);
@@ -168,28 +170,40 @@ public class BankEJB implements BankEJBRemote {
 		parameter = ejb.getParameterbykey(9);
 
 		List aux = new Vector();
-		// aqui la validacion de abono a capital si no se ha pagado por completo
-		// el interes
 		
-
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Asignación de valores por defecto y llenado:
+		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
+		// no aplican.
+		// --------------------------------------------------------------------------------------------------------------------------------
 		if (parameters.getDoctotal() == null) {
 			parameters.setDoctotal(zero);
 		}
+		
+		parameters.setDocduedate(parameters.getDocdate());
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Hacer validaciones:
+		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
+		// no aplican para validaciones
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_return = validateColecturia(parameters);
+
+		if (_return.getCodigoError() != 0) {
+			return _return;
+		}
 
 		try {
-			
-			_return=validateColecturia(parameters);
-			if(_return.getCodigoError()!=0){
-				_return.setCodigoError(1);
-				
-			}else{
-			
-			
+
 			if (action == Common.MTTOINSERT) {
 
 				_return.setDocentry(DAO.ges_ges_col0_colecturia_mtto(
 						parameters, action));
 				parameters.setDocentry(_return.getDocentry());
+				parameters.setRef1(Integer.toString(_return.getDocentry()));
+				parameters.setDocnum(_return.getDocentry());
+
 				// Acciones con los hijos
 				Iterator<ColecturiaDetailTO> iterator = parameters
 						.getColecturiaDetail().iterator();
@@ -228,7 +242,7 @@ public class BankEJB implements BankEJBRemote {
 
 				parameters.setColecturiaDetail(aux);
 				// ---------------------------------------------------------------------------
-				// Asiento de coelcturia Series = 2
+				// Asiento de colecturia Series = 1
 				// ---------------------------------------------------------------------------
 				if (parameters.getSeries() == 1) {
 
@@ -263,17 +277,18 @@ public class BankEJB implements BankEJBRemote {
 
 					colecturia = get_ges_colecturiaByKey(parameters
 							.getReceiptnum());
-					// cambia estado a 2 indicando que el pago de colecturia ha
-					// sido anulado
+					// Cambia estado a 2 indicando que el pago de colecturia
+					// ha sido anulado
 					colecturia.setTranstype(2);
 					// actualizando el pago de colecturia anterior
 					DAO.ges_ges_col0_colecturia_mtto(colecturia,
 							Common.MTTOUPDATE);
-					// actualiza el campo de pago de facturas de cancelado a no
-					// cancelado
+					// actualiza el campo de pago de facturas de cancelado a
+					// no cancelado
 					ResultOutTO nuevo1 = new ResultOutTO();
 					nuevo1 = actualizar_sale2(DAO.getConn(), parameters);
 
+					// Validar si es equipo propio o asociado
 					if (parameters.getPrinted().equals("1")) {
 						journal = fill_JournalEntry_liquidacion_anulacion(parameters);
 						account1 = new AccountingEJB();
@@ -286,86 +301,105 @@ public class BankEJB implements BankEJBRemote {
 			} else {
 				DAO.ges_ges_col0_colecturia_mtto(parameters, Common.MTTOUPDATE);
 			}
-			
-				_return.setCodigoError(0);
-				_return.setMensaje("Datos ingresados con exito");
-			
-			
-			}// fin del if de la validacion 
-				DAO.forceCommit();
+
+			DAO.forceCommit();
+
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			DAO.rollBackConnection();
 			throw (EJBException) new EJBException(e);
 		} finally {
 
 			DAO.forceCloseConnection();
 		}
-		
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos ingresados con exito");
 		return _return;
 	}
 
-	public ResultOutTO validateColecturia(ColecturiaTO parameter) {
-		ResultOutTO result = new ResultOutTO();
-		// asingnacion de variables;
-		ParameterDAO DAO = new ParameterDAO();
+	public ResultOutTO validateColecturia(ColecturiaTO parameter)
+			throws EJBException {
+
+		// Variables
+		ResultOutTO _return = new ResultOutTO();
+		ParameterEJB par = new ParameterEJB();
 		parameterTO prestamo = new parameterTO();
 		parameterTO interes = new parameterTO();
+		ColecturiaDetailTO cPrestamo = new ColecturiaDetailTO();
+		ColecturiaDetailTO cInteres = new ColecturiaDetailTO();
 
-		try {
-			// validacion si el cierre de caja del dia anterior ya se realizo
-			/*result = validateCloseDiary_colecturia(parameter.getUsersign());
-			if (result.getCodigoError() != 0) {
-				result.setCodigoError(1);
-				result.setMensaje("no se ha realizado el cierre de caja de el dia anterior");
-				return result;
-			}*/
-			// validacion de prestamos
-			prestamo = DAO.getParameterbykey(11);
-
-			DAO = new ParameterDAO();
-			interes = DAO.getParameterbykey(12);
-
-			List list = new Vector();
-			list = parameter.getColecturiaDetail();
-			for (Object object : list) {
-
-				ColecturiaDetailTO colecturia = (ColecturiaDetailTO) object;
-
-				// consulta el concepto de prestamos
-				if (prestamo.getValue1().equals(Integer.toString(colecturia.getLinenum()))) {
-
-					// cosulta si existe un monto a pagar en el concepto de
-					// prestamo
-					if (colecturia.getPaidsum() > 0.0) {
-						// si el pago de prestamos > 0.0
-						for (Object object2 : list) {
-
-							ColecturiaDetailTO colecturia2 = (ColecturiaDetailTO) object2;
-							if (interes.getValue1().equals(Integer.toString(colecturia2.getLinenum()))) {
-								// si el saldo del interes es igual a cero o el
-								// saldo - paidsum=0
-								if (Double.parseDouble(colecturia2.getValue1()) <= 0.0
-										|| (Double.parseDouble(colecturia2
-												.getValue1()) - colecturia2
-												.getPaidsum()) == 0.0) {
-									result.setMensaje("colecturia valida");
-									result.setCodigoError(0);
-								}else {
-									result.setMensaje("Debe Pagar los intereses antes que el capital del préstamo ");
-									result.setCodigoError(1);
-									return result;
-								}
-							} 
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// -----------------------------------------------------------------------------------------------------------------
+		// Validando el tipo de documento, para coelcturia de reversión no
+		// aplican validaciones
+		// -----------------------------------------------------------------------------------------------------------------
+		if (parameter.getSeries() == 2) {
+			_return.setCodigoError(0);
+			return _return;
 		}
-		return result;
+
+		// -----------------------------------------------------------------------------------------------------------------
+		// validacion si el cierre de caja del dia anterior ya se realizo
+		// -----------------------------------------------------------------------------------------------------------------
+
+		/*
+		 * result = validateCloseDiary_colecturia(parameter.getUsersign()); if
+		 * (result.getCodigoError() != 0) { result.setCodigoError(1); result
+		 * .setMensaje("no se ha realizado el cierre de caja de el dia anterior"
+		 * ); return result; }
+		 */
+
+		// -----------------------------------------------------------------------------------------------------------------
+		// Validación de prestamos
+		// -----------------------------------------------------------------------------------------------------------------
+
+		List list = new Vector();
+		list = parameter.getColecturiaDetail();
+
+		// Consulta el concepto de prestamos
+		// -------------------------------------------------------------------------
+		prestamo = par.getParameterbykey(11);
+
+		for (Object object : list) {
+
+			cPrestamo = (ColecturiaDetailTO) object;
+
+			if (prestamo.getValue1().equals(
+					Integer.toString(cPrestamo.getLinenum()))) {
+				break;
+			}
+		}
+
+		// Consulta el concepto Interes
+		// -------------------------------------------------------------------------
+		par = new ParameterEJB();
+		interes = par.getParameterbykey(12);
+
+		for (Object object : list) {
+
+			cInteres = (ColecturiaDetailTO) object;
+
+			if (interes.getValue1().equals(
+					Integer.toString(cInteres.getLinenum()))) {
+				break;
+			}
+		}
+
+		// Se debe pagar primero el interes completo antes que el prestamo
+		// -------------------------------------------------------------------------
+
+		if (cPrestamo.getPaidsum() > 0.0) {
+			if (Double.parseDouble(cInteres.getValue1().replaceAll(",", "")) > 0.0
+					&& (Double.parseDouble(cInteres.getValue1().replaceAll(",",
+							"")) - cInteres.getPaidsum()) > 0.0) {
+				_return.setMensaje("Debe Pagar los intereses antes que el capital del préstamo ");
+				_return.setCodigoError(1);
+				return _return;
+			}
+		}
+
+		_return.setCodigoError(0);
+
+		return _return;
 	}
 
 	public ResultOutTO validateCloseDiary_colecturia(int usersign)
@@ -668,10 +702,10 @@ public class BankEJB implements BankEJBRemote {
 				art1.setLine_id(n);
 				art1.setAccount(business);
 				art1.setCredit(sum);
-				art1.setDuedate(parameters.getDocdate());
+				art1.setDuedate(parameters.getDocduedate());
 				art1.setShortname(business);
 				art1.setContraact(colecturia_c.getAcctcode());
-				art1.setLinememo("pago de colecturia");
+				art1.setLinememo("Pago de colecturia");
 				art1.setRefdate(parameters.getDocdate());
 				art1.setRef1(Integer.toString(parameters.getDocentry()));
 				// art1.setRef2();
@@ -724,10 +758,10 @@ public class BankEJB implements BankEJBRemote {
 				art2.setLine_id(n);
 				art2.setAccount(colecturia_c.getAcctcode());
 				art2.setDebit(sum);
-				art2.setDuedate(parameters.getDocdate());
+				art2.setDuedate(parameters.getDocduedate());
 				art2.setShortname(colecturia_c.getAcctcode());
 				art2.setContraact(business);
-				art2.setLinememo("pago de colecturia ");
+				art2.setLinememo("Pago de colecturia");
 				art2.setRefdate(parameters.getDocdate());
 				art2.setRef1(Integer.toString(parameters.getDocentry()));
 				// art2.setRef2();
@@ -776,10 +810,10 @@ public class BankEJB implements BankEJBRemote {
 					art3.setLine_id(n);
 					art3.setAccount(colecturia_c.getAcctcode2());
 					art3.setDebit(sum);
-					art3.setDuedate(parameters.getDocdate());
+					art3.setDuedate(parameters.getDocduedate());
 					art3.setShortname(colecturia_c.getAcctcode2());
 					art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
-					art3.setLinememo("pago de colecturia");
+					art3.setLinememo("Pago de colecturia");
 					art3.setRefdate(parameters.getDocdate());
 					art3.setRef1(Integer.toString(parameters.getDocentry()));
 					// art2.setRef2();
@@ -826,10 +860,10 @@ public class BankEJB implements BankEJBRemote {
 
 						art4.setCredit(t_iva);
 
-						art4.setDuedate(parameters.getDocdate());
+						art4.setDuedate(parameters.getDocduedate());
 						art4.setShortname(iva_c);
 						art4.setContraact(colecturia_c.getAcctcode2());
-						art4.setLinememo("pago de colecturia");
+						art4.setLinememo("Pago de colecturia");
 						art4.setRefdate(parameters.getDocdate());
 						art4.setRef1(parameters.getRef1());
 						// rt2.setRef2();
@@ -869,10 +903,10 @@ public class BankEJB implements BankEJBRemote {
 					art5.setLine_id(n);
 					art5.setAccount(colecturia_c.getAcctcode3());
 					art5.setCredit(ingreso);
-					art5.setDuedate(parameters.getDocdate());
+					art5.setDuedate(parameters.getDocduedate());
 					art5.setShortname(colecturia_c.getAcctcode3());
 					art5.setContraact(colecturia_c.getAcctcode2());
-					art5.setLinememo("pago de colecturia");
+					art5.setLinememo("Pago de colecturia");
 					art5.setRefdate(parameters.getDocdate());
 					art5.setRef1(Integer.toString(parameters.getDocentry()));
 					// art2.setRef2();
@@ -911,9 +945,9 @@ public class BankEJB implements BankEJBRemote {
 
 		nuevo.setBtfstatus("O");
 		nuevo.setTranstype(Objtype);
-		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
+		nuevo.setBaseref(Integer.toString(parameters.getDocentry()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo("pago de conceptos de colecturia");
+		nuevo.setMemo("Pago de colecturia");
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(total_sum);
@@ -1052,7 +1086,7 @@ public class BankEJB implements BankEJBRemote {
 			art1.setShortname(acc);
 			art1.setContraact(c_acc);
 			art1.setLinememo(parameters.getMemo());
-			art1.setRefdate(parameters.getDuedate());
+			art1.setRefdate(parameters.getRefdate());
 			art1.setRef1(parameters.getRef1());
 			// art1.setRef2();
 			art1.setBaseref(parameters.getRef1());
@@ -1177,7 +1211,7 @@ public class BankEJB implements BankEJBRemote {
 				art1.setDuedate(parameters.getDocdate());
 				art1.setShortname(business);
 				art1.setContraact(colecturia_c.getAcctcode());
-				art1.setLinememo("reversion de pago de colecturia");
+				art1.setLinememo("Reversión pago de colecturia");
 				art1.setRefdate(parameters.getDocdate());
 				art1.setRef1(Integer.toString(parameters.getDocentry()));
 				// art1.setRef2();
@@ -1234,7 +1268,7 @@ public class BankEJB implements BankEJBRemote {
 				art2.setDuedate(parameters.getDocdate());
 				art2.setShortname(colecturia_c.getAcctcode());
 				art2.setContraact(business);
-				art2.setLinememo("Reversion pago de colecturia ");
+				art2.setLinememo("Reversión pago de colecturia");
 				art2.setRefdate(parameters.getDocdate());
 				art2.setRef1(Integer.toString(parameters.getDocentry()));
 				// art2.setRef2();
@@ -1284,7 +1318,7 @@ public class BankEJB implements BankEJBRemote {
 					art3.setDuedate(parameters.getDocdate());
 					art3.setShortname(colecturia_c.getAcctcode2());
 					art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
-					art3.setLinememo("Reversion pago de colecturia");
+					art3.setLinememo("Reversión pago de colecturia");
 					art3.setRefdate(parameters.getDocdate());
 					art3.setRef1(Integer.toString(parameters.getDocentry()));
 					// art2.setRef2();
@@ -1332,7 +1366,7 @@ public class BankEJB implements BankEJBRemote {
 						art4.setDuedate(parameters.getDocdate());
 						art4.setShortname(iva_c);
 						art4.setContraact(colecturia_c.getAcctcode2());
-						art4.setLinememo("reversion pago de colecturia");
+						art4.setLinememo("Reversión pago de colecturia");
 						art4.setRefdate(parameters.getDocdate());
 						art4.setRef1(Integer.toString(parameters.getDocentry()));
 						// rt2.setRef2();
@@ -1376,7 +1410,7 @@ public class BankEJB implements BankEJBRemote {
 					art5.setDuedate(parameters.getDocdate());
 					art5.setShortname(colecturia_c.getAcctcode3());
 					art5.setContraact(colecturia_c.getAcctcode2());
-					art5.setLinememo("Reversion  pago de colecturia");
+					art5.setLinememo("Reversión pago de colecturia");
 					art5.setRefdate(parameters.getDocdate());
 					art5.setRef1(Integer.toString(parameters.getDocentry()));
 					// art2.setRef2();
@@ -1417,7 +1451,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setTranstype("41");
 		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo(parameters.getJrnlmemo());
+		nuevo.setMemo("Reversión pago de colecturia");
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(total_sum);
@@ -1509,10 +1543,10 @@ public class BankEJB implements BankEJBRemote {
 					art1.setLine_id(n);
 					art1.setAccount(colecturia_c.getCtlaccount());
 					art1.setDebit(colecturia_c.getPaidsum());
-					art1.setDuedate(parameters.getDocdate());
+					art1.setDuedate(parameters.getDocduedate());
 					art1.setShortname(colecturia_c.getCtlaccount());
 					art1.setContraact("");
-					art1.setLinememo("liquidacion de unidades propias ");
+					art1.setLinememo("Liquidación de unidades propias");
 					art1.setRefdate(parameters.getDocdate());
 					art1.setRef1(Integer.toString(parameters.getDocentry()));
 					// art1.setRef2();
@@ -1563,17 +1597,17 @@ public class BankEJB implements BankEJBRemote {
 
 		if (ingreso.equals(null)) {
 			throw new Exception(
-					"no existe cuenta asiganada a ingresos para la liquidacion");
+					"No existe cuenta asiganada a ingresos para la liquidacion");
 		}
 
 		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 		art2.setLine_id(n);
 		art2.setAccount(ingreso);
 		art2.setCredit(sum);
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(ingreso);
 		art2.setContraact("");
-		art2.setLinememo("liquidacion de unidades propias ");
+		art2.setLinememo("Liquidación de unidades propias");
 		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(Integer.toString(parameters.getDocentry()));
 		// art2.setRef2();
@@ -1612,7 +1646,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setTranstype(objtype);
 		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo("liquidacion de unidades propias ");
+		nuevo.setMemo("Liquidación de unidades propias");
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(sum);
@@ -1707,7 +1741,7 @@ public class BankEJB implements BankEJBRemote {
 					art1.setDuedate(parameters.getDocdate());
 					art1.setShortname(colecturia_c.getCtlaccount());
 					art1.setContraact("");
-					art1.setLinememo("Anulacion liquidacion de unidades propias ");
+					art1.setLinememo("Anulación liquidación de unidades propias");
 					art1.setRefdate(parameters.getDocdate());
 					art1.setRef1(Integer.toString(parameters.getDocentry()));
 					// art1.setRef2();
@@ -1758,7 +1792,7 @@ public class BankEJB implements BankEJBRemote {
 
 		if (ingreso.equals(null)) {
 			throw new Exception(
-					"no existe cuenta asiganada a ingresos para la liquidacion");
+					"No existe cuenta asiganada a ingresos para la liquidacion");
 		}
 
 		JournalEntryLinesTO art2 = new JournalEntryLinesTO();
@@ -1766,11 +1800,11 @@ public class BankEJB implements BankEJBRemote {
 		art2.setAccount(ingreso);
 		// art2.setCredit();
 		art2.setDebit(sum);
-		art2.setDuedate(parameters.getDocdate());
+		art2.setDuedate(parameters.getDocduedate());
 		art2.setShortname(ingreso);
 		art2.setContraact("");
-		art2.setLinememo("Anulacion liquidacion de unidades propias ");
-		art2.setRefdate(parameters.getDocduedate());
+		art2.setLinememo("Anulación liquidación de unidades propias");
+		art2.setRefdate(parameters.getDocdate());
 		art2.setRef1(Integer.toString(parameters.getDocentry()));
 		// art2.setRef2();
 		art2.setBaseref(parameters.getRef1());
@@ -1808,7 +1842,7 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setTranstype(objtype);
 		nuevo.setBaseref(Integer.toString(parameters.getDocnum()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo("Anulacion liquidacion de unidades propias ");
+		nuevo.setMemo("Anulación liquidación de unidades propias");
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(sum);
@@ -1931,7 +1965,7 @@ public class BankEJB implements BankEJBRemote {
 			throws Exception {
 		JournalEntryTO journal = new JournalEntryTO();
 		if (parameters.getChecksum() == 0) {
-			throw new Exception("debe ser un monto mayor que cero");
+			throw new Exception("Debe ser un monto mayor que cero");
 
 		}
 		List detail = new Vector();
@@ -1945,7 +1979,7 @@ public class BankEJB implements BankEJBRemote {
 		busines = admin.get_businesspartnerBykey(cardcode);
 
 		if (busines == null) {
-			throw new Exception("no se encuentra socio de negocio");
+			throw new Exception("No se encuentra socio de negocio");
 
 		}
 
@@ -1954,10 +1988,10 @@ public class BankEJB implements BankEJBRemote {
 		art1.setLine_id(1);
 		art1.setAccount(busines.getDebpayacct());
 		art1.setDebit(parameters.getChecksum());
-		art1.setDuedate(parameters.getPmntdate());
+		art1.setDuedate(parameters.getCheckdate());
 		art1.setShortname(busines.getDebpayacct());
 		art1.setContraact(parameters.getCheckacct());
-		art1.setLinememo("emision de cheque a proveedor ");
+		art1.setLinememo("Emisión de cheque a proveedor");
 		art1.setRefdate(parameters.getPmntdate());
 		art1.setRef1(Integer.toString(parameters.getCheckkey()));
 		// art1.setRef2();
@@ -1995,7 +2029,7 @@ public class BankEJB implements BankEJBRemote {
 		art2.setDuedate(parameters.getPmntdate());
 		art2.setShortname(parameters.getCheckacct());
 		art2.setContraact(busines.getDebpayacct());
-		art2.setLinememo("emision de cheque a proveedor ");
+		art2.setLinememo("Emisión de cheque a proveedor");
 		art2.setRefdate(parameters.getPmntdate());
 		art2.setRef1(Integer.toString(parameters.getCheckkey()));
 		// rt1.setRef2();
@@ -2026,10 +2060,10 @@ public class BankEJB implements BankEJBRemote {
 		// LLenado del padre
 
 		journal.setBtfstatus("O");
-		journal.setTranstype("-1");
+		journal.setTranstype(parameters.getObjtype());
 		journal.setBaseref(Integer.toString(parameters.getCheckkey()));
 		journal.setRefdate(parameters.getPmntdate());
-		journal.setMemo("emision de cheques a proveedor ");
+		journal.setMemo("Emisión de cheque a proveedor");
 		journal.setRef1(Integer.toString(parameters.getCheckkey()));
 		journal.setRef2(journal.getRef1());
 		journal.setLoctotal(parameters.getChecksum());
@@ -2050,7 +2084,6 @@ public class BankEJB implements BankEJBRemote {
 		journal.setAutowt("N");
 		journal.setDeferedtax("N");
 		journal.setJournalentryList(detail);
-		journal.setObjtype(parameters.getObjtype());
 
 		journal.setJournalentryList(detail);
 		return journal;
@@ -2126,7 +2159,7 @@ public class BankEJB implements BankEJBRemote {
 		busines.setCardcode(cardcode);
 		busines.setAcctype(Integer.parseInt(codpres));
 		// cosultando el codigo de la cuenta configurada en el concepto de
-		// prestamospor socio
+		// prestamos por socio
 		busines = DAO.get_businesspartnerAcount_FCredit(busines);
 		cuenta = busines.getAcctcode();
 		// consultando el codigo de cuenta para encontrar su saldo si es mayor
@@ -2135,8 +2168,11 @@ public class BankEJB implements BankEJBRemote {
 
 		if (account.getCurrtotal() != null && account.getCurrtotal() > 0.0) {
 
+			// Buscando cuenta de interes moratorio
 			parameterTO = parameter.getParameterbykey(12);
 
+			// Revisando la cantidad de dias antes del ultimo actualización de
+			// saldos
 			dias_prestamo = dias_prestamo(cuenta, conn);
 
 			// codigo del concepto de interes moratorio
@@ -2145,7 +2181,7 @@ public class BankEJB implements BankEJBRemote {
 			busines.setCardcode(cardcode);
 			busines.setAcctype(Integer.parseInt(codpres));
 			// cosultando el codigo de la cuenta configurada en el concepto de
-			// prestamospor socio
+			// prestamos por socio
 			busines = DAO.get_businesspartnerAcount_FCredit(busines);
 			cuenta = busines.getAcctcode();
 
@@ -2194,7 +2230,7 @@ public class BankEJB implements BankEJBRemote {
 			journal.setTranstype("50");
 			journal.setBaseref("50");
 			journal.setRefdate(sqlDate);
-			journal.setMemo("registro de interes moratorio a la fecha");
+			journal.setMemo("Registro de interes moratorio");
 			journal.setRef1(Integer.toString(journal.getTransid()));
 			journal.setRef2(journal.getRef1());
 			journal.setLoctotal(interes);
@@ -2226,7 +2262,7 @@ public class BankEJB implements BankEJBRemote {
 			art1.setDuedate(sqlDate);
 			art1.setShortname(cuenta);
 			art1.setContraact(concepto.getAcctcode2());
-			art1.setLinememo("registro de interes moratorio a la fecha");
+			art1.setLinememo("Registro de interes moratorio");
 			art1.setRefdate(sqlDate);
 			art1.setRef1(Integer.toString(concepto.getLinenum()));
 			// art1.setRef2();
@@ -2260,7 +2296,7 @@ public class BankEJB implements BankEJBRemote {
 			art2.setDuedate(sqlDate);
 			art2.setShortname(concepto.getAcctcode2());
 			art2.setContraact(cuenta);
-			art2.setLinememo("registro de interes moratorios");
+			art2.setLinememo("Registro de interes moratorio");
 			art2.setRefdate(sqlDate);
 			art2.setRef1(Integer.toString(concepto.getLinenum()));
 			// rt1.setRef2();

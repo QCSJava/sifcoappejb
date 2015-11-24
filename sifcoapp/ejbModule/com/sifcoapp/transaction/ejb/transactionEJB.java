@@ -460,7 +460,11 @@ public class transactionEJB {
 		// -------------------------------------------------------------------------------------------------------
 
 		if (transaction.getObjtype().equals("12")) {
+			
+			//------------------------
 			// almacen de Entrada
+			//------------------------
+			
 			if (transaction.getInqty() > 0) {
 				// Existencias
 				// -----------------------------------------------------------------------------------------------
@@ -488,7 +492,10 @@ public class transactionEJB {
 				transaction.setNewAvgprice(newAvgPrice);
 				transaction.setBalance(newTotalArticle);
 
+				//------------------------
 				// almacen de salida
+				//------------------------
+				
 			} else if (transaction.getOutqty() > 0) {
 				// Existencias
 				// -----------------------------------------------------------------------------------------------
@@ -591,8 +598,8 @@ public class transactionEJB {
 			// Actualizar objeto princicpal
 			transaction.setNewOnhand(newOnhand);
 			transaction.setNewWhsOnhand(newWhsOnhand);
-			transaction.setInqty(zero);
-			transaction.setOutqty(transQuantity);
+			transaction.setInqty(transQuantity);
+			transaction.setOutqty(zero);
 
 			// Costos promedios
 			// ---------------------------------------------------------------------------------------------------
