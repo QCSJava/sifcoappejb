@@ -67,6 +67,10 @@ public class AccountingDAO extends CommonDAO {
 		// TODO Auto-generated constructor stub
 	}
 
+	// -------------------------------------------------------------------------------------------------
+	// Arbol contable
+	// -------------------------------------------------------------------------------------------------
+
 	public List getTreeAccount() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -179,6 +183,7 @@ public class AccountingDAO extends CommonDAO {
 
 	}
 
+	// Este no se utliza borrar
 	public List getAccount(int type) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -231,6 +236,10 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
+
+	// -------------------------------------------------------------------------------------------------
+	// Cierre del periodo contable
+	// -------------------------------------------------------------------------------------------------
 
 	public List getAccount_Toclose() throws Exception {
 		List _return = new Vector();
@@ -336,25 +345,30 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	// ######### RETORNA REGISTRO DE ACCOUNT POR FILTROS
-	// ############################
-	// ######### RETORNA REGISTRO DE ACCOUNT POR FILTROS
-	// ############################
+	// -------------------------------------------------------------------------------------------------
+	// Consulta cuentas con filtros
+	// -------------------------------------------------------------------------------------------------
 	public List getAccountByFilter(String acctcode, String acctname)
 			throws Exception {
-		return getAccountByFilter(acctcode, acctname, null);
+		return getAccountByFilter(acctcode, acctname, null, 0);
 	}
 
 	public List getAccountByFilter(String acctcode, String acctname,
 			String postable) throws Exception {
+		return getAccountByFilter(acctcode, postable, null, 0);
+	}
+
+	public List getAccountByFilter(String acctcode, String acctname,
+			String postable, Integer groupmask) throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
 
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_acc0_account(?,?,?)}");
+		this.setDbObject("{call sp_get_acc0_account(?,?,?,?)}");
 		this.setString(1, "_acctcode", acctcode);
 		this.setString(2, "_acctname", acctname);
 		this.setString(3, "_postable", postable);
+		this.setInt(4, "_groupmask", new Integer(groupmask));
 		lstResultSet = this.runQuery();
 		CachedRowSetImpl rowsetActual;
 
@@ -400,8 +414,6 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	// ######### RETORNA REGISTRO DE ACCOUNT POR CLAVE
-	// ############################
 	public AccountTO getAccountByKey(String acctcode) throws Exception {
 		AccountTO _return = new AccountTO();
 		List lstResultSet = null;
@@ -455,8 +467,9 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	// ##################### MANTEMINIENTO DE LA TABLA ACCOUNT
-	// ############################
+	// -------------------------------------------------------------------------------------------------
+	//MAntenimientos de cuentas contables
+	// -------------------------------------------------------------------------------------------------
 	public int account_mtto_new(AccountTO parameters) throws Exception {
 
 		int v_resp = 0;
@@ -896,6 +909,20 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
+	public int update_grplines(int groupmask) throws Exception {
+
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE cat_acc0_account SET grpline = Q1.rnum FROM "
+				+ "(SELECT row_number() OVER (order BY T1.groupmask, grpline) as rnum, T1.acctcode, t1.grpline	"
+				+ "FROM cat_acc0_account T1 where t1.groupmask = ? order BY T1.groupmask, grpline) AS Q1 "
+				+ "WHERE cat_acc0_account.acctcode = Q1.acctcode");
+		this.setInt(1, "_groupmask", new Integer(groupmask));
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
+	}
+
 	// ############## MANTENIMIENTO DE LA TABLA BUDGET######################
 	public int cat_budget_mtto(BudgetTO parameters, int action)
 			throws Exception {
@@ -1304,6 +1331,10 @@ public class AccountingDAO extends CommonDAO {
 		return v_resp;
 
 	}
+
+	// -------------------------------------------------------------------------------------------------
+	// Contabilizaciones periodicas
+	// -------------------------------------------------------------------------------------------------
 
 	public List getrecurringPostingDetail(String _rcurcode, int _instance)
 			throws Exception {

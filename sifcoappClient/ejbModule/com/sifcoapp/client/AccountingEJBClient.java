@@ -94,25 +94,23 @@ public class AccountingEJBClient {
 		return acc;
 	}
 
-	/*
-	 * public List getAccount(int type) throws Exception { // TODO
-	 * Auto-generated method stub List acc = new Vector();
-	 * 
-	 * acc = bean.getAccount(type);
-	 * 
-	 * return acc; }
-	 */
 
 	public List getAccountByFilter(String acctcode, String acctname)
 			throws Exception {
 		return getAccountByFilter(acctcode, acctname, "Y");
 	}
+	
+	public List getAccountByFilter(String acctcode, String acctname, String postable)
+			throws Exception {
+		return getAccountByFilter(acctcode, acctname, postable);
+	}
+	
 
 	public List getAccountByFilter(String acctcode, String acctname,
-			String postable) throws Exception {
+			String postable, Integer groupmask) throws Exception {
 		// TODO Auto-generated method stub
 		List account = new Vector();
-		account = bean.getAccountByFilter(acctcode, acctname, postable);
+		account = bean.getAccountByFilter(acctcode, acctname, postable, groupmask);
 		return account;
 	}
 

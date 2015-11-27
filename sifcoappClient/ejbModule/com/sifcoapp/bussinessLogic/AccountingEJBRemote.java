@@ -41,6 +41,9 @@ public interface AccountingEJBRemote {
 
 	public List getAccountByFilter(String acctcode, String acctname,
 			String postable) throws EJBException;
+	
+	public List getAccountByFilter(String acctcode, String acctname,
+			String postable, Integer groupmask) throws EJBException;
 
 	public AccountTO getAccountByKey(String acctcode) throws EJBException;
 

@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 
 import org.glassfish.jersey.gf.ejb.internal.EjbExceptionMapper;
 
+import com.sifcoapp.admin.ejb.ParameterEJB;
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryLinesDAO;
@@ -40,7 +41,10 @@ import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.DAO.SalesDAO;
+import com.sifcoapp.objects.sales.DAO.SalesDetailDAO;
 import com.sifcoapp.objects.sales.to.ClientCrediDetailTO;
+import com.sifcoapp.objects.sales.to.SalesDetailTO;
+import com.sifcoapp.objects.sales.to.SalesTO;
 
 /**
  * Session Bean implementation class AccountingEJB
@@ -57,6 +61,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("unchecked")
+	// -------------------------------------------------------------------------------------------------
+	// Periodos contables
+	// -------------------------------------------------------------------------------------------------
 	public List getAccPeriods() throws EJBException {
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
@@ -94,16 +102,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 		return _return;
 	}
-
-	/*
-	 * public List getAccount(int type) throws EJBException {
-	 * 
-	 * List _return = new Vector(); AccountingDAO DAO = new AccountingDAO(); try
-	 * { _return = DAO.getAccount(type); } catch (Exception e) { // TODO
-	 * Auto-generated catch block throw (EJBException) new EJBException(e); }
-	 * 
-	 * return _return; }
-	 */
 
 	public List getAccount_Toclose() throws EJBException {
 
@@ -166,19 +164,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 	}
 
-	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters,
-			int action) throws EJBException {
-		ResultOutTO _return = new ResultOutTO();
-
-		AccountingDAO DAO = new AccountingDAO();
-		try {
-			_return = DAO.cat_accAssignment_mtto(parameters, action);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-		return _return;
-	}
+	// -------------------------------------------------------------------------------------------------
+	// Asignación cuentas contables
+	// -------------------------------------------------------------------------------------------------
 
 	public AccassignmentTO getAccAssignment() throws EJBException {
 		AccassignmentTO _return = null;
@@ -193,18 +181,42 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public ResultOutTO cat_accAssignment_mtto(AccassignmentTO parameters,
+			int action) throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			_return = DAO.cat_accAssignment_mtto(parameters, action);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw (EJBException) new EJBException(e);
+		}
+		return _return;
+	}
+
+	// -------------------------------------------------------------------------------------------------
+	// Consulta cuentas
+	// -------------------------------------------------------------------------------------------------
+
 	public List getAccountByFilter(String acctcode, String acctname)
 			throws EJBException {
-		return getAccountByFilter(acctcode, acctname, null);
+		return getAccountByFilter(acctcode, acctname, null, 0);
 	}
 
 	public List getAccountByFilter(String acctcode, String acctname,
 			String postable) throws EJBException {
+		return getAccountByFilter(acctcode, acctname, postable, 0);
+	}
+
+	public List getAccountByFilter(String acctcode, String acctname,
+			String postable, Integer groupmask) throws EJBException {
 		// TODO Auto-generated method stub
 		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
-			_return = DAO.getAccountByFilter(acctcode, acctname, postable);
+			_return = DAO.getAccountByFilter(acctcode, acctname, postable,
+					groupmask);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
@@ -225,19 +237,275 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return acc;
 	}
 
-	public ResultOutTO cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
-			throws EJBException {
+	public List getTreeAccount() throws EJBException {
 		// TODO Auto-generated method stub
-		ResultOutTO _return = new ResultOutTO();
-		// int _return = 0;
+		List _return = new Vector();
 		AccountingDAO DAO = new AccountingDAO();
 		try {
-			_return.setDocentry(DAO.cat_acc0_ACCOUNT_mtto(parameters, action));
+			_return = DAO.getTreeAccount();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw (EJBException) new EJBException(e);
 		}
+		return _return;
+	}
 
+	// -------------------------------------------------------------------------------------------------
+	// Manatenimiento cuentas
+	// -------------------------------------------------------------------------------------------------
+
+	public ResultOutTO cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
+			throws EJBException {
+
+		// Declaración de variables
+
+		ResultOutTO _valid = new ResultOutTO();
+
+		ResultOutTO _return = new ResultOutTO();
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar acción a realizar
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		if (action != Common.MTTOINSERT) {
+			_return = inv_account_update(parameters, action);
+			return _return;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Asignación de valores por defecto y llenado:
+		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
+		// no aplican.
+		// --------------------------------------------------------------------------------------------------------------------------------
+		parameters = fillAccount(parameters);
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Hacer validaciones:
+		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
+		// no aplican para validaciones
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_valid = validateAccount(parameters);
+
+		if (_valid.getCodigoError() != 0) {
+			return _valid;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Guardar en base:
+		// Desde aqui se debe manajar como una transaccion global, cada metodo
+		// debe tener una opción para ejecutarlo como parte de una transacción
+		// global
+		// --------------------------------------------------------------------------------------------------------------------------------
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+
+			DAO.setIstransaccional(true);
+			_return = save_TransactionAccount(parameters, action, DAO.getConn());
+			DAO.forceCommit();
+
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+		return _return;
+
+	}
+
+	public ResultOutTO inv_account_update(AccountTO parameters, int action)
+			throws EJBException {
+		ResultOutTO _return = new ResultOutTO();
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			_return = inv_account_update(parameters, action, DAO.getConn());
+			DAO.forceCommit();
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+			DAO.forceCloseConnection();
+		}
+		return _return;
+
+	}
+
+	public ResultOutTO inv_account_update(AccountTO parameters, int action,
+			Connection conn) throws Exception {
+		// Variables
+		ResultOutTO _return = new ResultOutTO();
+		AccountingDAO DAO = new AccountingDAO(conn);
+		DAO.setIstransaccional(true);
+
+		// Actualizar/borrar encabezados
+		_return.setDocentry(DAO.cat_acc0_ACCOUNT_mtto(parameters, action));
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos Actualizados con exito");
+		return _return;
+	}
+
+	private AccountTO fillAccount(AccountTO parameters) {
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Valores por defecto
+		// --------------------------------------------------------------------------------------------------------------------------------
+		parameters.setCurrtotal(0.0);
+		parameters.setEndtotal(0.0);
+		// parameters.setFinanse(finanse);
+		parameters.setFrozen("N");
+		// parameters.setPostable(postable);
+		parameters.setActtype("0");
+		parameters.setObjtype("4");
+		parameters.setValidfor("Y");
+		parameters.setCounter(0);
+		parameters.setFormatcode(parameters.getAcctcode());
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Identificar numero de linea
+		// --------------------------------------------------------------------------------------------------------------------------------
+		
+		
+
+		return parameters;
+	}
+
+	public ResultOutTO validateAccount(AccountTO account) throws EJBException {
+
+		// Variables
+		ResultOutTO _return = new ResultOutTO();
+		parameterTO parameter = new parameterTO();
+		String str = "";
+		Integer largo = 0;
+		Integer largo2 = 0;
+		Integer nivelAcc = 0;
+		Integer lonNivel = 0;
+		Integer lonPadre = 0;
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar longitud codigo
+		// --------------------------------------------------------------------------------------------------------------------------------
+		if (account.getAcctcode().length() <= 1) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Error en codigo");
+			return _return;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar longitud codigo
+		// --------------------------------------------------------------------------------------------------------------------------------
+		if (account.getAcctname().length() <= 1) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Error en nombre");
+			return _return;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar grupo de cuenta
+		// --------------------------------------------------------------------------------------------------------------------------------
+		if (account.getGroupmask() == 0
+				|| Integer.parseInt(account.getAcctcode().substring(0, 1)) != account
+						.getGroupmask()) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El codigo indicado no corresponde con el grupo");
+			return _return;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar codigo Repetido
+		// --------------------------------------------------------------------------------------------------------------------------------
+		AccountTO accValidacion = new AccountTO();
+		accValidacion = getAccountByKey(account.getAcctcode());
+
+		if (accValidacion.getAcctcode() != null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("Ya existe la cuenta indicada");
+			return _return;
+		}
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Consultando estructura de catalogo
+		// --------------------------------------------------------------------------------------------------------------------------------
+		ParameterEJB ejb = new ParameterEJB();
+		parameter = ejb.getParameterbykey(27);
+		str = parameter.getValue1();
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validando longtitud de campo
+		// --------------------------------------------------------------------------------------------------------------------------------
+		String delimiter = "/";
+		String[] niveles;
+		niveles = str.split(delimiter);
+
+		largo = account.getAcctcode().length();
+
+		for (int i = 0; i < niveles.length; i++) {
+			largo2 = largo2 + Integer.parseInt(niveles[i]);
+			if (largo2 == largo) {
+				nivelAcc = i + 1;
+				lonNivel = Integer.parseInt(niveles[i]);
+				break;
+			}
+		}
+
+		if (nivelAcc == 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("La longitud de la cuenta no corresponde con el formato");
+			return _return;
+		}
+
+		account.setLevels(nivelAcc);
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validando que exista un padre
+		// --------------------------------------------------------------------------------------------------------------------------------
+		AccountTO accPadre = new AccountTO();
+
+		lonPadre = account.getAcctcode().length() - lonNivel;
+
+		accPadre = getAccountByKey(account.getAcctcode().substring(0, lonPadre));
+
+		if (accPadre.getAcctcode() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No existe una cuenta padre para la cuenta indicada");
+			return _return;
+		}
+
+		if (accPadre.getPostable() == null
+				|| accPadre.getPostable().equals("Y")) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No existe una cuenta padre para la cuenta indicada");
+			return _return;
+		}
+
+		account.setFathernum(accPadre.getAcctcode());
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Paso todas las validaciones
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_return.setCodigoError(0);
+
+		return _return;
+	}
+
+	public ResultOutTO save_TransactionAccount(AccountTO account, int action,
+			Connection conn) throws Exception {
+
+		ResultOutTO _return = new ResultOutTO();
+		AccountingDAO DAO = new AccountingDAO(conn);
+		DAO.setIstransaccional(true);
+
+		// Ingresar nueva cuenta
+		_return.setDocentry(DAO.cat_acc0_ACCOUNT_mtto(account, action));
+
+		// Actualizar numeros de linea
+		DAO.update_grplines(account.getGroupmask());
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos guardados con éxito");
 		return _return;
 	}
 
@@ -253,20 +521,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public List getTreeAccount() throws EJBException {
-		// TODO Auto-generated method stub
-		List _return = new Vector();
-		AccountingDAO DAO = new AccountingDAO();
-		try {
-			_return = DAO.getTreeAccount();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw (EJBException) new EJBException(e);
-		}
-		return _return;
-	}
+	// -------------------------------------------------------------------------------------------------
+	// Journal Entry
+	// -------------------------------------------------------------------------------------------------
 
-	// ////###### journal entry####/////////////////////////////
 	public List getJournalEntry(JournalEntryInTO parameters)
 			throws EJBException {
 		List _return = new Vector();
@@ -295,10 +553,11 @@ public class AccountingEJB implements AccountingEJBRemote {
 	public ResultOutTO journalEntry_mtto(JournalEntryTO parameters, int action) {
 		ResultOutTO _return = new ResultOutTO();
 		JournalEntryDAO DAO = new JournalEntryDAO();
-		
-		//Cuando se crea un asientop contalbe por defecto se el asignara el transtype igual al objecttype
+
+		// Cuando se crea un asientop contalbe por defecto se el asignara el
+		// transtype igual al objecttype
 		parameters.setTranstype("5");
-		
+
 		try {
 			_return = journalEntry_mtto(parameters, action, DAO.getConn());
 			DAO.forceCommit();
@@ -532,7 +791,9 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 	}
 
-	// ################### BUDGET ######################
+	// -------------------------------------------------------------------------------------------------
+	// Presupuesto
+	// -------------------------------------------------------------------------------------------------
 	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action)
 			throws EJBException {
 
@@ -594,7 +855,10 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	// ######################## RecurringPosting ####################
+	// -------------------------------------------------------------------------------------------------
+	// Contabilizaciones periodicas
+	// -------------------------------------------------------------------------------------------------
+
 	public ResultOutTO fin_recurringPosting_mtto(
 			RecurringPostingsTO parameters, int action) throws EJBException {
 		// TODO Auto-generated method stub
@@ -1616,89 +1880,90 @@ public class AccountingEJB implements AccountingEJBRemote {
 			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
 			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
 
-			if(detalle.getCtlaccount()!=null && detalle.getAcctcode()!=null){
-			art1.setLine_id(n);
-			// art1.setDebit(bussines);
-			art1.setCredit(detalle.getPaidsum());
-			art1.setAccount(detalle.getAcctcode());
-			art1.setDuedate(colecturia.getDocdate());
-			art1.setShortname(detalle.getAcctcode());
-			art1.setContraact(detalle.getCtlaccount());
-			art1.setLinememo(colecturia.getComments());
-			art1.setRefdate(colecturia.getDocdate());
-			art1.setRef1(Integer.toString(colecturia.getUsersign()));
-			// ar1.setRef2();
-			art1.setBaseref(art1.getRef1());
-			art1.setTaxdate(colecturia.getDocdate());
-			// art1.setFinncpriod(finncpriod);
-			art1.setReltransid(-1);
-			art1.setRellineid(-1);
-			art1.setReltype("N");
-			art1.setObjtype("5");
-			art1.setVatline("N");
-			art1.setVatamount(0.0);
-			art1.setClosed("N");
-			art1.setGrossvalue(0.0);
-			art1.setBalduedeb(0.0);
-			art1.setBalduecred(detalle.getPaidsum());
-			art1.setIsnet("Y");
-			art1.setTaxtype(0);
-			art1.setTaxpostacc("N");
-			art1.setTotalvat(0.0);
-			art1.setWtliable("N");
-			art1.setWtline("N");
-			art1.setPayblock("N");
-			art1.setOrdered("N");
-			art1.setIntrnmatch(1);
-			art1.setMthdate(art1.getDuedate());
-			art1.setTranstype("45");
+			if (detalle.getCtlaccount() != null
+					&& detalle.getAcctcode() != null) {
+				art1.setLine_id(n);
+				// art1.setDebit(bussines);
+				art1.setCredit(detalle.getPaidsum());
+				art1.setAccount(detalle.getAcctcode());
+				art1.setDuedate(colecturia.getDocdate());
+				art1.setShortname(detalle.getAcctcode());
+				art1.setContraact(detalle.getCtlaccount());
+				art1.setLinememo(colecturia.getComments());
+				art1.setRefdate(colecturia.getDocdate());
+				art1.setRef1(Integer.toString(colecturia.getUsersign()));
+				// ar1.setRef2();
+				art1.setBaseref(art1.getRef1());
+				art1.setTaxdate(colecturia.getDocdate());
+				// art1.setFinncpriod(finncpriod);
+				art1.setReltransid(-1);
+				art1.setRellineid(-1);
+				art1.setReltype("N");
+				art1.setObjtype("5");
+				art1.setVatline("N");
+				art1.setVatamount(0.0);
+				art1.setClosed("N");
+				art1.setGrossvalue(0.0);
+				art1.setBalduedeb(0.0);
+				art1.setBalduecred(detalle.getPaidsum());
+				art1.setIsnet("Y");
+				art1.setTaxtype(0);
+				art1.setTaxpostacc("N");
+				art1.setTotalvat(0.0);
+				art1.setWtliable("N");
+				art1.setWtline("N");
+				art1.setPayblock("N");
+				art1.setOrdered("N");
+				art1.setIntrnmatch(1);
+				art1.setMthdate(art1.getDuedate());
+				art1.setTranstype("45");
 
-			detail.add(art1);
+				detail.add(art1);
 
-			n = n + 1;
-			// cuenta Bancos..........
+				n = n + 1;
+				// cuenta Bancos..........
 
-			art2.setLine_id(n);
-			// art2.setCredit(bussines);
-			art2.setDebit(detalle.getPaidsum());
-			art2.setAccount(detalle.getCtlaccount());
-			art2.setDuedate(colecturia.getDocdate());
-			art2.setShortname(detalle.getCtlaccount());
-			art2.setContraact(detalle.getAcctcode());
-			art2.setLinememo(colecturia.getComments());
-			art2.setRefdate(colecturia.getDocdate());
-			art2.setRef1(Integer.toString(colecturia.getUsersign()));
-			// r1.setRef2();
-			art2.setBaseref(art2.getRef1());
-			art2.setTaxdate(colecturia.getDocdate());
-			// art1.setFinncpriod(finncpriod);
-			art2.setReltransid(-1);
-			art2.setRellineid(-1);
-			art2.setReltype("N");
-			art2.setObjtype("5");
-			art2.setVatline("N");
-			art2.setVatamount(0.0);
-			art2.setClosed("N");
-			art2.setGrossvalue(0.0);
-			art2.setBalduedeb(detalle.getPaidsum());
-			art2.setBalduecred(0.0);
-			art2.setIsnet("Y");
-			art2.setTaxtype(0);
-			art2.setTaxpostacc("N");
-			art2.setTotalvat(0.0);
-			art2.setWtliable("N");
-			art2.setWtline("N");
-			art2.setPayblock("N");
-			art2.setOrdered("N");
-			art2.setIntrnmatch(1);
-			art2.setMthdate(art2.getDuedate());
-			art2.setTranstype("45");
+				art2.setLine_id(n);
+				// art2.setCredit(bussines);
+				art2.setDebit(detalle.getPaidsum());
+				art2.setAccount(detalle.getCtlaccount());
+				art2.setDuedate(colecturia.getDocdate());
+				art2.setShortname(detalle.getCtlaccount());
+				art2.setContraact(detalle.getAcctcode());
+				art2.setLinememo(colecturia.getComments());
+				art2.setRefdate(colecturia.getDocdate());
+				art2.setRef1(Integer.toString(colecturia.getUsersign()));
+				// r1.setRef2();
+				art2.setBaseref(art2.getRef1());
+				art2.setTaxdate(colecturia.getDocdate());
+				// art1.setFinncpriod(finncpriod);
+				art2.setReltransid(-1);
+				art2.setRellineid(-1);
+				art2.setReltype("N");
+				art2.setObjtype("5");
+				art2.setVatline("N");
+				art2.setVatamount(0.0);
+				art2.setClosed("N");
+				art2.setGrossvalue(0.0);
+				art2.setBalduedeb(detalle.getPaidsum());
+				art2.setBalduecred(0.0);
+				art2.setIsnet("Y");
+				art2.setTaxtype(0);
+				art2.setTaxpostacc("N");
+				art2.setTotalvat(0.0);
+				art2.setWtliable("N");
+				art2.setWtline("N");
+				art2.setPayblock("N");
+				art2.setOrdered("N");
+				art2.setIntrnmatch(1);
+				art2.setMthdate(art2.getDuedate());
+				art2.setTranstype("45");
 
-			detail.add(art2);
+				detail.add(art2);
 
-			n = n + 1;
-			sum = sum + detalle.getPaidsum();
-		}
+				n = n + 1;
+				sum = sum + detalle.getPaidsum();
+			}
 		}
 		// --------------------------------------------------------------------------------------------------------------------------------------------------------
 		// llenado del asiento contable

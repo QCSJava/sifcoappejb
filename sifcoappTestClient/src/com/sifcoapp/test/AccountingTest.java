@@ -270,8 +270,8 @@ public class AccountingTest {
 		List lstPeriods = new Vector();
 		// 558,7954
 		try {
-			lstPeriods = AccountingEJBService.getAccountByFilter("11",
-					null,null);
+			lstPeriods = AccountingEJBService.getAccountByFilter(null,
+					null,null,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -299,15 +299,15 @@ public class AccountingTest {
 	public static void cat_Acc0_account_mtto() throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 		AccountTO acc = new AccountTO();
-		acc.setAcctcode("1102700106");
+		acc.setAcctcode("171");
 		acc.setAcctname("cuenta por cobrar Equipo 01");
 
-		acc.setCurrtotal(42.5);
-		acc.setEndtotal(56.2);
+		acc.setCurrtotal(0.0);
+		acc.setEndtotal(0.0);
 
 		_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 1);
 
-		System.out.println(_return.getDocentry());
+		System.out.println(_return.getMensaje());
 
 	}
 
@@ -654,7 +654,7 @@ public class AccountingTest {
 		ResultOutTO nuevo = new ResultOutTO();
 		List consul = new Vector();
 
-		for (int i =3854; i < 4360; i++) {
+		for (int i =4539; i < 4945; i++) {
 			JournalEntryTO result = new JournalEntryTO();
 
 			result = AccountingEJBService.getpruebaByKey(i);
