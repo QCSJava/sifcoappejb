@@ -468,7 +468,7 @@ public class AccountingDAO extends CommonDAO {
 	}
 
 	// -------------------------------------------------------------------------------------------------
-	//MAntenimientos de cuentas contables
+	// Mantenimientos de cuentas contables
 	// -------------------------------------------------------------------------------------------------
 	public int account_mtto_new(AccountTO parameters) throws Exception {
 
@@ -523,6 +523,23 @@ public class AccountingDAO extends CommonDAO {
 		return v_resp;
 	}
 
+	public int update_grplines(int groupmask) throws Exception {
+
+		int lstResultSet = 0;
+
+		this.setDbObject("UPDATE cat_acc0_account SET grpline = Q1.rnum FROM "
+				+ "(SELECT row_number() OVER (order BY T1.acctcode) as rnum, T1.acctcode, t1.grpline	"
+				+ "FROM cat_acc0_account T1 where t1.groupmask = ?) AS Q1"
+				+ " WHERE cat_acc0_account.acctcode = Q1.acctcode;");
+		this.setInt(1, "_groupmask", new Integer(groupmask));
+		lstResultSet = this.runUpdate();
+
+		return lstResultSet;
+	}
+
+	// -------------------------------------------------------------------------------------------------
+	// Cierre del periodo contable
+	// -------------------------------------------------------------------------------------------------
 	public List getAccPeriods() throws Exception {
 		List _return = new Vector();
 		List lstResultSet = null;
@@ -909,21 +926,9 @@ public class AccountingDAO extends CommonDAO {
 		return _return;
 	}
 
-	public int update_grplines(int groupmask) throws Exception {
-
-		int lstResultSet = 0;
-
-		this.setDbObject("UPDATE cat_acc0_account SET grpline = Q1.rnum FROM "
-				+ "(SELECT row_number() OVER (order BY T1.groupmask, grpline) as rnum, T1.acctcode, t1.grpline	"
-				+ "FROM cat_acc0_account T1 where t1.groupmask = ? order BY T1.groupmask, grpline) AS Q1 "
-				+ "WHERE cat_acc0_account.acctcode = Q1.acctcode");
-		this.setInt(1, "_groupmask", new Integer(groupmask));
-		lstResultSet = this.runUpdate();
-
-		return lstResultSet;
-	}
-
-	// ############## MANTENIMIENTO DE LA TABLA BUDGET######################
+	// -------------------------------------------------------------------------------------------------
+	// Mantenimientos de presupuestos
+	// -------------------------------------------------------------------------------------------------
 	public int cat_budget_mtto(BudgetTO parameters, int action)
 			throws Exception {
 		int v_resp = 0;
@@ -1064,8 +1069,9 @@ public class AccountingDAO extends CommonDAO {
 
 	}
 
-	// ################ MANTENIMIENTO DE LA TABLA RecurringPostings
-	// ###########################
+	// -------------------------------------------------------------------------------------------------
+	// Mantenimientos de contabilizaciones periodicas
+	// -------------------------------------------------------------------------------------------------
 
 	public int fin_recurringPosting_mtto(RecurringPostingsTO parameters,
 			int action) throws Exception {
@@ -1332,10 +1338,6 @@ public class AccountingDAO extends CommonDAO {
 
 	}
 
-	// -------------------------------------------------------------------------------------------------
-	// Contabilizaciones periodicas
-	// -------------------------------------------------------------------------------------------------
-
 	public List getrecurringPostingDetail(String _rcurcode, int _instance)
 			throws Exception {
 		List _return = new Vector();
@@ -1442,6 +1444,10 @@ public class AccountingDAO extends CommonDAO {
 		}
 		return _return;
 	}
+
+	// -------------------------------------------------------------------------------------------------
+	// Actualizaciones varias.
+	// -------------------------------------------------------------------------------------------------
 
 	public int update_currtotal(AccountTO transaction) throws Exception {
 

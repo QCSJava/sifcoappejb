@@ -299,13 +299,15 @@ public class AccountingTest {
 	public static void cat_Acc0_account_mtto() throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 		AccountTO acc = new AccountTO();
-		acc.setAcctcode("171");
-		acc.setAcctname("cuenta por cobrar Equipo 01");
+		acc.setAcctcode("1301");
+		acc.setAcctname("cuenta de pruebas mod");
+		acc.setGroupmask(1);
+		acc.setPostable("Y");
 
 		acc.setCurrtotal(0.0);
 		acc.setEndtotal(0.0);
 
-		_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, 1);
+		_return = AccountingEJBService.cat_acc0_ACCOUNT_mtto(acc, Common.MTTOINSERT);
 
 		System.out.println(_return.getMensaje());
 

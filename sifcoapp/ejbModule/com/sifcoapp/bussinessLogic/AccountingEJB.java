@@ -8,7 +8,9 @@ import java.util.Vector;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.persistence.criteria.CriteriaBuilder.Case;
 
+import org.eclipse.persistence.jpa.jpql.parser.CastExpression;
 import org.glassfish.jersey.gf.ejb.internal.EjbExceptionMapper;
 
 import com.sifcoapp.admin.ejb.ParameterEJB;
@@ -254,7 +256,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 	// Manatenimiento cuentas
 	// -------------------------------------------------------------------------------------------------
 
-	public ResultOutTO cat_acc0_ACCOUNT_mtto(AccountTO parameters, int action)
+	public ResultOutTO cat_acc0_account_mtto(AccountTO parameters, int action)
 			throws EJBException {
 
 		// Declaración de variables
@@ -262,6 +264,16 @@ public class AccountingEJB implements AccountingEJBRemote {
 		ResultOutTO _valid = new ResultOutTO();
 
 		ResultOutTO _return = new ResultOutTO();
+
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Hacer validaciones:
+		// --------------------------------------------------------------------------------------------------------------------------------
+
+		_valid = validateAccount(parameters, action);
+
+		if (_valid.getCodigoError() != 0) {
+			return _valid;
+		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Validar acción a realizar
@@ -278,18 +290,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// no aplican.
 		// --------------------------------------------------------------------------------------------------------------------------------
 		parameters = fillAccount(parameters);
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Hacer validaciones:
-		// Estas se realizan solo para cuando es guardar, el actualizar y borrar
-		// no aplican para validaciones
-		// --------------------------------------------------------------------------------------------------------------------------------
-
-		_valid = validateAccount(parameters);
-
-		if (_valid.getCodigoError() != 0) {
-			return _valid;
-		}
 
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Guardar en base:
@@ -366,128 +366,179 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// --------------------------------------------------------------------------------------------------------------------------------
 		// Identificar numero de linea
 		// --------------------------------------------------------------------------------------------------------------------------------
-		
-		
+		// TODO Por el momento solo se ordenaran por el codigo y ese será su
+		// orden. En algun momento se deberia de cambiar a que el usuario pueda
+		// elegir la posición
+		// en todo caso las la logica del sistema se aplica sin problemas.
 
 		return parameters;
 	}
 
-	public ResultOutTO validateAccount(AccountTO account) throws EJBException {
+	public ResultOutTO validateAccount(AccountTO account, int action)
+			throws EJBException {
+		// --------------------------------------------------------------------------------------------------------------------------------
+		// Validar en base a la accion a realizar Agregar, Editar, Borrar
+		// --------------------------------------------------------------------------------------------------------------------------------
 
 		// Variables
 		ResultOutTO _return = new ResultOutTO();
-		parameterTO parameter = new parameterTO();
-		String str = "";
-		Integer largo = 0;
-		Integer largo2 = 0;
-		Integer nivelAcc = 0;
-		Integer lonNivel = 0;
-		Integer lonPadre = 0;
 
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Validar longitud codigo
-		// --------------------------------------------------------------------------------------------------------------------------------
-		if (account.getAcctcode().length() <= 1) {
-			_return.setCodigoError(1);
-			_return.setMensaje("Error en codigo");
-			return _return;
-		}
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Validar longitud codigo
-		// --------------------------------------------------------------------------------------------------------------------------------
-		if (account.getAcctname().length() <= 1) {
-			_return.setCodigoError(1);
-			_return.setMensaje("Error en nombre");
-			return _return;
-		}
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Validar grupo de cuenta
-		// --------------------------------------------------------------------------------------------------------------------------------
-		if (account.getGroupmask() == 0
-				|| Integer.parseInt(account.getAcctcode().substring(0, 1)) != account
-						.getGroupmask()) {
-			_return.setCodigoError(1);
-			_return.setMensaje("El codigo indicado no corresponde con el grupo");
-			return _return;
-		}
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Validar codigo Repetido
-		// --------------------------------------------------------------------------------------------------------------------------------
-		AccountTO accValidacion = new AccountTO();
-		accValidacion = getAccountByKey(account.getAcctcode());
-
-		if (accValidacion.getAcctcode() != null) {
-			_return.setCodigoError(1);
-			_return.setMensaje("Ya existe la cuenta indicada");
-			return _return;
-		}
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Consultando estructura de catalogo
-		// --------------------------------------------------------------------------------------------------------------------------------
-		ParameterEJB ejb = new ParameterEJB();
-		parameter = ejb.getParameterbykey(27);
-		str = parameter.getValue1();
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Validando longtitud de campo
-		// --------------------------------------------------------------------------------------------------------------------------------
-		String delimiter = "/";
-		String[] niveles;
-		niveles = str.split(delimiter);
-
-		largo = account.getAcctcode().length();
-
-		for (int i = 0; i < niveles.length; i++) {
-			largo2 = largo2 + Integer.parseInt(niveles[i]);
-			if (largo2 == largo) {
-				nivelAcc = i + 1;
-				lonNivel = Integer.parseInt(niveles[i]);
-				break;
+		switch (action) {
+		case Common.MTTODELETE: {
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validar que la cuenta no tenga movimientos contables
+			// --------------------------------------------------------------------------------------------------------------------------------
+			if (if_removable(account)) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No se puede eliminar esta cuenta");
+				return _return;
 			}
+			_return.setCodigoError(0);
+			return _return;
 		}
+		case Common.MTTOUPDATE: {
 
-		if (nivelAcc == 0) {
-			_return.setCodigoError(1);
-			_return.setMensaje("La longitud de la cuenta no corresponde con el formato");
+			_return.setCodigoError(0);
+			_return.setMensaje("Sin error, no se realizaron validaciones");
+			return _return;
+
+		}
+		case Common.MTTOINSERT: {
+
+			// Variables
+			parameterTO parameter = new parameterTO();
+			String str = "";
+			Integer largo = 0;
+			Integer largo2 = 0;
+			Integer nivelAcc = 0;
+			Integer lonNivel = 0;
+			Integer lonPadre = 0;
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validar longitud codigo
+			// --------------------------------------------------------------------------------------------------------------------------------
+			if (account.getAcctcode().length() <= 1) {
+				_return.setCodigoError(1);
+				_return.setMensaje("Error en codigo");
+				return _return;
+			}
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validar longitud codigo
+			// --------------------------------------------------------------------------------------------------------------------------------
+			if (account.getAcctname().length() <= 1) {
+				_return.setCodigoError(1);
+				_return.setMensaje("Error en nombre");
+				return _return;
+			}
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validar grupo de cuenta
+			// --------------------------------------------------------------------------------------------------------------------------------
+			if (account.getGroupmask() == 0
+					|| Integer.parseInt(account.getAcctcode().substring(0, 1)) != account
+							.getGroupmask()) {
+				_return.setCodigoError(1);
+				_return.setMensaje("El codigo indicado no corresponde con el grupo");
+				return _return;
+			}
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validar campo postable
+			// --------------------------------------------------------------------------------------------------------------------------------
+			if (account.getPostable() == null) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No se ha indicado si la cuenta es activa o de título");
+				return _return;
+			}
+			
+			if (!account.getPostable().contains("Y") && !account.getPostable().contains("N")) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No se ha indicado si la cuenta es activa o de título");
+				return _return;
+			}
+			
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validar codigo Repetido
+			// --------------------------------------------------------------------------------------------------------------------------------
+			AccountTO accValidacion = new AccountTO();
+			accValidacion = getAccountByKey(account.getAcctcode());
+
+			if (accValidacion.getAcctcode() != null) {
+				_return.setCodigoError(1);
+				_return.setMensaje("Ya existe la cuenta indicada");
+				return _return;
+			}
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Consultando estructura de catalogo
+			// --------------------------------------------------------------------------------------------------------------------------------
+			ParameterEJB ejb = new ParameterEJB();
+			parameter = ejb.getParameterbykey(27);
+			str = parameter.getValue1();
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validando longtitud de campo
+			// --------------------------------------------------------------------------------------------------------------------------------
+			String delimiter = "/";
+			String[] niveles;
+			niveles = str.split(delimiter);
+
+			largo = account.getAcctcode().length();
+
+			for (int i = 0; i < niveles.length; i++) {
+				largo2 = largo2 + Integer.parseInt(niveles[i]);
+				if (largo2 == largo) {
+					nivelAcc = i + 1;
+					lonNivel = Integer.parseInt(niveles[i]);
+					break;
+				}
+			}
+
+			if (nivelAcc == 0) {
+				_return.setCodigoError(1);
+				_return.setMensaje("La longitud de la cuenta no corresponde con el formato");
+				return _return;
+			}
+
+			account.setLevels(nivelAcc);
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validando que exista un padre
+			// --------------------------------------------------------------------------------------------------------------------------------
+			AccountTO accPadre = new AccountTO();
+
+			lonPadre = account.getAcctcode().length() - lonNivel;
+
+			accPadre = getAccountByKey(account.getAcctcode().substring(0,
+					lonPadre));
+
+			if (accPadre.getAcctcode() == null) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No existe una cuenta padre para la cuenta indicada");
+				return _return;
+			}
+
+			if (accPadre.getPostable() == null
+					|| accPadre.getPostable().equals("Y")) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No existe una cuenta padre para la cuenta indicada");
+				return _return;
+			}
+
+			account.setFathernum(accPadre.getAcctcode());
+
+			_return.setCodigoError(0);
 			return _return;
 		}
 
-		account.setLevels(nivelAcc);
-
-		// --------------------------------------------------------------------------------------------------------------------------------
-		// Validando que exista un padre
-		// --------------------------------------------------------------------------------------------------------------------------------
-		AccountTO accPadre = new AccountTO();
-
-		lonPadre = account.getAcctcode().length() - lonNivel;
-
-		accPadre = getAccountByKey(account.getAcctcode().substring(0, lonPadre));
-
-		if (accPadre.getAcctcode() == null) {
-			_return.setCodigoError(1);
-			_return.setMensaje("No existe una cuenta padre para la cuenta indicada");
-			return _return;
 		}
-
-		if (accPadre.getPostable() == null
-				|| accPadre.getPostable().equals("Y")) {
-			_return.setCodigoError(1);
-			_return.setMensaje("No existe una cuenta padre para la cuenta indicada");
-			return _return;
-		}
-
-		account.setFathernum(accPadre.getAcctcode());
-
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Paso todas las validaciones
+		// Devolver error
 		// --------------------------------------------------------------------------------------------------------------------------------
-
-		_return.setCodigoError(0);
-
+		_return.setCodigoError(1);
+		_return.setMensaje("Error desconocido, informar a soporte técnico");
 		return _return;
 	}
 
@@ -502,6 +553,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		_return.setDocentry(DAO.cat_acc0_ACCOUNT_mtto(account, action));
 
 		// Actualizar numeros de linea
+		DAO = new AccountingDAO(conn);
+		DAO.setIstransaccional(true);
 		DAO.update_grplines(account.getGroupmask());
 
 		_return.setCodigoError(0);
@@ -509,16 +562,25 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
-	public int update_currtotal(AccountTO parameters, Connection conn)
-			throws Exception {
-		// TODO Auto-generated method stub
-		int _return = 0;
-		AccountingDAO DAO = new AccountingDAO(conn);
-		DAO.setIstransaccional(true);
+	public boolean if_removable(AccountTO account) throws EJBException {
+		boolean transaction = false;
+		JournalEntryLinesDAO dao = new JournalEntryLinesDAO();
 
-		_return = DAO.update_currtotal(parameters);
+		try {
+			int trans = dao.getTransaction(account.getAcctcode());
+			dao = new JournalEntryLinesDAO();
+			int hijos = dao.getHijos(account.getAcctcode());
 
-		return _return;
+			if (trans > 0 || hijos > 0) {
+				transaction = true;
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return transaction;
 	}
 
 	// -------------------------------------------------------------------------------------------------
@@ -755,6 +817,18 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _return;
 	}
 
+	public int update_currtotal(AccountTO parameters, Connection conn)
+			throws Exception {
+		// TODO Auto-generated method stub
+		int _return = 0;
+		AccountingDAO DAO = new AccountingDAO(conn);
+		DAO.setIstransaccional(true);
+
+		_return = DAO.update_currtotal(parameters);
+
+		return _return;
+	}
+
 	public ResultOutTO update_currtotal(JournalEntryLinesTO line,
 			Connection conn) throws Exception {
 		ResultOutTO _return = new ResultOutTO();
@@ -794,6 +868,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 	// -------------------------------------------------------------------------------------------------
 	// Presupuesto
 	// -------------------------------------------------------------------------------------------------
+
 	public ResultOutTO cat_budget_mtto(BudgetTO parameters, int action)
 			throws EJBException {
 
@@ -1013,99 +1088,65 @@ public class AccountingEJB implements AccountingEJBRemote {
 
 	public ResultOutTO saveTreeAccount(List parameters) throws EJBException {
 
-		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
-
-		AccountingDAO DAO = new AccountingDAO();
-		DAO.setIstransaccional(true);
-		List cuentas = new Vector();
-
-		AccountTO node = new AccountTO();
-		AccountTO account = new AccountTO();
-		try {
-			// consultando todas las cuentas del catalogo para compararlas con
-			// la lista recibida en los parametros
-			cuentas = DAO.getAccount_Endtotal();
-
-			// limpiando la conexion
-
-			DAO = new AccountingDAO();
-			DAO.setIstransaccional(true);
-
-			for (Object object : parameters) {
-				AccountingDAO DAO1 = new AccountingDAO(DAO.getConn());
-				DAO1.setIstransaccional(true);
-				node = (AccountTO) object;
-				if (!(node.getLevels() == 1)) {
-					account = DAO1.getAccountByKey(node.getAcctcode());
-					if (account.getAcctcode() != null) {
-
-						int i = DAO1.account_mtto_new(node);
-					} else {
-						node.setCurrtotal(zero);
-						node.setEndtotal(zero);
-						int i = DAO1.cat_acc0_ACCOUNT_mtto(node,
-								Common.MTTOINSERT);
-					}
-
-				}
-
-			}
-			// para eliminar cuentas
-			List aux = new Vector();
-			boolean ind = false;
-			for (Object object : cuentas) {
-				AccountTO cuenta = new AccountTO();
-				ind = false;
-				cuenta = (AccountTO) object;
-
-				for (Object object1 : parameters) {
-					AccountTO Account = new AccountTO();
-					Account = (AccountTO) object1;
-					if (cuenta.getAcctcode().equals(Account.getAcctcode())) {
-						ind = true;
-					}
-				}
-				// validando si la cuenta ya no existe en la nueva lista de
-				// cuentas
-				// si ya no existe entonces add a la lista de cuentas por
-				// eliminar
-				if (!ind) {
-					aux.add(cuenta);
-				}
-			}
-			// Eliminando cuentas
-			AccountingDAO DAO2 = new AccountingDAO(DAO.getConn());
-			DAO2.setIstransaccional(true);
-			for (Object object2 : aux) {
-				AccountTO aux_acc = new AccountTO();
-				aux_acc = (AccountTO) object2;
-				boolean valido = false;
-				valido = if_removable(aux_acc, DAO.getConn());
-				// validar si la cuenta se puede eliminar sino enviar mensaje a
-				// usuario
-				if (valido) {
-					int i = DAO2.cat_acc0_ACCOUNT_mtto(aux_acc,
-							Common.MTTODELETE);
-				} else {
-					throw new Exception(
-							"La Cuenta No se puede Eliminar del Catalogo cuenta= "
-									+ aux_acc.getAcctcode());
-				}
-			}
-
-			DAO.forceCommit();
-		} catch (Exception e) {
-			// TODO: handle exception
-			DAO.rollBackConnection();
-			throw (EJBException) new EJBException(e);
-		} finally {
-
-			DAO.forceCloseConnection();
-		}
-		_return.setCodigoError(0);
-		_return.setMensaje("Datos guardados correctamente");
+		_return.setCodigoError(1);
+		_return.setMensaje("Metodo ya no utilizado");
 		return _return;
+
+		/*
+		 * ResultOutTO _return = new ResultOutTO();
+		 * 
+		 * AccountingDAO DAO = new AccountingDAO();
+		 * DAO.setIstransaccional(true); List cuentas = new Vector();
+		 * 
+		 * AccountTO node = new AccountTO(); AccountTO account = new
+		 * AccountTO(); try { // consultando todas las cuentas del catalogo para
+		 * compararlas con // la lista recibida en los parametros cuentas =
+		 * DAO.getAccount_Endtotal();
+		 * 
+		 * // limpiando la conexion
+		 * 
+		 * DAO = new AccountingDAO(); DAO.setIstransaccional(true);
+		 * 
+		 * for (Object object : parameters) { AccountingDAO DAO1 = new
+		 * AccountingDAO(DAO.getConn()); DAO1.setIstransaccional(true); node =
+		 * (AccountTO) object; if (!(node.getLevels() == 1)) { account =
+		 * DAO1.getAccountByKey(node.getAcctcode()); if (account.getAcctcode()
+		 * != null) {
+		 * 
+		 * int i = DAO1.account_mtto_new(node); } else {
+		 * node.setCurrtotal(zero); node.setEndtotal(zero); int i =
+		 * DAO1.cat_acc0_ACCOUNT_mtto(node, Common.MTTOINSERT); }
+		 * 
+		 * }
+		 * 
+		 * } // para eliminar cuentas List aux = new Vector(); boolean ind =
+		 * false; for (Object object : cuentas) { AccountTO cuenta = new
+		 * AccountTO(); ind = false; cuenta = (AccountTO) object;
+		 * 
+		 * for (Object object1 : parameters) { AccountTO Account = new
+		 * AccountTO(); Account = (AccountTO) object1; if
+		 * (cuenta.getAcctcode().equals(Account.getAcctcode())) { ind = true; }
+		 * } // validando si la cuenta ya no existe en la nueva lista de //
+		 * cuentas // si ya no existe entonces add a la lista de cuentas por //
+		 * eliminar if (!ind) { aux.add(cuenta); } } // Eliminando cuentas
+		 * AccountingDAO DAO2 = new AccountingDAO(DAO.getConn());
+		 * DAO2.setIstransaccional(true); for (Object object2 : aux) { AccountTO
+		 * aux_acc = new AccountTO(); aux_acc = (AccountTO) object2; boolean
+		 * valido = false; valido = if_removable(aux_acc, DAO.getConn()); //
+		 * validar si la cuenta se puede eliminar sino enviar mensaje a //
+		 * usuario if (valido) { int i = DAO2.cat_acc0_ACCOUNT_mtto(aux_acc,
+		 * Common.MTTODELETE); } else { throw new Exception(
+		 * "La Cuenta No se puede Eliminar del Catalogo cuenta= " +
+		 * aux_acc.getAcctcode()); } }
+		 * 
+		 * DAO.forceCommit(); } catch (Exception e) { // TODO: handle exception
+		 * DAO.rollBackConnection(); throw (EJBException) new EJBException(e); }
+		 * finally {
+		 * 
+		 * DAO.forceCloseConnection(); }
+		 */
+
 	}
 
 	public List getEntryDetail(JournalEntryLinesInTO parameters)
@@ -2210,28 +2251,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 			throw (EJBException) new EJBException(e);
 		}
 		return _return;
-	}
-
-	public boolean if_removable(AccountTO account, Connection conn)
-			throws EJBException {
-		boolean transaction = true;
-		JournalEntryLinesDAO dao = new JournalEntryLinesDAO(conn);
-
-		try {
-			int trans = dao.getTransaction(account.getAcctcode());
-			dao = new JournalEntryLinesDAO(conn);
-			int hijos = dao.getHijos(account.getAcctcode());
-
-			if (trans > 0 && hijos > 0) {
-				transaction = false;
-			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return transaction;
 	}
 
 	public double getSaldoSales(Date fecha, int usersign) throws EJBException {

@@ -126,7 +126,7 @@ public class AccountingEJBClient {
 		// TODO Auto-generated method stub
 		ResultOutTO _return = new ResultOutTO();
 
-		_return = bean.cat_acc0_ACCOUNT_mtto(parameters, action);
+		_return = bean.cat_acc0_account_mtto(parameters, action);
 		return _return;
 	}
 
