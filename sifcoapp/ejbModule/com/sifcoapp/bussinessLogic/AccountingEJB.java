@@ -386,7 +386,16 @@ public class AccountingEJB implements AccountingEJBRemote {
 		switch (action) {
 		case Common.MTTODELETE: {
 			// --------------------------------------------------------------------------------------------------------------------------------
-			// Validar que la cuenta no tenga movimientos contables
+			// Validar que no sea una cuenta de nivel 1
+			// --------------------------------------------------------------------------------------------------------------------------------
+			if (account.getAcctcode().length() <=1) {
+				_return.setCodigoError(1);
+				_return.setMensaje("No se puede eliminar esta cuenta");
+				return _return;
+			}
+
+			// --------------------------------------------------------------------------------------------------------------------------------
+			// Validar que la cuenta no tenga movimientos contables, ni hijos
 			// --------------------------------------------------------------------------------------------------------------------------------
 			if (if_removable(account)) {
 				_return.setCodigoError(1);
@@ -451,13 +460,13 @@ public class AccountingEJB implements AccountingEJBRemote {
 				_return.setMensaje("No se ha indicado si la cuenta es activa o de título");
 				return _return;
 			}
-			
-			if (!account.getPostable().contains("Y") && !account.getPostable().contains("N")) {
+
+			if (!account.getPostable().contains("Y")
+					&& !account.getPostable().contains("N")) {
 				_return.setCodigoError(1);
 				_return.setMensaje("No se ha indicado si la cuenta es activa o de título");
 				return _return;
 			}
-			
 
 			// --------------------------------------------------------------------------------------------------------------------------------
 			// Validar codigo Repetido
@@ -523,7 +532,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			if (accPadre.getPostable() == null
 					|| accPadre.getPostable().equals("Y")) {
 				_return.setCodigoError(1);
-				_return.setMensaje("No existe una cuenta padre para la cuenta indicada");
+				_return.setMensaje("No existe una cuenta padre válida para la cuenta indicada");
 				return _return;
 			}
 
@@ -538,7 +547,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		// Devolver error
 		// --------------------------------------------------------------------------------------------------------------------------------
 		_return.setCodigoError(1);
-		_return.setMensaje("Error desconocido, informar a soporte técnico");
+		_return.setMensaje("No se ha indicado ninguna acción valida, informar a soporte técnico");
 		return _return;
 	}
 

@@ -1705,7 +1705,12 @@ public class AccountingDAO extends CommonDAO {
 		List lstResult = new Vector();
 		List lstResultSet = null;
 
-		this.setDbObject("select B.linenum,A.dscription,sum(B.paidsum) as paidsum,A.acctcode,A.ctlaccount from   ges_col2_colecturiaconcept A join ges_col1_colecturiadetail B on B.linenum=A.linenum join ges_col0_colecturia C on B.docentry=C.docentry where C.docdate=? and C.usersign=? and C.docnum = 0 and transtype = 1 group by B.linenum,A.dscription,A.ctlaccount,A.acctcode order by linenum ");
+		this.setDbObject("select B.linenum,A.dscription,sum(B.paidsum) as paidsum,A.acctcode,A.ctlaccount "
+				+ "from   ges_col2_colecturiaconcept A join ges_col1_colecturiadetail B on B.linenum=A.linenum "
+				+ "join ges_col0_colecturia C on B.docentry=C.docentry "
+				+ "where C.docdate=? and C.usersign=? and C.docnum = 0 and C.transtype = 1 and C.series = 1"
+				+ "group by B.linenum,A.dscription,A.ctlaccount,A.acctcode "
+				+ "order by linenum ");
 		if (fecha == null) {
 			this.setDate(1, "_docdate", fecha);
 		} else {

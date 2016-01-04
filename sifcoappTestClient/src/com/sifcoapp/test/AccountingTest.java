@@ -271,7 +271,7 @@ public class AccountingTest {
 		// 558,7954
 		try {
 			lstPeriods = AccountingEJBService.getAccountByFilter(null,
-					null,null,1);
+					null,"N");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -299,9 +299,9 @@ public class AccountingTest {
 	public static void cat_Acc0_account_mtto() throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 		AccountTO acc = new AccountTO();
-		acc.setAcctcode("1301");
-		acc.setAcctname("cuenta de pruebas mod");
-		acc.setGroupmask(1);
+		acc.setAcctcode("2102010301");
+		acc.setAcctname("Patrick Adonay Pérez Deras");
+		acc.setGroupmask(2);
 		acc.setPostable("Y");
 
 		acc.setCurrtotal(0.0);
@@ -389,8 +389,8 @@ public class AccountingTest {
 	public static void getjournalEntry() {
 		JournalEntryInTO nuevo = new JournalEntryInTO();
 		List consul = new Vector();
-		nuevo.setTransid(283);
-		// nuevo.setBtfstatus("Y");
+		//nuevo.setLoctotal(1000.0);
+		//nuevo.setBtfstatus("Y");
 
 		consul = AccountingEJBService.getJournalEntry(nuevo);
 		Iterator<JournalEntryTO> iterator = consul.iterator();

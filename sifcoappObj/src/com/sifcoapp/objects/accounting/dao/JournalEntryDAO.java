@@ -49,7 +49,7 @@ public class JournalEntryDAO extends CommonDAO {
 		this.setString(7, "_memo", parameters.getMemo());
 		this.setString(8, "_ref1", parameters.getRef1());
 		this.setString(9, "_ref2", parameters.getRef2());
-		this.setDouble(10, "_loctotal", zero);
+		this.setDouble(10, "_loctotal",(parameters.getLoctotal()==null)?zero: new Double(parameters.getLoctotal()));
 		this.setDouble(11, "_systotal", zero);
 		this.setString(12, "_transcode", parameters.getTranscode());
 		this.setDouble(13, "_transrate", zero);

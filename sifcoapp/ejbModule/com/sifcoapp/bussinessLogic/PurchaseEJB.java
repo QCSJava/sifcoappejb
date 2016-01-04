@@ -221,7 +221,8 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			articleDetalle.setGrssprofit(articleDetalle.getGrssprofit());
 			articleDetalle.setVatappld(articleDetalle.getVatappld());
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
-			articleDetalle.setStockpricestockprice(articleDetalle.getStockpricestockprice());
+			articleDetalle.setStockpricestockprice(articleDetalle
+					.getStockpricestockprice());
 
 			// Calculo de impuesto
 			vatsum = vatsum + articleDetalle.getVatsum();
@@ -356,7 +357,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ PurchaseDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -380,7 +381,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ PurchaseDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -663,7 +664,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		boolean ind = false;
@@ -673,7 +674,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-	
 
 		ArticlesTO arti = new ArticlesTO();
 
@@ -689,7 +689,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 			arti = good.getArticle();
 			branch = branch + (good.getPrice() * good.getQuantity());
-			//sale = sale + good.getLinetotal();
+			// sale = sale + good.getLinetotal();
 			// calculando el iva validando si el producto esta exento o de iva
 			if (good.getTaxstatus().equals("Y")) {
 				// validar si es FOV
@@ -1167,8 +1167,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -1326,16 +1325,16 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		return nuevo;
 	}
 
-	public ResultOutTO pagoCompras(PurchaseTO purchase,Connection conn)
+	public ResultOutTO pagoCompras(PurchaseTO purchase, Connection conn)
 			throws Exception {
 		JournalEntryTO journal = new JournalEntryTO();
 		ResultOutTO _return = new ResultOutTO();
-		Double Monto=0.0;
+		Double Monto = 0.0;
 		String account;
-		//parametros que se necesitan para los calculos
-		Monto=purchase.getDoctotal();
-		account=purchase.getCardcode();
-		
+		// parametros que se necesitan para los calculos
+		Monto = purchase.getDoctotal();
+		account = purchase.getCardcode();
+
 		PurchaseInTO nuevo = new PurchaseInTO();
 		nuevo.setCardcode(account);
 		List lis_purchase = new Vector();
@@ -1357,52 +1356,51 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// para actualizar el documento de compras
 		for (Object object : Aux) {
 			PurchaseTO compra = (PurchaseTO) object;
-			
-			
-			//si monto es diferente de cero y no esta pagada por completo 
-			if (Monto != zero && compra.getPaidsum() != zero&&compra.getPaidsum()!=compra.getDoctotal()){
-				//si el monto de pago no excede la cantidad
-				if ((compra.getDoctotal()-compra.getPaidsum()) <= Monto) {
-					//disminuyendo la cantidad de dinero pagada
-					Monto = Monto - (compra.getDoctotal()-compra.getPaidsum());
+
+			// si monto es diferente de cero y no esta pagada por completo
+			if (Monto != zero && compra.getPaidsum() != zero
+					&& compra.getPaidsum() != compra.getDoctotal()) {
+				// si el monto de pago no excede la cantidad
+				if ((compra.getDoctotal() - compra.getPaidsum()) <= Monto) {
+					// disminuyendo la cantidad de dinero pagada
+					Monto = Monto
+							- (compra.getDoctotal() - compra.getPaidsum());
 					compra.setPaidsum(compra.getDoctotal());
 					compra.setDocstatus("C");
 					compra.setPaidtodate(purchase.getCreatedate());
-				}else{
-					double pago=compra.getPaidsum()+Monto;
+				} else {
+					double pago = compra.getPaidsum() + Monto;
 					compra.setPaidsum(pago);
 					compra.setPaidtodate(purchase.getCreatedate());
-					Monto=0.0;
-					
+					Monto = 0.0;
+
 				}
 			}
-				
-			
-			//si monto es diferente de cero y no ha se ha pagado ni una parte de la factura
+
+			// si monto es diferente de cero y no ha se ha pagado ni una parte
+			// de la factura
 			if (Monto != zero && compra.getPaidsum() == zero) {
 				if (compra.getDoctotal() <= Monto) {
 					compra.setPaidsum(compra.getDoctotal());
 					Monto = Monto - compra.getDoctotal();
 					compra.setDocstatus("C");
 					compra.setPaidtodate(purchase.getCreatedate());
-				}else{
-					double pago=Monto;
+				} else {
+					double pago = Monto;
 					compra.setPaidsum(pago);
 					compra.setPaidtodate(purchase.getCreatedate());
-					Monto=0.0;
+					Monto = 0.0;
 				}
 			}
-			
-			
+
 		}
 
 		for (Object object : Aux) {
-			PurchaseTO compra=(PurchaseTO)object;
-			
+			PurchaseTO compra = (PurchaseTO) object;
+
 			// actualizacion de el total de facturas
-				_return = inv_Purchase_update(compra, Common.MTTOUPDATE, conn);
-			
-			
+			_return = inv_Purchase_update(compra, Common.MTTOUPDATE, conn);
+
 		}
 		return _return;
 	}
@@ -1503,7 +1501,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 		ResultOutTO _return = new ResultOutTO();
 		_return = validate_inv_PurchaseQuotation_mtto(parameters);
-		
+
 		if (_return.getCodigoError() != 0) {
 			return _return;
 		}
@@ -1522,6 +1520,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 				articleDetalle.setDiscprcnt(articleDetalle.getQuantity());
 				articleDetalle.setOpenqty(articleDetalle.getQuantity());
 				articleDetalle.setFactor1(articleDetalle.getQuantity());
+				articleDetalle.setObjtype("22");
 
 			}
 
@@ -1530,6 +1529,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			parameters.setPaidsum(0.00);
 			parameters.setRounddif(0.00);
 			parameters.setVatsum(0.00);
+			parameters.setObjtype("22");
 			_return.setDocentry(DAO.inv_PurchaseQuotation_mtto(parameters,
 					action));
 
@@ -1565,7 +1565,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	public ResultOutTO validate_inv_PurchaseQuotation_mtto(
 			PurchaseQuotationTO parameters) throws Exception {
-		
+
 		boolean valid = false;
 		ResultOutTO _return = new ResultOutTO();
 		AccountingEJB acc = new AccountingEJB();
@@ -1657,7 +1657,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ PurchaseQuotationDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -1681,7 +1681,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ PurchaseQuotationDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -1744,7 +1744,9 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 	}
 
-	// ------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------
+	// Mantenimeinto de Notas de Credito Compras
+	// -----------------------------------------------------------------------------------------------------------------
 	public ResultOutTO inv_Supplier_mtto(SupplierTO parameters, int action)
 			throws EJBException {
 
@@ -1905,11 +1907,12 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			articleDetalle.setTaxstatus("Y");
 			articleDetalle.setOcrcode(parameters.getTowhscode());
 			articleDetalle.setFactor1(zero);
-			articleDetalle.setObjtype("20");
+			articleDetalle.setObjtype("21");
 			articleDetalle.setGrssprofit(articleDetalle.getGrssprofit());
 			articleDetalle.setVatappld(articleDetalle.getVatappld());
 			articleDetalle.setUnitmsr(DBArticle.getBuyUnitMsr());
-			articleDetalle.setStockpricestockprice(articleDetalle.getStockpricestockprice());
+			articleDetalle.setStockpricestockprice(articleDetalle
+					.getStockpricestockprice());
 
 			// Calculo de impuesto
 			vatsum = vatsum + articleDetalle.getVatsum();
@@ -1930,14 +1933,14 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
 		parameters.setDocstatus("O");
-		parameters.setObjtype("20");
+		parameters.setObjtype("21");
 		parameters.setVatsum(vatsum);
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
 		parameters.setJrnlmemo("Facturas de proveedores - "
 				+ parameters.getCardcode());
-		//parameters.setReceiptnum(0);
+		// parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
 		parameters.setConfirmed("Y");
 		parameters.setCreatetran("Y");
@@ -1948,7 +1951,6 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		// consulta he incluirse la cuenta contables
 		parameters.setPaidsum(zero);
 		parameters.setNret(zero);
-		parameters.setObjtype("20");
 		parameters.setReceiptnum(baseentry);
 		return parameters;
 	}
@@ -2237,7 +2239,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		boolean ind = false;
@@ -2247,7 +2249,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		List<List> listas = new Vector();
 		List aux1 = new Vector();
 		// recorre la lista de detalles
-		
+
 		ArticlesTO arti = new ArticlesTO();
 
 		for (Object obj : list) {
@@ -2261,7 +2263,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 			// --------------------------------------------------------------------------------
 
 			arti = good.getArticle();
-			branch = branch + (good.getPrice()* good.getQuantity());
+			branch = branch + (good.getPrice() * good.getQuantity());
 			sale = sale + good.getLinetotal();
 			// calculando el iva validando si el producto esta exento o de iva
 			if (good.getTaxstatus().equals("Y")) {
@@ -2741,7 +2743,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		double sale = 0.0;
 		double costo = 0.0;
 		double impuesto = 0.0;
-		
+
 		JournalEntryTO nuevo = new JournalEntryTO();
 		ResultOutTO _result = new ResultOutTO();
 		ArticlesTO arti = new ArticlesTO();
@@ -3071,7 +3073,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " no existe,informar al administrador. linea :"
 						+ SupplierDetail.getLinenum());
-				
+
 				return _return;
 
 			}
@@ -3095,7 +3097,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 
 						+ " No esta activo. linea :"
 						+ SupplierDetail.getLinenum());
-				
+
 				return _return;
 
 			}
