@@ -130,6 +130,25 @@ public class BankTest {
 				+ " - " + lstPeriods3.getAddress());
 
 	}
+	
+	public static void checkAnnular() {
+		CheckForPaymentTO lstPeriods3 = new CheckForPaymentTO();
+		CheckForPaymentInTO nuevo = new CheckForPaymentInTO();
+		nuevo.setCheckkey(13);
+		ResultOutTO resp = null;
+
+		try {
+			resp = catalog.ges_cfp0_checkforpayment_annular(17);
+			System.out.println(resp.getDocentry());
+			System.out.println(resp.getCodigoError());
+			System.out.println(resp.getMensaje());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+	}
 
 	public static void check_mtto() {
 		ResultOutTO resp = null;

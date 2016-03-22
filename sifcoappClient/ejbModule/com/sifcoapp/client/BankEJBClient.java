@@ -62,6 +62,14 @@ public class BankEJBClient {
 		lstPeriods = bean.get_cfp0_checkforpaymentByKey(parameters);
 		return lstPeriods;
 	}
+	
+	public ResultOutTO ges_cfp0_checkforpayment_annular(int parameters)
+			throws Exception {
+		// TODO Auto-generated method stub
+		ResultOutTO lstPeriods = new ResultOutTO();
+		lstPeriods = bean.ges_cfp0_checkforpayment_annular(parameters);
+		return lstPeriods;
+	}
 
 	public ResultOutTO ges_ges_col0_colecturia_mtto(ColecturiaTO parameters,
 			int action) throws Exception {

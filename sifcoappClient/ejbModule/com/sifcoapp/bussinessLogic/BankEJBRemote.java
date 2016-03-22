@@ -21,6 +21,9 @@ public interface BankEJBRemote {
 	public ResultOutTO ges_cfp0_checkforpayment_mtto(
 			CheckForPaymentTO parameters, int action) throws Exception;
 
+	public ResultOutTO ges_cfp0_checkforpayment_annular(int parameters)
+			throws EJBException;
+	
 	public List get_cfp0_checkforpayment(CheckForPaymentInTO parameters)
 			throws EJBException;
 

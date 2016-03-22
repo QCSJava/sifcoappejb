@@ -376,6 +376,7 @@ public class AdminTest {
 		ArticlesInTO param = new ArticlesInTO();
 		//param.setSellItem("N");
 		//param.setPrchseItem("N");
+		param.setItemName("abrazadera pla");
 		//param.setItemType("2");
 		//param.setItmsIsGrpCod("1");
 
@@ -390,7 +391,7 @@ public class AdminTest {
 		while (iterator.hasNext()) {
 			ArticlesTO article = (ArticlesTO) iterator.next();
 			System.out.println(article.getItemCode() + " - "
-					+ article.getItemName());
+					+ article.getItemName() + " -  onhand" + article.getOnHand() + " - precio $" + article.getAvgPrice());
 		}
 	}
 

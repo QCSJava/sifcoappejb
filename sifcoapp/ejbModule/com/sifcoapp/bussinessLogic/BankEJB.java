@@ -1,8 +1,6 @@
 package com.sifcoapp.bussinessLogic;
 
 import java.sql.Connection;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -108,6 +106,153 @@ public class BankEJB implements BankEJBRemote {
 		return _return;
 	}
 
+	public ResultOutTO ges_cfp0_checkforpayment_annular(int parameters)
+			throws EJBException {
+
+		ResultOutTO _return = new ResultOutTO();
+		ResultOutTO _valid = new ResultOutTO();
+
+		CheckForPaymentTO original = new CheckForPaymentTO();
+
+		// Consultar cheque a annular
+		original = get_cfp0_checkforpaymentByKey(parameters);
+
+		// Validaciones pra poder anular
+
+		_valid = validateAnnularCheck(original);
+
+		if (_valid.getCodigoError() != 0) {
+			return _valid;
+		}
+
+		// Actualizar el cheque anterior a estado cancelado
+		original.setCanceled("Y");
+		_return = ges_cfp0_checkforpayment_mtto(original, Common.MTTOUPDATE);
+
+		// Guardar la anulación del cheque
+
+		original.setCanceled("N");
+		original.setDetails("Anulación de cheque: " + original.getDpstacct() + " transacción: " + original.getCheckkey());
+		original.setPmntnum(original.getCheckkey());
+		_return = ges_cfp0_checkforpayment_annular_mtto(original,
+				Common.MTTOINSERT);
+
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos ingresados correctamente");
+		return _return;
+	}
+
+	public ResultOutTO validateAnnularCheck(CheckForPaymentTO parameters)
+			throws EJBException {
+		// Variables
+
+		boolean valid = false;
+		ResultOutTO _return = new ResultOutTO();
+		AccountingEJB acc = new AccountingEJB();
+
+		// validaciones del documento
+
+		// ------------------------------------------------------------------------------------------------------------
+		// Validación cheque ya anulado
+		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getCanceled() != null
+				&& parameters.getCanceled().equals("Y")) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El cheque ya esta anulado");
+
+			return _return;
+		}
+
+		// ------------------------------------------------------------------------------------------------------------
+		// fecha de contabilizacion valida
+		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getCheckdate() == null) {
+			_return.setCodigoError(1);
+			_return.setMensaje("no se encuentra fecha del documento ");
+
+			return _return;
+		}
+		_return = acc.validate_exist_accperiod(parameters.getCheckdate());
+		if (_return.getCodigoError() != 0) {
+			_return.setCodigoError(1);
+			_return.setMensaje("El documento tiene una fecha fuera del periodo contable activo");
+			return _return;
+		}
+		// ------------------------------------------------------------------------------------------------------------
+		// Validando que no sea ya una anulación
+		// ------------------------------------------------------------------------------------------------------------
+		if (parameters.getObjtype().equals("47")) {
+			_return.setCodigoError(1);
+			_return.setMensaje("No se puede generar una anulación de otra anulación");
+
+			return _return;
+		}
+
+		_return.setCodigoError(0);
+
+		return _return;
+	}
+
+	public ResultOutTO ges_cfp0_checkforpayment_annular_mtto(
+			CheckForPaymentTO parameters, int action) throws EJBException {
+
+		ResultOutTO _return = new ResultOutTO();
+		CheckForPaymentDAO DAO = new CheckForPaymentDAO();
+		DAO.setIstransaccional(true);
+
+		if (parameters.getChecksum() == null) {
+			parameters.setChecksum(zero);
+		}
+		if (parameters.getLinessum() == null) {
+			parameters.setLinessum(zero);
+		}
+		if (parameters.getVattotal() == null) {
+			parameters.setVattotal(zero);
+		}
+
+		try {
+			if (action == Common.MTTOINSERT) {
+				parameters.setObjtype("47");
+				_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(
+						parameters, action));
+				parameters.setCheckkey(_return.getDocentry());
+
+				// llenado del asiento contable del chekforpayment
+
+				AccountingEJB acounting = new AccountingEJB();
+
+				JournalEntryTO journal = new JournalEntryTO();
+				journal = journal_CheckForPayment_Annular(parameters);
+				ResultOutTO resultado = acounting.journalEntry_mtto(journal,
+						Common.MTTOINSERT, DAO.getConn());
+
+				// Actualizando el documento de Control de cheques emitidos con
+				// el transid del journalEntry
+				parameters
+						.setTransref(Integer.toString(resultado.getDocentry()));
+				parameters.setTransnum(resultado.getDocentry());
+				int result = DAO.ges_cfp0_checkforpayment_mtto(parameters,
+						Common.MTTOUPDATE);
+
+			}
+			if (action == Common.MTTOUPDATE) {
+				_return.setDocentry(DAO.ges_cfp0_checkforpayment_mtto(
+						parameters, Common.MTTOUPDATE));
+			}
+
+			DAO.forceCommit();
+		} catch (Exception e) {
+			DAO.rollBackConnection();
+			throw (EJBException) new EJBException(e);
+		} finally {
+
+			DAO.forceCloseConnection();
+		}
+		_return.setCodigoError(0);
+		_return.setMensaje("Datos ingresados correctamente");
+		return _return;
+	}
+	
 	public List get_cfp0_checkforpayment(CheckForPaymentInTO parameters)
 			throws EJBException {
 		// TODO Auto-generated method stub
@@ -2089,6 +2234,140 @@ public class BankEJB implements BankEJBRemote {
 		return journal;
 	}
 
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	// Generación de asiento contable Anulación de cheque
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public JournalEntryTO journal_CheckForPayment_Annular(
+				CheckForPaymentTO parameters) throws Exception {
+			JournalEntryTO journal = new JournalEntryTO();
+			if (parameters.getChecksum() == 0) {
+				throw new Exception("Debe ser un monto mayor que cero");
+
+			}
+			List detail = new Vector();
+
+			String cardcode = parameters.getVendorcode();
+
+			BusinesspartnerTO busines = new BusinesspartnerTO();
+
+			CatalogEJB admin = new CatalogEJB();
+
+			busines = admin.get_businesspartnerBykey(cardcode);
+
+			if (busines == null) {
+				throw new Exception("No se encuentra socio de negocio");
+
+			}
+
+			JournalEntryLinesTO art1 = new JournalEntryLinesTO();
+			// cuenta de socio de negocio
+			art1.setLine_id(1);
+			art1.setAccount(busines.getDebpayacct());
+			art1.setDebit(zero);
+			art1.setCredit(parameters.getChecksum());
+			art1.setDuedate(parameters.getCheckdate());
+			art1.setShortname(busines.getDebpayacct());
+			art1.setContraact(parameters.getCheckacct());
+			art1.setLinememo("Anulación de cheque a proveedor");
+			art1.setRefdate(parameters.getPmntdate());
+			art1.setRef1(Integer.toString(parameters.getCheckkey()));
+			// art1.setRef2();
+			art1.setBaseref(art1.getRef1());
+			art1.setTaxdate(parameters.getPmntdate());
+			// art1.setFinncpriod(finncpriod);
+			art1.setReltransid(-1);
+			art1.setRellineid(-1);
+			art1.setReltype("N");
+			art1.setObjtype("5");
+			art1.setVatline("N");
+			art1.setVatamount(zero);
+			art1.setClosed("N");
+			art1.setGrossvalue(zero);
+			art1.setBalduedeb(zero);
+			art1.setBalduecred(art1.getDebit());
+			art1.setIsnet("Y");
+			art1.setTaxtype(0);
+			art1.setTaxpostacc("N");
+			art1.setTotalvat(zero);
+			art1.setWtliable("N");
+			art1.setWtline("N");
+			art1.setPayblock("N");
+			art1.setOrdered("N");
+			art1.setTranstype(parameters.getObjtype());
+			detail.add(art1);
+
+			// cuenta del banco
+
+			JournalEntryLinesTO art2 = new JournalEntryLinesTO();
+
+			art2.setLine_id(2);
+			art2.setAccount(parameters.getCheckacct());
+			art2.setDebit(parameters.getChecksum());
+			art2.setCredit(zero);
+			art2.setDuedate(parameters.getPmntdate());
+			art2.setShortname(parameters.getCheckacct());
+			art2.setContraact(busines.getDebpayacct());
+			art2.setLinememo("Anulación de cheque a proveedor");
+			art2.setRefdate(parameters.getPmntdate());
+			art2.setRef1(Integer.toString(parameters.getCheckkey()));
+			// rt1.setRef2();
+			art2.setBaseref(art1.getRef1());
+			art2.setTaxdate(parameters.getPmntdate());
+			// art1.setFinncpriod(finncpriod);
+			art2.setReltransid(-1);
+			art2.setRellineid(-1);
+			art2.setReltype("N");
+			art2.setObjtype("5");
+			art2.setVatline("N");
+			art2.setVatamount(zero);
+			art2.setClosed("N");
+			art2.setGrossvalue(zero);
+			art2.setBalduedeb(art2.getCredit());
+			art2.setBalduecred(zero);
+			art2.setIsnet("Y");
+			art2.setTaxtype(0);
+			art2.setTaxpostacc("N");
+			art2.setTotalvat(zero);
+			art2.setWtliable("N");
+			art2.setWtline("N");
+			art2.setPayblock("N");
+			art2.setOrdered("N");
+			art2.setTranstype(parameters.getObjtype());
+			detail.add(art2);
+			// --------------------------------------------------------------------------------------------------------------------------------------------------------
+			// LLenado del padre
+
+			journal.setBtfstatus("O");
+			journal.setTranstype(parameters.getObjtype());
+			journal.setBaseref(Integer.toString(parameters.getCheckkey()));
+			journal.setRefdate(parameters.getPmntdate());
+			journal.setMemo("Anulación de cheque a proveedor");
+			journal.setRef1(Integer.toString(parameters.getCheckkey()));
+			journal.setRef2(journal.getRef1());
+			journal.setLoctotal(parameters.getChecksum());
+			journal.setSystotal(parameters.getChecksum());
+			journal.setTransrate(zero);
+			journal.setDuedate(parameters.getPmntdate());
+			journal.setTaxdate(parameters.getPmntdate());
+			journal.setFinncpriod(0);
+			journal.setUsersign(parameters.getUsersign());
+			journal.setRefndrprt("N");
+			journal.setObjtype("5");
+			journal.setAdjtran("N");
+			journal.setAutostorno("N");
+			journal.setSeries(0);
+			journal.setAutovat("N");
+			journal.setDocseries(0);
+			journal.setPrinted("N");
+			journal.setAutowt("N");
+			journal.setDeferedtax("N");
+			journal.setJournalentryList(detail);
+
+			journal.setJournalentryList(detail);
+			return journal;
+		}
+	
 	public int get_dias(String cuenta, String objtype, Connection conn)
 			throws Exception {
 
@@ -2335,5 +2614,5 @@ public class BankEJB implements BankEJBRemote {
 		return _result;
 
 	}
-
 }
+

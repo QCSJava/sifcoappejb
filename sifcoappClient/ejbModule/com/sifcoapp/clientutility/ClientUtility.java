@@ -20,6 +20,7 @@ public class ClientUtility {
 
 	private static final String PROVIDER_HOST = "localhost";
 	private static final String PROVIDER_PORT = "3700";
+	//private static final String PROVIDER_PORT = "6817";
 
 	/*
 	 * Factory that creates initial context objects. fully qualified class name.

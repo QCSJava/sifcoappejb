@@ -4,7 +4,7 @@ import com.sifcoapp.objects.common.to.CommonTO;
 
 import java.util.Date;
 
-public class CheckForPaymentTO extends CommonTO {
+public class CheckForPaymentTO extends CommonTO implements Cloneable   {
 
 	/**
 	 * 

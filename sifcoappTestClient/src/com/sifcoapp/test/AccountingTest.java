@@ -656,7 +656,7 @@ public class AccountingTest {
 		ResultOutTO nuevo = new ResultOutTO();
 		List consul = new Vector();
 
-		for (int i =4539; i < 4945; i++) {
+		for (int i =1; i < 4945; i++) {
 			JournalEntryTO result = new JournalEntryTO();
 
 			result = AccountingEJBService.getpruebaByKey(i);
