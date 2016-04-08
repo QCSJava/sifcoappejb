@@ -1,27 +1,19 @@
 package com.sifcoapp.transaction.ejb;
 
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.sifcoapp.admin.ejb.AdminEJB;
-import com.sifcoapp.objects.admin.dao.AdminDAO;
-import com.sifcoapp.objects.admin.to.ArticlesInTO;
 import com.sifcoapp.objects.admin.to.ArticlesTO;
 import com.sifcoapp.objects.admin.to.BranchArticlesTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.inventory.dao.InventoryLogDAO;
-import com.sifcoapp.objects.inventory.to.GoodsReceiptDetailTO;
-import com.sifcoapp.objects.inventory.to.GoodsreceiptTO;
 import com.sifcoapp.objects.transaction.dao.TransactionDAO;
 import com.sifcoapp.objects.transaction.to.InventoryLogTO;
-import com.sifcoapp.objects.transaction.to.InventorylogInTo;
 import com.sifcoapp.objects.transaction.to.TransactionTo;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalLayerTO;
 import com.sifcoapp.objects.transaction.to.WarehouseJournalTO;
-import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 
 public class transactionEJB {
 	Double zero = 0.0;

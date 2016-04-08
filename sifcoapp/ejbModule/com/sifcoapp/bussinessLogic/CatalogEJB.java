@@ -18,7 +18,6 @@ import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.purchase.to.PurchaseDetailTO;
 import com.sifcoapp.objects.sales.to.SalesTO;
-import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 
 @Stateless
 public class CatalogEJB implements CatalogEJBRemote, CatalogEJBLocal {

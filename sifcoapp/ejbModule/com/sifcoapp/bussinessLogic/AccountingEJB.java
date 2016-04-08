@@ -5,14 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-import javax.persistence.criteria.CriteriaBuilder.Case;
-
-import org.eclipse.persistence.jpa.jpql.parser.CastExpression;
-import org.glassfish.jersey.gf.ejb.internal.EjbExceptionMapper;
-
 import com.sifcoapp.admin.ejb.ParameterEJB;
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
@@ -31,22 +25,13 @@ import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
 import com.sifcoapp.objects.admin.dao.AdminDAO;
 import com.sifcoapp.objects.admin.dao.ParameterDAO;
-import com.sifcoapp.objects.admin.to.ArticlesTO;
-import com.sifcoapp.objects.admin.to.CatalogTO;
 import com.sifcoapp.objects.admin.to.parameterTO;
 import com.sifcoapp.objects.bank.dao.ColecturiaDAO;
-import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
 import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
 import com.sifcoapp.objects.bank.to.ColecturiaTO;
-import com.sifcoapp.objects.catalog.dao.BusinesspartnerDAO;
-import com.sifcoapp.objects.catalog.to.BusinesspartnerAcountTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.to.ResultOutTO;
 import com.sifcoapp.objects.sales.DAO.SalesDAO;
-import com.sifcoapp.objects.sales.DAO.SalesDetailDAO;
-import com.sifcoapp.objects.sales.to.ClientCrediDetailTO;
-import com.sifcoapp.objects.sales.to.SalesDetailTO;
-import com.sifcoapp.objects.sales.to.SalesTO;
 
 /**
  * Session Bean implementation class AccountingEJB
@@ -388,7 +373,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 			// --------------------------------------------------------------------------------------------------------------------------------
 			// Validar que no sea una cuenta de nivel 1
 			// --------------------------------------------------------------------------------------------------------------------------------
-			if (account.getAcctcode().length() <=1) {
+			if (account.getAcctcode().length() <= 1) {
 				_return.setCodigoError(1);
 				_return.setMensaje("No se puede eliminar esta cuenta");
 				return _return;
@@ -651,6 +636,24 @@ public class AccountingEJB implements AccountingEJBRemote {
 		ResultOutTO _return = new ResultOutTO();
 		DAO.setIstransaccional(true);
 
+		// -------------------------------------------------------------------------------------------------
+		// La actualización se realizá directamente, si completar nada y sin hacer validaciones
+		// -------------------------------------------------------------------------------------------------
+
+		if (action == Common.MTTOUPDATE) {
+			_return.setDocentry(DAO.journalEntry_mtto(parameters,
+					Common.MTTOUPDATE));
+			_return.setCodigoError(0);
+			_return.setMensaje("Datos actualizados con éxito");
+			return _return;
+
+		}
+
+		// -------------------------------------------------------------------------------------------------
+		// Realizar el ingreso de nuevo elemento
+		// -------------------------------------------------------------------------------------------------
+		
+
 		JournalEntryLinesDAO JournalLinesDAO = new JournalEntryLinesDAO(_conn);
 		JournalLinesDAO.setIstransaccional(true);
 
@@ -816,10 +819,6 @@ public class AccountingEJB implements AccountingEJBRemote {
 				update_currtotal(Detalle, _conn);
 
 			}
-		} else {
-			_return.setDocentry(DAO.journalEntry_mtto(parameters,
-					Common.MTTOUPDATE));
-
 		}
 		_return.setCodigoError(0);
 		_return.setMensaje("Datos guardados con exito");
@@ -849,8 +848,8 @@ public class AccountingEJB implements AccountingEJBRemote {
 		if (account1.getAcctcode() == null
 				|| account1.getPostable().equals("N")) {
 			throw new Exception(
-					"La cuenta contable no existe o no es posteable edn la linea ="
-							+ line.getLine_id() + "codigo de cuenta"
+					"La cuenta contable no existe o no es posteable en la linea ="
+							+ line.getLine_id() + " codigo de cuenta "
 							+ line.getAccount());
 		}
 		// C es para credito(haber) y D debito(debe)
