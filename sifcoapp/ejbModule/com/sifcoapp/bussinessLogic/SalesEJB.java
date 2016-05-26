@@ -386,7 +386,7 @@ public class SalesEJB implements SalesEJBRemote {
 		JournalEntryTO journal = new JournalEntryTO();
 
 		// --------------------------------------------------------------------------------------------------------------------------------
-		// Guardar Encabezados y detalles de Entrada
+		// Guardar Encabezados y detalles
 		// --------------------------------------------------------------------------------------------------------------------------------
 
 		_return = inv_sales_save(Sales, action, conn);
@@ -721,20 +721,18 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 
 		// cuenta asignada a ventas
-		AccassignmentTO acc = new AccassignmentTO();
-		AccountingDAO accDAO = new AccountingDAO();
-		acc = accDAO.getAccAssignment();
+		// Se utilizara la cuenta indicada en la configuración contable del almacén
 
-		V_local = acc.getLinkact_1();
+		V_local = branch1.getSalecostac();
 		if (V_local == null) {
 			throw new Exception(
-					"No hay una cuenta contable asignada a ingreso por Venta ");
+					"No hay una cuenta contable asignada a  Costo de Ventas");
 		}
-		costo_venta = acc.getCogm_act();
+		costo_venta = branch1.getRevenuesac();
 
 		if (costo_venta == null) {
 			throw new Exception(
-					"No hay una cuenta contable asignada a Costo de Ventas ");
+					"No hay una cuenta contable asignada a ingreso por Venta");
 		}
 
 		// asiento contable
@@ -2442,17 +2440,24 @@ public class SalesEJB implements SalesEJBRemote {
 		branch_c = branch1.getBalinvntac();
 		if (branch1.getBalinvntac() == null) {
 			throw new Exception(
-					"No hay una cuenta contable de Inventario asignada al almacen");
+					"No hay una cuenta contable de Inventario asignada al almacén");
 		}
 
 		// buscando cuenta asignada para IVA y FOVIAL
 
 		// cuenta asignada a ventas
-		AccassignmentTO acc = new AccassignmentTO();
-		AccountingDAO accDAO = new AccountingDAO();
-		acc = accDAO.getAccAssignment();
-		V_local = acc.getLinkact_1();
-		costo_venta = acc.getCogm_act();
+		// Se utilizara la cuenta indicada en la configuración contable del almacén
+		V_local = branch1.getSalecostac();
+		if (V_local == null) {
+			throw new Exception(
+					"No hay una cuenta contable asignada a Costo de Ventas ");
+		}
+		costo_venta = branch1.getRevenuesac();
+
+		if (costo_venta == null) {
+			throw new Exception(
+					"No hay una cuenta contable asignada a ingreso por Venta ");
+		}
 
 		// asiento contable
 		JournalEntryLinesTO art1 = new JournalEntryLinesTO();
