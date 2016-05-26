@@ -270,8 +270,8 @@ public class AccountingTest {
 		List lstPeriods = new Vector();
 		// 558,7954
 		try {
-			lstPeriods = AccountingEJBService.getAccountByFilter(null,
-					null,"N");
+			lstPeriods = AccountingEJBService.getAccountByFilter("21050501",
+					"Provisión liquidación previsionales ISSS, AFP'S, IPSFA","N");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

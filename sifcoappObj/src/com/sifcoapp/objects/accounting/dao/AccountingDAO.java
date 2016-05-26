@@ -3,15 +3,11 @@ package com.sifcoapp.objects.accounting.dao;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
-
-import javax.ejb.EJBException;
 
 import com.sifcoapp.objects.accounting.to.AccPeriodTO;
 import com.sifcoapp.objects.accounting.to.AccassignmentTO;
@@ -20,13 +16,10 @@ import com.sifcoapp.objects.accounting.to.BudgetTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsDetailTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsInTO;
 import com.sifcoapp.objects.accounting.to.RecurringPostingsTO;
-import com.sifcoapp.objects.bank.to.ColecturiaConceptTO;
 import com.sifcoapp.objects.bank.to.ColecturiaDetailTO;
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
 import com.sifcoapp.objects.common.to.ResultOutTO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
-import com.sifcoapp.objects.security.to.ProfileDetOutTO;
 import com.sun.rowset.CachedRowSetImpl;
 
 public class AccountingDAO extends CommonDAO {

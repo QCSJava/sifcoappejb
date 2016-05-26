@@ -376,9 +376,9 @@ public class AdminTest {
 		ArticlesInTO param = new ArticlesInTO();
 		//param.setSellItem("N");
 		//param.setPrchseItem("N");
-		param.setItemName("abrazadera pla");
+		param.setItemName("a");
 		//param.setItemType("2");
-		//param.setItmsIsGrpCod("1");
+		param.setAssetItem("1");
 
 		try {
 			resp = AdminEJBService.getArticles(param);
@@ -398,7 +398,7 @@ public class AdminTest {
 	public static void getArticlesByKey() {
 		ArticlesTO article = null;
 
-		String code = "INV0000002";
+		String code = "INV0001819";
 
 		try {
 			article = AdminEJBService.getArticlesByKey(code);

@@ -7,7 +7,6 @@ import java.util.ListIterator;
 
 import com.sifcoapp.objects.catalogos.Common;
 import com.sifcoapp.objects.common.dao.CommonDAO;
-import com.sifcoapp.objects.inventory.to.GoodsissuesTO;
 import com.sifcoapp.objects.transaction.to.InventoryLogTO;
 import com.sun.rowset.CachedRowSetImpl;
 

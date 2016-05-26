@@ -26,7 +26,7 @@ public class DeliveryDAO extends CommonDAO{
 		List lstResultSet = null;
 		
 		this.setTypeReturn(Common.TYPERETURN_CURSOR);
-		this.setDbObject("{call sp_get_delivery(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		this.setDbObject("{call sp_get_delivery(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		
 		if (param.getDocdate() == null){
 			this.setDate(2, "_docdate", param.getDocdate());
@@ -62,6 +62,8 @@ public class DeliveryDAO extends CommonDAO{
 			this.setDate(14, "_taxdate", fecha);
 		}
 		this.setString(15, "_canceled", param.getCanceled());
+		this.setInt(16, "_receiptnum", param.getReceiptnum());
+		this.setString(17, "_numatcard", param.getNumatcard());
 		
 		
 		lstResultSet = this.runQuery();

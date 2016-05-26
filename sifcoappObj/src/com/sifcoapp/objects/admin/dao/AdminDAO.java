@@ -507,8 +507,7 @@ public class AdminDAO extends CommonDAO {
 					article.setVatgourpsa(rowsetActual.getString(30));
 					article.setBranchArticles(getBranchArticles(itemcode));
 					article.setArticleprices(getArticlePrices(itemcode));
-					article.setVatgourpsaList(findCatalogByKey_List(
-							article.getVatgourpsa(), tablecode));
+					article.setVatgourpsaList(article.getVatgourpsa() == null ?null:findCatalogByKey_List(article.getVatgourpsa(), tablecode));
 					_return = article;
 
 				}

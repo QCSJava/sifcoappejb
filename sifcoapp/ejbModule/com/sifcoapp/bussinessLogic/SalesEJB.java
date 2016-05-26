@@ -49,6 +49,7 @@ import com.sifcoapp.transaction.ejb.transactionEJB;
 @Stateless
 public class SalesEJB implements SalesEJBRemote {
 	Double zero = 0.0;
+	private SalesTO parameters;
 
 	/**
 	 * Default constructor.
@@ -3390,7 +3391,7 @@ public class SalesEJB implements SalesEJBRemote {
 		parameters.setDocnum(parameters.getDocentry());
 		parameters.setDoctype("I");
 		parameters.setCanceled("N");
-		parameters.setDocstatus("O");
+		//parameters.setDocstatus("O");
 		parameters.setObjtype("12");
 		parameters.setVatsum(vatsum);
 		parameters.setDiscsum(zero);
@@ -4346,6 +4347,11 @@ public class SalesEJB implements SalesEJBRemote {
 		}
 
 		return _return;
+	}
+	
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------

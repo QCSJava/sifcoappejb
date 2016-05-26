@@ -1938,7 +1938,7 @@ public class PurchaseEJB implements PurchaseEJBRemote {
 		parameters.setDiscsum(zero);
 		parameters.setDoctotal(total);
 		parameters.setRef1(Integer.toString(parameters.getDocnum()));
-		parameters.setJrnlmemo("Facturas de proveedores - "
+		parameters.setJrnlmemo("Nota de credito proveedores - "
 				+ parameters.getCardcode());
 		// parameters.setReceiptnum(0);
 		parameters.setGroupnum(0);
