@@ -850,7 +850,14 @@ public class BankEJB implements BankEJBRemote {
 				art1.setDuedate(parameters.getDocduedate());
 				art1.setShortname(business);
 				art1.setContraact(colecturia_c.getAcctcode());
-				art1.setLinememo("Pago de colecturia");
+				//art1.setLinememo("Pago de colecturia");
+				if (parameters.getComments() == null || parameters.getComments().length() <= 0) {
+					art1.setLinememo(parameters.getComments());
+				} else if (parameters.getComments().length() <= 100) {
+					art1.setLinememo(parameters.getComments());
+				} else { 
+					art1.setLinememo(parameters.getComments().substring(0, 100));
+				}
 				art1.setRefdate(parameters.getDocdate());
 				art1.setRef1(Integer.toString(parameters.getDocentry()));
 				// art1.setRef2();
@@ -906,7 +913,14 @@ public class BankEJB implements BankEJBRemote {
 				art2.setDuedate(parameters.getDocduedate());
 				art2.setShortname(colecturia_c.getAcctcode());
 				art2.setContraact(business);
-				art2.setLinememo("Pago de colecturia");
+				//art2.setLinememo("Pago de colecturia");
+				if (parameters.getComments() == null || parameters.getComments().length() <= 0) {
+					art2.setLinememo(parameters.getComments());
+				} else if (parameters.getComments().length() <= 100) {
+					art2.setLinememo(parameters.getComments());
+				} else { 
+					art2.setLinememo(parameters.getComments().substring(0, 100));
+				}
 				art2.setRefdate(parameters.getDocdate());
 				art2.setRef1(Integer.toString(parameters.getDocentry()));
 				// art2.setRef2();
@@ -958,7 +972,14 @@ public class BankEJB implements BankEJBRemote {
 					art3.setDuedate(parameters.getDocduedate());
 					art3.setShortname(colecturia_c.getAcctcode2());
 					art3.setContraact(colecturia_c.getAcctcode3() + "-" + iva_c);
-					art3.setLinememo("Pago de colecturia");
+					//art3.setLinememo("Pago de colecturia");
+					if (parameters.getComments() == null || parameters.getComments().length() <= 0) {
+						art3.setLinememo(parameters.getComments());
+					} else if (parameters.getComments().length() <= 100) {
+						art3.setLinememo(parameters.getComments());
+					} else { 
+						art3.setLinememo(parameters.getComments().substring(0, 100));
+					}
 					art3.setRefdate(parameters.getDocdate());
 					art3.setRef1(Integer.toString(parameters.getDocentry()));
 					// art2.setRef2();
@@ -1008,7 +1029,14 @@ public class BankEJB implements BankEJBRemote {
 						art4.setDuedate(parameters.getDocduedate());
 						art4.setShortname(iva_c);
 						art4.setContraact(colecturia_c.getAcctcode2());
-						art4.setLinememo("Pago de colecturia");
+						//art4.setLinememo("Pago de colecturia");
+						if (parameters.getComments() == null || parameters.getComments().length() <= 0) {
+							art4.setLinememo(parameters.getComments());
+						} else if (parameters.getComments().length() <= 100) {
+							art4.setLinememo(parameters.getComments());
+						} else { 
+							art4.setLinememo(parameters.getComments().substring(0, 100));
+						}
 						art4.setRefdate(parameters.getDocdate());
 						art4.setRef1(parameters.getRef1());
 						// rt2.setRef2();
@@ -1051,7 +1079,14 @@ public class BankEJB implements BankEJBRemote {
 					art5.setDuedate(parameters.getDocduedate());
 					art5.setShortname(colecturia_c.getAcctcode3());
 					art5.setContraact(colecturia_c.getAcctcode2());
-					art5.setLinememo("Pago de colecturia");
+					//art5.setLinememo("Pago de colecturia");
+					if (parameters.getComments() == null || parameters.getComments().length() <= 0) {
+						art5.setLinememo(parameters.getComments());
+					} else if (parameters.getComments().length() <= 100) {
+						art5.setLinememo(parameters.getComments());
+					} else { 
+						art5.setLinememo(parameters.getComments().substring(0, 100));
+					}
 					art5.setRefdate(parameters.getDocdate());
 					art5.setRef1(Integer.toString(parameters.getDocentry()));
 					// art2.setRef2();
@@ -1092,7 +1127,14 @@ public class BankEJB implements BankEJBRemote {
 		nuevo.setTranstype(Objtype);
 		nuevo.setBaseref(Integer.toString(parameters.getDocentry()));
 		nuevo.setRefdate(parameters.getDocdate());
-		nuevo.setMemo("Pago de colecturia");
+		//nuevo.setMemo("Pago de colecturia");
+		if (parameters.getComments() == null || parameters.getComments().length() <= 0) {
+			nuevo.setMemo(parameters.getComments());
+		} else if (parameters.getComments().length() <= 100) {
+			nuevo.setMemo(parameters.getComments());
+		} else { 
+			nuevo.setMemo(parameters.getComments().substring(0, 100));
+		}
 		nuevo.setRef1(Integer.toString(parameters.getDocnum()));
 		nuevo.setRef2(parameters.getRef1());
 		nuevo.setLoctotal(total_sum);
@@ -2136,7 +2178,14 @@ public class BankEJB implements BankEJBRemote {
 		art1.setDuedate(parameters.getCheckdate());
 		art1.setShortname(busines.getDebpayacct());
 		art1.setContraact(parameters.getCheckacct());
-		art1.setLinememo("Emisión de cheque a proveedor");
+		//art1.setLinememo("Emisión de cheque a proveedor");
+		if (parameters.getDetails() == null || parameters.getDetails().length() <= 0) {
+			journal.setMemo(parameters.getDetails());
+		} else if (parameters.getDetails().length() <= 100) {
+			journal.setMemo(parameters.getDetails());
+		} else { 
+			journal.setMemo(parameters.getDetails().substring(0, 100));
+		}
 		art1.setRefdate(parameters.getPmntdate());
 		art1.setRef1(Integer.toString(parameters.getCheckkey()));
 		// art1.setRef2();
@@ -2174,7 +2223,14 @@ public class BankEJB implements BankEJBRemote {
 		art2.setDuedate(parameters.getPmntdate());
 		art2.setShortname(parameters.getCheckacct());
 		art2.setContraact(busines.getDebpayacct());
-		art2.setLinememo("Emisión de cheque a proveedor");
+		//art2.setLinememo("Emisión de cheque a proveedor");
+		if (parameters.getDetails() == null || parameters.getDetails().length() <= 0) {
+			journal.setMemo(parameters.getDetails());
+		} else if (parameters.getDetails().length() <= 100) {
+			journal.setMemo(parameters.getDetails());
+		} else { 
+			journal.setMemo(parameters.getDetails().substring(0, 100));
+		}
 		art2.setRefdate(parameters.getPmntdate());
 		art2.setRef1(Integer.toString(parameters.getCheckkey()));
 		// rt1.setRef2();
@@ -2208,7 +2264,14 @@ public class BankEJB implements BankEJBRemote {
 		journal.setTranstype(parameters.getObjtype());
 		journal.setBaseref(Integer.toString(parameters.getCheckkey()));
 		journal.setRefdate(parameters.getPmntdate());
-		journal.setMemo("Emisión de cheque a proveedor");
+		if (parameters.getDetails() == null || parameters.getDetails().length() <= 0) {
+			journal.setMemo(parameters.getDetails());
+		} else if (parameters.getDetails().length() <= 100) {
+			journal.setMemo(parameters.getDetails());
+		} else { 
+			journal.setMemo(parameters.getDetails().substring(0, 100));
+		}
+		//journal.setMemo(parameters.getDetails());
 		journal.setRef1(Integer.toString(parameters.getCheckkey()));
 		journal.setRef2(journal.getRef1());
 		journal.setLoctotal(parameters.getChecksum());
@@ -2269,7 +2332,14 @@ public class BankEJB implements BankEJBRemote {
 			art1.setDuedate(parameters.getCheckdate());
 			art1.setShortname(busines.getDebpayacct());
 			art1.setContraact(parameters.getCheckacct());
-			art1.setLinememo("Anulación de cheque a proveedor");
+			//art1.setLinememo("Anulación de cheque a proveedor");
+			if (parameters.getDetails() == null || parameters.getDetails().length() <= 0) {
+				art1.setLinememo(parameters.getDetails());
+			} else if (parameters.getDetails().length() <= 100) {
+				art1.setLinememo(parameters.getDetails());
+			} else { 
+				art1.setLinememo(parameters.getDetails().substring(0, 100));
+			}
 			art1.setRefdate(parameters.getPmntdate());
 			art1.setRef1(Integer.toString(parameters.getCheckkey()));
 			// art1.setRef2();
@@ -2308,7 +2378,14 @@ public class BankEJB implements BankEJBRemote {
 			art2.setDuedate(parameters.getPmntdate());
 			art2.setShortname(parameters.getCheckacct());
 			art2.setContraact(busines.getDebpayacct());
-			art2.setLinememo("Anulación de cheque a proveedor");
+			//art2.setLinememo("Anulación de cheque a proveedor");
+			if (parameters.getDetails() == null || parameters.getDetails().length() <= 0) {
+				art2.setLinememo(parameters.getDetails());
+			} else if (parameters.getDetails().length() <= 100) {
+				art2.setLinememo(parameters.getDetails());
+			} else { 
+				art2.setLinememo(parameters.getDetails().substring(0, 100));
+			}
 			art2.setRefdate(parameters.getPmntdate());
 			art2.setRef1(Integer.toString(parameters.getCheckkey()));
 			// rt1.setRef2();
@@ -2342,7 +2419,14 @@ public class BankEJB implements BankEJBRemote {
 			journal.setTranstype(parameters.getObjtype());
 			journal.setBaseref(Integer.toString(parameters.getCheckkey()));
 			journal.setRefdate(parameters.getPmntdate());
-			journal.setMemo("Anulación de cheque a proveedor");
+			//journal.setMemo("Anulación de cheque a proveedor");
+			if (parameters.getDetails() == null || parameters.getDetails().length() <= 0) {
+				journal.setMemo(parameters.getDetails());
+			} else if (parameters.getDetails().length() <= 100) {
+				journal.setMemo(parameters.getDetails());
+			} else { 
+				journal.setMemo(parameters.getDetails().substring(0, 100));
+			}
 			journal.setRef1(Integer.toString(parameters.getCheckkey()));
 			journal.setRef2(journal.getRef1());
 			journal.setLoctotal(parameters.getChecksum());
