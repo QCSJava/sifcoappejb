@@ -480,7 +480,7 @@ public class SalesEJB implements SalesEJBRemote {
 		// -----------------------------------------------------------------------------------
 		// Metodo de Pago de factura Contado
 		// -----------------------------------------------------------------------------------
-		if (Sales.getPeymethod().equals("1")) {
+		if (Sales.getPeymethod().equals("3") || Sales.getPeymethod().equals("1")|| Sales.getPeymethod().equals("5")) {
 			journal = fill_JournalEntry_pago(Sales);
 
 			AccountingEJB account1 = new AccountingEJB();

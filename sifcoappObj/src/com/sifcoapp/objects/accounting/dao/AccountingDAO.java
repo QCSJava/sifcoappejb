@@ -1751,7 +1751,7 @@ public class AccountingDAO extends CommonDAO {
 		List lstResult = new Vector();
 		List lstResultSet = null;
 
-		this.setDbObject("select sum(doctotal) from sal_sal0_sales where peymethod='1' and confirmed='N' and  usersign=? and docdate = ? and canceled ='N'");
+		this.setDbObject("select sum(doctotal) from sal_sal0_sales where peymethod in ('1','3','5') and confirmed='N' and  usersign=? and docdate = ? and canceled ='N'");
 		this.setInt(1, "_usersign", usersign);
 
 		if (fecha == null) {
@@ -1782,6 +1782,48 @@ public class AccountingDAO extends CommonDAO {
 		}
 
 		return saldo;
+
+	}
+		
+	public String getCommentSales(Date fecha, int usersign) throws Exception {
+
+		String comment = "";
+		List conceptos = new Vector();
+		int dias = -1;
+		List lstResult = new Vector();
+		List lstResultSet = null;
+
+		this.setDbObject("select 'Contado E:' || to_char(coalesce(SUM(case when peymethod = '1' THEN doctotal END ),0),'999D99') || '  - Auto Consumo AC' ||to_char(coalesce(SUM(case when peymethod = '3' THEN doctotal END ),0),'999D99')|| '  - Terceros CE' ||to_char(coalesce(SUM(case when peymethod = '5' THEN doctotal END ),0),'999D99') from sal_sal0_sales where peymethod in ('1','3','5') and confirmed='N' and  usersign=? and docdate = ? and canceled ='N'");
+		this.setInt(1, "_usersign", usersign);
+
+		if (fecha == null) {
+			this.setDate(2, "_docdate", fecha);
+		} else {
+			java.sql.Date fecha1 = new java.sql.Date(fecha.getTime());
+			this.setDate(2, "_docdate", fecha1);
+		}
+
+		lstResultSet = this.runQueryPrepared();
+
+		CachedRowSetImpl rowsetActual;
+
+		ListIterator liRowset = null;
+		liRowset = lstResultSet.listIterator();
+
+		while (liRowset.hasNext()) {
+			rowsetActual = (CachedRowSetImpl) liRowset.next();
+			try {
+				while (rowsetActual.next()) {
+					comment = rowsetActual.getString(1);
+				}
+				rowsetActual.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return comment;
 
 	}
 }

@@ -240,6 +240,17 @@ public class AccountingEJBClient {
 		}
 		return _return;
 	}
+		
+	public String getCommentSales(Date fecha, int usersign) throws EJBException {
+		String _return = "";
+		try {
+			_return =  bean.getCommentSales(fecha, usersign);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return _return;
+	}
 
 	// --------------------------------------------------------------
 
@@ -285,6 +296,7 @@ public class AccountingEJBClient {
 		return _return;
 
 	}
+	
 	public ResultOutTO traslado_caja_venta(double saldo,Date fecha, int usersign) throws Exception {
 		ResultOutTO _return = new ResultOutTO();
 
@@ -293,6 +305,7 @@ public class AccountingEJBClient {
 		return _return;
 
 	}
+	
 	public List devolver_saldo_colecturia(Date fecha,
 			int usersign) throws Exception {
 		List _return = new Vector();

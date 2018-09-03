@@ -91,6 +91,8 @@ public interface AccountingEJBRemote {
 			throws Exception;
 
 	public double getSaldoSales(Date fecha, int usersign) throws EJBException;
+	
+	//public String getCommentSales(Date fecha, int usersign) throws EJBException;
 
 	// -------------------------------------------------------------------
 	// elementos de prueba
@@ -111,5 +113,9 @@ public interface AccountingEJBRemote {
 	public void update_tree(Date refdate, String transtype) throws EJBException;
 	
 	public List devolver_saldo_colecturia(Date fecha,int usersign)throws Exception;
+	
 	public ResultOutTO traslado_caja_venta(double saldo,Date fecha, int usersign)throws Exception;
+
+	public String getCommentSales(Date fecha, int usersign)throws EJBException;
+
 }

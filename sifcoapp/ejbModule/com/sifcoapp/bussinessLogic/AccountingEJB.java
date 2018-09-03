@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+
 import com.sifcoapp.admin.ejb.ParameterEJB;
 import com.sifcoapp.objects.accounting.dao.AccountingDAO;
 import com.sifcoapp.objects.accounting.dao.JournalEntryDAO;
@@ -2273,7 +2275,7 @@ public class AccountingEJB implements AccountingEJBRemote {
 		}
 		return saldo;
 	}
-
+	
 	public ResultOutTO traslado_caja_venta(double saldo, Date fecha,
 			int usersign) throws Exception {
 
@@ -2408,4 +2410,19 @@ public class AccountingEJB implements AccountingEJBRemote {
 		return _result;
 
 	}
+
+	public String getCommentSales(Date fecha, int usersign) throws EJBException {
+		String comment = "";
+		AccountingDAO DAO = new AccountingDAO();
+		try {
+			comment = DAO.getCommentSales(fecha, usersign);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return comment;
+	}
+
+
 }

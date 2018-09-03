@@ -353,7 +353,7 @@ public class SalesDAO extends CommonDAO {
 
 		int lstResultSet = 0;
 
-		this.setDbObject("UPDATE sal_sal0_sales SET confirmed='Y' WHERE peymethod='1' and confirmed='N' and canceled ='N' and usersign=? and docdate=? ");
+		this.setDbObject("UPDATE sal_sal0_sales SET confirmed='Y' WHERE peymethod in ('1','3','5') and confirmed='N' and canceled ='N' and usersign=? and docdate=? ");
 		this.setInt(1, "_usersign", usersign);
 
 		if (fecha == null) {
