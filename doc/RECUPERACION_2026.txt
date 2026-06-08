@@ -1,0 +1,102 @@
+# SIFCO - Recuperación Ambiente 2026
+
+## Ambiente validado
+
+Fecha: Junio 2026
+
+### Java
+
+JDK 1.7.0_80
+
+Ruta:
+
+C:\Program Files\Java\jdk1.7.0_80
+
+### GlassFish
+
+GlassFish 4.1
+
+Ruta:
+
+C:\SIFCO\glassfish4\glassfish4\glassfish
+
+### PostgreSQL
+
+Versión 9.4
+
+Datasource:
+
+jdbc/sifcoDBJDBC
+
+Pool:
+
+PostgresPool
+
+### Aplicaciones desplegadas
+
+sifcoappEAR
+sifcoappFE
+
+### Puertos
+
+Admin Console: 4949
+
+HTTP: 8585
+
+HTTPS: 8181
+
+### Variable requerida
+
+AS_JAVA=C:\Program Files\Java\jdk1.7.0_80
+
+### Inicio de GlassFish
+
+asadmin start-domain domain1
+
+### Usuario recuperación
+
+Usuario:
+
+administrador
+
+La contraseña fue regenerada utilizando PasswordService.
+
+### Reportes
+
+Ruta utilizada en ejecución:
+
+C:\reports
+
+Problema encontrado:
+
+Existían dos versiones de Groovy:
+
+* groovy-all-2.0.1.jar
+* groovy-all-2.4.3.jar
+
+La versión 2.4.3 provocaba:
+
+java.lang.NoClassDefFoundError:
+groovy.lang.GroovySystem
+
+Solución:
+
+Eliminar:
+
+web/WEB-INF/lib/groovy-all-2.4.3.jar
+
+Conservar:
+
+web/WEB-INF/lib/groovy-all-2.0.1.jar
+
+### Git
+
+Repositorios:
+
+https://github.com/QCSJava/sifcoappejb
+
+https://github.com/QCSJava/sifcoappFE
+
+Rama estable recuperada:
+
+recuperacion-2026
